@@ -71,20 +71,34 @@ src/
    npm install
    ```
 
-3. **Start development server**
+3. **Set up environment variables (optional)**
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your OpenAI API key for enhanced AI features
+   ```
+
+4. **Start development server**
    ```bash
    npm run dev
    ```
 
-4. **Build for production**
+5. **Build for production**
    ```bash
    npm run build
    ```
 
-5. **Preview production build**
+6. **Preview production build**
    ```bash
    npm run preview
    ```
+
+## 🔑 Environment Variables
+
+The application supports the following environment variables:
+
+- `VITE_OPENAI_API_KEY` - OpenAI API key for enhanced AI travel planning (optional)
+  - Get your key from: https://platform.openai.com/api-keys
+  - The app provides fallback responses if no API key is configured
 
 ## 🌐 Pages & Routes
 
@@ -156,8 +170,9 @@ The site is configured for deployment on Netlify with:
 ### Travel Assistant
 - Natural language trip planning
 - Personalized recommendations
+- OpenAI-powered itinerary generation
 - Real-time price monitoring
-- Itinerary generation
+- Structured JSON responses for travel data
 - 24/7 chat support
 
 ### Smart Features
@@ -165,6 +180,7 @@ The site is configured for deployment on Netlify with:
 - Deal discovery engine
 - Preference learning
 - Multi-destination optimization
+- Cost estimation and budget planning
 
 ## 📊 Performance
 
