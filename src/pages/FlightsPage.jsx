@@ -23,7 +23,7 @@ export default function FlightsPage() {
       {/* HERO + SEARCH */}
       <div className="bg-[#004499] text-white relative overflow-hidden">
         <div className="max-w-6xl mx-auto py-20 px-6">
-          <h1 className="text-4xl font-bold mb-4">Find your next flight deal</h1>
+          <h1 className="text-4xl font-bold mb-4">Find your next trip on Utrippin</h1>
           <div className="flex gap-4 text-sm mb-4">
             <button className="bg-white text-[#004499] px-4 py-2 rounded-full font-bold">Round-trip</button>
             <button className="bg-[#004499] border border-white px-4 py-2 rounded-full">One-way</button>
