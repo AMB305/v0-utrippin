@@ -1,1 +1,39 @@
-@tailwind base; @tailwind components; @tailwind utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ----- Fallback custom styles just in case Tailwind fails to build ----- */
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  color: #1f2937;
+  background: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: #111827;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Utility fallbacks */
+.rounded-3xl { border-radius: 1.5rem; }
+.rounded-xl { border-radius: 0.75rem; }
+.shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+.text-blue-600 { color: #2563EB; }
+.bg-blue-600 { background-color: #2563EB; }
+.bg-[#FF6200] { background-color: #FF6200; }
+.text-[#002974] { color: #002974; }
+.bg-lime-200 { background-color: #D9F99D; }
+.bg-green-700 { background-color: #15803D; }
+.text-green-700 { color: #15803D; }
+.border-slate-300 { border-color: #cbd5e1; }
