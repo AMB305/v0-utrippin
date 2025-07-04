@@ -2,145 +2,112 @@ import React from "react";
 
 export default function FlightsPage() {
   return (
-    <div className="bg-gray-50 text-gray-800">
-      {/* Hero search section */}
-      <div className="max-w-6xl mx-auto mt-8 p-6 bg-white rounded-lg shadow">
-        <h1 className="text-3xl font-bold mb-6">
-          ✈️ Find your next flight deal
-        </h1>
-        <div className="flex space-x-4 mb-4">
-          <button className="px-4 py-2 bg-blue-900 text-white rounded">Round-trip</button>
-          <button className="px-4 py-2 bg-gray-100 rounded">One-way</button>
-          <button className="px-4 py-2 bg-gray-100 rounded">Multi-destination</button>
+    <div className="bg-[#f5f7fa] min-h-screen font-['Roboto']">
+      {/* TOP NAV */}
+      <header className="bg-[#003580] text-white py-4 shadow">
+        <div className="max-w-6xl mx-auto flex items-center justify-between px-4">
+          <div className="text-2xl font-bold">Utrippin</div>
+          <nav className="space-x-6 font-semibold">
+            <a href="/flights" className="border-b-2 border-white pb-1">Flights</a>
+            <a href="/hotels" className="hover:text-[#ffb700]">Hotels</a>
+            <a href="/cars" className="hover:text-[#ffb700]">Cars</a>
+            <a href="/packages" className="hover:text-[#ffb700]">Packages</a>
+            <a href="/destinations" className="hover:text-[#ffb700]">Destinations</a>
+          </nav>
         </div>
+      </header>
 
-        <div className="flex justify-between items-center bg-green-100 p-3 rounded mb-4">
-          <div className="flex space-x-4 items-center">
-            <label className="flex items-center space-x-1">
-              <input type="checkbox" />
-              <span>Bundle + Save</span>
-            </label>
-            <label className="flex items-center space-x-1">
-              <input type="checkbox" />
-              <span>Add hotel</span>
-            </label>
-            <label className="flex items-center space-x-1">
-              <input type="checkbox" />
-              <span>Add car</span>
-            </label>
-          </div>
-          <div className="font-semibold text-green-800">Save up to $625</div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <input type="text" placeholder="From" className="border p-2 rounded w-full" />
-          <input type="text" placeholder="To" className="border p-2 rounded w-full" />
-          <input type="date" className="border p-2 rounded w-full" />
-          <input type="date" className="border p-2 rounded w-full" />
-          <select className="border p-2 rounded w-full md:col-span-2">
+      {/* SEARCH BOX */}
+      <div className="max-w-4xl mx-auto mt-8 bg-white rounded-xl shadow-lg p-6 space-y-4">
+        <h1 className="text-2xl font-bold text-[#003580]">Find cheap flights</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            placeholder="From"
+            className="border border-gray-300 p-3 rounded focus:ring-2 focus:ring-[#003580]"
+          />
+          <input
+            type="text"
+            placeholder="To"
+            className="border border-gray-300 p-3 rounded focus:ring-2 focus:ring-[#003580]"
+          />
+          <input
+            type="date"
+            className="border border-gray-300 p-3 rounded focus:ring-2 focus:ring-[#003580]"
+          />
+          <input
+            type="date"
+            className="border border-gray-300 p-3 rounded focus:ring-2 focus:ring-[#003580]"
+          />
+          <select className="md:col-span-2 border border-gray-300 p-3 rounded focus:ring-2 focus:ring-[#003580]">
             <option>1 Adult, Economy</option>
+            <option>2 Adults, Business</option>
           </select>
         </div>
-
-        <button className="w-full bg-blue-900 text-white py-3 rounded mt-2 hover:bg-blue-800">
+        <button className="w-full bg-[#003580] text-white font-bold py-3 rounded hover:bg-[#002f6c]">
           🔍 Search Flights
         </button>
-
-        <p className="mt-4 text-center text-sm">
-          Looking for international deals? Call us at 
-          <span className="text-orange-600 font-bold"> (833) 203-5879</span>
-        </p>
       </div>
 
-      {/* Recent search */}
-      <div className="bg-blue-50 py-10 mt-10">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Pick up where you left off</h2>
-            <button className="border border-blue-900 text-blue-900 rounded-full px-4 py-1 hover:bg-blue-900 hover:text-white">
-              View All Recent Activity
-            </button>
+      {/* RECENT SEARCHES */}
+      <div className="max-w-4xl mx-auto mt-10 bg-white rounded-xl shadow p-6">
+        <h2 className="text-xl font-bold text-[#003580] mb-4">
+          Recent searches
+        </h2>
+        <div className="flex justify-between items-center bg-[#eaf1fb] p-4 rounded">
+          <div>
+            <div className="font-semibold">Miami to London</div>
+            <div className="text-sm text-gray-600">1 Adult · Economy</div>
           </div>
-
-          <div className="bg-white rounded-lg p-6 flex flex-wrap items-center shadow">
-            <div className="flex items-center space-x-4 mb-4 md:mb-0 md:w-1/3">
-              <div className="bg-blue-100 p-3 rounded-full">
-                ✈️
-              </div>
-              <div>
-                <div className="font-bold">Fort Lauderdale, FL (FLL) - Christiansted, VQ (STX)</div>
-                <div className="text-sm text-gray-600">Round trip flight</div>
-              </div>
-            </div>
-            <div className="flex space-x-6 md:w-1/3">
-              <div className="text-center">
-                <div className="text-xs font-bold text-gray-600">DEPART</div>
-                <div className="font-semibold">Thu, Jul 17, 2025</div>
-                <div className="text-xs">FLL → STX</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xs font-bold text-gray-600">RETURN</div>
-                <div className="font-semibold">Fri, Aug 22, 2025</div>
-                <div className="text-xs">STX → FLL</div>
-              </div>
-            </div>
-            <div className="md:w-1/6 text-center">
-              <div className="font-bold">1 Adult</div>
-              <div className="text-sm text-gray-600">Economy</div>
-            </div>
-            <div className="md:w-1/6 text-center mt-4 md:mt-0">
-              <button className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800">
-                Continue Search
-              </button>
-            </div>
-          </div>
+          <button className="bg-[#003580] text-white px-4 py-2 rounded hover:bg-[#002f6c]">
+            Continue
+          </button>
         </div>
       </div>
 
-      {/* Featured Deals */}
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <h2 className="text-2xl font-bold mb-6">Featured Deals</h2>
+      {/* FEATURED DEALS */}
+      <div className="max-w-6xl mx-auto mt-12 px-4">
+        <h2 className="text-2xl font-bold text-[#003580] mb-6">
+          Featured flight deals
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
-              img: "https://images.unsplash.com/photo-1576085898321-f74c4d07b128",
-              title: "Tokyo Adventure",
-              desc: "Round-trip flights + 5 nights hotel",
-              price: "$1,299",
-              oldPrice: "$1,599",
-              discount: "19%"
+              title: "New York → Paris",
+              desc: "Round-trip · Direct flight",
+              price: "$450",
+              img: "https://images.unsplash.com/photo-1504198453319-5ce911bafcde"
             },
             {
-              img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34",
-              title: "Paris Romance",
-              desc: "Luxury hotel + Seine river cruise",
-              price: "$899",
-              oldPrice: "$1,199",
-              discount: "25%"
+              title: "LA → Tokyo",
+              desc: "Round-trip · 1 stop",
+              price: "$890",
+              img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308"
             },
             {
-              img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-              title: "Bali Escape",
-              desc: "Beach resort + spa treatments",
-              price: "$749",
-              oldPrice: "$999",
-              discount: "25%"
-            }
-          ].map((deal, idx) => (
-            <div key={idx} className="relative rounded-lg overflow-hidden shadow hover:shadow-lg transition">
-              <img src={deal.img} alt={deal.title} className="w-full h-56 object-cover"/>
-              <div className="absolute top-3 left-3 bg-red-600 text-white text-xs px-2 py-1 rounded">
-                {deal.discount} off
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4 text-white">
-                <h3 className="font-bold text-lg">{deal.title}</h3>
-                <p className="text-sm">{deal.desc}</p>
-                <div className="mt-1 font-bold">{deal.price} <span className="line-through font-light">{deal.oldPrice}</span></div>
+              title: "Chicago → Rome",
+              desc: "Round-trip · Direct",
+              price: "$720",
+              img: "https://images.unsplash.com/photo-1533049022227-6cbadaf94f32"
+            },
+          ].map((deal, i) => (
+            <div key={i} className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+              <img
+                src={`${deal.img}?auto=format&fit=crop&w=800&q=80`}
+                alt={deal.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="font-bold text-lg mb-1 text-[#003580]">{deal.title}</h3>
+                <p className="text-gray-600 text-sm mb-2">{deal.desc}</p>
+                <div className="font-bold text-[#ff6200]">{deal.price}</div>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      <div className="py-12"></div>
     </div>
   );
 }
