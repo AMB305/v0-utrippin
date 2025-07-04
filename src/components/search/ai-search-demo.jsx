@@ -26,11 +26,11 @@ export default function AiSearchDemo() {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-6 border border-purple-200">
+    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-[#0068EF]/20">
       <div className="text-center mb-6">
         <div className="flex items-center justify-center mb-3">
-          <Sparkles className="h-6 w-6 text-purple-600 mr-2" />
-          <h3 className="text-xl font-semibold text-gray-900">AI Travel Assistant</h3>
+          <Sparkles className="h-6 w-6 text-[#0068EF] mr-2" />
+          <h3 className="text-xl font-semibold text-[#003C8A]">AI Travel Assistant</h3>
         </div>
         <p className="text-gray-600">
           Ask me anything about travel - I'll help you plan, book, and discover amazing destinations
@@ -42,7 +42,7 @@ export default function AiSearchDemo() {
         <div className="space-y-4">
           {/* AI Welcome Message */}
           <div className="flex items-start space-x-3">
-            <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-[#0068EF] rounded-full flex items-center justify-center">
               <Sparkles className="h-4 w-4 text-white" />
             </div>
             <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
@@ -55,7 +55,7 @@ export default function AiSearchDemo() {
           {/* User Message (if any) */}
           {message && (
             <div className="flex items-start space-x-3 justify-end">
-              <div className="bg-purple-500 text-white rounded-lg p-3 max-w-xs">
+              <div className="bg-[#0068EF] text-white rounded-lg p-3 max-w-xs">
                 <p className="text-sm">{message}</p>
               </div>
               <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
@@ -67,7 +67,7 @@ export default function AiSearchDemo() {
           {/* Typing Indicator */}
           {isTyping && (
             <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#0068EF] rounded-full flex items-center justify-center">
                 <Sparkles className="h-4 w-4 text-white" />
               </div>
               <div className="bg-gray-100 rounded-lg p-3">
@@ -89,13 +89,13 @@ export default function AiSearchDemo() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Ask me about travel plans, destinations, or deals..."
-          className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-20"
+          className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:border-[#0068EF] focus:outline-none focus:ring-2 focus:ring-[#0068EF] focus:ring-opacity-20"
           disabled={isTyping}
         />
         <Button 
           type="submit" 
           disabled={!message.trim() || isTyping}
-          className="bg-purple-500 hover:bg-purple-600 px-4 py-3 rounded-xl"
+          className="bg-[#0068EF] hover:bg-[#0055A5] px-4 py-3 rounded-xl"
         >
           <Send className="h-4 w-4" />
         </Button>
