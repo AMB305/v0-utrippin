@@ -1,13 +1,13 @@
 import React from "react";
 
-export default function HotelsPage() {
+export default function CruisesPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Section 1: Header with Navigation and Hero Search */}
       <div className="bg-[#0068EF] text-white text-sm flex justify-center py-4 px-4">
         <div className="text-center max-w-6xl mx-auto">
-          <span className="font-bold mr-8">Summer Hotel Deals!</span>
-          <span>Save up to 60% on Express Deals®. Book now for best rates! <span className="underline">Learn More</span></span>
+          <span className="font-bold mr-8">Cruise Season is Here!</span>
+          <span>Save up to 70% on cruise deals. Set sail for less! <span className="underline">Learn More</span></span>
         </div>
       </div>
 
@@ -21,11 +21,11 @@ export default function HotelsPage() {
                 <div className="text-[#0068EF] font-bold text-xl">UTrippin</div>
               </a>
               <ul className="hidden lg:flex items-center gap-2 text-sm">
-                <li><a href="/hotels" className="px-3 py-3 rounded-full text-[#0068EF] font-medium bg-blue-50">Hotels</a></li>
+                <li><a href="/hotels" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Hotels</a></li>
                 <li><a href="/cars" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Cars</a></li>
                 <li><a href="/flights" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Flights</a></li>
                 <li><a href="/packages" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Packages</a></li>
-                <li><a href="/cruises" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Cruises</a></li>
+                <li><a href="/cruises" className="px-3 py-3 rounded-full text-[#0068EF] font-medium bg-blue-50">Cruises</a></li>
                 <li><a href="/experiences" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Experiences</a></li>
               </ul>
             </div>
@@ -49,19 +49,12 @@ export default function HotelsPage() {
       </header>
 
       {/* Hero Section with Search Form */}
-      <div className="relative bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 min-h-[500px] flex items-center">
+      <div className="relative bg-gradient-to-r from-blue-400 via-teal-400 to-cyan-400 min-h-[500px] flex items-center">
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
         <div className="relative max-w-6xl mx-auto px-4 py-16 flex gap-8">
           {/* Search Form */}
           <div className="bg-white rounded-3xl shadow-lg p-8 flex-1 max-w-2xl">
-            <h1 className="text-3xl font-bold text-[#003C8A] mb-6">Find your next hotel deal</h1>
-            
-            {/* Hotel Type Tabs */}
-            <div className="flex gap-4 mb-6 text-sm">
-              <button className="bg-[#0068EF] text-white px-4 py-2 rounded-lg font-medium">Hotels</button>
-              <button className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg">Resorts</button>
-              <button className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg">Boutiques</button>
-            </div>
+            <h1 className="text-3xl font-bold text-[#003C8A] mb-6">Find your next cruise deal</h1>
 
             {/* Form Fields */}
             <div className="space-y-4">
@@ -74,37 +67,46 @@ export default function HotelsPage() {
                 </div>
                 <input 
                   type="text" 
-                  placeholder="Where to?" 
+                  placeholder="Destination or cruise line" 
                   className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-xl text-sm focus:border-[#0068EF] focus:outline-none"
                 />
               </div>
 
-              {/* Check-in/Check-out Fields */}
+              {/* Departure Date and Duration */}
               <div className="flex flex-col lg:flex-row lg:gap-4 gap-4">
                 <div className="flex-1">
                   <button className="w-full flex items-center justify-start gap-3 px-4 py-3 border-2 border-gray-300 rounded-xl text-sm text-gray-600 focus:border-[#0068EF] focus:outline-none hover:border-gray-400">
                     <svg className="w-5 h-5 text-[#0068EF]" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
                     </svg>
-                    <span>Check-in</span>
+                    <span>Departure date</span>
                   </button>
                 </div>
                 <div className="flex-1">
-                  <button className="w-full flex items-center justify-start gap-3 px-4 py-3 border-2 border-gray-300 rounded-xl text-sm text-gray-600 focus:border-[#0068EF] focus:outline-none hover:border-gray-400">
-                    <svg className="w-5 h-5 text-[#0068EF]" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-                    </svg>
-                    <span>Check-out</span>
-                  </button>
+                  <div className="relative">
+                    <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-sm focus:border-[#0068EF] focus:outline-none appearance-none">
+                      <option>Any duration</option>
+                      <option>3-5 days</option>
+                      <option>6-8 days</option>
+                      <option>9-14 days</option>
+                      <option>15+ days</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7.4 8l4.6 4.6L16.6 8 18 9.4l-6 6-6-6L7.4 8z"/>
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Guests and Rooms */}
+              {/* Guests */}
               <div className="relative">
                 <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-sm focus:border-[#0068EF] focus:outline-none appearance-none">
-                  <option>2 Guests, 1 Room</option>
-                  <option>4 Guests, 2 Rooms</option>
-                  <option>6 Guests, 3 Rooms</option>
+                  <option>2 Guests</option>
+                  <option>3 Guests</option>
+                  <option>4 Guests</option>
+                  <option>5+ Guests</option>
                 </select>
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
@@ -115,7 +117,7 @@ export default function HotelsPage() {
 
               {/* Search Button */}
               <button className="w-full bg-[#0068EF] hover:bg-blue-700 text-white font-bold py-4 rounded-xl text-lg transition-colors flex items-center justify-center gap-2">
-                🏨 Search Hotels
+                🚢 Search Cruises
               </button>
             </div>
           </div>
@@ -123,13 +125,13 @@ export default function HotelsPage() {
           {/* Right Side - Promotional Card */}
           <div className="hidden lg:block w-80">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="relative h-48 bg-gradient-to-r from-green-500 to-blue-600">
+              <div className="relative h-48 bg-gradient-to-r from-blue-500 to-teal-600">
                 <div className="absolute inset-0 bg-black bg-opacity-30"></div>
                 <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-xl font-bold">Express Deals up to 60% off!</h3>
-                  <p className="text-sm">Luxury hotels at unbeatable prices!</p>
-                  <button className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                    Book Now
+                  <h3 className="text-xl font-bold">Set Sail & Save!</h3>
+                  <p className="text-sm">Luxury cruises at unbeatable prices!</p>
+                  <button className="mt-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                    Browse Cruises
                   </button>
                 </div>
               </div>
@@ -138,7 +140,7 @@ export default function HotelsPage() {
         </div>
       </div>
 
-      {/* Section 2: Recent Hotel Searches */}
+      {/* Section 2: Recent Cruise Searches */}
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-[#003C8A]">Pick up where you left off</h2>
@@ -150,23 +152,24 @@ export default function HotelsPage() {
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V6H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/>
+                  <path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/>
                 </svg>
               </div>
               <div>
-                <h3 className="font-bold text-lg">Miami Beach, FL - Luxury Resort</h3>
-                <p className="text-sm text-gray-600">4-star beachfront hotel</p>
+                <h3 className="font-bold text-lg">Caribbean Cruise - Royal Caribbean</h3>
+                <p className="text-sm text-gray-600">7-day Western Caribbean</p>
               </div>
             </div>
             
             <div className="flex items-center gap-8">
               <div className="text-center">
-                <div className="text-xs text-gray-500 uppercase">Check-in</div>
-                <div className="font-bold">Fri, Aug 15, 2025</div>
+                <div className="text-xs text-gray-500 uppercase">Departure</div>
+                <div className="font-bold">Sun, Oct 12, 2025</div>
+                <div className="text-sm text-gray-600">Miami, FL</div>
               </div>
               <div className="text-center">
-                <div className="text-xs text-gray-500 uppercase">Check-out</div>
-                <div className="font-bold">Mon, Aug 18, 2025</div>
+                <div className="text-xs text-gray-500 uppercase">Duration</div>
+                <div className="font-bold">7 Days</div>
               </div>
               <div className="text-center">
                 <div className="text-xs text-gray-500 uppercase">Guests</div>
@@ -180,91 +183,91 @@ export default function HotelsPage() {
         </div>
       </div>
 
-      {/* Section 3: Hotel Deals */}
+      {/* Section 3: Cruise Deals */}
       <div className="max-w-6xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold text-[#003C8A] mb-8">Express Hotel Deals Near You</h2>
+        <h2 className="text-2xl font-bold text-[#003C8A] mb-8">Featured Cruise Deals</h2>
         
         <div className="flex gap-4 overflow-x-auto pb-4">
-          {/* Hotel Deal 1 */}
+          {/* Cruise Deal 1 */}
           <div className="min-w-[300px] border-2 border-gray-200 rounded-2xl overflow-hidden">
             <img 
-              src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=300&h=200" 
-              alt="Luxury Hotel" 
+              src="https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg?auto=compress&cs=tinysrgb&w=300&h=200" 
+              alt="Caribbean Cruise" 
               className="w-full h-32 object-cover"
             />
             <div className="p-4">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="font-bold">Miami Beach</h3>
-                  <div className="text-yellow-500 text-sm">★★★★☆</div>
+                  <h3 className="font-bold">Caribbean</h3>
+                  <div className="text-sm text-gray-600">Royal Caribbean • 7 days</div>
                 </div>
                 <div className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-full">
-                  60% OFF
+                  SAVE 60%
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xs line-through text-gray-500">$299</div>
-                <div className="text-2xl font-bold text-green-600">$119</div>
-                <div className="text-xs text-gray-600">per night</div>
+                <div className="text-xs line-through text-gray-500">$1,299</div>
+                <div className="text-2xl font-bold text-green-600">$519</div>
+                <div className="text-xs text-gray-600">per person</div>
               </div>
               <button className="w-full bg-gray-100 text-[#0068EF] font-bold py-2 rounded-full text-sm hover:bg-gray-200 mt-3">
-                View Deal
+                View Cruise
               </button>
             </div>
           </div>
 
-          {/* Hotel Deal 2 */}
+          {/* Cruise Deal 2 */}
           <div className="min-w-[300px] border-2 border-gray-200 rounded-2xl overflow-hidden">
             <img 
-              src="https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=300&h=200" 
-              alt="City Hotel" 
+              src="https://images.pexels.com/photos/1008155/pexels-photo-1008155.jpeg?auto=compress&cs=tinysrgb&w=300&h=200" 
+              alt="Mediterranean Cruise" 
               className="w-full h-32 object-cover"
             />
             <div className="p-4">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="font-bold">New York City</h3>
-                  <div className="text-yellow-500 text-sm">★★★★★</div>
+                  <h3 className="font-bold">Mediterranean</h3>
+                  <div className="text-sm text-gray-600">Norwegian • 10 days</div>
                 </div>
                 <div className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-full">
-                  45% OFF
+                  SAVE 45%
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xs line-through text-gray-500">$450</div>
-                <div className="text-2xl font-bold text-green-600">$247</div>
-                <div className="text-xs text-gray-600">per night</div>
+                <div className="text-xs line-through text-gray-500">$2,199</div>
+                <div className="text-2xl font-bold text-green-600">$1,209</div>
+                <div className="text-xs text-gray-600">per person</div>
               </div>
               <button className="w-full bg-gray-100 text-[#0068EF] font-bold py-2 rounded-full text-sm hover:bg-gray-200 mt-3">
-                View Deal
+                View Cruise
               </button>
             </div>
           </div>
 
-          {/* Hotel Deal 3 */}
+          {/* Cruise Deal 3 */}
           <div className="min-w-[300px] border-2 border-gray-200 rounded-2xl overflow-hidden">
             <img 
-              src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=300&h=200" 
-              alt="Resort" 
+              src="https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg?auto=compress&cs=tinysrgb&w=300&h=200" 
+              alt="Alaska Cruise" 
               className="w-full h-32 object-cover"
             />
             <div className="p-4">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="font-bold">Las Vegas</h3>
-                  <div className="text-yellow-500 text-sm">★★★★☆</div>
+                  <h3 className="font-bold">Alaska</h3>
+                  <div className="text-sm text-gray-600">Princess • 7 days</div>
                 </div>
                 <div className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-full">
-                  55% OFF
+                  SAVE 55%
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xs line-through text-gray-500">$189</div>
-                <div className="text-2xl font-bold text-green-600">$85</div>
-                <div className="text-xs text-gray-600">per night</div>
+                <div className="text-xs line-through text-gray-500">$1,899</div>
+                <div className="text-2xl font-bold text-green-600">$855</div>
+                <div className="text-xs text-gray-600">per person</div>
               </div>
               <button className="w-full bg-gray-100 text-[#0068EF] font-bold py-2 rounded-full text-sm hover:bg-gray-200 mt-3">
-                View Deal
+                View Cruise
               </button>
             </div>
           </div>
@@ -276,8 +279,8 @@ export default function HotelsPage() {
         <div className="max-w-6xl mx-auto px-4">
           {/* Email Signup Section */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[#003C8A] mb-4">Sign up for Exclusive Hotel Deals</h2>
-            <p className="text-gray-600 mb-8">Get access to Express Deals and member-only rates.</p>
+            <h2 className="text-3xl font-bold text-[#003C8A] mb-4">Sign up for Exclusive Cruise Deals</h2>
+            <p className="text-gray-600 mb-8">Get access to last-minute cruise deals and special offers.</p>
             
             <div className="flex max-w-md mx-auto gap-2">
               <div className="flex-1 relative">
@@ -302,9 +305,9 @@ export default function HotelsPage() {
           <div className="bg-white rounded-2xl p-8 flex items-center gap-8">
             <div className="flex-1">
               <div className="text-sm text-gray-500 uppercase font-bold mb-2">MOBILE EXCLUSIVE</div>
-              <h3 className="text-3xl font-bold text-[#003C8A] mb-4">Tonight Only Hotel Deals. Only in the App.</h3>
+              <h3 className="text-3xl font-bold text-[#003C8A] mb-4">Last-Minute Cruise Deals. Only in the App.</h3>
               <p className="text-gray-600 mb-6">
-                Discover exclusive hotel deals and last-minute rates in our mobile app. Download today for the best prices!
+                Discover exclusive cruise deals and manage your bookings on the go. Set sail with savings!
               </p>
               <div className="flex gap-4">
                 <img 
