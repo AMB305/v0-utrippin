@@ -1,11 +1,13 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import FlightsPage from './pages/FlightsPage';
-import HotelsPage from './pages/HotelsPage';
-import CarsPage from './pages/CarsPage';
-import PackagesPage from './pages/PackagesPage';
-import DestinationsPage from './pages/DestinationsPage';
-import Home from './pages/Home';
+Replace my src/App.jsx with this exact code:
+
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import FlightsPage from './pages/FlightsPage'
+import HotelsPage from './pages/HotelsPage'
+import CarsPage from './pages/CarsPage'
+import PackagesPage from './pages/PackagesPage'
+import DestinationsPage from './pages/DestinationsPage'
 
 export default function App() {
   return (
@@ -19,5 +21,5 @@ export default function App() {
         <Route path="/destinations" element={<DestinationsPage />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
