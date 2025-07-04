@@ -1,3 +1,5 @@
+Replace my src/App.jsx with this exact code:
+
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
@@ -12,6 +14,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/flights" element={<FlightsPage />} />
         <Route path="/hotels" element={<HotelsPage />} />
         <Route path="/cars" element={<CarsPage />} />
