@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "../components/layout/header";
 import Footer from "../components/layout/footer";
 import MultiSearch from "../components/search/multi-search";
-import AiSearchDemo from "../components/search/ai-search-demo";
+import AiSearchDemo from "../components/search/ai-search-demo.jsx";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
