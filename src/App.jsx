@@ -7,6 +7,7 @@ import CarsPage from './pages/CarsPage'
 import PackagesPage from './pages/PackagesPage'
 import CruisesPage from './pages/CruisesPage'
 import ExperiencesPage from './pages/ExperiencesPage'
+import DealsPage from './pages/DealsPage'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/packages" element={<PackagesPage />} />
         <Route path="/cruises" element={<CruisesPage />} />
         <Route path="/experiences" element={<ExperiencesPage />} />
+        <Route path="/deals" element={<DealsPage />} />
       </Routes>
     </BrowserRouter>
   )
