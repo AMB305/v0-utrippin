@@ -6,22 +6,17 @@ export default function FlightsPage() {
       {/* NAVBAR */}
       <div className="bg-[#0068EF] text-white py-4 px-6 flex justify-between items-center">
         <div className="flex gap-6 items-center">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Priceline_logo.svg/2560px-Priceline_logo.svg.png"
-            alt="Priceline"
-            className="h-6"
-          />
+          <div className="text-2xl font-bold text-white">Utrippin</div>
           <nav className="hidden md:flex gap-4">
             <a className="hover:underline" href="#">Hotels</a>
             <a className="hover:underline" href="#">Cars</a>
             <a className="font-bold border-b-2 border-white pb-1" href="#">Flights</a>
             <a className="hover:underline" href="#">Packages</a>
-            <a className="hover:underline" href="#">Cruises</a>
-            <a className="hover:underline" href="#">Experiences</a>
+            <a className="hover:underline" href="#">Destinations</a>
           </nav>
         </div>
         <button className="bg-white text-[#0068EF] px-4 py-1 rounded-full font-bold">
-          Sign In / Join VIP
+          Sign In / Join
         </button>
       </div>
 
