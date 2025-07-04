@@ -16,46 +16,32 @@ export default function Home() {
   const { user, isLoading } = useAuth();
   const { toast } = useToast();
 
-  // Mock data for demo
-  const recentSearches = [
-    {
-      id: 1,
-      searchData: { from: 'NYC', to: 'LAX' },
-      createdAt: new Date().toISOString()
-    },
-    {
-      id: 2,
-      searchData: { from: 'MIA', to: 'LAS' },
-      createdAt: new Date().toISOString()
-    }
-  ];
+  const { data: recentSearches } = useQuery({
+    queryKey: ['/api/searches'],
+  });
 
-  const priceAlerts = [
-    {
-      id: 1,
-      route: 'NYC → LAX',
-      date: 'Dec 15',
-      price: 299,
-      trend: 'down'
-    },
-    {
-      id: 2,
-      route: 'MIA → LAS',
-      date: 'Jan 20',
-      price: 189,
-      trend: 'up'
-    }
-  ];
+  const { data: priceAlerts } = useQuery({
+    queryKey: ['/api/price-alerts'],
+  });
 
-  const userTrips = [
-    {
-      id: 1,
-      title: 'Hawaii Vacation',
-      destination: 'Honolulu, HI',
-      startDate: '2025-03-15',
-      endDate: '2025-03-22'
+  const { data: userTrips } = useQuery({
+    queryKey: ['/api/trips'],
+  });
+
+  // Redirect to home if not authenticated
+  useEffect(() => {
+    if (!isLoading && !user) {
+      toast({
+        title: "Unauthorized",
+        description: "You are logged out. Logging in again...",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 500);
+      return;
     }
-  ];
+  }, [user, isLoading, toast]);
 
   if (isLoading) {
     return (
