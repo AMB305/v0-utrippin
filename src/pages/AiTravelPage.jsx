@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { generateTravelItinerary } from '../services/openai';
+import ItineraryDisplay from '../components/ai/ItineraryDisplay';
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
@@ -40,37 +42,37 @@ export default function AiTravelPage() {
   ]);
   const [userInput, setUserInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [currentItinerary, setCurrentItinerary] = useState(null);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!userInput) return;
     const newMessages = [...chatMessages, { from: 'user', text: userInput }];
     setChatMessages(newMessages);
+    const currentInput = userInput;
     setUserInput('');
     setIsTyping(true);
 
-    // Fake AI reply (replace with OpenAI call)
-    setTimeout(() => {
-      const aiResponse = generateAIResponse(userInput);
-      setChatMessages(prev => [...prev, { from: 'ai', text: aiResponse }]);
+    try {
+      // Call OpenAI service
+      const response = await generateTravelItinerary(currentInput);
+      
+      setChatMessages(prev => [...prev, { from: 'ai', text: response.text }]);
+      
+      // If we got an itinerary, display it
+      if (response.type === 'itinerary') {
+        setCurrentItinerary(response.data);
+      }
+    } catch (error) {
+      console.error('Error generating response:', error);
+      setChatMessages(prev => [...prev, { 
+        from: 'ai', 
+        text: "I'm having trouble connecting right now. Please try again in a moment!" 
+      }]);
+    } finally {
       setIsTyping(false);
-    }, 1000);
-  };
-
-  const generateAIResponse = (input) => {
-    const lowerInput = input.toLowerCase();
-    
-    if (lowerInput.includes('japan') || lowerInput.includes('tokyo')) {
-      return "🇯🇵 Japan is amazing! I'd recommend Tokyo (3 days) for modern culture, Kyoto (2 days) for temples, and Osaka (1 day) for food. Best time: March-May or September-November. Budget: $200-300/day. Want me to find flights and hotels?";
-    } else if (lowerInput.includes('europe') || lowerInput.includes('paris')) {
-      return "🇪🇺 Europe is perfect for first-timers! Try London → Paris → Rome (3 days each). Use Eurail pass for easy travel. Budget €150-200/day. Spring/fall have best weather. I can help book everything!";
-    } else if (lowerInput.includes('budget') || lowerInput.includes('cheap')) {
-      return "💰 Budget travel tips: Book flights 6-8 weeks ahead, fly Tuesday-Thursday, use alternative airports, mix hostels with budget hotels, eat at local markets. I can find deals 40-60% cheaper! What's your destination?";
-    } else if (lowerInput.includes('family') || lowerInput.includes('kids')) {
-      return "👨‍👩‍👧‍👦 Family travel made easy! Orlando (theme parks), San Diego (beaches + zoo), or Costa Rica (adventure + wildlife) are great. I'll find family-friendly hotels and kid-approved activities!";
-    } else {
-      return "Sounds amazing! Here's a draft itinerary for you. I can help with flights, hotels, activities, and create detailed day-by-day plans. What's your budget and travel style preference?";
     }
   };
+
 
   const quickPrompts = [
     "Plan a 7-day trip to Japan for $3000",
@@ -291,125 +293,18 @@ export default function AiTravelPage() {
       </section>
 
       {/* Itinerary */}
-      <section className="max-w-5xl mx-auto mt-12 p-4">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-[#003C8A]">🗓️ Your AI-generated Itinerary</h2>
-          <Badge className="bg-green-100 text-green-800">
-            <Sparkles className="h-4 w-4 mr-1" />
-            AI Optimized
-          </Badge>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-white shadow-lg border-2 border-gray-200 hover:border-[#0068EF] transition-all">
-            <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-              <CardTitle className="flex items-center">
-                <Calendar className="h-5 w-5 mr-2" />
-                Day 1
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <Clock className="h-4 w-4 mr-2 mt-1 text-gray-500" />
-                  <div>
-                    <span className="font-semibold">Morning:</span> Explore downtown
-                    <p className="text-sm text-gray-600">Walking tour of historic district</p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <Utensils className="h-4 w-4 mr-2 mt-1 text-gray-500" />
-                  <div>
-                    <span className="font-semibold">Lunch:</span> Local bistro
-                    <p className="text-sm text-gray-600">Recommended: Café Central</p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <Camera className="h-4 w-4 mr-2 mt-1 text-gray-500" />
-                  <div>
-                    <span className="font-semibold">Evening:</span> Sunset cruise
-                    <p className="text-sm text-gray-600">Harbor tour with dinner</p>
-                  </div>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white shadow-lg border-2 border-gray-200 hover:border-[#0068EF] transition-all">
-            <CardHeader className="bg-gradient-to-r from-green-500 to-green-600 text-white">
-              <CardTitle className="flex items-center">
-                <Calendar className="h-5 w-5 mr-2" />
-                Day 2
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <Camera className="h-4 w-4 mr-2 mt-1 text-gray-500" />
-                  <div>
-                    <span className="font-semibold">Morning:</span> Art museum
-                    <p className="text-sm text-gray-600">Skip-the-line tickets included</p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <MapPin className="h-4 w-4 mr-2 mt-1 text-gray-500" />
-                  <div>
-                    <span className="font-semibold">Afternoon:</span> Local market
-                    <p className="text-sm text-gray-600">Shopping and street food</p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <Utensils className="h-4 w-4 mr-2 mt-1 text-gray-500" />
-                  <div>
-                    <span className="font-semibold">Dinner:</span> La Bella restaurant
-                    <p className="text-sm text-gray-600">Reservation confirmed</p>
-                  </div>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white shadow-lg border-2 border-gray-200 hover:border-[#0068EF] transition-all">
-            <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
-              <CardTitle className="flex items-center">
-                <Calendar className="h-5 w-5 mr-2" />
-                Day 3
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <Plane className="h-4 w-4 mr-2 mt-1 text-gray-500" />
-                  <div>
-                    <span className="font-semibold">Day trip:</span> Nearby island
-                    <p className="text-sm text-gray-600">Ferry tickets booked</p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <MapPin className="h-4 w-4 mr-2 mt-1 text-gray-500" />
-                  <div>
-                    <span className="font-semibold">Activity:</span> Beach relaxation
-                    <p className="text-sm text-gray-600">Snorkeling gear rental</p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <Clock className="h-4 w-4 mr-2 mt-1 text-gray-500" />
-                  <div>
-                    <span className="font-semibold">Return:</span> Evening ferry
-                    <p className="text-sm text-gray-600">6:30 PM departure</p>
-                  </div>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-        
-        <div className="text-center mt-8">
-          <Button className="bg-[#0068EF] hover:bg-[#0055A5] text-white px-8 py-3 rounded-xl">
-            <FileText className="mr-2 h-5 w-5" />
-            Download Full Itinerary
-          </Button>
-        </div>
-      </section>
+      {currentItinerary && (
+        <section className="max-w-5xl mx-auto mt-12 p-4">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-[#003C8A]">🗓️ Your AI-generated Itinerary</h2>
+            <Badge className="bg-green-100 text-green-800">
+              <Sparkles className="h-4 w-4 mr-1" />
+              AI Optimized
+            </Badge>
+          </div>
+          <ItineraryDisplay itinerary={currentItinerary} />
+        </section>
+      )}
 
       {/* Map & Recommendations */}
       <section className="max-w-5xl mx-auto mt-12 p-4">
