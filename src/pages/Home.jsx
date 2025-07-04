@@ -18,14 +18,29 @@ export default function Home() {
 
   const { data: recentSearches } = useQuery({
     queryKey: ['/api/searches'],
+    queryFn: async () => {
+      const response = await fetch('/api/searches');
+      if (!response.ok) throw new Error('Failed to fetch recent searches');
+      return response.json();
+    }
   });
 
   const { data: priceAlerts } = useQuery({
     queryKey: ['/api/price-alerts'],
+    queryFn: async () => {
+      const response = await fetch('/api/price-alerts');
+      if (!response.ok) throw new Error('Failed to fetch price alerts');
+      return response.json();
+    }
   });
 
   const { data: userTrips } = useQuery({
     queryKey: ['/api/trips'],
+    queryFn: async () => {
+      const response = await fetch('/api/trips');
+      if (!response.ok) throw new Error('Failed to fetch user trips');
+      return response.json();
+    }
   });
 
   // Redirect to home if not authenticated
