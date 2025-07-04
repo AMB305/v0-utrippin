@@ -14,6 +14,7 @@ export default function Header() {
               <div className="text-[#0068EF] font-bold text-xl">UTrippin</div>
             </a>
             <ul className="hidden lg:flex items-center gap-2 text-sm">
+              <li><a href="/ai-assistant" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">AI Travel Assistant</a></li>
               <li><a href="/hotels" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Hotels</a></li>
               <li><a href="/cars" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Cars</a></li>
               <li><a href="/flights" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Flights</a></li>
@@ -21,7 +22,6 @@ export default function Header() {
               <li><a href="/cruises" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Cruises</a></li>
               <li><a href="/experiences" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Experiences</a></li>
               <li><a href="/deals" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Deals</a></li>
-              <li><a href="/ai-assistant" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">AI Travel Assistant</a></li>
             </ul>
           </div>
 
