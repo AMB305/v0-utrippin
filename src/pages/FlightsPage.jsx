@@ -46,3 +46,11 @@ export default function FlightsPage() {
                 type="text"
                 placeholder="Departing - Returning"
                 className="flex-1 border border-gray-300 rounded-xl py-4 px-4 focus:ring-2 focus:ring-blue-600 outline-none"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
