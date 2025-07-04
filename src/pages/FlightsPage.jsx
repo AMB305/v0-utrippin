@@ -6,7 +6,7 @@ export default function FlightsPage() {
       {/* NAVBAR */}
       <div className="bg-[#0068EF] text-white py-4 px-6 flex justify-between items-center">
         <div className="flex gap-6 items-center">
-          <div className="text-2xl font-bold text-white">Utrippin</div>
+          <img src="/logo-utrippin.png" alt="Utrippin Logo" className="h-8" />
           <nav className="hidden md:flex gap-4">
             <a className="hover:underline" href="#">Hotels</a>
             <a className="hover:underline" href="#">Cars</a>
