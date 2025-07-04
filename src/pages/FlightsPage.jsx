@@ -2,7 +2,21 @@ import React from "react";
 
 export default function FlightsPage() {
   return (
-    <div className="w-full min-h-screen bg-[url('https://images.unsplash.com/photo-1533460004985-ee4c9275bb2b?auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
+    <>
+      <style>{`
+        .rounded-3xl { border-radius: 1.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .text-blue-600 { color: #2563EB; }
+        .bg-blue-600 { background-color: #2563EB; }
+        .bg-[#FF6200] { background-color: #FF6200; }
+        .text-[#002974] { color: #002974; }
+        .bg-lime-200 { background-color: #D9F99D; }
+        .text-green-700 { color: #15803D; }
+        .bg-green-700 { background-color: #15803D; }
+        .border-slate-300 { border-color: #cbd5e1; }
+      `}</style>
+      <div className="w-full min-h-screen bg-[url('https://images.unsplash.com/photo-1533460004985-ee4c9275bb2b?auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
       {/* Container */}
       <div className="max-w-7xl mx-auto pt-12 px-4 lg:flex lg:space-x-8">
         
@@ -103,6 +117,7 @@ export default function FlightsPage() {
           More exclusive deals available on Utrippin. Start exploring your next adventure today!
         </p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
