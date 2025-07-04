@@ -47,9 +47,61 @@ export default function FlightsPage() {
                 placeholder="Departing - Returning"
                 className="flex-1 border border-gray-300 rounded-xl py-4 px-4 focus:ring-2 focus:ring-blue-600 outline-none"
               />
+              <select className="flex-1 border border-gray-300 rounded-xl py-4 px-4 focus:ring-2 focus:ring-blue-600 outline-none">
+                <option>1 Adult</option>
+                <option>2 Adults</option>
+              </select>
+              <select className="flex-1 border border-gray-300 rounded-xl py-4 px-4 focus:ring-2 focus:ring-blue-600 outline-none">
+                <option>Economy</option>
+                <option>Business</option>
+              </select>
             </div>
           </div>
+
+          {/* Bundle + Save */}
+          <div className="bg-green-100 rounded-xl p-4 flex flex-wrap items-center space-x-6 mb-6">
+            <span className="text-green-900 font-semibold flex items-center space-x-1">
+              <span>💰</span>
+              <span>Bundle + Save</span>
+            </span>
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" className="accent-blue-600" />
+              <span>Add hotel</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" className="accent-blue-600" />
+              <span>Add car</span>
+            </label>
+          </div>
+
+          {/* CTA */}
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold w-full py-4 rounded-xl text-lg transition">
+            Find Your Flight
+          </button>
+
+          {/* Call line */}
+          <p className="text-center text-sm text-gray-700 mt-6">
+            Looking for international flight deals? Call us at <span className="text-[#FF6200] font-bold">(833) 203-5879</span>
+          </p>
         </div>
+
+        {/* RIGHT - Promo card */}
+        <div className="hidden lg:flex items-center justify-center mt-8 lg:mt-0">
+          <div className="bg-[#FF6200] text-white rounded-3xl p-8 w-72 flex flex-col items-center space-y-4">
+            <span className="bg-white text-[#FF6200] text-xs font-bold px-3 py-1 rounded-full">Limited Time</span>
+            <h3 className="text-xl font-bold text-center">✈️ Flight Deal Alert</h3>
+            <p className="text-center">NYC to Miami</p>
+            <p className="text-3xl font-bold">$89</p>
+            <button className="bg-white text-[#FF6200] font-bold px-6 py-3 rounded-xl">View Deal</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer style banner (optional mimic of Priceline) */}
+      <div className="bg-white text-center mt-12 py-6">
+        <p className="text-gray-700">
+          More exclusive deals available on Utrippin. Start exploring your next adventure today!
+        </p>
       </div>
     </div>
   );
