@@ -21,6 +21,7 @@ export default function App() {
         <Route path="/packages" element={<PackagesPage />} />
         <Route path="/cruises" element={<CruisesPage />} />
         <Route path="/experiences" element={<ExperiencesPage />} />
+        <Route path="/destination" element={<ExperiencesPage />} />
         <Route path="/deals" element={<DealsPage />} />
       </Routes>
     </BrowserRouter>
