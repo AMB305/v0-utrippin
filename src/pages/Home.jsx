@@ -341,13 +341,13 @@ export default function Home() {
             
             <div 
               id="travel-pros-container"
-              className="flex gap-6 overflow-x-auto scrollbar-hide pb-4"
+              className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 pt-6"
               style={{ scrollBehavior: 'smooth' }}
             >
               {/* UTrippin AI */}
               <Card className="hover:shadow-lg transition-shadow bg-white flex-shrink-0 w-80 border-2 border-gray-200 hover:border-[#0068EF]">
                 <div className="relative">
-                  <Badge className="absolute -top-3 left-4 bg-[#003C8A] text-white text-xs font-medium px-3 py-1 z-10">
+                  <Badge className="absolute -top-4 left-4 bg-[#003C8A] text-white text-xs font-medium px-3 py-1 z-10 shadow-md">
                     BETA
                   </Badge>
                 </div>
