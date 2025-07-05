@@ -37,27 +37,24 @@ export default function SEOHead({ title, description, image, url, structuredData
     // Open Graph tags
     if (title) {
       updateMetaTag('og:title', title);
+      updateMetaTag('twitter:title', title, false);
     }
     if (description) {
       updateMetaTag('og:description', description);
+      updateMetaTag('twitter:description', description, false);
     }
     if (image) {
       updateMetaTag('og:image', image);
+      updateMetaTag('og:image:width', '1200');
+      updateMetaTag('og:image:height', '630');
+      updateMetaTag('twitter:image', image, false);
     }
     if (url) {
       updateMetaTag('og:url', url);
     }
     
-    // Twitter Card tags
-    if (title) {
-      updateMetaTag('twitter:title', title, false);
-    }
-    if (description) {
-      updateMetaTag('twitter:description', description, false);
-    }
-    if (image) {
-      updateMetaTag('twitter:image', image, false);
-    }
+    // Ensure Twitter card type is set
+    updateMetaTag('twitter:card', 'summary_large_image', false);
     
     // Handle structured data JSON-LD
     if (structuredData) {

@@ -1,11 +1,11 @@
 // SEO Configuration for UTrippin
 export const defaultSEOConfig = {
   type: "website",
-  url: "https://utrippin.ai/",
+  url: "https://utrippin.ai",
   title: "UTrippin: Your AI Travel Buddy",
   description: "Compare flights, hotels, cars & even find travel buddies.",
   image: {
-    url: "https://utrippin.ai/utrippin_social_card.png",
+    url: "https://utrippin.ai/UTrippin_Social_Card_BlueBG_1200x630.png",
     width: 1200,
     height: 630
   }

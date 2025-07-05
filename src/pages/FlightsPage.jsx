@@ -218,7 +218,7 @@ export default function FlightsPage() {
       <SEOHead 
         title={pageSEOConfigs.flights.title}
         description={pageSEOConfigs.flights.description}
-        image="https://utrippin.ai/utrippin_social_card.png"
+        image="https://utrippin.ai/UTrippin_Social_Card_BlueBG_1200x630.png"
         url="https://utrippin.ai/flights"
         structuredData={flightsStructuredData}
       />
