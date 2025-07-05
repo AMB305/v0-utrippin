@@ -9,6 +9,7 @@ import CruisesPage from './pages/CruisesPage'
 import ExperiencesPage from './pages/ExperiencesPage'
 import DealsPage from './pages/DealsPage'
 import AiTravelPage from './pages/AiTravelPage'
+import TravelBuddy from './pages/TravelBuddy'
 import TravelBuddySwipePage from './pages/TravelBuddySwipePage'
 import TravelMatchesPage from './pages/TravelMatchesPage'
 import TravelPlannerPage from './pages/TravelPlannerPage'
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/destination" element={<ExperiencesPage />} />
           <Route path="/deals" element={<DealsPage />} />
           <Route path="/ai-travel" element={<AiTravelPage />} />
+          <Route path="/travel-buddy-old" element={<TravelBuddy />} />
           <Route path="/travel-buddy" element={<TravelBuddySwipePage />} />
           <Route path="/travel-matches" element={<TravelMatchesPage />} />
           <Route path="/travel-planner" element={<TravelPlannerPage />} />
