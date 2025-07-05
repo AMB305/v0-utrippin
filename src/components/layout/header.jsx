@@ -14,7 +14,11 @@ export default function Header() {
           {/* Left side - Logo and Navigation */}
           <div className="flex items-center gap-2">
             <Link to="/" className="flex items-center px-3 py-2 rounded-full">
-              <span className="text-[#0068EF] font-bold text-xl">Travel</span>
+              <img 
+                src="/UTrippin_Logo_new.png"
+                alt="UTrippin Logo"
+                className="h-10 w-auto"
+              />
             </Link>
             
             {/* Desktop Navigation */}
