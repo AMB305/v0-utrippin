@@ -346,18 +346,18 @@ export default function Home() {
             >
               {/* UTrippin AI */}
               <Card className="hover:shadow-lg transition-shadow bg-white flex-shrink-0 w-80 border-2 border-gray-200 hover:border-[#0068EF]">
+                <div className="relative">
+                  <Badge className="absolute -top-3 left-4 bg-[#003C8A] text-white text-xs font-medium px-3 py-1 z-10">
+                    BETA
+                  </Badge>
+                </div>
                 <CardContent className="p-6">
-                  <div className="mb-4">
-                    <Badge className="bg-[#003C8A] text-white text-xs font-medium px-2 py-1 mb-3">
-                      BETA
-                    </Badge>
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2 text-[#003C8A]">UTrippin.ai</h3>
-                  <p className="text-sm text-gray-600 mb-6">
+                  <h3 className="font-semibold text-lg mb-2 text-[#003C8A] text-center mt-2">UTrippin.ai</h3>
+                  <p className="text-sm text-gray-600 mb-6 text-center">
                     Get travel questions answered with AI-powered insights
                   </p>
-                  <div className="h-40 relative bg-gradient-to-br from-[#0068EF]/10 to-[#0055A5]/20 rounded-lg flex items-center justify-center overflow-hidden">
-                    <div className="relative">
+                  <div className="h-40 relative bg-gradient-to-br from-[#0068EF]/10 to-[#0055A5]/20 rounded-lg flex items-center justify-center overflow-hidden mx-auto">
+                    <div className="relative flex items-center justify-center">
                       <div className="w-24 h-20 bg-[#0068EF] rounded-2xl shadow-lg flex items-center justify-center relative">
                         <MessageCircle className="h-12 w-12 text-white" />
                         <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#FF6200] rounded-full flex items-center justify-center shadow-md">
@@ -372,12 +372,12 @@ export default function Home() {
               {/* Best Time to Travel */}
               <Card className="hover:shadow-lg transition-shadow bg-white flex-shrink-0 w-80 border-2 border-gray-200 hover:border-[#0068EF]">
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg mb-2 text-[#003C8A]">Best Time to Travel</h3>
-                  <p className="text-sm text-gray-600 mb-6">
+                  <h3 className="font-semibold text-lg mb-2 text-[#003C8A] text-center">Best Time to Travel</h3>
+                  <p className="text-sm text-gray-600 mb-6 text-center">
                     Know when to save with AI price predictions
                   </p>
-                  <div className="h-40 relative bg-gradient-to-br from-[#FF6200]/10 to-red-100 rounded-lg flex items-center justify-center overflow-hidden">
-                    <div className="relative">
+                  <div className="h-40 relative bg-gradient-to-br from-[#FF6200]/10 to-red-100 rounded-lg flex items-center justify-center overflow-hidden mx-auto">
+                    <div className="relative flex items-center justify-center">
                       <div className="w-20 h-20 bg-gradient-to-br from-[#0068EF] to-[#0055A5] rounded-full shadow-lg relative overflow-hidden">
                         <div className="w-6 h-8 bg-green-500 rounded-full absolute top-2 left-3"></div>
                         <div className="w-8 h-6 bg-green-600 rounded-full absolute bottom-3 right-2"></div>
@@ -394,12 +394,12 @@ export default function Home() {
               {/* Price Alerts */}
               <Card className="hover:shadow-lg transition-shadow bg-white flex-shrink-0 w-80 border-2 border-gray-200 hover:border-[#0068EF]">
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg mb-2 text-[#003C8A]">Price Alerts</h3>
-                  <p className="text-sm text-gray-600 mb-6">
+                  <h3 className="font-semibold text-lg mb-2 text-[#003C8A] text-center">Price Alerts</h3>
+                  <p className="text-sm text-gray-600 mb-6 text-center">
                     Know when prices change for your tracked routes
                   </p>
-                  <div className="h-40 relative bg-gradient-to-br from-[#FF6200]/10 to-red-100 rounded-lg flex items-center justify-center overflow-hidden">
-                    <div className="relative">
+                  <div className="h-40 relative bg-gradient-to-br from-[#FF6200]/10 to-red-100 rounded-lg flex items-center justify-center overflow-hidden mx-auto">
+                    <div className="relative flex items-center justify-center">
                       <div className="w-16 h-28 bg-[#0068EF] rounded-2xl shadow-lg relative flex items-center justify-center">
                         <div className="w-12 h-20 bg-white rounded-xl absolute top-2 left-2">
                           <div className="w-8 h-3 bg-gray-200 rounded-md absolute top-2 left-2"></div>
@@ -421,12 +421,12 @@ export default function Home() {
               {/* Flight Tracker */}
               <Card className="hover:shadow-lg transition-shadow bg-white flex-shrink-0 w-80 border-2 border-gray-200 hover:border-[#0068EF]">
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg mb-2 text-[#003C8A]">Flight Tracker</h3>
-                  <p className="text-sm text-gray-600 mb-6">
+                  <h3 className="font-semibold text-lg mb-2 text-[#003C8A] text-center">Flight Tracker</h3>
+                  <p className="text-sm text-gray-600 mb-6 text-center">
                     See real-time delays and gate changes for your flights
                   </p>
-                  <div className="h-40 relative bg-gradient-to-br from-[#0068EF]/10 to-cyan-100 rounded-lg flex items-center justify-center overflow-hidden">
-                    <div className="relative">
+                  <div className="h-40 relative bg-gradient-to-br from-[#0068EF]/10 to-cyan-100 rounded-lg flex items-center justify-center overflow-hidden mx-auto">
+                    <div className="relative flex items-center justify-center">
                       <div className="w-28 h-20 bg-[#0068EF] rounded-2xl shadow-lg relative flex items-center justify-center">
                         <div className="w-24 h-16 bg-white rounded-xl absolute top-2 left-2">
                           <div className="w-20 h-3 bg-blue-200 rounded-md absolute top-2 left-2"></div>
