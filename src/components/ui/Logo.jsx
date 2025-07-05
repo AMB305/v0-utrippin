@@ -2,14 +2,14 @@ import React from "react";
 
 export default function Logo() {
   const letters = [
-    { char: "U", color: "bg-[#0068EF]" },
-    { char: "T", color: "bg-[#005FCF]" },
-    { char: "R", color: "bg-[#004FB0]" },
-    { char: "I", color: "bg-[#004092]" },
-    { char: "P", color: "bg-[#003073]" },
-    { char: "P", color: "bg-[#002155]" },
-    { char: "I", color: "bg-[#001137]" },
-    { char: "N", color: "bg-[#000218]" },
+    { char: "U", color: "bg-[#0068EF]", hover: "hover:bg-[#338ef7]" },
+    { char: "T", color: "bg-[#005FCF]", hover: "hover:bg-[#337ed7]" },
+    { char: "R", color: "bg-[#004FB0]", hover: "hover:bg-[#336eb0]" },
+    { char: "I", color: "bg-[#004092]", hover: "hover:bg-[#335e92]" },
+    { char: "P", color: "bg-[#003073]", hover: "hover:bg-[#334e73]" },
+    { char: "P", color: "bg-[#002155]", hover: "hover:bg-[#333e55]" },
+    { char: "I", color: "bg-[#001137]", hover: "hover:bg-[#332e37]" },
+    { char: "N", color: "bg-[#000218]", hover: "hover:bg-[#331e18]" },
   ];
 
   return (
@@ -17,11 +17,11 @@ export default function Logo() {
       {letters.map((item, idx) => (
         <div
           key={idx}
-          className={`${item.color} w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 
+          className={`${item.color} ${item.hover} w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 
           flex items-center justify-center rounded transition duration-300 
-          hover:brightness-125 hover:shadow-md hover:-translate-y-0.5`}
+          hover:shadow-md hover:-translate-y-0.5`}
         >
-          <span className="text-white font-bold text-sm sm:text-base md:text-lg">
+          <span className="text-white font-bold text-xs sm:text-sm md:text-base">
             {item.char}
           </span>
         </div>

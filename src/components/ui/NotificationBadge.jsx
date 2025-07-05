@@ -59,7 +59,7 @@ export default function NotificationBadge({ className }) {
   
   return (
     <div className="relative">
-      <Bell className={`h-5 w-5 ${className || ''}`} />
+      <Bell className={`h-5 w-5 text-gray-700 ${className || ''}`} />
       {count > 0 && (
         <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs min-w-[1.25rem] h-5 flex items-center justify-center rounded-full px-1">
           {count > 99 ? '99+' : count}
