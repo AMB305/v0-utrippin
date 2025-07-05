@@ -19,23 +19,14 @@ export default function Header() {
             <img 
               src="/UTrippin_Logo_3000px.png" 
               alt="UTrippin Logo" 
-              className="h-8 md:h-10 w-auto"
+              className="h-10 w-auto object-contain"
               onError={handleLogoError}
+              onLoad={() => console.log('Logo loaded successfully')}
             />
           ) : (
             // Fallback to text logo if image fails to load
-            <div className="flex gap-1">
-              {"UTRIPPIN".split("").map((char, index) => (
-                <div
-                  key={index}
-                  className="w-6 h-6 md:w-8 md:h-8 flex items-center justify-center text-white font-bold rounded-sm transition-all text-xs md:text-sm"
-                  style={{
-                    backgroundColor: `hsl(${210 + index * 5}, 90%, 50%)`
-                  }}
-                >
-                  {char}
-                </div>
-              ))}
+            <div className="flex items-center">
+              <div className="text-[#0068EF] font-bold text-xl">UTrippin</div>
             </div>
           )}
         </Link>
