@@ -39,11 +39,11 @@ export default function SocialCardGenerator() {
             <SocialCardLogo />
           </div>
           
-          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-4">
+          <h2 className="text-5xl md:text-6xl font-bold text-white text-center mb-6">
             Your AI Travel Buddy
           </h2>
           
-          <p className="text-xl text-blue-100 text-center max-w-2xl">
+          <p className="text-2xl text-blue-100 text-center max-w-2xl">
             Compare flights, hotels, cars & even find travel buddies.
           </p>
         </Card>

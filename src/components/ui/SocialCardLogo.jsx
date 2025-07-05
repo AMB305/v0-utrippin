@@ -19,11 +19,11 @@ export default function SocialCardLogo() {
       {letters.map((item, idx) => (
         <div
           key={idx}
-          className={`${item.color} w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 
+          className={`${item.color} w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 
           flex items-center justify-center rounded-md transition duration-300 
           hover:shadow-md hover:-translate-y-0.5`}
         >
-          <span className="text-white font-bold text-2xl sm:text-3xl md:text-4xl">
+          <span className="text-white font-bold text-4xl sm:text-5xl md:text-6xl">
             {item.char}
           </span>
         </div>
