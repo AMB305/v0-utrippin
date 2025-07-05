@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import UtrippinLogo from "../ui/UtrippinLogo";
 import { Menu, X } from "lucide-react";
 
 export default function Header() {
@@ -13,12 +14,8 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Left side - Logo and Navigation */}
           <div className="flex items-center gap-2">
-            <Link to="/" className="flex items-center px-3 py-2 rounded-full">
-              <img 
-                src="/UTrippin_Logo_bg_removed.png"
-                alt="UTrippin Logo"
-                className="h-14 w-auto"
-              />
+            <Link to="/" className="flex items-center px-3 py-2">
+              <UtrippinLogo />
             </Link>
             
             {/* Desktop Navigation */}
