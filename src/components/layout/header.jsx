@@ -17,7 +17,7 @@ export default function Header() {
               <img 
                 src="/UTrippin_Logo_new.png"
                 alt="UTrippin Logo"
-                className="h-10 w-auto bg-transparent"
+                className="h-10 w-auto"
               />
             </Link>
             
