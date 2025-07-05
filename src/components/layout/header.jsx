@@ -14,7 +14,7 @@ export default function Header() {
           <img 
             src="/UTrippin_Logo_3000px_clean.png"
             alt="UTrippin Logo"
-            className="h-10 w-auto max-w-[200px] transition-transform duration-300 hover:scale-105"
+            className="h-8 w-auto max-w-[160px] transition-transform duration-300 hover:scale-105"
             onError={(e) => {
               // Fallback to text logo if image fails to load
               e.target.style.display = 'none';
