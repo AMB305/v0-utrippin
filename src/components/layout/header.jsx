@@ -11,9 +11,18 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Left side - Logo and Navigation */}
           <div className="flex items-center gap-2">
-            <a href="/" className="flex items-center px-3 py-2 rounded-full">
-              <div className="text-[#0068EF] font-bold text-xl">UTrippin</div>
-            </a>
+            <Link href="/" className="group flex space-x-2 transition transform hover:scale-105 duration-300">
+              <div className="flex space-x-1">
+                <span className="bg-[#0068ef] group-hover:bg-[#338df3] transition text-white font-bold px-2 py-1">U</span>
+                <span className="bg-[#0055a5] group-hover:bg-[#3578bd] transition text-white font-bold px-2 py-1">T</span>
+                <span className="bg-[#004080] group-hover:bg-[#2e5d91] transition text-white font-bold px-2 py-1">R</span>
+                <span className="bg-[#003366] group-hover:bg-[#264d73] transition text-white font-bold px-2 py-1">I</span>
+                <span className="bg-[#00264d] group-hover:bg-[#1e3c5c] transition text-white font-bold px-2 py-1">P</span>
+                <span className="bg-[#001933] group-hover:bg-[#14293f] transition text-white font-bold px-2 py-1">P</span>
+                <span className="bg-[#001020] group-hover:bg-[#0e1a26] transition text-white font-bold px-2 py-1">I</span>
+                <span className="bg-[#000d1a] group-hover:bg-[#0b141f] transition text-white font-bold px-2 py-1">N</span>
+              </div>
+            </Link>
             <ul className="hidden lg:flex items-center gap-2 text-sm">
               <li><a href="/hotels" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Hotels</a></li>
               <li><a href="/cars" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Cars</a></li>
