@@ -13,8 +13,8 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Left side - Logo and Navigation */}
           <div className="flex items-center gap-2">
-            <Link to="/" className="flex items-center px-3 py-2 rounded-full text-[#0068EF] font-bold text-xl">
-              UTrippin
+            <Link to="/" className="flex items-center px-3 py-2 rounded-full">
+              <span className="text-[#0068EF] font-bold text-xl">Travel</span>
             </Link>
             
             {/* Desktop Navigation */}
