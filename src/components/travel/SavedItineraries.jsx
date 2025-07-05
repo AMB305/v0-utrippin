@@ -13,11 +13,14 @@ import {
   Share2,
   Download,
   Trash2,
-  Heart
+  Heart,
+  Globe,
+  Clock
 } from 'lucide-react';
-import { travelDb } from '../../hooks/useSupabase';
+import { useSupabase } from '../../hooks/useSupabase';
 
 export default function SavedItineraries({ userId }) {
+  const { supabase } = useSupabase();
   const [savedTrips, setSavedTrips] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +33,22 @@ export default function SavedItineraries({ userId }) {
   const loadSavedItineraries = async () => {
     setLoading(true);
     try {
-      const { data, error } = await travelDb.getSavedItineraries(userId);
+      const { data, error } = await supabase
+        .from('saved_itineraries')
+        .select(`
+          *,
+          trip:trips (
+            *,
+            user:users (
+              email,
+              profile_photo_url,
+              location
+            )
+          )
+        `)
+        .eq('user_id', userId)
+        .order('saved_at', { ascending: false });
+      
       if (error) throw error;
       setSavedTrips(data || []);
     } catch (error) {
@@ -134,7 +152,7 @@ export default function SavedItineraries({ userId }) {
                   <h3 className="font-bold text-lg text-[#003C8A] mb-2">{trip.title}</h3>
                   <div className="flex items-center text-sm text-gray-600 mb-2">
                     <Users className="h-4 w-4 mr-1" />
-                    <span>by {trip.user?.name || 'Anonymous'}</span>
+                    <span>by {trip.user?.email?.split('@')[0] || 'Anonymous'}</span>
                   </div>
                 </div>
 
@@ -157,7 +175,7 @@ export default function SavedItineraries({ userId }) {
                   )}
                   
                   <div className="flex items-center text-sm">
-                    <MapPin className="h-4 w-4 mr-2 text-gray-500" />
+                    <Clock className="h-4 w-4 mr-2 text-gray-500" />
                     <span>{trip.duration_days || 0} days</span>
                   </div>
                 </div>

@@ -32,6 +32,7 @@ export default function Header() {
               <li><Link to="/deals" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100 hover:text-[#0068EF] transition-colors">Deals</Link></li>
               <li><Link to="/ai-travel" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100 hover:text-[#0068EF] transition-colors font-medium">🤖 AI Travel</Link></li>
               <li><Link to="/travel-buddy" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100 hover:text-[#0068EF] transition-colors font-medium">🧑‍🤝‍🧑 Find Buddies</Link></li>
+              <li><Link to="/travel-planner" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100 hover:text-[#0068EF] transition-colors font-medium">📋 My Trips</Link></li>
             </ul>
           </div>
 
@@ -88,6 +89,7 @@ export default function Header() {
               <Link to="/ai-travel" className="block py-2 text-[#001E3C] hover:text-[#0068EF] transition-colors font-medium" onClick={() => setIsOpen(false)}>🤖 AI Travel</Link>
               <Link to="/travel-buddy" className="block py-2 text-[#001E3C] hover:text-[#0068EF] transition-colors font-medium" onClick={() => setIsOpen(false)}>🧑‍🤝‍🧑 Find Buddies</Link>
               <Link to="/travel-matches" className="block py-2 text-[#001E3C] hover:text-[#0068EF] transition-colors" onClick={() => setIsOpen(false)}>💕 Your Matches</Link>
+              <Link to="/travel-planner" className="block py-2 text-[#001E3C] hover:text-[#0068EF] transition-colors font-medium" onClick={() => setIsOpen(false)}>📋 My Trips</Link>
               
               {/* Mobile User Actions */}
               <div className="pt-4 border-t border-gray-200 mt-4">

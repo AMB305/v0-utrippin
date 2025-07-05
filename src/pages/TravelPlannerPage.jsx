@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
 import { 
   MapPin, 
   Calendar, 
@@ -15,20 +17,41 @@ import {
   Camera,
   Settings,
   Share2,
-  Download
+  Download,
+  Edit,
+  Trash2,
+  Globe,
+  Heart,
+  MessageCircle,
+  Star,
+  Clock,
+  DollarSign,
+  Filter,
+  Search
 } from 'lucide-react';
 import Header from '../components/layout/header';
 import Footer from '../components/layout/footer';
 import SEOHead from '../components/common/seo-head';
 import TravelBuddyFinder from '../components/travel/TravelBuddyFinder';
 import SavedItineraries from '../components/travel/SavedItineraries';
-import { useSupabase, travelDb } from '../hooks/useSupabase';
+import { useSupabase } from '../hooks/useSupabase';
 
 export default function TravelPlannerPage() {
-  const { user } = useSupabase();
+  const { user, supabase } = useSupabase();
   const [userTrips, setUserTrips] = useState([]);
+  const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('my-trips');
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [profileForm, setProfileForm] = useState({
+    bio: '',
+    location: '',
+    age: '',
+    travel_style: 'mid-range',
+    interests: [],
+    preferred_destinations: [],
+    languages_spoken: []
+  });
 
   useEffect(() => {
     if (user) {
@@ -40,11 +63,31 @@ export default function TravelPlannerPage() {
     setLoading(true);
     try {
       // Get user profile
-      const { data: profile } = await travelDb.getUserProfile(user.id);
+      const { data: profile, error: profileError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', user.email)
+        .single();
       
       if (profile) {
+        setUserProfile(profile);
+        setProfileForm({
+          bio: profile.bio || '',
+          location: profile.location || '',
+          age: profile.age || '',
+          travel_style: profile.travel_style || 'mid-range',
+          interests: profile.interests || [],
+          preferred_destinations: profile.preferred_destinations || [],
+          languages_spoken: profile.languages_spoken || []
+        });
+
         // Get user trips
-        const { data: trips } = await travelDb.getUserTrips(profile.id);
+        const { data: trips } = await supabase
+          .from('trips')
+          .select('*')
+          .eq('user_id', profile.id)
+          .order('created_at', { ascending: false });
+        
         setUserTrips(trips || []);
       }
     } catch (error) {
@@ -54,9 +97,66 @@ export default function TravelPlannerPage() {
     }
   };
 
+  const handleProfileUpdate = async () => {
+    if (!userProfile) return;
+
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          bio: profileForm.bio,
+          location: profileForm.location,
+          age: profileForm.age ? parseInt(profileForm.age) : null,
+          travel_style: profileForm.travel_style,
+          interests: profileForm.interests,
+          preferred_destinations: profileForm.preferred_destinations,
+          languages_spoken: profileForm.languages_spoken
+        })
+        .eq('id', userProfile.id);
+
+      if (error) throw error;
+
+      setEditingProfile(false);
+      loadUserData(); // Refresh data
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
   const handleBuddyRequest = (requestData) => {
-    // Handle successful buddy request
     console.log('Buddy request sent:', requestData);
+  };
+
+  const addInterest = (interest) => {
+    if (interest && !profileForm.interests.includes(interest)) {
+      setProfileForm(prev => ({
+        ...prev,
+        interests: [...prev.interests, interest]
+      }));
+    }
+  };
+
+  const removeInterest = (interest) => {
+    setProfileForm(prev => ({
+      ...prev,
+      interests: prev.interests.filter(i => i !== interest)
+    }));
+  };
+
+  const addDestination = (destination) => {
+    if (destination && !profileForm.preferred_destinations.includes(destination)) {
+      setProfileForm(prev => ({
+        ...prev,
+        preferred_destinations: [...prev.preferred_destinations, destination]
+      }));
+    }
+  };
+
+  const removeDestination = (destination) => {
+    setProfileForm(prev => ({
+      ...prev,
+      preferred_destinations: prev.preferred_destinations.filter(d => d !== destination)
+    }));
   };
 
   if (!user) {
@@ -128,7 +228,9 @@ export default function TravelPlannerPage() {
               <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Camera className="h-6 w-6 text-orange-600" />
               </div>
-              <div className="text-2xl font-bold text-[#003C8A]">0</div>
+              <div className="text-2xl font-bold text-[#003C8A]">
+                {userTrips.filter(t => t.status === 'completed').length}
+              </div>
               <div className="text-sm text-gray-600">Completed</div>
             </CardContent>
           </Card>
@@ -218,6 +320,13 @@ export default function TravelPlannerPage() {
                           <Users className="h-4 w-4 mr-2 text-gray-500" />
                           <span>{trip.trip_type || 'Solo'} trip</span>
                         </div>
+
+                        {trip.budget && (
+                          <div className="flex items-center text-sm">
+                            <DollarSign className="h-4 w-4 mr-2 text-gray-500" />
+                            <span>${trip.budget} {trip.currency || 'USD'}</span>
+                          </div>
+                        )}
                       </div>
 
                       {trip.ai_generated && (
@@ -252,16 +361,225 @@ export default function TravelPlannerPage() {
           </TabsContent>
 
           <TabsContent value="saved" className="space-y-6">
-            <SavedItineraries userId={user?.id} />
+            <SavedItineraries userId={userProfile?.id} />
           </TabsContent>
 
           <TabsContent value="profile" className="space-y-6">
             <Card className="border-2 border-gray-200">
               <CardHeader>
-                <CardTitle className="text-[#003C8A]">Travel Profile</CardTitle>
+                <div className="flex justify-between items-center">
+                  <CardTitle className="text-[#003C8A]">Travel Profile</CardTitle>
+                  <Button
+                    variant="outline"
+                    onClick={() => setEditingProfile(!editingProfile)}
+                    className="border-[#0068EF] text-[#0068EF]"
+                  >
+                    <Edit className="h-4 w-4 mr-2" />
+                    {editingProfile ? 'Cancel' : 'Edit Profile'}
+                  </Button>
+                </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Profile settings and travel preferences coming soon...</p>
+              <CardContent className="space-y-6">
+                {editingProfile ? (
+                  <div className="space-y-6">
+                    {/* Basic Info */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="location">Location</Label>
+                        <Input
+                          id="location"
+                          value={profileForm.location}
+                          onChange={(e) => setProfileForm(prev => ({ ...prev, location: e.target.value }))}
+                          placeholder="City, Country"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="age">Age</Label>
+                        <Input
+                          id="age"
+                          type="number"
+                          value={profileForm.age}
+                          onChange={(e) => setProfileForm(prev => ({ ...prev, age: e.target.value }))}
+                          placeholder="Your age"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Bio */}
+                    <div>
+                      <Label htmlFor="bio">Bio</Label>
+                      <textarea
+                        id="bio"
+                        value={profileForm.bio}
+                        onChange={(e) => setProfileForm(prev => ({ ...prev, bio: e.target.value }))}
+                        placeholder="Tell other travelers about yourself..."
+                        className="w-full p-3 border border-gray-300 rounded-lg resize-none"
+                        rows={3}
+                      />
+                    </div>
+
+                    {/* Travel Style */}
+                    <div>
+                      <Label htmlFor="travel_style">Travel Style</Label>
+                      <select
+                        id="travel_style"
+                        value={profileForm.travel_style}
+                        onChange={(e) => setProfileForm(prev => ({ ...prev, travel_style: e.target.value }))}
+                        className="w-full p-3 border border-gray-300 rounded-lg"
+                      >
+                        <option value="budget">Budget Traveler</option>
+                        <option value="mid-range">Mid-range</option>
+                        <option value="luxury">Luxury</option>
+                        <option value="backpacker">Backpacker</option>
+                        <option value="business">Business</option>
+                      </select>
+                    </div>
+
+                    {/* Interests */}
+                    <div>
+                      <Label>Interests</Label>
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {profileForm.interests.map((interest, idx) => (
+                          <Badge key={idx} variant="secondary" className="bg-blue-50 text-[#0068EF]">
+                            {interest}
+                            <button
+                              onClick={() => removeInterest(interest)}
+                              className="ml-2 text-red-500 hover:text-red-700"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Add an interest"
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              addInterest(e.target.value);
+                              e.target.value = '';
+                            }
+                          }}
+                        />
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {['Photography', 'Food', 'Culture', 'Adventure', 'History', 'Nature', 'Nightlife', 'Art'].map(interest => (
+                          <Button
+                            key={interest}
+                            variant="outline"
+                            size="sm"
+                            onClick={() => addInterest(interest)}
+                            className="text-xs"
+                          >
+                            + {interest}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Preferred Destinations */}
+                    <div>
+                      <Label>Preferred Destinations</Label>
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {profileForm.preferred_destinations.map((dest, idx) => (
+                          <Badge key={idx} variant="secondary" className="bg-green-50 text-green-600">
+                            {dest}
+                            <button
+                              onClick={() => removeDestination(dest)}
+                              className="ml-2 text-red-500 hover:text-red-700"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <Input
+                        placeholder="Add a destination"
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            addDestination(e.target.value);
+                            e.target.value = '';
+                          }
+                        }}
+                      />
+                    </div>
+
+                    {/* Save Button */}
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={handleProfileUpdate}
+                        className="bg-[#0068EF] hover:bg-[#0055A5]"
+                      >
+                        Save Changes
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => setEditingProfile(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {/* Profile Display */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h3 className="font-semibold text-gray-700 mb-2">Basic Info</h3>
+                        <div className="space-y-2">
+                          <div className="flex items-center">
+                            <MapPin className="h-4 w-4 mr-2 text-gray-500" />
+                            <span>{userProfile?.location || 'Not specified'}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Users className="h-4 w-4 mr-2 text-gray-500" />
+                            <span>{userProfile?.age ? `${userProfile.age} years old` : 'Age not specified'}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Globe className="h-4 w-4 mr-2 text-gray-500" />
+                            <span className="capitalize">{userProfile?.travel_style || 'Not specified'} traveler</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 className="font-semibold text-gray-700 mb-2">Bio</h3>
+                        <p className="text-gray-600">
+                          {userProfile?.bio || 'No bio added yet. Click edit to add your travel story!'}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Interests */}
+                    {userProfile?.interests && userProfile.interests.length > 0 && (
+                      <div>
+                        <h3 className="font-semibold text-gray-700 mb-2">Interests</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {userProfile.interests.map((interest, idx) => (
+                            <Badge key={idx} variant="secondary" className="bg-blue-50 text-[#0068EF]">
+                              {interest}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Preferred Destinations */}
+                    {userProfile?.preferred_destinations && userProfile.preferred_destinations.length > 0 && (
+                      <div>
+                        <h3 className="font-semibold text-gray-700 mb-2">Dream Destinations</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {userProfile.preferred_destinations.map((dest, idx) => (
+                            <Badge key={idx} variant="secondary" className="bg-green-50 text-green-600">
+                              <Globe className="h-3 w-3 mr-1" />
+                              {dest}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

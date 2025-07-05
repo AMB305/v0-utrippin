@@ -11,6 +11,7 @@ import DealsPage from './pages/DealsPage'
 import AiTravelPage from './pages/AiTravelPage'
 import TravelBuddySwipePage from './pages/TravelBuddySwipePage'
 import TravelMatchesPage from './pages/TravelMatchesPage'
+import TravelPlannerPage from './pages/TravelPlannerPage'
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/ai-travel" element={<AiTravelPage />} />
           <Route path="/travel-buddy" element={<TravelBuddySwipePage />} />
           <Route path="/travel-matches" element={<TravelMatchesPage />} />
+          <Route path="/travel-planner" element={<TravelPlannerPage />} />
         </Routes>
       </div>
     </BrowserRouter>
