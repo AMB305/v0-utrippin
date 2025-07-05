@@ -58,11 +58,17 @@ export default function FlightsPage() {
       </header>
 
       {/* Hero Section with Search Form */}
-      <div className="relative bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 min-h-[500px] flex items-center">
-        <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-        <div className="relative max-w-6xl mx-auto px-4 py-16 flex gap-8">
+      <div className="relative bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 min-h-[400px] flex items-center" 
+           style={{
+             backgroundImage: 'url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80")',
+             backgroundSize: 'cover',
+             backgroundPosition: 'center',
+             backgroundBlendMode: 'overlay'
+           }}>
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/70 via-purple-600/70 to-pink-600/70"></div>
+        <div className="relative max-w-6xl mx-auto px-4 py-12 flex gap-8">
           {/* Search Form */}
-          <div className="bg-white rounded-3xl shadow-lg p-8 flex-1 max-w-2xl">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 flex-1 max-w-2xl">
             <h1 className="text-3xl font-bold text-[#003C8A] mb-6">Find your next flight deal</h1>
             
             {/* Trip Type Radio Buttons */}
@@ -84,9 +90,9 @@ export default function FlightsPage() {
             </div>
 
             {/* Form Fields */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* From/To Fields */}
-              <div className="flex flex-col lg:flex-row lg:gap-4 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 <div className="flex-1">
                   <div className="relative">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#0068EF]">
@@ -97,7 +103,7 @@ export default function FlightsPage() {
                     <input 
                       type="text" 
                       placeholder="Departing from?" 
-                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-xl text-sm focus:border-[#0068EF] focus:outline-none"
+                      className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-300 rounded-lg text-sm focus:border-[#0068EF] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -111,16 +117,16 @@ export default function FlightsPage() {
                     <input 
                       type="text" 
                       placeholder="Going to?" 
-                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-xl text-sm focus:border-[#0068EF] focus:outline-none"
+                      className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-300 rounded-lg text-sm focus:border-[#0068EF] focus:outline-none"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Date and Passenger Fields */}
-              <div className="flex flex-col lg:flex-row lg:gap-4 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 <div className="flex-1">
-                  <button className="w-full flex items-center justify-start gap-3 px-4 py-3 border-2 border-gray-300 rounded-xl text-sm text-gray-600 focus:border-[#0068EF] focus:outline-none hover:border-gray-400">
+                  <button className="w-full flex items-center justify-start gap-3 px-4 py-2.5 border-2 border-gray-300 rounded-lg text-sm text-gray-600 focus:border-[#0068EF] focus:outline-none hover:border-gray-400">
                     <svg className="w-5 h-5 text-[#0068EF]" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
                     </svg>
@@ -128,7 +134,7 @@ export default function FlightsPage() {
                   </button>
                 </div>
                 <div className="flex-1">
-                  <button className="w-full flex items-center justify-start gap-3 px-4 py-3 border-2 border-gray-300 rounded-xl text-sm text-gray-600 focus:border-[#0068EF] focus:outline-none hover:border-gray-400">
+                  <button className="w-full flex items-center justify-start gap-3 px-4 py-2.5 border-2 border-gray-300 rounded-lg text-sm text-gray-600 focus:border-[#0068EF] focus:outline-none hover:border-gray-400">
                     <svg className="w-5 h-5 text-[#0068EF]" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 12c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/>
                     </svg>
@@ -139,9 +145,9 @@ export default function FlightsPage() {
 
               {/* Cabin Class */}
               <div className="w-full">
-                <label className="block text-xs font-bold text-gray-600 mb-1 ml-3">Cabin Class</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Cabin Class</label>
                 <div className="relative">
-                  <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-sm focus:border-[#0068EF] focus:outline-none appearance-none">
+                  <select className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg text-sm focus:border-[#0068EF] focus:outline-none appearance-none">
                     <option>Economy</option>
                     <option>Premium Economy</option>
                     <option>Business</option>
@@ -156,27 +162,27 @@ export default function FlightsPage() {
               </div>
 
               {/* Bundle + Save */}
-              <div className="bg-[#D0F1AC] rounded-xl p-4 flex flex-wrap items-center gap-4">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex flex-wrap items-center gap-3">
                 <div className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-green-700" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M23 12l-2.4 2.7.3 3.5-3.6.8-1.9 3-3.4-1.4L8.6 22l-1.9-3-3.6-.8.3-3.5L1 12l2.4-2.7-.3-3.5L6.7 5l1.9-3L12 3.4 15.4 2l1.9 3 3.6.8-.3 3.5L23 12zm-10.8-.6c-1.3-.3-1.8-.7-1.8-1.3 0-.6.6-1.1 1.6-1.1s1.4.5 1.5 1.2h1.3c0-1-.7-1.9-1.9-2.2V6.7h-1.8V8c-1.1.2-2 1-2 2.1 0 1.3 1.1 2 2.8 2.4 1.5.4 1.8.9 1.8 1.4 0 .4-.3 1-1.6 1-1.2 0-1.7-.5-1.8-1.2H9c.1 1.3 1 2 2.2 2.2v1.3H13V16c1.1-.2 2.1-.9 2.1-2.1-.1-1.6-1.5-2.2-2.9-2.5z"/>
                   </svg>
-                  <span className="text-green-700 font-bold text-sm">Bundle + Save</span>
+                  <span className="text-green-700 font-semibold text-sm">Bundle + Save</span>
                 </div>
-                <div className="flex flex-wrap gap-4 text-sm">
+                <div className="flex flex-wrap gap-3 text-sm">
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="w-4 h-4 text-[#0068EF] border-2 border-gray-400 rounded focus:ring-[#0068EF]" />
+                    <input type="checkbox" className="w-4 h-4 text-[#0068EF] border border-gray-300 rounded focus:ring-[#0068EF]" />
                     <span>Add a hotel</span>
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="w-4 h-4 text-[#0068EF] border-2 border-gray-400 rounded focus:ring-[#0068EF]" />
+                    <input type="checkbox" className="w-4 h-4 text-[#0068EF] border border-gray-300 rounded focus:ring-[#0068EF]" />
                     <span>Add a car</span>
                   </label>
                 </div>
               </div>
 
               {/* Search Button */}
-              <button className="w-full bg-[#0068EF] hover:bg-blue-700 text-white font-bold py-4 rounded-xl text-lg transition-colors">
+              <button className="w-full bg-[#0068EF] hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-base transition-colors">
                 Find Your Flight
               </button>
             </div>
@@ -188,14 +194,19 @@ export default function FlightsPage() {
           </div>
 
           {/* Right Side - Promotional Card */}
-          <div className="hidden lg:block w-80">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600">
-                <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-xl font-bold">Shop fares up to $99!</h3>
-                  <p className="text-sm">Your next adventure awaits!</p>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+          <div className="hidden lg:block w-72">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-white/20">
+              <div className="relative h-40 bg-gradient-to-r from-blue-500 to-purple-600"
+                   style={{
+                     backgroundImage: 'url("https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80")',
+                     backgroundSize: 'cover',
+                     backgroundPosition: 'center'
+                   }}>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/80 to-purple-600/80"></div>
+                <div className="absolute bottom-3 left-3 text-white">
+                  <h3 className="text-lg font-bold">Shop fares up to $99!</h3>
+                  <p className="text-xs mb-2">Your next adventure awaits!</p>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-xs font-medium">
                     Explore now
                   </button>
                 </div>
