@@ -17,7 +17,7 @@ export default function Header() {
               <img 
                 src="/UTrippin_Logo_3000px_clean.png"
                 alt="UTrippin Logo"
-                className="h-8 w-auto"
+                className="h-10 w-auto"
               />
             </Link>
             
@@ -53,7 +53,7 @@ export default function Header() {
                 <button className="bg-white border-2 border-gray-300 rounded-full px-3 py-2 flex items-center gap-2 text-sm hover:bg-gray-50 transition-colors">
                   <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs">
                     {user.firstName?.[0] || 'U'}
-                  </div>
+                  </div> 
                   <span className="text-gray-700">{user.firstName}</span>
                 </button>
                 <button 
