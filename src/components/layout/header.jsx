@@ -1,59 +1,63 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import React from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [logoError, setLogoError] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
-    <header className="border-b border-gray-200 bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-        
-        {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2">
-          {!logoError ? (
-            <img 
-              src="/UTrippin_Logo_3000px_clean.png"
-              alt="UTrippin Logo"
-              className="h-12 w-auto transition-transform duration-300 hover:scale-105"
-              onError={() => setLogoError(true)}
-            />
-          ) : (
-            <div className="text-[#0068EF] font-bold text-xl">
-              UTrippin
-            </div>
-          )}
-        </Link>
+    <header className="max-w-7xl mx-auto">
+      <nav className="px-4 py-3">
+        <div className="flex items-center justify-between">
+          {/* Left side - Logo and Navigation */}
+          <div className="flex items-center gap-2">
+            <a href="/" className="flex items-center px-3 py-2 rounded-full">
+              <img 
+                src="/UTrippin_Logo_3000px_clean.png"
+                alt="UTrippin Logo"
+                className="h-8 w-auto"
+              />
+            </a>
+            <ul className="hidden lg:flex items-center gap-2 text-sm">
+              <li><a href="/hotels" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Hotels</a></li>
+              <li><a href="/cars" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Cars</a></li>
+              <li><a href="/flights" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Flights</a></li>
+              <li><a href="/packages" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Packages</a></li>
+              <li><a href="/cruises" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Cruises</a></li>
+              <li><a href="/experiences" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Experiences</a></li>
+              <li><a href="/deals" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Deals</a></li>
+              <li><a href="/ai-travel" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100 font-medium">🤖 AI Travel</a></li>
+            </ul>
+          </div>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex space-x-6 items-center text-sm font-medium text-[#001E3C]">
-          <Link to="/hotels" className="hover:text-[#0068EF] transition-colors">Hotels</Link>
-          <Link to="/cars" className="hover:text-[#0068EF] transition-colors">Cars</Link>
-          <Link to="/flights" className="hover:text-[#0068EF] transition-colors">Flights</Link>
-          <Link to="/packages" className="hover:text-[#0068EF] transition-colors">Packages</Link>
-        </nav>
-
-        {/* Mobile menu button */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#0068EF]"
-        >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      {isOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-            <Link to="/hotels" className="block px-3 py-2 text-base font-medium text-[#001E3C] hover:text-[#0068EF] hover:bg-gray-50">Hotels</Link>
-            <Link to="/cars" className="block px-3 py-2 text-base font-medium text-[#001E3C] hover:text-[#0068EF] hover:bg-gray-50">Cars</Link>
-            <Link to="/flights" className="block px-3 py-2 text-base font-medium text-[#001E3C] hover:text-[#0068EF] hover:bg-gray-50">Flights</Link>
-            <Link to="/packages" className="block px-3 py-2 text-base font-medium text-[#001E3C] hover:text-[#0068EF] hover:bg-gray-50">Packages</Link>
+          {/* Right side - User actions */}
+          <div className="flex items-center gap-2">
+            {user ? (
+              <>
+                <button className="bg-white border-2 border-gray-300 rounded-full px-3 py-2 flex items-center gap-2 text-sm hover:bg-gray-50">
+                  <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs">
+                    {user.firstName?.[0] || 'U'}
+                  </div>
+                  <span className="hidden lg:block text-gray-700">{user.firstName}</span>
+                </button>
+                <button 
+                  onClick={logout}
+                  className="bg-white border-2 border-gray-300 rounded-full px-3 py-2 text-sm hover:bg-gray-50"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button className="bg-white border-2 border-gray-300 rounded-full px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-50">
+                <div className="w-6 h-6 bg-blue-600 rounded-full"></div>
+                <div className="text-left">
+                  <div className="text-xs text-gray-700">Sign In</div>
+                  <div className="text-[#003C8A] font-bold text-xs uppercase">Join VIP</div>
+                </div>
+              </button>
+            )}
           </div>
         </div>
-      )}
+      </nav>
     </header>
   );
 }
