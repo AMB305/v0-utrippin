@@ -229,6 +229,79 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Travel Buddy Section */}
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-[#003C8A] mb-4">
+                Find Your Travel Buddy
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Connect with fellow travelers who share your interests and discover amazing destinations together.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Find Travel Buddy */}
+              <Card className="hover:shadow-lg transition-shadow border-2 border-gray-200 hover:border-[#0068EF] text-center">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="text-2xl">✈️</div>
+                  </div>
+                  <h3 className="text-xl font-bold text-[#003C8A] mb-3">Find Travel Buddy</h3>
+                  <p className="text-gray-600 mb-6">
+                    Swipe to match with travelers who share your vibe and travel style.
+                  </p>
+                  <a 
+                    href="/travel-buddy"
+                    className="inline-flex items-center text-[#FF6200] font-semibold hover:text-orange-700 transition-colors"
+                  >
+                    Get Started →
+                  </a>
+                </CardContent>
+              </Card>
+
+              {/* Your Matches */}
+              <Card className="hover:shadow-lg transition-shadow border-2 border-gray-200 hover:border-[#0068EF] text-center">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="text-2xl">❤️</div>
+                  </div>
+                  <h3 className="text-xl font-bold text-[#003C8A] mb-3">Your Matches</h3>
+                  <p className="text-gray-600 mb-6">
+                    View all your travel buddy connections and start planning together.
+                  </p>
+                  <a 
+                    href="/travel-matches"
+                    className="inline-flex items-center text-[#FF6200] font-semibold hover:text-orange-700 transition-colors"
+                  >
+                    View Matches →
+                  </a>
+                </CardContent>
+              </Card>
+
+              {/* Social Planning */}
+              <Card className="hover:shadow-lg transition-shadow border-2 border-gray-200 hover:border-[#0068EF] text-center">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-[#003C8A] mb-3">Plan Together</h3>
+                  <p className="text-gray-600 mb-6">
+                    Collaborate on itineraries, share costs, and vote on activities with your travel group.
+                  </p>
+                  <a 
+                    href="/ai-travel"
+                    className="inline-flex items-center text-[#FF6200] font-semibold hover:text-orange-700 transition-colors"
+                  >
+                    Start Planning →
+                  </a>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
         {/* For Travel Pros Section */}
         <section className="py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
