@@ -14,14 +14,14 @@ export default function Header() {
           <img 
             src="/UTrippin_Logo_3000px.png"
             alt="UTrippin Logo"
-            className="h-8 w-auto transition-transform duration-300 hover:scale-105"
+            className="h-10 w-auto max-w-[200px] transition-transform duration-300 hover:scale-105"
             onError={(e) => {
               // Fallback to text logo if image fails to load
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'block';
             }}
           />
-          <div className="text-[#0068EF] font-bold text-lg" style={{ display: 'none' }}>
+          <div className="text-[#0068EF] font-bold text-xl" style={{ display: 'none' }}>
             UTrippin
           </div>
         </Link>
