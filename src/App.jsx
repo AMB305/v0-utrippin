@@ -13,6 +13,7 @@ import TravelBuddy from './pages/TravelBuddy'
 import TravelBuddySwipePage from './pages/TravelBuddySwipePage'
 import TravelMatchesPage from './pages/TravelMatchesPage'
 import TravelPlannerPage from './pages/TravelPlannerPage'
+import SocialCardGenerator from './pages/SocialCardGenerator'
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/travel-buddy" element={<TravelBuddySwipePage />} />
           <Route path="/travel-matches" element={<TravelMatchesPage />} />
           <Route path="/travel-planner" element={<TravelPlannerPage />} />
+          <Route path="/social-card-generator" element={<SocialCardGenerator />} />
         </Routes>
       </div>
     </BrowserRouter>

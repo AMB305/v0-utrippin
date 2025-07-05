@@ -1,6 +1,8 @@
 import React from "react";
 
-export default function Logo() {
+// Special version of the logo specifically for social cards
+// This is larger and more prominent than the regular logo
+export default function SocialCardLogo() {
   const letters = [
     { char: "U", color: "bg-[#0068EF]", hover: "hover:bg-[#338ef7]" },
     { char: "T", color: "bg-[#005FCF]", hover: "hover:bg-[#337ed7]" },
@@ -13,15 +15,15 @@ export default function Logo() {
   ];
 
   return (
-    <div className="flex items-center space-x-1.5 animate-pulse-gradient">
+    <div className="flex items-center space-x-3 animate-pulse-gradient">
       {letters.map((item, idx) => (
         <div
           key={idx}
-          className={`${item.color} ${item.hover} w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 
-          flex items-center justify-center rounded transition duration-300 
+          className={`${item.color} w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 
+          flex items-center justify-center rounded-md transition duration-300 
           hover:shadow-md hover:-translate-y-0.5`}
         >
-          <span className="text-white font-bold text-sm sm:text-lg md:text-xl">
+          <span className="text-white font-bold text-2xl sm:text-3xl md:text-4xl">
             {item.char}
           </span>
         </div>
