@@ -112,9 +112,9 @@ export default function Home() {
   return (
     <>
       <SEOHead 
-        title="UTrippin - AI-Powered Travel Booking Platform | Compare Flights, Hotels & More"
-        description="Discover the future of travel booking with UTrippin. Compare flights, hotels, cars and vacation packages with AI-powered recommendations, VR previews, and social travel planning."
-        image="/UTrippin_Social_Card_1200x630_blue.png"
+        title="UTrippin: Your AI Travel Buddy"
+        description="Compare flights, hotels, cars & even find travel buddies. Powered by AI."
+        image="https://utrippin.ai/UTrippin_Social_Card_BlueBG_1200x630.png"
         url="https://utrippin.ai"
       />
       
