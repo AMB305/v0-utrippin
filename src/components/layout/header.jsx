@@ -15,7 +15,7 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <Link to="/" className="flex items-center px-3 py-2 rounded-full">
               <img 
-                src="/UTrippin_Logo_new.png"
+                src="/UTrippin_Logo_3000px_clean.png"
                 alt="UTrippin Logo"
                 className="h-10 w-auto"
               />
