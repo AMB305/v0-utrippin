@@ -15,15 +15,15 @@ export default function SocialCardLogo() {
   ];
 
   return (
-    <div className="flex items-center space-x-3 animate-pulse-gradient">
+    <div className="flex items-center space-x-4 animate-pulse-gradient">
       {letters.map((item, idx) => (
         <div
           key={idx}
-          className={`${item.color} w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 
+          className={`${item.color} w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 
           flex items-center justify-center rounded-md transition duration-300 
           hover:shadow-md hover:-translate-y-0.5`}
         >
-          <span className="text-white font-bold text-4xl sm:text-5xl md:text-6xl">
+          <span className="text-white font-bold text-5xl sm:text-6xl md:text-7xl">
             {item.char}
           </span>
         </div>
