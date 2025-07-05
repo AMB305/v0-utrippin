@@ -12,7 +12,7 @@ export default function Header() {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <img 
-            src="/UTrippin_Logo_3000px.png"
+            src="/UTrippin_Logo_3000px_clean.png"
             alt="UTrippin Logo"
             className="h-8 w-auto max-w-[160px] transition-transform duration-300 hover:scale-105"
             onError={(e) => {
