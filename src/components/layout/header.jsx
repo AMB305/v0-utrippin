@@ -70,8 +70,8 @@ export default function Header() {
           <Link to="/cruises" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>Cruises</Link>
           <Link to="/experiences" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>Experiences</Link>
           <Link to="/deals" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>Deals</Link>
-          <Link to="/ai-travel" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)">🤖 AI Travel</Link>
-          <Link to="/travel-buddy" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)">🧑‍🤝‍🧑 Find Buddies</Link>
+          <Link to="/ai-travel" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>🤖 AI Travel</Link>
+          <Link to="/travel-buddy" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>🧑‍🤝‍🧑 Find Buddies</Link>
           
           {/* Mobile User Actions */}
           <div className="border-t pt-4 mt-4">
