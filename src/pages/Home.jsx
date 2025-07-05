@@ -129,7 +129,7 @@ export default function Home() {
       <SEOHead 
         title={pageSEOConfigs.home.title}
         description={pageSEOConfigs.home.description}
-        image="https://utrippin.ai/UTrippin_Social_Card_BlueBG_1200x630.png"
+        image="https://utrippin.ai/utrippin_social_card.png"
         url="https://utrippin.ai"
         structuredData={homeStructuredData}
       />

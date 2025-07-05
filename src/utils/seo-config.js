@@ -3,9 +3,9 @@ export const defaultSEOConfig = {
   type: "website",
   url: "https://utrippin.ai",
   title: "UTrippin: Your AI Travel Buddy",
-  description: "Compare flights, hotels, cars & even find travel buddies.",
+  description: "Compare Flights, Hotels, Cars and Travel Buddies!",
   image: {
-    url: "https://utrippin.ai/UTrippin_Social_Card_BlueBG_1200x630.png",
+    url: "https://utrippin.ai/utrippin_social_card.png",
     width: 1200,
     height: 630
   }
@@ -123,7 +123,7 @@ export const generateBoltSEOJSON = (pageData = {}) => {
 export const pageSEOConfigs = {
   home: {
     title: "UTrippin: Your AI Travel Buddy",
-    description: "Compare flights, hotels, cars & even find travel buddies.",
+    description: "Compare Flights, Hotels, Cars and Travel Buddies!",
     structuredDataType: 'travel-service'
   },
   

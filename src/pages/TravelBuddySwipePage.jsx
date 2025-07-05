@@ -129,7 +129,7 @@ export default function TravelBuddySwipePage() {
       <SEOHead 
         title={pageSEOConfigs['travel-buddy'].title}
         description={pageSEOConfigs['travel-buddy'].description}
-        image="https://utrippin.ai/UTrippin_Social_Card_BlueBG_1200x630.png"
+        image="https://utrippin.ai/utrippin_social_card.png"
         url="https://utrippin.ai/travel-buddy"
         structuredData={buddyStructuredData}
       />
