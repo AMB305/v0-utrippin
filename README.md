@@ -1,6 +1,6 @@
 # UTrippin - AI-Powered Travel Booking Platform
 
-UTrippin is a modern travel booking platform that combines traditional search functionality with cutting-edge AI assistance to help users plan, book, and manage their travel experiences.
+UTrippin is a modern travel booking platform that combines traditional search functionality with cutting-edge AI assistance and social travel features to help users plan, book, and manage their travel experiences.
 
 ## 🌟 Features
 
@@ -16,6 +16,12 @@ UTrippin is a modern travel booking platform that combines traditional search fu
 - **Price Prediction**: Machine learning algorithms for optimal booking timing
 - **Itinerary Generation**: Automated day-by-day travel plans
 
+### Social Travel Features (NEW in Version 2)
+- **Travel Buddy Finder**: Tinder-style swiping to find compatible travel companions
+- **Travel Matches**: Connect with fellow travelers who share your interests
+- **Trip Planning Dashboard**: Manage your trips, save itineraries, and track travel buddies
+- **Social Profiles**: Create detailed travel profiles with preferences and interests
+
 ### User Experience
 - **Modern UI/UX**: Clean, intuitive interface with Tailwind CSS
 - **Fast Performance**: Optimized React components and efficient routing
@@ -25,6 +31,8 @@ UTrippin is a modern travel booking platform that combines traditional search fu
 ## 🚀 Technology Stack
 
 - **Frontend**: React 18, React Router DOM
+- **Database**: Supabase (PostgreSQL with real-time features)
+- **Authentication**: Supabase Auth
 - **Styling**: Tailwind CSS, Custom Components
 - **State Management**: React Query for server state
 - **Build Tool**: Vite
@@ -42,6 +50,7 @@ src/
 │   ├── features/          # Feature-specific components
 │   ├── layout/            # Header, Footer, Navigation
 │   ├── search/            # Search interfaces
+│   ├── travel/            # Travel buddy & social features
 │   └── ui/                # Reusable UI components
 ├── hooks/                 # Custom React hooks
 ├── lib/                   # Utility functions
@@ -54,7 +63,11 @@ src/
 │   ├── CruisesPage.jsx
 │   ├── ExperiencesPage.jsx
 │   ├── DealsPage.jsx
-│   └── AiTravelAssistantPage.jsx
+│   ├── AiTravelAssistantPage.jsx
+│   ├── TravelBuddySwipePage.jsx    # NEW
+│   ├── TravelMatchesPage.jsx       # NEW
+│   └── TravelPlannerPage.jsx       # NEW
+├── services/              # External API services
 └── App.jsx               # Main app component
 ```
 
@@ -71,37 +84,55 @@ src/
    npm install
    ```
 
-3. **Set up environment variables (optional)**
+3. **Set up environment variables**
    ```bash
    cp .env.example .env
-   # Edit .env and add your OpenAI API key for enhanced AI features
+   # Edit .env and add your API keys:
+   # - VITE_OPENAI_API_KEY (optional for enhanced AI features)
+   # - VITE_SUPABASE_URL (required for database)
+   # - VITE_SUPABASE_ANON_KEY (required for database)
    ```
 
-4. **Start development server**
+4. **Set up Supabase Database**
+   - Create a new Supabase project at https://supabase.com
+   - Run the migration files in `supabase/migrations/` in your Supabase SQL editor
+   - Update your `.env` file with your Supabase credentials
+
+5. **Start development server**
    ```bash
    npm run dev
    ```
 
-5. **Build for production**
+6. **Build for production**
    ```bash
    npm run build
    ```
 
-6. **Preview production build**
-   ```bash
-   npm run preview
-   ```
+## 🗄️ Database Schema (Version 2)
 
-## 🔑 Environment Variables
+### Core Tables
+- **users**: Enhanced with travel preferences, bio, location, interests
+- **travel_preferences**: Detailed travel style and accommodation preferences
+- **trips**: AI-generated itineraries with social features
+- **itineraries**: Normalized daily travel plans
 
-The application supports the following environment variables:
+### Social Features Tables (NEW)
+- **travel_swipes**: Tinder-style swipe data for travel buddy matching
+- **travel_buddy_matches**: Mutual matches between users
+- **matches**: Trip-based matching system
+- **buddy_requests**: Direct connection requests
+- **trip_participants**: Group travel management
+- **saved_itineraries**: Bookmarked trips from other users
 
-- `VITE_OPENAI_API_KEY` - OpenAI API key for enhanced AI travel planning (optional)
-  - Get your key from: https://platform.openai.com/api-keys
-  - The app provides fallback responses if no API key is configured
+### Key Features
+- **Row Level Security (RLS)**: Secure data access policies
+- **Real-time subscriptions**: Live updates for matches and messages
+- **AI compatibility scoring**: Algorithm-based user matching
+- **Comprehensive indexing**: Optimized for performance
 
 ## 🌐 Pages & Routes
 
+### Core Pages
 - `/` - Homepage with search interface and featured deals
 - `/flights` - Flight search and booking
 - `/hotels` - Hotel search and booking  
@@ -111,6 +142,19 @@ The application supports the following environment variables:
 - `/experiences` - Tours and activities
 - `/deals` - Exclusive travel deals and offers
 - `/ai-assistant` - AI-powered travel planning interface
+
+### Social Features (NEW)
+- `/travel-buddy` - Swipe interface to find travel companions
+- `/travel-matches` - View and chat with matched travel buddies
+- `/travel-planner` - Personal dashboard for trip management
+
+## 🔑 Environment Variables
+
+The application supports the following environment variables:
+
+- `VITE_OPENAI_API_KEY` - OpenAI API key for enhanced AI travel planning (optional)
+- `VITE_SUPABASE_URL` - Your Supabase project URL (required)
+- `VITE_SUPABASE_ANON_KEY` - Your Supabase anonymous key (required)
 
 ## 🎨 Design System
 
@@ -139,6 +183,11 @@ The application supports the following environment variables:
 ### Search Components
 - `MultiSearch` - Tabbed search interface for all travel types
 - `AiSearchDemo` - AI-powered natural language search
+
+### Social Components (NEW)
+- `TravelBuddyFinder` - Swipe interface for finding travel companions
+- `TravelMatchesPage` - Display and manage travel buddy matches
+- `SavedItineraries` - Bookmark and manage favorite trips
 
 ### UI Components
 - `Button` - Consistent button styling with variants
@@ -182,6 +231,26 @@ The site is configured for deployment on Netlify with:
 - Multi-destination optimization
 - Cost estimation and budget planning
 
+## 👥 Social Features (NEW in Version 2)
+
+### Travel Buddy Matching
+- Tinder-style swipe interface
+- AI-powered compatibility scoring
+- Interest and destination-based matching
+- Real-time match notifications
+
+### Trip Planning & Sharing
+- Personal travel dashboard
+- Save and share itineraries
+- Group trip planning
+- Travel buddy requests and management
+
+### User Profiles
+- Detailed travel preferences
+- Photo and bio management
+- Interest and destination tracking
+- Privacy controls
+
 ## 📊 Performance
 
 - Lighthouse Score: 90+ across all metrics
@@ -191,10 +260,30 @@ The site is configured for deployment on Netlify with:
 
 ## 🔒 Security & Privacy
 
-- No sensitive data stored in frontend
+- Row Level Security (RLS) in Supabase
 - Secure API communication patterns
 - Privacy-compliant data handling
 - GDPR considerations built-in
+- User data encryption
+
+## 📈 Version 2 Changelog
+
+### New Features
+- **Travel Buddy System**: Complete Tinder-style matching system
+- **Social Profiles**: Enhanced user profiles with travel preferences
+- **Trip Management**: Personal dashboard for managing trips and matches
+- **Real-time Matching**: Instant notifications for new travel buddy matches
+- **Advanced Database Schema**: Comprehensive social travel features
+
+### Technical Improvements
+- **Supabase Integration**: Full database migration to Supabase
+- **Enhanced Security**: Row Level Security policies
+- **Performance Optimization**: Improved database indexing
+- **Real-time Features**: Live updates for social interactions
+
+### Database Migrations
+- `20250705000628_aged_pond.sql`: Core travel and social tables
+- `20250705001107_cool_torch.sql`: Travel buddy swipe and match system
 
 ## 🤝 Contributing
 
@@ -211,6 +300,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - React team for the amazing framework
+- Supabase for the powerful backend-as-a-service
 - Tailwind CSS for the utility-first styling
 - Lucide for the beautiful icons
 - Unsplash for the high-quality images
@@ -222,4 +312,4 @@ For support, email support@utrippin.com or join our Slack channel.
 
 ---
 
-**UTrippin** - Making travel planning effortless with AI-powered assistance.
+**UTrippin Version 2** - Making travel planning effortless with AI-powered assistance and social connections.
