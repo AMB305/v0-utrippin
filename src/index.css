@@ -2,21 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  @keyframes pulse-gradient {
-    0%, 100% {
-      filter: brightness(100%) drop-shadow(0 0 0 transparent);
-    }
-    50% {
-      filter: brightness(110%) drop-shadow(0 0 8px rgba(0,104,239,0.3));
-    }
-  }
-
-  .animate-pulse-gradient {
-    animation: pulse-gradient 3s ease-in-out infinite;
-  }
-}
-
 /* ----- Fallback custom styles just in case Tailwind fails to build ----- */
 
 body {
