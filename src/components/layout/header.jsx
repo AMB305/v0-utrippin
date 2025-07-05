@@ -4,17 +4,40 @@ import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
+
+  const handleLogoError = () => {
+    setLogoError(true);
+  };
 
   return (
     <header className="bg-white border-b border-gray-200 z-50 relative">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
         {/* Logo */}
         <Link to="/" className="flex items-center hover:scale-105 transition-transform">
-          <img 
-            src="/UTrippin_Logo_3000px.png" 
-            alt="UTrippin Logo" 
-            className="h-8 md:h-10 w-auto"
-          />
+          {!logoError ? (
+            <img 
+              src="/UTrippin_Logo_3000px.png" 
+              alt="UTrippin Logo" 
+              className="h-8 md:h-10 w-auto"
+              onError={handleLogoError}
+            />
+          ) : (
+            // Fallback to text logo if image fails to load
+            <div className="flex gap-1">
+              {"UTRIPPIN".split("").map((char, index) => (
+                <div
+                  key={index}
+                  className="w-6 h-6 md:w-8 md:h-8 flex items-center justify-center text-white font-bold rounded-sm transition-all text-xs md:text-sm"
+                  style={{
+                    backgroundColor: `hsl(${210 + index * 5}, 90%, 50%)`
+                  }}
+                >
+                  {char}
+                </div>
+              ))}
+            </div>
+          )}
         </Link>
 
         {/* Desktop Nav */}
