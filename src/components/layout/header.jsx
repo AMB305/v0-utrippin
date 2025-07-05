@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import UtrippinLogo from "../ui/UtrippinLogo";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Bell, Heart, User } from "lucide-react";
+import NotificationBadge from "../ui/NotificationBadge";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -47,6 +48,12 @@ export default function Header() {
           <div className="hidden lg:flex items-center gap-2">
             {user ? (
               <>
+                <button className="bg-white border-2 border-gray-300 rounded-full p-2 flex items-center justify-center hover:bg-gray-50 transition-colors">
+                  <NotificationBadge className="text-gray-700" />
+                </button>
+                <button className="bg-white border-2 border-gray-300 rounded-full p-2 flex items-center justify-center hover:bg-gray-50 transition-colors">
+                  <Heart className="h-5 w-5 text-gray-700" />
+                </button>
                 <button className="bg-white border-2 border-gray-300 rounded-full px-3 py-2 flex items-center gap-2 text-sm hover:bg-gray-50 transition-colors">
                   <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs">
                     {user.firstName?.[0] || 'U'}
@@ -92,6 +99,16 @@ export default function Header() {
               <div className="pt-4 border-t border-gray-200 mt-4">
                 {user ? (
                   <div className="space-y-2">
+                    <div className="flex items-center gap-4 py-2">
+                      <button className="flex items-center gap-2 text-[#001E3C]">
+                        <Bell className="h-5 w-5" />
+                        <span>Notifications</span>
+                      </button>
+                      <button className="flex items-center gap-2 text-[#001E3C]">
+                        <Heart className="h-5 w-5" />
+                        <span>Favorites</span>
+                      </button>
+                    </div>
                     <div className="flex items-center gap-2 py-2">
                       <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs">
                         {user.firstName?.[0] || 'U'}
