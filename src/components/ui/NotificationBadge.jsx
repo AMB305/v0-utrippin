@@ -13,13 +13,22 @@ export default function NotificationBadge({ className }) {
     // Initial fetch of notification count
     const fetchNotificationCount = async () => {
       try {
-        const { data, error } = await supabase.rpc(
-          'get_unread_notification_count',
-          { user_id: user.id }
-        );
-        
-        if (error) throw error;
-        setCount(data || 0);
+        // Get current user's profile first
+        const { data: userProfile } = await supabase
+          .from('users')
+          .select('id')
+          .eq('email', user.email)
+          .single();
+          
+        if (userProfile) {
+          const { data, error } = await supabase.rpc(
+            'get_unread_notification_count',
+            { user_id: userProfile.id }
+          );
+          
+          if (error) throw error;
+          setCount(data || 0);
+        }
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }
@@ -35,8 +44,7 @@ export default function NotificationBadge({ className }) {
         {
           event: '*',
           schema: 'public',
-          table: 'travel_buddy_notifications',
-          filter: `user_id=eq.${user.id}`,
+          table: 'travel_buddy_notifications'
         },
         () => {
           fetchNotificationCount();
@@ -49,18 +57,14 @@ export default function NotificationBadge({ className }) {
     };
   }, [user, supabase]);
   
-  if (count === 0) {
-    return (
-      <Bell className={`h-5 w-5 ${className || ''}`} />
-    );
-  }
-  
   return (
     <div className="relative">
       <Bell className={`h-5 w-5 ${className || ''}`} />
-      <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs min-w-[1.25rem] h-5 flex items-center justify-center rounded-full px-1">
-        {count > 99 ? '99+' : count}
-      </Badge>
+      {count > 0 && (
+        <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs min-w-[1.25rem] h-5 flex items-center justify-center rounded-full px-1">
+          {count > 99 ? '99+' : count}
+        </Badge>
+      )}
     </div>
   );
 }

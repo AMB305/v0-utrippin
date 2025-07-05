@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import UtrippinLogo from "../ui/UtrippinLogo";
-import { Menu, X, Bell, Heart, User } from "lucide-react";
+import Logo from "../ui/Logo";
+import { Menu, X, Heart, User } from "lucide-react";
 import NotificationBadge from "../ui/NotificationBadge";
 
 export default function Header() {
@@ -16,7 +16,7 @@ export default function Header() {
           {/* Left side - Logo and Navigation */}
           <div className="flex items-center gap-2">
             <Link to="/" className="flex items-center px-3 py-2">
-              <UtrippinLogo />
+              <Logo />
             </Link>
             
             {/* Desktop Navigation */}
@@ -49,7 +49,7 @@ export default function Header() {
             {user ? (
               <>
                 <button className="bg-white border-2 border-gray-300 rounded-full p-2 flex items-center justify-center hover:bg-gray-50 transition-colors">
-                  <NotificationBadge className="text-gray-700" />
+                  <NotificationBadge />
                 </button>
                 <button className="bg-white border-2 border-gray-300 rounded-full p-2 flex items-center justify-center hover:bg-gray-50 transition-colors">
                   <Heart className="h-5 w-5 text-gray-700" />
