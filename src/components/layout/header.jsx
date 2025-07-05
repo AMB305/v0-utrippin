@@ -14,7 +14,7 @@ export default function Header() {
             {"UTRIPPIN".split("").map((char, index) => (
               <div
                 key={index}
-                className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-white font-bold rounded-sm transition-all"
+                className="w-6 h-6 md:w-7 md:h-7 flex items-center justify-center text-white font-bold rounded-sm transition-all text-xs md:text-sm"
                 style={{
                   backgroundColor: `hsl(${210 + index * 5}, 90%, 50%)`
                 }}
@@ -26,7 +26,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center space-x-6 ml-6 text-sm md:text-base">
+        <nav className="hidden lg:flex items-center space-x-4 ml-4 text-sm">
           <Link to="/hotels" className="hover:text-[#0068EF] transition-colors">Hotels</Link>
           <Link to="/cars" className="hover:text-[#0068EF] transition-colors">Cars</Link>
           <Link to="/flights" className="hover:text-[#0068EF] transition-colors">Flights</Link>
@@ -34,8 +34,8 @@ export default function Header() {
           <Link to="/cruises" className="hover:text-[#0068EF] transition-colors">Cruises</Link>
           <Link to="/experiences" className="hover:text-[#0068EF] transition-colors">Experiences</Link>
           <Link to="/deals" className="hover:text-[#0068EF] transition-colors">Deals</Link>
-          <Link to="/ai-travel" className="font-semibold hover:text-[#FF6200] transition-colors">🤖 AI Travel</Link>
-          <Link to="/travel-buddy" className="font-semibold hover:text-[#FF6200] transition-colors">👫 Find Buddies</Link>
+          <Link to="/ai-travel" className="font-medium hover:text-[#FF6200] transition-colors">🤖 AI Travel</Link>
+          <Link to="/travel-buddy" className="font-medium hover:text-[#FF6200] transition-colors">👫 Find Buddies</Link>
         </nav>
 
         {/* Desktop User */}
