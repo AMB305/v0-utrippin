@@ -626,3 +626,6 @@ export default function FlightsPage() {
 }
 
 export default FlightsPage;
+
+  )
+}
