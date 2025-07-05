@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <>
+    <div className="mt-auto">
       {/* Section 5: Footer */}
       <footer className="bg-gray-100 py-12">
         <div className="max-w-6xl mx-auto px-4">
@@ -76,6 +76,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

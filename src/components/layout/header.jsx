@@ -5,7 +5,8 @@ export default function Header() {
   const { user, logout } = useAuth();
 
   return (
-    <header className="max-w-7xl mx-auto">
+    <header className="w-full bg-white border-b border-gray-200">
+      <div className="max-w-7xl mx-auto">
       <nav className="px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Left side - Logo and Navigation */}
@@ -55,6 +56,7 @@ export default function Header() {
           </div>
         </div>
       </nav>
+      </div>
     </header>
   );
 }
