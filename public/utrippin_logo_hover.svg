@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="600" viewBox="0 0 3000 600">
+  <style>
+    rect:hover {
+      transform: scale(1.08);
+      transform-origin: center;
+      transition: transform 0.3s ease-in-out;
+    }
+  </style>
+  <defs>
+    <linearGradient id="pulseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0068EF">
+        <animate attributeName="stop-color" values="#0068EF;#003C8A;#0068EF" dur="3s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#003C8A">
+        <animate attributeName="stop-color" values="#003C8A;#0068EF;#003C8A" dur="3s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+  </defs>
+  
+  <g font-family="Helvetica, Arial, sans-serif" font-size="400" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="middle">
+    <g>
+      <rect x="0" y="0" width="375" height="600" fill="url(#pulseGradient)"/>
+      <text x="187" y="300">U</text>
+    </g>
+    <g>
+      <rect x="375" y="0" width="375" height="600" fill="url(#pulseGradient)"/>
+      <text x="562" y="300">T</text>
+    </g>
+    <g>
+      <rect x="750" y="0" width="375" height="600" fill="url(#pulseGradient)"/>
+      <text x="937" y="300">R</text>
+    </g>
+    <g>
+      <rect x="1125" y="0" width="375" height="600" fill="url(#pulseGradient)"/>
+      <text x="1312" y="300">I</text>
+    </g>
+    <g>
+      <rect x="1500" y="0" width="375" height="600" fill="url(#pulseGradient)"/>
+      <text x="1687" y="300">P</text>
+    </g>
+    <g>
+      <rect x="1875" y="0" width="375" height="600" fill="url(#pulseGradient)"/>
+      <text x="2062" y="300">P</text>
+    </g>
+    <g>
+      <rect x="2250" y="0" width="375" height="600" fill="url(#pulseGradient)"/>
+      <text x="2437" y="300">I</text>
+    </g>
+    <g>
+      <rect x="2625" y="0" width="375" height="600" fill="url(#pulseGradient)"/>
+      <text x="2812" y="300">N</text>
+    </g>
+  </g>
+</svg>
