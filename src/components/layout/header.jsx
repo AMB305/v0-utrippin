@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   return (
     <header className="border-b border-gray-200 bg-white shadow-sm">
@@ -11,9 +12,18 @@ export default function Header() {
         
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <div className="text-[#0068EF] font-bold text-xl">
-            UTrippin
-          </div>
+          {!logoError ? (
+            <img 
+              src="/UTrippin_Logo_3000px_clean.png"
+              alt="UTrippin Logo"
+              className="h-12 w-auto transition-transform duration-300 hover:scale-105"
+              onError={() => setLogoError(true)}
+            />
+          ) : (
+            <div className="text-[#0068EF] font-bold text-xl">
+              UTrippin
+            </div>
+          )}
         </Link>
 
         {/* Desktop Nav */}
