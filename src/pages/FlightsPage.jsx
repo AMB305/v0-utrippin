@@ -653,8 +653,8 @@ export default function FlightsPage() {
           </div>
         </div>
       </footer>
-
-      {/* Bottom Brand Section */}
+  
+        {/* Bottom Brand Section */}
       <div className="bg-[#001833] py-8">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p className="text-white text-sm mb-6">UTrippin is part of Booking Holdings, the world leader in online travel related services.</p>
@@ -670,5 +670,5 @@ export default function FlightsPage() {
     </div>
   );
 }
-  )
-}
+
+export default FlightsPage;
