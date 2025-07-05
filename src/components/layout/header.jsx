@@ -1,72 +1,79 @@
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
-  const { user, logout } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="w-full bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto">
-      <nav className="px-4 py-3">
-        <div className="flex items-center justify-between">
-          {/* Left side - Logo and Navigation */}
-          <div className="flex items-center gap-2">
-            <Link href="/" className="group flex space-x-2 transition transform hover:scale-105 duration-300">
-              <div className="flex space-x-1">
-                <span className="bg-[#0068ef] group-hover:bg-[#338df3] transition text-white font-bold px-2 py-1">U</span>
-                <span className="bg-[#0055a5] group-hover:bg-[#3578bd] transition text-white font-bold px-2 py-1">T</span>
-                <span className="bg-[#004080] group-hover:bg-[#2e5d91] transition text-white font-bold px-2 py-1">R</span>
-                <span className="bg-[#003366] group-hover:bg-[#264d73] transition text-white font-bold px-2 py-1">I</span>
-                <span className="bg-[#00264d] group-hover:bg-[#1e3c5c] transition text-white font-bold px-2 py-1">P</span>
-                <span className="bg-[#001933] group-hover:bg-[#14293f] transition text-white font-bold px-2 py-1">P</span>
-                <span className="bg-[#001020] group-hover:bg-[#0e1a26] transition text-white font-bold px-2 py-1">I</span>
-                <span className="bg-[#000d1a] group-hover:bg-[#0b141f] transition text-white font-bold px-2 py-1">N</span>
+    <header className="bg-white border-b border-gray-200 z-50 relative">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 hover:scale-105 transition-transform">
+          <div className="flex gap-1">
+            {"UTRIPPIN".split("").map((char, index) => (
+              <div
+                key={index}
+                className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-white font-bold rounded-sm transition-all"
+                style={{
+                  backgroundColor: `hsl(${210 + index * 5}, 90%, 50%)`
+                }}
+              >
+                {char}
               </div>
-            </Link>
-            <ul className="hidden lg:flex items-center gap-2 text-sm">
-              <li><a href="/hotels" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Hotels</a></li>
-              <li><a href="/cars" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Cars</a></li>
-              <li><a href="/flights" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Flights</a></li>
-              <li><a href="/packages" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Packages</a></li>
-              <li><a href="/cruises" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Cruises</a></li>
-              <li><a href="/experiences" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Experiences</a></li>
-              <li><a href="/deals" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Deals</a></li>
-              <li><a href="/ai-travel" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100 font-medium">🤖 AI Travel</a></li>
-              <li><a href="/travel-buddy" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100 font-medium">👫 Find Buddies</a></li>
-            </ul>
+            ))}
           </div>
+        </Link>
 
-          {/* Right side - User actions */}
-          <div className="flex items-center gap-2">
-            {user ? (
-              <>
-                <button className="bg-white border-2 border-gray-300 rounded-full px-3 py-2 flex items-center gap-2 text-sm hover:bg-gray-50">
-                  <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs">
-                    {user.firstName?.[0] || 'U'}
-                  </div>
-                  <span className="hidden lg:block text-gray-700">{user.firstName}</span>
-                </button>
-                <button 
-                  onClick={logout}
-                  className="bg-white border-2 border-gray-300 rounded-full px-3 py-2 text-sm hover:bg-gray-50"
-                >
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <button className="bg-white border-2 border-gray-300 rounded-full px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-50">
-                <div className="w-6 h-6 bg-blue-600 rounded-full"></div>
-                <div className="text-left">
-                  <div className="text-xs text-gray-700">Sign In</div>
-                  <div className="text-[#003C8A] font-bold text-xs uppercase">Join VIP</div>
-                </div>
-              </button>
-            )}
+        {/* Desktop Nav */}
+        <nav className="hidden lg:flex items-center space-x-6 ml-6 text-sm md:text-base">
+          <Link to="/hotels" className="hover:text-[#0068EF] transition-colors">Hotels</Link>
+          <Link to="/cars" className="hover:text-[#0068EF] transition-colors">Cars</Link>
+          <Link to="/flights" className="hover:text-[#0068EF] transition-colors">Flights</Link>
+          <Link to="/packages" className="hover:text-[#0068EF] transition-colors">Packages</Link>
+          <Link to="/cruises" className="hover:text-[#0068EF] transition-colors">Cruises</Link>
+          <Link to="/experiences" className="hover:text-[#0068EF] transition-colors">Experiences</Link>
+          <Link to="/deals" className="hover:text-[#0068EF] transition-colors">Deals</Link>
+          <Link to="/ai-travel" className="font-semibold hover:text-[#FF6200] transition-colors">🤖 AI Travel</Link>
+          <Link to="/travel-buddy" className="font-semibold hover:text-[#FF6200] transition-colors">👫 Find Buddies</Link>
+        </nav>
+
+        {/* Desktop User */}
+        <div className="hidden lg:flex items-center space-x-4">
+          <div className="flex items-center space-x-2 border rounded-full px-3 py-1">
+            <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">J</div>
+            <span>John</span>
+          </div>
+          <button className="border rounded-full px-4 py-1 hover:bg-gray-50">Sign Out</button>
+        </div>
+
+        {/* Mobile Hamburger */}
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden text-gray-600">
+          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {mobileOpen && (
+        <div className="lg:hidden bg-white border-t border-gray-200 px-6 py-4 space-y-4">
+          <Link to="/hotels" className="block hover:text-[#0068EF] transition-colors">Hotels</Link>
+          <Link to="/cars" className="block hover:text-[#0068EF] transition-colors">Cars</Link>
+          <Link to="/flights" className="block hover:text-[#0068EF] transition-colors">Flights</Link>
+          <Link to="/packages" className="block hover:text-[#0068EF] transition-colors">Packages</Link>
+          <Link to="/cruises" className="block hover:text-[#0068EF] transition-colors">Cruises</Link>
+          <Link to="/experiences" className="block hover:text-[#0068EF] transition-colors">Experiences</Link>
+          <Link to="/deals" className="block hover:text-[#0068EF] transition-colors">Deals</Link>
+          <Link to="/ai-travel" className="block font-semibold hover:text-[#FF6200] transition-colors">🤖 AI Travel</Link>
+          <Link to="/travel-buddy" className="block font-semibold hover:text-[#FF6200] transition-colors">👫 Find Buddies</Link>
+          <div className="border-t pt-4 mt-4">
+            <div className="flex items-center space-x-2 border rounded-full px-3 py-1 w-fit">
+              <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">J</div>
+              <span>John</span>
+            </div>
+            <button className="mt-3 border rounded-full px-4 py-1 hover:bg-gray-50 w-full">Sign Out</button>
           </div>
         </div>
-      </nav>
-      </div>
+      )}
     </header>
   );
 }
