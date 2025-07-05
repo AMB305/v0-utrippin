@@ -22,6 +22,7 @@ export default function Header() {
               <li><a href="/experiences" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Experiences</a></li>
               <li><a href="/deals" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100">Deals</a></li>
               <li><a href="/ai-travel" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100 font-medium">🤖 AI Travel</a></li>
+              <li><a href="/travel-buddy" className="px-3 py-3 rounded-full text-[#001833] hover:bg-gray-100 font-medium">👫 Find Buddies</a></li>
             </ul>
           </div>
 
