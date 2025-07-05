@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="600" viewBox="0 0 3000 600">
+  <style>
+    .letter {
+      transition: transform 0.3s ease-in-out;
+    }
+    .letter:hover {
+      transform: scale(1.08);
+    }
+    .u { fill: #0068EF; }
+    .t { fill: #0055A5; }
+    .r { fill: #004A91; }
+    .i { fill: #003F7D; }
+    .p { fill: #003468; }
+    .p2 { fill: #002954; }
+    .i2 { fill: #001E3F; }
+    .n { fill: #00132B; }
+  </style>
+  
+  <g font-family="Helvetica, Arial, sans-serif" font-size="400" font-weight="bold" text-anchor="middle" dominant-baseline="middle">
+    <g class="letter">
+      <text x="187" y="300" class="u">U</text>
+    </g>
+    <g class="letter">
+      <text x="562" y="300" class="t">T</text>
+    </g>
+    <g class="letter">
+      <text x="937" y="300" class="r">R</text>
+    </g>
+    <g class="letter">
+      <text x="1312" y="300" class="i">I</text>
+    </g>
+    <g class="letter">
+      <text x="1687" y="300" class="p">P</text>
+    </g>
+    <g class="letter">
+      <text x="2062" y="300" class="p2">P</text>
+    </g>
+    <g class="letter">
+      <text x="2437" y="300" class="i2">I</text>
+    </g>
+    <g class="letter">
+      <text x="2812" y="300" class="n">N</text>
+    </g>
+  </g>
+</svg>
