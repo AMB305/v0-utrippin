@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   return (
     <header className="border-b border-gray-200 bg-white shadow-sm">
@@ -11,19 +12,19 @@ export default function Header() {
         
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <img 
-            src="/UTrippin_Logo_3000px_clean.png"
-            alt="UTrippin Logo"
-            className="h-8 w-auto max-w-[160px] transition-transform duration-300 hover:scale-105"
-            onError={(e) => {
-              // Fallback to text logo if image fails to load
-              e.target.style.display = 'none';
-              e.target.nextSibling.style.display = 'block';
-            }}
-          />
-          <div className="text-[#0068EF] font-bold text-xl" style={{ display: 'none' }}>
-            UTrippin
-          </div>
+          {!logoError ? (
+            <img 
+              src="/UTrippin_Logo_3000px_clean.png"
+              alt="UTrippin Logo"
+              className="h-8 w-auto max-w-[160px] transition-transform duration-300 hover:scale-105"
+              onError={() => setLogoError(true)}
+              onLoad={() => console.log('Logo loaded successfully')}
+            />
+          ) : (
+            <div className="text-[#0068EF] font-bold text-xl">
+              UTrippin
+            </div>
+          )}
         </Link>
 
         {/* Desktop Nav */}
@@ -69,8 +70,8 @@ export default function Header() {
           <Link to="/cruises" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>Cruises</Link>
           <Link to="/experiences" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>Experiences</Link>
           <Link to="/deals" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>Deals</Link>
-          <Link to="/ai-travel" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>🤖 AI Travel</Link>
-          <Link to="/travel-buddy" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)}>🧑‍🤝‍🧑 Find Buddies</Link>
+          <Link to="/ai-travel" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)">🤖 AI Travel</Link>
+          <Link to="/travel-buddy" className="block py-2 text-[#001E3C] hover:text-[#0068EF]" onClick={() => setIsOpen(false)">🧑‍🤝‍🧑 Find Buddies</Link>
           
           {/* Mobile User Actions */}
           <div className="border-t pt-4 mt-4">
