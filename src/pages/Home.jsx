@@ -113,8 +113,8 @@ export default function Home() {
     <>
       <SEOHead 
         title="UTrippin: Your AI Travel Buddy"
-        description="Compare flights, hotels, cars & even find travel buddies. Powered by AI."
-        image="https://utrippin.ai/UTrippin_Social_Card_BlueBG_1200x630.png"
+        description="Compare flights, hotels, cars & even find travel buddies."
+        image="https://utrippin.ai/utrippin_social_card.png"
         url="https://utrippin.ai"
       />
       
