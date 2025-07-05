@@ -50,7 +50,7 @@ export default function SocialCardGenerator() {
             </h2>
             
             <p className="text-2xl text-blue-100 text-center max-w-2xl">
-              Compare Flights, Hotels, Cars and Travel Buddies!
+              Compare Flights, Hotels, Cars and even find a Travel Buddy!
             </p>
           </Card>
         </div>
