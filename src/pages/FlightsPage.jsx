@@ -1,8 +1,38 @@
 import React from "react";
+import SEOHead from "../components/common/seo-head";
+import { generateStructuredData, generateBoltSEOJSON, pageSEOConfigs } from "../utils/seo-config";
 
 export default function FlightsPage() {
+  // Generate structured data for flights page
+  const flightsStructuredData = generateStructuredData('travel-service', {
+    ...pageSEOConfigs.flights.customStructuredData,
+    "name": "UTrippin Flight Booking",
+    "description": "Compare and book cheap flights from hundreds of airlines worldwide"
+  });
+
+  // Generate Bolt SEO JSON
+  const boltSEOJSON = generateBoltSEOJSON(pageSEOConfigs.flights);
+
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <SEOHead 
+        title={pageSEOConfigs.flights.title}
+        description={pageSEOConfigs.flights.description}
+        image="https://utrippin.ai/utrippin_social_card.png"
+        url="https://utrippin.ai/flights"
+        structuredData={flightsStructuredData}
+      />
+      
+      {/* Bolt SEO JSON */}
+      <script 
+        type="application/json" 
+        id="bolt-seo-config"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(boltSEOJSON, null, 2)
+        }}
+      />
+      
+      <div className="min-h-screen bg-white">
       {/* Section 1: Header with Navigation and Hero Search */}
       <div className="bg-[#0068EF] text-white text-sm flex justify-center py-4 px-4">
         <div className="text-center max-w-6xl mx-auto">

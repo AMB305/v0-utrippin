@@ -17,6 +17,7 @@ import Header from '../components/layout/header';
 import Footer from '../components/layout/footer';
 import SEOHead from '../components/common/seo-head';
 import { useSupabase } from '../hooks/useSupabase';
+import { generateStructuredData, generateBoltSEOJSON, pageSEOConfigs } from '../utils/seo-config';
 
 export default function TravelBuddySwipePage() {
   const { user, supabase } = useSupabase();
@@ -95,6 +96,16 @@ export default function TravelBuddySwipePage() {
     }
   }
 
+  // Generate structured data for travel buddy page
+  const buddyStructuredData = generateStructuredData('software-application', {
+    ...pageSEOConfigs['travel-buddy'].customStructuredData,
+    "name": "UTrippin Travel Buddy Finder",
+    "description": "Find compatible travel companions through our AI-powered matching system"
+  });
+
+  // Generate Bolt SEO JSON
+  const boltSEOJSON = generateBoltSEOJSON(pageSEOConfigs['travel-buddy']);
+
   const currentBuddy = buddies[currentIndex];
 
   if (!user) {
@@ -116,8 +127,20 @@ export default function TravelBuddySwipePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <SEOHead 
-        title="Find Travel Buddies: Swipe & Match | UTrippin" 
-        description="Discover travel companions who share your interests. Swipe to connect with fellow travelers worldwide."
+        title={pageSEOConfigs['travel-buddy'].title}
+        description={pageSEOConfigs['travel-buddy'].description}
+        image="https://utrippin.ai/utrippin_social_card.png"
+        url="https://utrippin.ai/travel-buddy"
+        structuredData={buddyStructuredData}
+      />
+      
+      {/* Bolt SEO JSON */}
+      <script 
+        type="application/json" 
+        id="bolt-seo-config"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(boltSEOJSON, null, 2)
+        }}
       />
       
       <Header />

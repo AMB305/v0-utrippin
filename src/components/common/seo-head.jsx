@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default function SEOHead({ title, description, image, url }) {
+export default function SEOHead({ title, description, image, url, structuredData }) {
   useEffect(() => {
     // Set page title
     if (title) {
@@ -59,7 +59,22 @@ export default function SEOHead({ title, description, image, url }) {
       updateMetaTag('twitter:image', image, false);
     }
     
-  }, [title, description, image, url]);
+    // Handle structured data JSON-LD
+    if (structuredData) {
+      // Remove existing structured data script if it exists
+      const existingScript = document.querySelector('script[type="application/ld+json"]');
+      if (existingScript) {
+        existingScript.remove();
+      }
+      
+      // Add new structured data script
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(structuredData);
+      document.head.appendChild(script);
+    }
+    
+  }, [title, description, image, url, structuredData]);
 
   return null;
 }

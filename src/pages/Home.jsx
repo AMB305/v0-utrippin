@@ -13,6 +13,7 @@ import SEOHead from "../components/common/seo-head";
 import AiChat from "../components/ai/ai-chat";
 import SponsoredContent, { BannerAd } from "../components/advertising/sponsored-content";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { generateStructuredData, generateBoltSEOJSON, pageSEOConfigs } from "../utils/seo-config";
 
 export default function Home() {
   const [showAiChat, setShowAiChat] = useState(false);
@@ -109,13 +110,37 @@ export default function Home() {
     }
   ];
 
+  // Generate structured data for home page
+  const homeStructuredData = generateStructuredData('travel-service', {
+    "name": "UTrippin",
+    "alternateName": "UTrippin.ai",
+    "sameAs": [
+      "https://www.facebook.com/utrippin",
+      "https://www.twitter.com/utrippin", 
+      "https://www.instagram.com/utrippin"
+    ]
+  });
+
+  // Generate Bolt SEO JSON
+  const boltSEOJSON = generateBoltSEOJSON(pageSEOConfigs.home);
+
   return (
     <>
       <SEOHead 
-        title="UTrippin: Your AI Travel Buddy"
-        description="Compare flights, hotels, cars & even find travel buddies."
+        title={pageSEOConfigs.home.title}
+        description={pageSEOConfigs.home.description}
         image="https://utrippin.ai/utrippin_social_card.png"
         url="https://utrippin.ai"
+        structuredData={homeStructuredData}
+      />
+      
+      {/* Bolt SEO JSON for headless CMS integration */}
+      <script 
+        type="application/json" 
+        id="bolt-seo-config"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(boltSEOJSON, null, 2)
+        }}
       />
       
       <div className="min-h-screen bg-gray-50">

@@ -1,0 +1,77 @@
+{
+  "type": "website",
+  "url": "https://utrippin.ai/",
+  "title": "UTrippin: Your AI Travel Buddy",
+  "description": "Compare flights, hotels, cars & even find travel buddies.",
+  "image": {
+    "url": "https://utrippin.ai/utrippin_social_card.png",
+    "width": 1200,
+    "height": 630
+  },
+  "pages": {
+    "home": {
+      "type": "website",
+      "url": "https://utrippin.ai/",
+      "title": "UTrippin: Your AI Travel Buddy",
+      "description": "Compare flights, hotels, cars & even find travel buddies.",
+      "image": {
+        "url": "https://utrippin.ai/utrippin_social_card.png",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    "flights": {
+      "type": "website",
+      "url": "https://utrippin.ai/flights",
+      "title": "Cheap Flights: Compare & Book Flight Deals | UTrippin",
+      "description": "Find and book cheap flights worldwide. Compare prices from hundreds of airlines and travel sites.",
+      "image": {
+        "url": "https://utrippin.ai/utrippin_social_card.png",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    "hotels": {
+      "type": "website",
+      "url": "https://utrippin.ai/hotels",
+      "title": "Hotels: Find Cheap Hotel Rooms & Discount Hotels | UTrippin",
+      "description": "Deep Discounts on Hotels. Get Exclusive Savings with UTrippin.com.",
+      "image": {
+        "url": "https://utrippin.ai/utrippin_social_card.png",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    "travel-buddy": {
+      "type": "website",
+      "url": "https://utrippin.ai/travel-buddy",
+      "title": "Find Travel Buddies: Swipe & Match | UTrippin",
+      "description": "Discover travel companions who share your interests. Swipe to connect with fellow travelers worldwide.",
+      "image": {
+        "url": "https://utrippin.ai/utrippin_social_card.png",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    "ai-travel": {
+      "type": "website",
+      "url": "https://utrippin.ai/ai-travel",
+      "title": "AI Travel Assistant: Smart Trip Planning | UTrippin",
+      "description": "Plan your perfect trip with AI. Get custom itineraries, book flights, reserve dinners & find travel buddies.",
+      "image": {
+        "url": "https://utrippin.ai/utrippin_social_card.png",
+        "width": 1200,
+        "height": 630
+      }
+    }
+  },
+  "organization": {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "UTrippin",
+    "url": "https://utrippin.ai",
+    "description": "AI-powered travel booking platform",
+    "serviceType": ["Flight Booking", "Hotel Booking", "Car Rental", "Travel Planning", "Travel Buddy Matching"],
+    "areaServed": "Worldwide"
+  }
+}
