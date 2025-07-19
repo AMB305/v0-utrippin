@@ -6,7 +6,7 @@ import { Search, Menu, Heart, User, Bot, Users, Briefcase, Car, Plane, Package, 
 import { FaCar, FaSuitcaseRolling, FaRobot } from "react-icons/fa";
 import { GiBoatFishing } from "react-icons/gi";
 import { MdFlight, MdHotel } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import UtrippinLogo from "@/components/UtrippinLogo";
 import EnhancedLanguageSelector from "@/components/EnhancedLanguageSelector";
 import { CurrencySelector } from "@/components/CurrencySelector";
@@ -28,9 +28,24 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchValue, setMobileSearchValue] = useState("");
   const [mobileSearchIata, setMobileSearchIata] = useState("");
+
+  // Determine active tab based on current route
+  const currentPath = location.pathname;
+  const getActiveTab = () => {
+    if (currentPath.startsWith('/flights')) return 'flights';
+    if (currentPath.startsWith('/hotels')) return 'hotels';
+    if (currentPath.startsWith('/cars')) return 'cars';
+    if (currentPath.startsWith('/packages')) return 'packages';
+    if (currentPath.startsWith('/cruises')) return 'cruises';
+    if (currentPath.startsWith('/ai-travel')) return 'ai';
+    return activeTab || ''; // fallback to prop or empty
+  };
+
+  const currentActiveTab = getActiveTab();
 
   const bookingTabs = [
     { key: "flights", label: "Flights", icon: <MdFlight className="w-4 h-4" /> },
@@ -81,7 +96,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   <Button 
                     variant="ghost" 
                     className={`text-sm px-2 whitespace-nowrap transition-colors ${
-                      activeTab === tab.key
+                      currentActiveTab === tab.key
                         ? 'text-blue-600 bg-blue-50'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
@@ -100,7 +115,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   <Button 
                     variant="ghost" 
                     className={`text-sm px-2 whitespace-nowrap transition-colors ${
-                      activeTab === tab.key
+                      currentActiveTab === tab.key
                         ? 'text-blue-600 bg-blue-50'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
@@ -163,7 +178,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   key={tab.key}
                   to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}
                   className={`flex flex-col items-center px-2 py-1 rounded-lg text-xs whitespace-nowrap min-w-0 flex-shrink-0 transition-colors ${
-                    activeTab === tab.key
+                    currentActiveTab === tab.key
                       ? 'bg-blue-500 text-white'
                       : 'bg-white text-gray-700 hover:bg-blue-100'
                   }`}
