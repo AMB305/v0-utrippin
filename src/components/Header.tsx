@@ -172,8 +172,8 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   variant="ghost" 
                   className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
                     currentActiveTab === tab.key
-                      ? 'text-blue-600 bg-blue-50 shadow-sm'
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50/50'
+                      ? 'text-black bg-gray-100 shadow-sm'
+                      : 'text-gray-700 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   {tab.icon}
@@ -185,7 +185,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
             {/* More Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50/50">
+                <Button variant="ghost" className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50">
                   More
                   <ChevronDown className="w-4 h-4" />
                 </Button>
@@ -222,8 +222,8 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}
                   className={`flex flex-col items-center px-3 py-2 rounded-lg text-xs whitespace-nowrap min-w-0 flex-shrink-0 transition-all duration-200 ${
                     currentActiveTab === tab.key
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-600'
+                      ? 'bg-black text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-black'
                   }`}
                 >
                   {tab.icon}
