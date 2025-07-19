@@ -1,0 +1,10 @@
+-- Insert sample trips with correct trip_type values
+INSERT INTO trips (user_id, title, destination, country, start_date, end_date, budget, trip_type, status, public, looking_for_buddies, max_buddies, duration_days) VALUES
+((SELECT id FROM users WHERE email = 'alex@example.com' LIMIT 1), 'Temple Hopping in Kyoto', 'Kyoto', 'Japan', '2024-04-15', '2024-04-22', 1200, 'solo', 'planning', true, true, 3, 7),
+((SELECT id FROM users WHERE email = 'maria@example.com' LIMIT 1), 'Street Food Adventure Tokyo', 'Tokyo', 'Japan', '2024-05-01', '2024-05-10', 1500, 'friends', 'planning', true, true, 4, 9),
+((SELECT id FROM users WHERE email = 'james@example.com' LIMIT 1), 'Art & Museums Barcelona', 'Barcelona', 'Spain', '2024-06-10', '2024-06-17', 800, 'couple', 'planning', true, true, 2, 7),
+((SELECT id FROM users WHERE email = 'sophie@example.com' LIMIT 1), 'Hiking Annapurna Base Camp', 'Pokhara', 'Nepal', '2024-10-15', '2024-10-30', 2000, 'friends', 'planning', true, true, 6, 15),
+((SELECT id FROM users WHERE email = 'alex.smith@example.com' LIMIT 1), 'Surf & Beach Vibes Bali', 'Canggu', 'Indonesia', '2024-07-20', '2024-08-05', 1000, 'solo', 'planning', true, true, 4, 16),
+((SELECT id FROM users WHERE email = 'maria.lopez@example.com' LIMIT 1), 'Music Festivals Europe', 'Amsterdam', 'Netherlands', '2024-08-15', '2024-08-25', 1800, 'friends', 'planning', true, true, 8, 10),
+((SELECT id FROM users WHERE email = 'jake.miller@example.com' LIMIT 1), 'Backpacking Southeast Asia', 'Bangkok', 'Thailand', '2024-09-01', '2024-09-30', 1200, 'solo', 'planning', true, true, 5, 29),
+((SELECT id FROM users WHERE email = 'sophie.chen@example.com' LIMIT 1), 'Wine Tour Tuscany', 'Florence', 'Italy', '2024-08-01', '2024-08-08', 1500, 'couple', 'planning', true, true, 3, 7);

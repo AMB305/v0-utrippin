@@ -1,0 +1,25 @@
+<svg width="320" height="64" viewBox="0 0 320 64" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="40" height="64" fill="#0070f3"/>
+  <text x="20" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">U</text>
+  
+  <rect x="40" y="0" width="40" height="64" fill="#0066e0"/>
+  <text x="60" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">T</text>
+  
+  <rect x="80" y="0" width="40" height="64" fill="#005ccc"/>
+  <text x="100" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">R</text>
+  
+  <rect x="120" y="0" width="40" height="64" fill="#0052b8"/>
+  <text x="140" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">I</text>
+  
+  <rect x="160" y="0" width="40" height="64" fill="#0048a4"/>
+  <text x="180" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">P</text>
+  
+  <rect x="200" y="0" width="40" height="64" fill="#003e90"/>
+  <text x="220" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">P</text>
+  
+  <rect x="240" y="0" width="40" height="64" fill="#00347c"/>
+  <text x="260" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">I</text>
+  
+  <rect x="280" y="0" width="40" height="64" fill="#002a68"/>
+  <text x="300" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">N</text>
+</svg>

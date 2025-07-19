@@ -1,0 +1,25 @@
+project_id = "ytraidksgwxttjeevjuc"
+
+[functions.pixabay-images]
+verify_jwt = false
+
+[functions.pexels-images]
+verify_jwt = false
+
+[functions.searchapi-images]
+verify_jwt = false
+
+[functions.unsplash-images]
+verify_jwt = false
+
+[functions.serpapi-images]
+verify_jwt = false
+
+[functions.airport-search]
+verify_jwt = false
+
+[functions.mobile-ai-travel]
+verify_jwt = false
+
+[functions.unified-image-search]
+verify_jwt = false

@@ -1,0 +1,176 @@
+{
+  "heroStory": {
+    "title": "Discover Ghana: A Journey Through Heritage & Culture",
+    "tag": "Black Travel ✈️",
+    "excerpt": "More Black travelers are returning to the motherland to discover their roots and connect with a rich cultural heritage that spans centuries.",
+    "image": "/src/assets/melanin-heritage-museum-141.jpg",
+    "link": "/stories/ghana-heritage"
+  },
+  "trendingItems": [
+    {
+      "title": "Top Black-Owned Restaurants in New Orleans",
+      "image": "/src/assets/melanin-nola-20.jpg",
+      "date": "July 10, 2025",
+      "link": "/stories/nola-black-owned"
+    },
+    {
+      "title": "Best Cities for Solo Black Women Travelers",
+      "image": "/src/assets/melanin-solo-woman-21.jpg",
+      "date": "July 12, 2025",
+      "link": "/stories/black-women-travel"
+    },
+    {
+      "title": "Luxury Caribbean Resorts Loved by Black Couples",
+      "image": "/src/assets/melanin-couples-22.jpg",
+      "date": "July 2, 2025",
+      "link": "/stories/black-couples-getaway"
+    }
+  ],
+  "editorialStories": [
+    {
+      "title": "Why Black Travelers are Rediscovering Africa",
+      "tag": "Heritage Travel",
+      "excerpt": "A cultural renaissance is happening across the continent as more diaspora travelers return home.",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/stories/rediscovering-africa",
+      "date": "July 5, 2025"
+    },
+    {
+      "title": "Safe Places for Black Americans to Travel",
+      "tag": "Travel Safety",
+      "excerpt": "Countries and cities where Black travelers feel welcomed and celebrated.",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/guides/safe-places",
+      "date": "July 8, 2025"
+    },
+    {
+      "title": "Black-Owned Hotels You Should Book",
+      "tag": "Accommodations",
+      "excerpt": "Supporting Black hospitality businesses around the world.",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/stories/black-owned-hotels",
+      "date": "July 3, 2025"
+    },
+    {
+      "title": "Travel Essentials for Melanin Skin",
+      "tag": "Beauty & Wellness",
+      "excerpt": "Skincare products that travel well and keep you glowing.",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/guides/melanin-skincare",
+      "date": "July 1, 2025"
+    }
+  ],
+  "rssFeeds": [
+    {
+      "title": "Marcus Samuelsson's New NYC Spot",
+      "tag": "Restaurants",
+      "excerpt": "The celebrity chef opens another must-visit restaurant in Harlem.",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/restaurants/marcus-samuelsson-nyc"
+    },
+    {
+      "title": "Safe Travel Updates for 2025",
+      "tag": "Travel Safety",
+      "excerpt": "Latest updates on destinations welcoming Black travelers.",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/safety/updates-2025"
+    },
+    {
+      "title": "New Direct Flights to Africa",
+      "tag": "Travel News",
+      "excerpt": "Airlines adding more routes connecting the diaspora to the motherland.",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/news/africa-flights"
+    }
+  ],
+  "blackOwnedRestaurants": [
+    {
+      "title": "Atlanta's Rising Food Scene",
+      "tag": "Restaurants",
+      "excerpt": "New Black-owned eateries transforming the city's culinary landscape.",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/restaurants/atlanta-rising"
+    },
+    {
+      "title": "Soul Food in Chicago",
+      "tag": "Restaurants",
+      "excerpt": "Traditional and modern takes on classic soul food in the Windy City.",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/restaurants/chicago-soul"
+    },
+    {
+      "title": "Caribbean Flavors in Miami",
+      "tag": "Restaurants",
+      "excerpt": "Where to find the best Caribbean cuisine in South Beach and beyond.",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/restaurants/miami-caribbean"
+    },
+    {
+      "title": "New Orleans Creole Masters",
+      "tag": "Restaurants",
+      "excerpt": "Historic Black-owned restaurants serving authentic Creole and Cajun cuisine.",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/restaurants/nola-creole"
+    }
+  ],
+  "blackOwnedWineries": [
+    {
+      "title": "California's Hidden Black Vintners",
+      "tag": "Wineries",
+      "excerpt": "Discover Black winemakers crafting exceptional vintages in Napa and beyond.",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/wineries/california-black-vintners"
+    },
+    {
+      "title": "South African Wine Heritage",
+      "tag": "Wineries",
+      "excerpt": "The rich history and bright future of Black winemaking in South Africa.",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/wineries/south-africa-heritage"
+    },
+    {
+      "title": "Texas Wine Country Rising",
+      "tag": "Wineries",
+      "excerpt": "Black-owned wineries putting Texas on the wine map.",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/wineries/texas-rising"
+    },
+    {
+      "title": "Virginia's Historic Black Winemakers",
+      "tag": "Wineries",
+      "excerpt": "Celebrating centuries-old Black winemaking traditions in America's oldest wine region.",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/wineries/virginia-heritage"
+    }
+  ],
+  "travelDeals": [
+    {
+      "title": "African American Couples Retreat Packages",
+      "tag": "Couples Travel",
+      "excerpt": "Romantic getaway deals designed for Black couples seeking cultural connections.",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/deals/couples-retreat"
+    },
+    {
+      "title": "Solo Black Women Travel Packages",
+      "tag": "Solo Travel",
+      "excerpt": "Safe, curated experiences for solo Black women travelers.",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/deals/solo-women"
+    },
+    {
+      "title": "Girls Trip to Ghana Special",
+      "tag": "Group Travel",
+      "excerpt": "Limited-time offer for sisterhood trips to the motherland.",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/deals/girls-trip-ghana"
+    },
+    {
+      "title": "Boys Trip Adventure Deals",
+      "tag": "Group Travel",
+      "excerpt": "Brotherhood experiences from safari to city adventures.",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/deals/boys-adventure"
+    }
+  ]
+}
