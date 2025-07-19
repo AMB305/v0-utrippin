@@ -217,7 +217,7 @@ const TravelCategories = () => {
                 </div>
                 
                 <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-xl font-semibold mb-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="text-xl font-bold mb-2 text-white drop-shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     {category.name}
                   </h3>
                   <p className="text-white/80 text-sm mb-2 opacity-75 group-hover:opacity-100 transition-opacity duration-300">
