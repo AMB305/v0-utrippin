@@ -94,7 +94,7 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {searchData.pickupDate ? format(searchData.pickupDate, "MMM dd") : "Select date"}
+                        {searchData.pickupDate ? format(searchData.pickupDate, "MMM dd") : <span className="hidden sm:inline">Select date</span>}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -173,7 +173,7 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {searchData.pickupDate ? format(searchData.pickupDate, "MMM dd") : "Select date"}
+                  {searchData.pickupDate ? format(searchData.pickupDate, "MMM dd") : <span className="hidden sm:inline">Select date</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -201,7 +201,7 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {searchData.dropoffDate ? format(searchData.dropoffDate, "MMM dd") : "Select date"}
+                  {searchData.dropoffDate ? format(searchData.dropoffDate, "MMM dd") : <span className="hidden sm:inline">Select date</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -240,7 +240,8 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
               size="lg"
             >
               <Search className="w-4 h-4 mr-2" />
-              {loading ? "Searching..." : "Search"}
+              <span className="hidden sm:inline">{loading ? "Searching..." : "Search"}</span>
+              <span className="sm:hidden">{loading ? "..." : ""}</span>
             </Button>
           </div>
         </div>
