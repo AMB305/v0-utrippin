@@ -77,50 +77,48 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
             {/* Core Navigation - Only essential items visible on large screens */}
             <nav className="hidden xl:flex items-center gap-1">
               {bookingTabs.slice(0, 4).map((tab) => (
-                <Button 
-                  key={tab.key}
-                  variant="ghost" 
-                  className={`text-sm px-2 whitespace-nowrap transition-colors ${
-                    activeTab === tab.key
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-gray-900'
-                  }`}
-                  onClick={() => {
-                    console.log(`${tab.label} button clicked`);
-                    if (typeof window.gtag !== 'undefined') {
-                      window.gtag('event', 'navigation_click', {
-                        event_category: 'Header Navigation',
-                        event_label: tab.label,
-                        value: 1,
-                      });
-                    }
-                    navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
-                  }}
-                >
-                  {tab.icon}
-                  <span className="ml-1">{tab.label}</span>
-                </Button>
+                <Link key={tab.key} to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}>
+                  <Button 
+                    variant="ghost" 
+                    className={`text-sm px-2 whitespace-nowrap transition-colors ${
+                      activeTab === tab.key
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:text-gray-900'
+                    }`}
+                    onClick={() => {
+                      console.log(`${tab.label} button clicked`);
+                      if (typeof window.gtag !== 'undefined') {
+                        window.gtag('event', 'navigation_click', {
+                          event_category: 'Header Navigation',
+                          event_label: tab.label,
+                          value: 1,
+                        });
+                      }
+                    }}
+                  >
+                    {tab.icon}
+                    <span className="ml-1">{tab.label}</span>
+                  </Button>
+                </Link>
               ))}
             </nav>
 
             {/* Medium screens - Compact navigation with dropdown */}
             <nav className="hidden lg:flex xl:hidden items-center gap-1">
               {bookingTabs.slice(0, 2).map((tab) => (
-                <Button 
-                  key={tab.key}
-                  variant="ghost" 
-                  className={`text-sm px-2 whitespace-nowrap transition-colors ${
-                    activeTab === tab.key
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-gray-900'
-                  }`}
-                  onClick={() => {
-                    navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
-                  }}
-                >
-                  {tab.icon}
-                  <span className="ml-1">{tab.label}</span>
-                </Button>
+                <Link key={tab.key} to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}>
+                  <Button 
+                    variant="ghost" 
+                    className={`text-sm px-2 whitespace-nowrap transition-colors ${
+                      activeTab === tab.key
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:text-gray-900'
+                    }`}
+                  >
+                    {tab.icon}
+                    <span className="ml-1">{tab.label}</span>
+                  </Button>
+                </Link>
               ))}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -131,16 +129,12 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white border border-gray-200 shadow-lg z-50">
                   {bookingTabs.slice(2).map((tab) => (
-                    <DropdownMenuItem 
-                      key={tab.key}
-                      className="flex items-center gap-2 cursor-pointer"
-                      onClick={() => {
-                        navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
-                      }}
-                    >
-                      {tab.icon}
-                      {tab.label}
-                    </DropdownMenuItem>
+                    <Link key={tab.key} to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}>
+                      <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                        {tab.icon}
+                        {tab.label}
+                      </DropdownMenuItem>
+                    </Link>
                   ))}
                   <Link to="/experiences">
                     <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
@@ -175,11 +169,9 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
           <nav className="lg:hidden flex-1 max-w-[50%] overflow-x-auto mx-2">
             <div className="flex space-x-1 whitespace-nowrap no-scrollbar">
               {bookingTabs.map((tab) => (
-                <button
+                <Link
                   key={tab.key}
-                  onClick={() => {
-                    navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
-                  }}
+                  to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}
                   className={`flex flex-col items-center px-2 py-1 rounded-lg text-xs whitespace-nowrap min-w-0 flex-shrink-0 transition-colors ${
                     activeTab === tab.key
                       ? 'bg-blue-500 text-white'
@@ -188,7 +180,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 >
                   {tab.icon}
                   <span className="mt-1 text-[10px]">{tab.label}</span>
-                </button>
+                </Link>
               ))}
             </div>
           </nav>
@@ -226,42 +218,44 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
             
             {/* Additional Navigation - Only on XL screens */}
             <div className="hidden xl:flex items-center gap-1">
-              <Button 
-                variant="ghost" 
-                className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
-                onClick={() => {
-                  console.log("🤖 Header AI Travel clicked");
-                  if (typeof window.gtag !== 'undefined') {
-                    window.gtag('event', 'navigation_click', {
-                      event_category: 'Header Navigation',
-                      event_label: 'AI Travel',
-                      value: 1,
-                    });
-                  }
-                  navigate('/ai-travel');
-                }}
-              >
-                <Bot className="w-4 h-4" />
-                AI Travel
-              </Button>
-              <Button 
-                variant="ghost" 
-                className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
-                onClick={() => {
-                  console.log("👥 Header Travel Buddies clicked");
-                  if (typeof window.gtag !== 'undefined') {
-                    window.gtag('event', 'navigation_click', {
-                      event_category: 'Header Navigation',
-                      event_label: 'Travel Buddies',
-                      value: 1,
-                    });
-                  }
-                  navigate('/travel-buddies');
-                }}
-              >
-                <Users className="w-4 h-4" />
-                Travel Buddies
-              </Button>
+              <Link to="/ai-travel">
+                <Button 
+                  variant="ghost" 
+                  className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
+                  onClick={() => {
+                    console.log("🤖 Header AI Travel clicked");
+                    if (typeof window.gtag !== 'undefined') {
+                      window.gtag('event', 'navigation_click', {
+                        event_category: 'Header Navigation',
+                        event_label: 'AI Travel',
+                        value: 1,
+                      });
+                    }
+                  }}
+                >
+                  <Bot className="w-4 h-4" />
+                  AI Travel
+                </Button>
+              </Link>
+              <Link to="/travel-buddies">
+                <Button 
+                  variant="ghost" 
+                  className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
+                  onClick={() => {
+                    console.log("👥 Header Travel Buddies clicked");
+                    if (typeof window.gtag !== 'undefined') {
+                      window.gtag('event', 'navigation_click', {
+                        event_category: 'Header Navigation',
+                        event_label: 'Travel Buddies',
+                        value: 1,
+                      });
+                    }
+                  }}
+                >
+                  <Users className="w-4 h-4" />
+                  Travel Buddies
+                </Button>
+              </Link>
             </div>
             
             {/* Desktop User Menu - Stack on smaller screens */}
