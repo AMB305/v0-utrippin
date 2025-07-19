@@ -76,6 +76,7 @@ import SearchHistory from "./pages/SearchHistory";
 import NotFound from "./pages/NotFound";
 import ExploreMerged from "@/pages/ExploreMerged";
 import AiTravelResults from "./pages/AiTravelResults";
+import ExploreAiTravel from "./pages/ExploreAiTravel";
 
 const queryClient = new QueryClient();
 
@@ -139,7 +140,8 @@ const App = () => (
                   <Route path="/family-travel" element={<FamilyTravel />} />
                   <Route path="/solo-travel" element={<SoloTravel />} />
                   <Route path="/events" element={<Events />} />
-                  <Route path="/ai-travel" element={<AiTravelResults />} />
+                  <Route path="/ai-travel" element={<ExploreAiTravel />} />
+                  <Route path="/ai-travel-results" element={<AiTravelResults />} />
                   <Route path="/name-your-price" element={<ExploreMerged />} />
                   <Route path="/melanin" element={<Melanin />} />
                   <Route path="/seo-reports" element={<SEOReports />} />

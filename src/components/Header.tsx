@@ -94,11 +94,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                         value: 1,
                       });
                     }
-                    if (onTabChange) {
-                      onTabChange(tab.key);
-                    } else {
-                      navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
-                    }
+                    navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
                   }}
                 >
                   {tab.icon}
@@ -119,11 +115,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                       : 'text-gray-700 hover:text-gray-900'
                   }`}
                   onClick={() => {
-                    if (onTabChange) {
-                      onTabChange(tab.key);
-                    } else {
-                      navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
-                    }
+                    navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
                   }}
                 >
                   {tab.icon}
@@ -143,11 +135,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                       key={tab.key}
                       className="flex items-center gap-2 cursor-pointer"
                       onClick={() => {
-                        if (onTabChange) {
-                          onTabChange(tab.key);
-                        } else {
-                          navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
-                        }
+                        navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
                       }}
                     >
                       {tab.icon}
@@ -190,11 +178,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 <button
                   key={tab.key}
                   onClick={() => {
-                    if (onTabChange) {
-                      onTabChange(tab.key);
-                    } else {
-                      navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
-                    }
+                    navigate(`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`);
                   }}
                   className={`flex flex-col items-center px-2 py-1 rounded-lg text-xs whitespace-nowrap min-w-0 flex-shrink-0 transition-colors ${
                     activeTab === tab.key
