@@ -84,22 +84,28 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
       {/* Top Navigation Line - Secondary Actions */}
       <div className="border-b border-border/50">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-10 text-xs">
-            {/* Left: Secondary Links */}
-            <div className="hidden lg:flex items-center gap-4 text-muted-foreground">
-              <Link to="/deals" className="hover:text-foreground transition-colors flex items-center gap-1">
-                <Tag className="w-3 h-3" />
-                Deals
+          <div className="flex items-center justify-between h-12">
+            {/* Left: Logo + Secondary Links */}
+            <div className="flex items-center gap-6">
+              <Link to="/" className="flex items-center flex-shrink-0">
+                <UtrippinLogo />
               </Link>
-              <Link to="/support" className="hover:text-foreground transition-colors">
-                Support
-              </Link>
-              <Link to="/partnership" className="hover:text-foreground transition-colors">
-                Partnership
-              </Link>
-              <Link to="/blog" className="hover:text-foreground transition-colors">
-                Blog
-              </Link>
+              
+              <div className="hidden lg:flex items-center gap-4 text-muted-foreground text-xs">
+                <Link to="/deals" className="hover:text-foreground transition-colors flex items-center gap-1">
+                  <Tag className="w-3 h-3" />
+                  Deals
+                </Link>
+                <Link to="/support" className="hover:text-foreground transition-colors">
+                  Support
+                </Link>
+                <Link to="/partnership" className="hover:text-foreground transition-colors">
+                  Partnership
+                </Link>
+                <Link to="/blog" className="hover:text-foreground transition-colors">
+                  Blog
+                </Link>
+              </div>
             </div>
 
             {/* Right: User Actions */}
@@ -133,13 +139,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
 
       {/* Main Navigation Line */}
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between py-3">
-          {/* Logo */}
-          <Link to="/" className="flex items-center flex-shrink-0">
-            <UtrippinLogo />
-          </Link>
-
-          {/* Main Navigation - Desktop */}
+        <div className="flex items-center justify-between py-3">{/* Main Navigation - Desktop */}
           <nav className="hidden lg:flex items-center gap-6">
             {bookingTabs.slice(0, 5).map((tab) => (
               <Link 
