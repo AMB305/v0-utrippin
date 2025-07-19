@@ -92,19 +92,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               </Link>
               
               <div className="hidden lg:flex items-center gap-4 text-xs">
-                <Link to="/deals" className="text-gray-700 hover:text-black transition-colors flex items-center gap-1">
-                  <Tag className="w-3 h-3" />
-                  Deals
-                </Link>
-                <Link to="/support" className="text-gray-700 hover:text-black transition-colors">
-                  Support
-                </Link>
-                <Link to="/partnership" className="text-gray-700 hover:text-black transition-colors">
-                  Partnership
-                </Link>
-                <Link to="/blog" className="text-gray-700 hover:text-black transition-colors">
-                  Blog
-                </Link>
+                {/* Keep empty or add other secondary links if needed */}
               </div>
             </div>
 
@@ -190,7 +178,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg rounded-lg">
+              <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg rounded-lg z-50">
                 <Link to="/experiences">
                   <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
                     <Sparkles className="w-4 h-4" />
@@ -207,6 +195,31 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
                     <Users className="w-4 h-4" />
                     Travel Buddies
+                  </DropdownMenuItem>
+                </Link>
+                <div className="border-t border-gray-200 my-1"></div>
+                <Link to="/deals">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                    <Tag className="w-4 h-4" />
+                    Deals
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/support">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                    <Users className="w-4 h-4" />
+                    Support
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/partnership">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                    <Briefcase className="w-4 h-4" />
+                    Partnership
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/blog">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                    <Package className="w-4 h-4" />
+                    Blog
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuContent>
