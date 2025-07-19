@@ -158,10 +158,36 @@ export default function AiTravel() {
         
         <main className="flex-1 lg:ml-[300px]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 sm:pb-32">
+            {/* AI Chat Section */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                Plan Your Perfect
+              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+                Tell AI Your Dream Vacation
               </h1>
+              <p className="text-slate-300 mb-6">
+                Describe your perfect trip and let AI plan every detail for you
+              </p>
+              
+              {/* Chat Input */}
+              <div className="bg-slate-800/50 rounded-2xl border border-slate-600/30 p-6 mb-8">
+                <ChatInput
+                  onSendMessage={handleSendMessage}
+                  placeholder="Tell me about your dream vacation... (e.g., 'I want a romantic weekend getaway in Europe for under $3000')"
+                />
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center my-8">
+              <div className="flex-1 border-t border-slate-600"></div>
+              <span className="px-4 text-slate-400 text-sm">OR PLAN WITH FORM</span>
+              <div className="flex-1 border-t border-slate-600"></div>
+            </div>
+
+            {/* Form Section */}
+            <div className="text-center mb-8">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                Plan Your Perfect
+              </h2>
               <div className="inline-block bg-gradient-to-r from-orange-400 to-yellow-400 text-black px-6 py-2 rounded-full text-xl sm:text-2xl font-bold mb-6">
                 Staycation or Vacation
               </div>
