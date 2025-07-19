@@ -91,18 +91,18 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 <UtrippinLogo />
               </Link>
               
-              <div className="hidden lg:flex items-center gap-4 text-muted-foreground text-xs">
-                <Link to="/deals" className="hover:text-foreground transition-colors flex items-center gap-1">
+              <div className="hidden lg:flex items-center gap-4 text-xs">
+                <Link to="/deals" className="text-gray-700 hover:text-black transition-colors flex items-center gap-1">
                   <Tag className="w-3 h-3" />
                   Deals
                 </Link>
-                <Link to="/support" className="hover:text-foreground transition-colors">
+                <Link to="/support" className="text-gray-700 hover:text-black transition-colors">
                   Support
                 </Link>
-                <Link to="/partnership" className="hover:text-foreground transition-colors">
+                <Link to="/partnership" className="text-gray-700 hover:text-black transition-colors">
                   Partnership
                 </Link>
-                <Link to="/blog" className="hover:text-foreground transition-colors">
+                <Link to="/blog" className="text-gray-700 hover:text-black transition-colors">
                   Blog
                 </Link>
               </div>
@@ -192,19 +192,19 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg rounded-lg">
                 <Link to="/experiences">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
                     <Sparkles className="w-4 h-4" />
                     Experiences
                   </DropdownMenuItem>
                 </Link>
                 <Link to="/ai-travel">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
                     <Bot className="w-4 h-4" />
                     AI Travel
                   </DropdownMenuItem>
                 </Link>
                 <Link to="/travel-buddies">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
                     <Users className="w-4 h-4" />
                     Travel Buddies
                   </DropdownMenuItem>
@@ -270,80 +270,80 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   {/* Navigation */}
                   <nav className="flex-1 space-y-2">
                     <Link to="/hotels" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                         <Briefcase className="w-5 h-5 mr-3" />
                         Hotels
                       </Button>
                     </Link>
                     <Link to="/flights" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                         <Plane className="w-5 h-5 mr-3" />
                         Flights
                       </Button>
                     </Link>
                     <Link to="/cars" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                         <Car className="w-5 h-5 mr-3" />
                         Cars
                       </Button>
                     </Link>
                     <Link to="/packages" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                         <Package className="w-5 h-5 mr-3" />
                         Packages
                       </Button>
                     </Link>
                     <Link to="/experiences" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                         <Sparkles className="w-5 h-5 mr-3" />
                         Experiences
                       </Button>
                     </Link>
                     <Link to="/cruises" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                         <Ship className="w-5 h-5 mr-3" />
                         Cruises
                       </Button>
                     </Link>
                     <Link to="/ai-recommendations" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                         <Bot className="w-5 h-5 mr-3" />
                         AI Recommendations
                       </Button>
                     </Link>
                     <Link to="/deals" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                         <Tag className="w-5 h-5 mr-3" />
                         Deals
                       </Button>
                     </Link>
                     <Link to="/blog" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                         Blog
                       </Button>
                     </Link>
                     
                     <div className="border-t border-border pt-4 mt-4">
                       <Link to="/ai-travel" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                           <Bot className="w-5 h-5 mr-3" />
                           AI Travel
                         </Button>
                       </Link>
                       <Link to="/travel-buddies" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                           <Users className="w-5 h-5 mr-3" />
                           Travel Buddies
                         </Button>
                       </Link>
                       <Link to="/dashboard" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                           <LayoutDashboard className="w-5 h-5 mr-3" />
                           Dashboard
                         </Button>
                       </Link>
                       <Link to="/trips" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                           <Briefcase className="w-5 h-5 mr-3" />
                           My Trips
                         </Button>
