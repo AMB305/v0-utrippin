@@ -71,7 +71,7 @@ const Index = () => {
   });
 
   // State for booking interface copied from PlaneTest.tsx
-  const [activeTab, setActiveTab] = useState('hotels');
+  const [activeTab, setActiveTab] = useState('');
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [destination, setDestination] = useState('');
