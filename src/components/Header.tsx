@@ -333,6 +333,31 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 </Link>
               ))}
               
+              {/* AI Travel and Travel Buddies - Now on main nav */}
+              <Link to="/ai-travel">
+                <Button 
+                  variant="ghost" 
+                  className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
+                    currentActiveTab === 'ai'
+                      ? 'text-black bg-gray-100 shadow-sm'
+                      : 'text-gray-700 hover:text-black hover:bg-gray-50'
+                  }`}
+                >
+                  <Bot className="w-4 h-4" />
+                  AI Travel
+                </Button>
+              </Link>
+              
+              <Link to="/travel-buddies">
+                <Button 
+                  variant="ghost" 
+                  className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50"
+                >
+                  <Users className="w-4 h-4" />
+                  Travel Buddies
+                </Button>
+              </Link>
+              
               {/* More Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -346,18 +371,6 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
                       <Sparkles className="w-4 h-4" />
                       Experiences
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link to="/ai-travel">
-                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
-                      <Bot className="w-4 h-4" />
-                      AI Travel
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link to="/travel-buddies">
-                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
-                      <Users className="w-4 h-4" />
-                      Travel Buddies
                     </DropdownMenuItem>
                   </Link>
                   <div className="border-t border-gray-200 my-1"></div>
