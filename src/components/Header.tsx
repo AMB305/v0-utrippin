@@ -80,54 +80,54 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
   };
 
   return (
-    <div className="bg-primary sticky top-0 z-50 shadow-lg overflow-x-hidden">
+    <div className="bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50 shadow-sm overflow-x-hidden">
       <div className="max-w-full overflow-x-hidden">
-        <div className="flex items-center px-6 py-3 min-h-[64px] overflow-x-hidden">
+        <div className="flex items-center px-2 sm:px-4 py-2 min-h-[64px] overflow-x-hidden">
           {/* Left Section: Logo + Core Navigation */}
-          <div className="flex items-center gap-8 flex-shrink-0">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <Link to="/" className="flex items-center gap-2 flex-shrink-0">
               <UtrippinLogo />
             </Link>
             
             {/* Core Navigation - Only essential items visible on large screens */}
-            <nav className="hidden xl:flex items-center gap-6">
+            <nav className="hidden xl:flex items-center gap-1">
               {bookingTabs.slice(0, 4).map((tab) => (
                 <Link key={tab.key} to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}>
                   <Button 
                     variant="ghost" 
-                    className={`text-sm px-4 py-2 whitespace-nowrap transition-colors border-none font-medium ${
+                    className={`text-sm px-2 whitespace-nowrap transition-colors ${
                       currentActiveTab === tab.key
-                        ? 'text-white bg-white/20 hover:bg-white/30'
-                        : 'text-white/90 hover:text-white hover:bg-white/10'
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:text-gray-900'
                     }`}
                   >
                     {tab.icon}
-                    <span className="ml-2">{tab.label}</span>
+                    <span className="ml-1">{tab.label}</span>
                   </Button>
                 </Link>
               ))}
             </nav>
 
             {/* Medium screens - Compact navigation with dropdown */}
-            <nav className="hidden lg:flex xl:hidden items-center gap-4">
+            <nav className="hidden lg:flex xl:hidden items-center gap-1">
               {bookingTabs.slice(0, 2).map((tab) => (
                 <Link key={tab.key} to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}>
                   <Button 
                     variant="ghost" 
-                    className={`text-sm px-3 py-2 whitespace-nowrap transition-colors border-none font-medium ${
+                    className={`text-sm px-2 whitespace-nowrap transition-colors ${
                       currentActiveTab === tab.key
-                        ? 'text-white bg-white/20 hover:bg-white/30'
-                        : 'text-white/90 hover:text-white hover:bg-white/10'
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:text-gray-900'
                     }`}
                   >
                     {tab.icon}
-                    <span className="ml-2">{tab.label}</span>
+                    <span className="ml-1">{tab.label}</span>
                   </Button>
                 </Link>
               ))}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-sm text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 border-none font-medium">
+                  <Button variant="ghost" className="text-sm text-gray-700 hover:text-gray-900 px-2">
                     {t('nav.more')}
                     <ChevronDown className="w-4 h-4 ml-1" />
                   </Button>
@@ -222,11 +222,11 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
             </div>
             
             {/* Additional Navigation - Only on XL screens */}
-            <div className="hidden xl:flex items-center gap-2">
+            <div className="hidden xl:flex items-center gap-1">
               <Link to="/ai-travel">
                 <Button 
                   variant="ghost" 
-                  className="flex items-center gap-2 text-sm text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 border-none font-medium"
+                  className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
                 >
                   <Bot className="w-4 h-4" />
                   AI Travel
@@ -235,7 +235,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               <Link to="/travel-buddies">
                 <Button 
                   variant="ghost" 
-                  className="flex items-center gap-2 text-sm text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 border-none font-medium"
+                  className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
                 >
                   <Users className="w-4 h-4" />
                   Travel Buddies
@@ -264,7 +264,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
             {/* Mobile Menu Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden flex-shrink-0 ml-1 text-white hover:bg-white/10 border-none">
+                <Button variant="ghost" size="icon" className="lg:hidden flex-shrink-0 ml-1">
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
