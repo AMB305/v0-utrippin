@@ -44,7 +44,7 @@ const VirtualTravelSection: React.FC = () => {
 
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-3xl font-bold mb-4 text-white">
             🌍 Travel the world virtually
           </h2>
           <p className="text-gray-300 max-w-2xl mx-auto">
@@ -93,7 +93,7 @@ const VirtualTravelSection: React.FC = () => {
                       href={dest.earthLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
+                      className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-gray-900 font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
                     >
                       <Navigation className="w-4 h-4" />
                       View in 3D
