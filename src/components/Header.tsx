@@ -108,6 +108,27 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               </div>
             </div>
 
+            {/* Center: Search Bar */}
+            <div className="hidden lg:block flex-1 max-w-md mx-6">
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const query = formData.get('search') as string;
+                if (query.trim()) {
+                  navigate(`/experiences?location=${encodeURIComponent(query)}`);
+                }
+              }}>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <Input 
+                    name="search"
+                    placeholder="Search destinations, hotels, flights..." 
+                    className="pl-10 bg-gray-50 border-gray-200 h-9 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </form>
+            </div>
+
             {/* Right: User Actions */}
             <div className="flex items-center gap-2">
               <div className="hidden md:flex items-center gap-2">
@@ -211,27 +232,6 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               ))}
             </div>
           </nav>
-
-          {/* Search Bar - Desktop */}
-          <div className="hidden xl:block flex-1 max-w-md mx-6">
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const formData = new FormData(e.currentTarget);
-              const query = formData.get('search') as string;
-              if (query.trim()) {
-                navigate(`/experiences?location=${encodeURIComponent(query)}`);
-              }
-            }}>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <Input 
-                  name="search"
-                  placeholder="Search destinations, hotels, flights..." 
-                  className="pl-10 bg-gray-50 border-gray-200 h-10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-            </form>
-          </div>
 
           {/* Mobile Menu Trigger */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
