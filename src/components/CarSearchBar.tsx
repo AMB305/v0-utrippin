@@ -239,11 +239,9 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
 
           {/* Time Selectors Row with Search Button */}
           <div className="grid grid-cols-5 gap-6 mt-6">
-            <div></div> {/* Empty space for Pick-up Location column */}
-            <div></div> {/* Empty space for Drop-off Location column */}
             
             {/* Pick-up Time */}
-            <div>
+            <div className="col-span-2">
               <Label className="text-xs text-muted-foreground mb-2 block">Pick-up Time</Label>
               <Select value={searchData.pickupTime} onValueChange={(value) => setSearchData(prev => ({ ...prev, pickupTime: value }))}>
                 <SelectTrigger className="h-10 rounded-lg">
@@ -259,7 +257,7 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
             </div>
 
             {/* Drop-off Time */}
-            <div>
+            <div className="col-span-2">
               <Label className="text-xs text-muted-foreground mb-2 block">Drop-off Time</Label>
               <Select value={searchData.dropoffTime} onValueChange={(value) => setSearchData(prev => ({ ...prev, dropoffTime: value }))}>
                 <SelectTrigger className="h-10 rounded-lg">
@@ -275,7 +273,7 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
             </div>
             
             {/* Search Button */}
-            <div className="flex items-end">
+            <div className="col-span-1 flex items-end">
               <Button 
                 onClick={handleSearch}
                 disabled={loading}
