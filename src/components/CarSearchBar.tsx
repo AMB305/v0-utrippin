@@ -129,7 +129,7 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
   }
 
   return (
-    <Card className="w-full max-w-6xl mx-auto">
+    <Card className="max-w-6xl mx-auto">
       <CardContent className="p-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
           {/* Pick-up Location */}
