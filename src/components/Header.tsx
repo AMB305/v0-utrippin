@@ -81,19 +81,15 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
 
   return (
     <div className="bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50 shadow-sm">
-      {/* Top Navigation Line - Secondary Actions */}
+      {/* Top Navigation Line - Logo, Search, User Actions, Mobile Menu */}
       <div className="border-b border-border/50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-12">
-            {/* Left: Logo + Secondary Links */}
-            <div className="flex items-center gap-6">
+            {/* Left: Logo */}
+            <div className="flex items-center">
               <Link to="/" className="flex items-center flex-shrink-0">
                 <UtrippinLogo />
               </Link>
-              
-              <div className="hidden lg:flex items-center gap-4 text-xs">
-                {/* Keep empty or add other secondary links if needed */}
-              </div>
             </div>
 
             {/* Center: Search Bar */}
@@ -117,7 +113,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               </form>
             </div>
 
-            {/* Right: User Actions */}
+            {/* Right: User Actions + Mobile Menu */}
             <div className="flex items-center gap-2">
               <div className="hidden md:flex items-center gap-2">
                 <CurrencySelector />
@@ -141,275 +137,258 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   </Link>
                 </div>
               )}
+
+              {/* Mobile Menu Trigger - Now on first line */}
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="lg:hidden flex-shrink-0">
+                    <Menu className="w-5 h-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background border-border">
+                  <div className="flex flex-col h-full text-foreground">
+                    {/* Mobile Search */}
+                    <div className="mb-6">
+                      <h3 className="text-sm font-medium text-foreground mb-3">Quick Flight Search</h3>
+                      <form onSubmit={handleMobileSearch}>
+                        <div className="space-y-3">
+                          <AirportAutocomplete
+                            name="mobile-search"
+                            placeholder="Search airports or cities"
+                            value={mobileSearchValue}
+                            onChange={(value, iataCode) => {
+                              setMobileSearchValue(value);
+                              setMobileSearchIata(iataCode);
+                            }}
+                            className="bg-white border-border text-foreground"
+                          />
+                          <button 
+                            type="submit" 
+                            className="w-full bg-primary hover:bg-primary-hover text-primary-foreground py-2 px-4 rounded-md text-sm font-medium transition-colors"
+                          >
+                            {mobileSearchIata ? 'Search Flights' : 'Search Destinations'}
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+
+                    {/* Navigation */}
+                    <nav className="flex-1 space-y-2">
+                      <Link to="/hotels" onClick={closeMobileMenu}>
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Briefcase className="w-5 h-5 mr-3" />
+                          Hotels
+                        </Button>
+                      </Link>
+                      <Link to="/flights" onClick={closeMobileMenu}>
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Plane className="w-5 h-5 mr-3" />
+                          Flights
+                        </Button>
+                      </Link>
+                      <Link to="/cars" onClick={closeMobileMenu}>
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Car className="w-5 h-5 mr-3" />
+                          Cars
+                        </Button>
+                      </Link>
+                      <Link to="/packages" onClick={closeMobileMenu}>
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Package className="w-5 h-5 mr-3" />
+                          Packages
+                        </Button>
+                      </Link>
+                      <Link to="/experiences" onClick={closeMobileMenu}>
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Sparkles className="w-5 h-5 mr-3" />
+                          Experiences
+                        </Button>
+                      </Link>
+                      <Link to="/cruises" onClick={closeMobileMenu}>
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Ship className="w-5 h-5 mr-3" />
+                          Cruises
+                        </Button>
+                      </Link>
+                      <Link to="/ai-recommendations" onClick={closeMobileMenu}>
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Bot className="w-5 h-5 mr-3" />
+                          AI Recommendations
+                        </Button>
+                      </Link>
+                      <Link to="/deals" onClick={closeMobileMenu}>
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Tag className="w-5 h-5 mr-3" />
+                          Deals
+                        </Button>
+                      </Link>
+                      <Link to="/blog" onClick={closeMobileMenu}>
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          Blog
+                        </Button>
+                      </Link>
+                      
+                      <div className="border-t border-border pt-4 mt-4">
+                        <Link to="/ai-travel" onClick={closeMobileMenu}>
+                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                            <Bot className="w-5 h-5 mr-3" />
+                            AI Travel
+                          </Button>
+                        </Link>
+                        <Link to="/travel-buddies" onClick={closeMobileMenu}>
+                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                            <Users className="w-5 h-5 mr-3" />
+                            Travel Buddies
+                          </Button>
+                        </Link>
+                        <Link to="/dashboard" onClick={closeMobileMenu}>
+                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                            <LayoutDashboard className="w-5 h-5 mr-3" />
+                            Dashboard
+                          </Button>
+                        </Link>
+                        <Link to="/trips" onClick={closeMobileMenu}>
+                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                            <Briefcase className="w-5 h-5 mr-3" />
+                            My Trips
+                          </Button>
+                        </Link>
+                      </div>
+                    </nav>
+
+                    {/* Mobile User Section */}
+                    <div className="border-t border-border pt-4 mt-4">
+                      {user ? (
+                        <div className="space-y-2">
+                          <div className="px-4 py-2 text-sm text-muted-foreground">
+                            Signed in as: {user.email}
+                          </div>
+                          <Link to="/profile" onClick={closeMobileMenu}>
+                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                              <User className="w-5 h-5 mr-3" />
+                              Profile
+                            </Button>
+                          </Link>
+                          <Link to="/settings" onClick={closeMobileMenu}>
+                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                              <Settings className="w-5 h-5 mr-3" />
+                              Settings
+                            </Button>
+                          </Link>
+                          <Button 
+                            variant="ghost" 
+                            className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent"
+                            onClick={handleSignOut}
+                          >
+                            <LogOut className="w-5 h-5 mr-3" />
+                            Sign Out
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <Link to="/auth" onClick={closeMobileMenu}>
+                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                              Sign In
+                            </Button>
+                          </Link>
+                          <Link to="/auth" onClick={closeMobileMenu}>
+                            <Button className="w-full text-base py-3 bg-primary hover:bg-primary-hover text-primary-foreground">
+                              JOIN VIP
+                            </Button>
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Navigation Line */}
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between py-3">{/* Main Navigation - Desktop */}
-          <nav className="hidden lg:flex items-center gap-6">
-            {bookingTabs.slice(0, 5).map((tab) => (
-              <Link 
-                key={tab.key} 
-                to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}
-                className="group"
-              >
-                <Button 
-                  variant="ghost" 
-                  className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
-                    currentActiveTab === tab.key
-                      ? 'text-black bg-gray-100 shadow-sm'
-                      : 'text-gray-700 hover:text-black hover:bg-gray-50'
-                  }`}
-                >
-                  {tab.icon}
-                  {tab.label}
-                </Button>
-              </Link>
-            ))}
-            
-            {/* More Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50">
-                  More
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg rounded-lg z-50">
-                <Link to="/experiences">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
-                    <Sparkles className="w-4 h-4" />
-                    Experiences
-                  </DropdownMenuItem>
-                </Link>
-                <Link to="/ai-travel">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
-                    <Bot className="w-4 h-4" />
-                    AI Travel
-                  </DropdownMenuItem>
-                </Link>
-                <Link to="/travel-buddies">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
-                    <Users className="w-4 h-4" />
-                    Travel Buddies
-                  </DropdownMenuItem>
-                </Link>
-                <div className="border-t border-gray-200 my-1"></div>
-                <Link to="/deals">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
-                    <Tag className="w-4 h-4" />
-                    Deals
-                  </DropdownMenuItem>
-                </Link>
-                <Link to="/support">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
-                    <Users className="w-4 h-4" />
-                    Support
-                  </DropdownMenuItem>
-                </Link>
-                <Link to="/partnership">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
-                    <Briefcase className="w-4 h-4" />
-                    Partnership
-                  </DropdownMenuItem>
-                </Link>
-                <Link to="/blog">
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
-                    <Package className="w-4 h-4" />
-                    Blog
-                  </DropdownMenuItem>
-                </Link>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </nav>
-
-          {/* Mobile Navigation - Horizontal Scrollable */}
-          <nav className="lg:hidden flex-1 max-w-[60%] overflow-x-auto mx-4">
-            <div className="flex space-x-2 whitespace-nowrap no-scrollbar">
-              {bookingTabs.slice(0, 4).map((tab) => (
-                <Link
-                  key={tab.key}
+      {/* Main Navigation Line - Desktop Only */}
+      <div className="hidden lg:block">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between py-3">
+            {/* Main Navigation - Desktop */}
+            <nav className="flex items-center gap-6">
+              {bookingTabs.slice(0, 5).map((tab) => (
+                <Link 
+                  key={tab.key} 
                   to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}
-                  className={`flex flex-col items-center px-3 py-2 rounded-lg text-xs whitespace-nowrap min-w-0 flex-shrink-0 transition-all duration-200 ${
-                    currentActiveTab === tab.key
-                      ? 'bg-black text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-black'
-                  }`}
+                  className="group"
                 >
-                  {tab.icon}
-                  <span className="mt-1 font-medium">{tab.label}</span>
+                  <Button 
+                    variant="ghost" 
+                    className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
+                      currentActiveTab === tab.key
+                        ? 'text-black bg-gray-100 shadow-sm'
+                        : 'text-gray-700 hover:text-black hover:bg-gray-50'
+                    }`}
+                  >
+                    {tab.icon}
+                    {tab.label}
+                  </Button>
                 </Link>
               ))}
-            </div>
-          </nav>
-
-          {/* Mobile Menu Trigger */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden flex-shrink-0">
-                <Menu className="w-5 h-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background border-border">
-              <div className="flex flex-col h-full text-foreground">
-                  {/* Mobile Search */}
-                  <div className="mb-6">
-                    <h3 className="text-sm font-medium text-foreground mb-3">Quick Flight Search</h3>
-                    <form onSubmit={handleMobileSearch}>
-                      <div className="space-y-3">
-                        <AirportAutocomplete
-                          name="mobile-search"
-                          placeholder="Search airports or cities"
-                          value={mobileSearchValue}
-                          onChange={(value, iataCode) => {
-                            setMobileSearchValue(value);
-                            setMobileSearchIata(iataCode);
-                          }}
-                          className="bg-white border-border text-foreground"
-                        />
-                        <button 
-                          type="submit" 
-                          className="w-full bg-primary hover:bg-primary-hover text-primary-foreground py-2 px-4 rounded-md text-sm font-medium transition-colors"
-                        >
-                          {mobileSearchIata ? 'Search Flights' : 'Search Destinations'}
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-
-                  {/* Navigation */}
-                  <nav className="flex-1 space-y-2">
-                    <Link to="/hotels" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                        <Briefcase className="w-5 h-5 mr-3" />
-                        Hotels
-                      </Button>
-                    </Link>
-                    <Link to="/flights" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                        <Plane className="w-5 h-5 mr-3" />
-                        Flights
-                      </Button>
-                    </Link>
-                    <Link to="/cars" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                        <Car className="w-5 h-5 mr-3" />
-                        Cars
-                      </Button>
-                    </Link>
-                    <Link to="/packages" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                        <Package className="w-5 h-5 mr-3" />
-                        Packages
-                      </Button>
-                    </Link>
-                    <Link to="/experiences" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                        <Sparkles className="w-5 h-5 mr-3" />
-                        Experiences
-                      </Button>
-                    </Link>
-                    <Link to="/cruises" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                        <Ship className="w-5 h-5 mr-3" />
-                        Cruises
-                      </Button>
-                    </Link>
-                    <Link to="/ai-recommendations" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                        <Bot className="w-5 h-5 mr-3" />
-                        AI Recommendations
-                      </Button>
-                    </Link>
-                    <Link to="/deals" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                        <Tag className="w-5 h-5 mr-3" />
-                        Deals
-                      </Button>
-                    </Link>
-                    <Link to="/blog" onClick={closeMobileMenu}>
-                      <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                        Blog
-                      </Button>
-                    </Link>
-                    
-                    <div className="border-t border-border pt-4 mt-4">
-                      <Link to="/ai-travel" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                          <Bot className="w-5 h-5 mr-3" />
-                          AI Travel
-                        </Button>
-                      </Link>
-                      <Link to="/travel-buddies" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                          <Users className="w-5 h-5 mr-3" />
-                          Travel Buddies
-                        </Button>
-                      </Link>
-                      <Link to="/dashboard" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                          <LayoutDashboard className="w-5 h-5 mr-3" />
-                          Dashboard
-                        </Button>
-                      </Link>
-                      <Link to="/trips" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
-                          <Briefcase className="w-5 h-5 mr-3" />
-                          My Trips
-                        </Button>
-                      </Link>
-                    </div>
-                  </nav>
-
-                  {/* Mobile User Section */}
-                  <div className="border-t border-border pt-4 mt-4">
-                    {user ? (
-                      <div className="space-y-2">
-                        <div className="px-4 py-2 text-sm text-muted-foreground">
-                          Signed in as: {user.email}
-                        </div>
-                        <Link to="/profile" onClick={closeMobileMenu}>
-                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
-                            <User className="w-5 h-5 mr-3" />
-                            Profile
-                          </Button>
-                        </Link>
-                        <Link to="/settings" onClick={closeMobileMenu}>
-                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
-                            <Settings className="w-5 h-5 mr-3" />
-                            Settings
-                          </Button>
-                        </Link>
-                        <Button 
-                          variant="ghost" 
-                          className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent"
-                          onClick={handleSignOut}
-                        >
-                          <LogOut className="w-5 h-5 mr-3" />
-                          Sign Out
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <Link to="/auth" onClick={closeMobileMenu}>
-                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
-                            Sign In
-                          </Button>
-                        </Link>
-                        <Link to="/auth" onClick={closeMobileMenu}>
-                          <Button className="w-full text-base py-3 bg-primary hover:bg-primary-hover text-primary-foreground">
-                            JOIN VIP
-                          </Button>
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+              
+              {/* More Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50">
+                    More
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg rounded-lg z-50">
+                  <Link to="/experiences">
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                      <Sparkles className="w-4 h-4" />
+                      Experiences
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/ai-travel">
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                      <Bot className="w-4 h-4" />
+                      AI Travel
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/travel-buddies">
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                      <Users className="w-4 h-4" />
+                      Travel Buddies
+                    </DropdownMenuItem>
+                  </Link>
+                  <div className="border-t border-gray-200 my-1"></div>
+                  <Link to="/deals">
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                      <Tag className="w-4 h-4" />
+                      Deals
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/support">
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                      <Users className="w-4 h-4" />
+                      Support
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/partnership">
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                      <Briefcase className="w-4 h-4" />
+                      Partnership
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/blog">
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
+                      <Package className="w-4 h-4" />
+                      Blog
+                    </DropdownMenuItem>
+                  </Link>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
