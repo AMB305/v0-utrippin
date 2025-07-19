@@ -1278,9 +1278,6 @@ const Index = () => {
           {/* Desktop/Tablet Content - Hidden on mobile */}
           <div className="hidden md:block bg-white">
             <HeroSection />
-            <div className="container mx-auto px-4 py-8">
-              {/* Booking widget will be added after import fix */}
-            </div>
             <AITripPlanner />
             <RecommendedDestinations />
             <MelaninTrippin />
