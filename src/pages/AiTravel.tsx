@@ -83,6 +83,13 @@ export default function AiTravel() {
     }
   };
 
+  // Debug logging
+  console.log('AI Travel Debug:', {
+    showTripPlanner,
+    tripPlannerMessagesLength: tripPlannerMessages.length,
+    tripPlannerMessages: tripPlannerMessages.slice(0, 2) // Show first 2 messages for debugging
+  });
+
   // Only show trip planner when user explicitly requests it
   // Don't auto-show on message load
 
@@ -121,8 +128,8 @@ export default function AiTravel() {
         }}
       />
       
-      {/* Trip Planner Display Modal */}
-      {showTripPlanner && (
+      {/* Trip Planner Display Modal - Only show when explicitly requested */}
+      {showTripPlanner && tripPlannerMessages.length > 0 && (
         <AITripPlannerDisplay
           messages={tripPlannerMessages}
           onClose={() => setShowTripPlanner(false)}
