@@ -134,7 +134,7 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
         {/* Desktop Layout */}
         <div className="hidden lg:block">
           {/* Main Form Row */}
-          <div className="grid grid-cols-6 gap-6 items-end">
+          <div className="grid grid-cols-5 gap-6 items-end">
             {/* Pick-up Location */}
             <div className="col-span-1">
               <Label className="text-sm font-medium mb-3 block text-foreground">Pick-up Location</Label>
@@ -235,23 +235,10 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
                 </SelectContent>
               </Select>
             </div>
-
-            {/* Search Button */}
-            <div className="col-span-1">
-              <Button 
-                onClick={handleSearch}
-                disabled={loading}
-                className="w-full h-12 px-6 rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white font-medium"
-                size="lg"
-              >
-                <Search className="w-5 h-5 mr-2" />
-                {loading ? "Searching..." : "Search"}
-              </Button>
-            </div>
           </div>
 
-          {/* Time Selectors Row */}
-          <div className="grid grid-cols-6 gap-6 mt-6">
+          {/* Time Selectors Row with Search Button */}
+          <div className="grid grid-cols-5 gap-6 mt-6">
             <div></div> {/* Empty space for Pick-up Location column */}
             <div></div> {/* Empty space for Drop-off Location column */}
             
@@ -287,8 +274,17 @@ const CarSearchBar = ({ onSearch, loading = false, initialData, compact = false 
               </Select>
             </div>
             
-            <div></div> {/* Empty space for Driver Age column */}
-            <div></div> {/* Empty space for Search Button column */}
+            {/* Search Button */}
+            <div className="flex items-end">
+              <Button 
+                onClick={handleSearch}
+                disabled={loading}
+                className="w-full h-10 px-6 rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white font-medium"
+              >
+                <Search className="w-4 h-4 mr-2" />
+                {loading ? "Searching..." : "Search"}
+              </Button>
+            </div>
           </div>
         </div>
 
