@@ -68,9 +68,8 @@ export default function AiTravel() {
     setIsGeneratingTrips(true);
     sendMessage(message);
     
-    // Also send to trip planner for detailed itinerary
+    // Send to trip planner but don't auto-show the modal
     await sendTripPlannerMessage(message);
-    setShowTripPlanner(true);
     
     try {
       const result = await generateTrips(message, budget);
