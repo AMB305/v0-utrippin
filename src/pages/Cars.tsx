@@ -94,7 +94,7 @@ const Cars = () => {
             </p>
             
             {/* Search Bar */}
-            <div className="mt-8">
+            <div className="mt-8 font-inherit">
               <CarSearchBar onSearch={handleSearch} loading={loading} />
             </div>
           </div>
