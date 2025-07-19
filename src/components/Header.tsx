@@ -85,16 +85,6 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                         ? 'text-blue-600 bg-blue-50'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    onClick={() => {
-                      console.log(`${tab.label} button clicked`);
-                      if (typeof window.gtag !== 'undefined') {
-                        window.gtag('event', 'navigation_click', {
-                          event_category: 'Header Navigation',
-                          event_label: tab.label,
-                          value: 1,
-                        });
-                      }
-                    }}
                   >
                     {tab.icon}
                     <span className="ml-1">{tab.label}</span>
@@ -222,16 +212,6 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 <Button 
                   variant="ghost" 
                   className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
-                  onClick={() => {
-                    console.log("🤖 Header AI Travel clicked");
-                    if (typeof window.gtag !== 'undefined') {
-                      window.gtag('event', 'navigation_click', {
-                        event_category: 'Header Navigation',
-                        event_label: 'AI Travel',
-                        value: 1,
-                      });
-                    }
-                  }}
                 >
                   <Bot className="w-4 h-4" />
                   AI Travel
@@ -241,16 +221,6 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 <Button 
                   variant="ghost" 
                   className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
-                  onClick={() => {
-                    console.log("👥 Header Travel Buddies clicked");
-                    if (typeof window.gtag !== 'undefined') {
-                      window.gtag('event', 'navigation_click', {
-                        event_category: 'Header Navigation',
-                        event_label: 'Travel Buddies',
-                        value: 1,
-                      });
-                    }
-                  }}
                 >
                   <Users className="w-4 h-4" />
                   Travel Buddies
