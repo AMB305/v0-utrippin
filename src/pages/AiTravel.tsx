@@ -164,32 +164,75 @@ export default function AiTravel() {
         <Header />
         
         <main className="flex-1 lg:ml-[300px]">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 sm:pb-32">
-            {/* AI Chat Section */}
-            <div className="text-center mb-8">
-              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-                Tell AI Your Dream Vacation
+          {/* Hero Section */}
+          <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+                Describe your perfect trip and budget!
               </h1>
-              <p className="text-slate-300 mb-6">
-                Describe your perfect trip and let AI plan every detail for you
+              <p className="text-xl sm:text-2xl text-blue-100 mb-12">
+                Get custom itineraries, dates, and budgets tailored just for you.
               </p>
               
-              {/* Chat Input */}
-              <div className="bg-slate-800/50 rounded-2xl border border-slate-600/30 p-6 mb-8">
-                <ChatInput
-                  onSendMessage={handleSendMessage}
-                  placeholder="Tell me about your dream vacation... (e.g., 'I want a romantic weekend getaway in Europe for under $3000')"
-                />
+              {/* Main Input Section */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 mb-8">
+                <div className="flex items-center gap-4 bg-white rounded-2xl p-2 mb-6">
+                  <div className="bg-blue-600 rounded-xl p-3 flex-shrink-0">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Plan me a trip to Mexico in Nov for 3 people"
+                    className="flex-1 text-gray-800 text-lg px-4 py-3 bg-transparent outline-none placeholder-gray-500"
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        const target = e.target as HTMLInputElement;
+                        if (target.value.trim()) {
+                          handleSendMessage(target.value);
+                          target.value = '';
+                        }
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={(e) => {
+                      const input = (e.target as HTMLButtonElement).parentElement?.querySelector('input') as HTMLInputElement;
+                      if (input?.value.trim()) {
+                        handleSendMessage(input.value);
+                        input.value = '';
+                      }
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold text-lg transition-colors"
+                  >
+                    Generate
+                  </button>
+                </div>
+                <p className="text-blue-100 text-lg">
+                  Describe your perfect trip...
+                </p>
+              </div>
+
+              {/* Features */}
+              <div className="mb-8">
+                <p className="text-blue-100 text-lg mb-4">
+                  Powered by advanced AI • Personalized recommendations • Real-time pricing
+                </p>
+                <div className="flex flex-wrap justify-center gap-4">
+                  <span className="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-medium">
+                    🎯 Custom Itineraries
+                  </span>
+                  <span className="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-medium">
+                    💰 Budget Optimization
+                  </span>
+                  <span className="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-medium">
+                    📅 Real-time Booking
+                  </span>
+                </div>
               </div>
             </div>
+          </div>
 
-            {/* Divider */}
-            <div className="flex items-center my-8">
-              <div className="flex-1 border-t border-slate-600"></div>
-              <span className="px-4 text-slate-400 text-sm">OR PLAN WITH FORM</span>
-              <div className="flex-1 border-t border-slate-600"></div>
-            </div>
-
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 sm:pb-32">
             {/* Form Section */}
             <div className="text-center mb-8">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
