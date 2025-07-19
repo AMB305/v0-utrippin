@@ -81,12 +81,8 @@ export default function AiTravel() {
     }
   };
 
-  // Show trip planner when there are messages
-  useEffect(() => {
-    if (tripPlannerMessages.length > 0) {
-      setShowTripPlanner(true);
-    }
-  }, [tripPlannerMessages]);
+  // Only show trip planner when user explicitly requests it
+  // Don't auto-show on message load
 
   return (
     <>
