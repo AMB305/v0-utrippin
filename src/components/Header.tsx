@@ -80,118 +80,140 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
   };
 
   return (
-    <div className="bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50 shadow-sm overflow-x-hidden">
-      <div className="max-w-full overflow-x-hidden">
-        <div className="flex items-center px-2 sm:px-4 py-2 min-h-[64px] overflow-x-hidden">
-          {/* Left Section: Logo + Core Navigation */}
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-              <UtrippinLogo />
-            </Link>
-            
-            {/* Core Navigation - Only essential items visible on large screens */}
-            <nav className="hidden xl:flex items-center gap-1">
-              {bookingTabs.slice(0, 4).map((tab) => (
-                <Link key={tab.key} to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}>
-                  <Button 
-                    variant="ghost" 
-                    className={`text-sm px-2 whitespace-nowrap transition-colors ${
-                      currentActiveTab === tab.key
-                        ? 'text-blue-600 bg-blue-50'
-                        : 'text-gray-700 hover:text-gray-900'
-                    }`}
-                  >
-                    {tab.icon}
-                    <span className="ml-1">{tab.label}</span>
-                  </Button>
-                </Link>
-              ))}
-            </nav>
+    <div className="bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50 shadow-sm">
+      {/* Top Navigation Line - Secondary Actions */}
+      <div className="border-b border-border/50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between h-10 text-xs">
+            {/* Left: Secondary Links */}
+            <div className="hidden lg:flex items-center gap-4 text-muted-foreground">
+              <Link to="/deals" className="hover:text-foreground transition-colors flex items-center gap-1">
+                <Tag className="w-3 h-3" />
+                Deals
+              </Link>
+              <Link to="/support" className="hover:text-foreground transition-colors">
+                Support
+              </Link>
+              <Link to="/partnership" className="hover:text-foreground transition-colors">
+                Partnership
+              </Link>
+              <Link to="/blog" className="hover:text-foreground transition-colors">
+                Blog
+              </Link>
+            </div>
 
-            {/* Medium screens - Compact navigation with dropdown */}
-            <nav className="hidden lg:flex xl:hidden items-center gap-1">
-              {bookingTabs.slice(0, 2).map((tab) => (
-                <Link key={tab.key} to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}>
-                  <Button 
-                    variant="ghost" 
-                    className={`text-sm px-2 whitespace-nowrap transition-colors ${
-                      currentActiveTab === tab.key
-                        ? 'text-blue-600 bg-blue-50'
-                        : 'text-gray-700 hover:text-gray-900'
-                    }`}
-                  >
-                    {tab.icon}
-                    <span className="ml-1">{tab.label}</span>
-                  </Button>
-                </Link>
-              ))}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-sm text-gray-700 hover:text-gray-900 px-2">
-                    {t('nav.more')}
-                    <ChevronDown className="w-4 h-4 ml-1" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-white border border-gray-200 shadow-lg z-50">
-                  {bookingTabs.slice(2).map((tab) => (
-                    <Link key={tab.key} to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}>
-                      <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                        {tab.icon}
-                        {tab.label}
-                      </DropdownMenuItem>
-                    </Link>
-                  ))}
-                  <Link to="/experiences">
-                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                      <Sparkles className="w-4 h-4" />
-                      {t('nav.experiences')}
-                    </DropdownMenuItem>
+            {/* Right: User Actions */}
+            <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
+                <CurrencySelector />
+                <EnhancedLanguageSelector />
+              </div>
+              
+              {user ? (
+                <UserProfileDropdown />
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Link to="/auth">
+                    <Button variant="ghost" size="sm" className="text-xs h-7 px-3 text-muted-foreground hover:text-foreground">
+                      <User className="w-3 h-3 mr-1" />
+                      Log In
+                    </Button>
                   </Link>
-                  <Link to="/cruises">
-                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                      <Ship className="w-4 h-4" />
-                      {t('nav.cruises')}
-                    </DropdownMenuItem>
+                  <Link to="/auth">
+                    <Button size="sm" className="text-xs h-7 px-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0">
+                      Register
+                    </Button>
                   </Link>
-                  <Link to="/deals">
-                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                      <Tag className="w-4 h-4" />
-                      {t('nav.deals')}
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link to="/ai-recommendations">
-                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                      <Bot className="w-4 h-4" />
-                      {t('nav.aiRecommendations')}
-                    </DropdownMenuItem>
-                  </Link>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </nav>
+                </div>
+              )}
+            </div>
           </div>
+        </div>
+      </div>
 
-          {/* Mobile Navigation - Horizontal Scrollable */}
-          <nav className="lg:hidden flex-1 max-w-[50%] overflow-x-auto mx-2">
-            <div className="flex space-x-1 whitespace-nowrap no-scrollbar">
-              {bookingTabs.map((tab) => (
-                <Link
-                  key={tab.key}
-                  to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}
-                  className={`flex flex-col items-center px-2 py-1 rounded-lg text-xs whitespace-nowrap min-w-0 flex-shrink-0 transition-colors ${
+      {/* Main Navigation Line */}
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between py-3">
+          {/* Logo */}
+          <Link to="/" className="flex items-center flex-shrink-0">
+            <UtrippinLogo />
+          </Link>
+
+          {/* Main Navigation - Desktop */}
+          <nav className="hidden lg:flex items-center gap-6">
+            {bookingTabs.slice(0, 5).map((tab) => (
+              <Link 
+                key={tab.key} 
+                to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}
+                className="group"
+              >
+                <Button 
+                  variant="ghost" 
+                  className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
                     currentActiveTab === tab.key
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white text-gray-700 hover:bg-blue-100'
+                      ? 'text-blue-600 bg-blue-50 shadow-sm'
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50/50'
                   }`}
                 >
                   {tab.icon}
-                  <span className="mt-1 text-[10px]">{tab.label}</span>
+                  {tab.label}
+                </Button>
+              </Link>
+            ))}
+            
+            {/* More Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50/50">
+                  More
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg rounded-lg">
+                <Link to="/experiences">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2">
+                    <Sparkles className="w-4 h-4" />
+                    Experiences
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/ai-travel">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2">
+                    <Bot className="w-4 h-4" />
+                    AI Travel
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/travel-buddies">
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2">
+                    <Users className="w-4 h-4" />
+                    Travel Buddies
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </nav>
+
+          {/* Mobile Navigation - Horizontal Scrollable */}
+          <nav className="lg:hidden flex-1 max-w-[60%] overflow-x-auto mx-4">
+            <div className="flex space-x-2 whitespace-nowrap no-scrollbar">
+              {bookingTabs.slice(0, 4).map((tab) => (
+                <Link
+                  key={tab.key}
+                  to={`/${tab.key === 'ai' ? 'ai-travel' : tab.key}`}
+                  className={`flex flex-col items-center px-3 py-2 rounded-lg text-xs whitespace-nowrap min-w-0 flex-shrink-0 transition-all duration-200 ${
+                    currentActiveTab === tab.key
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-600'
+                  }`}
+                >
+                  {tab.icon}
+                  <span className="mt-1 font-medium">{tab.label}</span>
                 </Link>
               ))}
             </div>
           </nav>
 
-          {/* Center Section: Desktop Search - Hidden on smaller screens */}
-          <div className="hidden xl:block flex-1 max-w-sm mx-4">
+          {/* Search Bar - Desktop */}
+          <div className="hidden xl:block flex-1 max-w-md mx-6">
             <form onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget);
@@ -204,72 +226,22 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input 
                   name="search"
-                  placeholder="Search destinations" 
-                  className="pl-10 bg-muted/50 border-muted h-9"
+                  placeholder="Search destinations, hotels, flights..." 
+                  className="pl-10 bg-gray-50 border-gray-200 h-10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
             </form>
           </div>
 
-          {/* Right Section: Actions & User Menu */}
-          <div className="flex items-center gap-1 flex-shrink-0">
-            {/* Language/Currency - Hidden on small screens */}
-            <div className="hidden md:block">
-              <CurrencySelector />
-            </div>
-            <div className="hidden md:block">
-              <EnhancedLanguageSelector />
-            </div>
-            
-            {/* Additional Navigation - Only on XL screens */}
-            <div className="hidden xl:flex items-center gap-1">
-              <Link to="/ai-travel">
-                <Button 
-                  variant="ghost" 
-                  className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
-                >
-                  <Bot className="w-4 h-4" />
-                  AI Travel
-                </Button>
-              </Link>
-              <Link to="/travel-buddies">
-                <Button 
-                  variant="ghost" 
-                  className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 px-2"
-                >
-                  <Users className="w-4 h-4" />
-                  Travel Buddies
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Desktop User Menu - Stack on smaller screens */}
-            {user ? (
-              <UserProfileDropdown />
-            ) : (
-              <div className="flex items-center gap-1 lg:gap-2">
-                <Link to="/auth">
-                  <Button variant="outline" className="text-xs lg:text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 border-2 border-gray-400 px-2 lg:px-4 py-2">
-                    Sign In
-                  </Button>
-                </Link>
-                <Link to="/auth">
-                  <Button variant="default" className="bg-blue-600 hover:bg-blue-700 text-white text-xs lg:text-sm px-2 lg:px-4 whitespace-nowrap">
-                    JOIN VIP
-                  </Button>
-                </Link>
-              </div>
-            )}
-
-            {/* Mobile Menu Trigger */}
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden flex-shrink-0 ml-1">
-                  <Menu className="w-5 h-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background border-border">
-                <div className="flex flex-col h-full text-foreground">
+          {/* Mobile Menu Trigger */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="lg:hidden flex-shrink-0">
+                <Menu className="w-5 h-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background border-border">
+              <div className="flex flex-col h-full text-foreground">
                   {/* Mobile Search */}
                   <div className="mb-6">
                     <h3 className="text-sm font-medium text-foreground mb-3">Quick Flight Search</h3>
@@ -422,10 +394,9 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                       </div>
                     )}
                   </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </div>
