@@ -35,6 +35,9 @@ interface Trip {
 
 export default function AiTravel() {
   const [budget, setBudget] = useState(3000);
+  const [tripType, setTripType] = useState<'staycation' | 'vacation'>('staycation');
+  const [groupSize, setGroupSize] = useState(1);
+  const [zipCode, setZipCode] = useState('');
   const debouncedBudget = useDebounce(budget, 1000);
   const { trips } = useTrips({ budget: debouncedBudget });
   const { messages, sendMessage } = useChatAI(trips);
@@ -155,18 +158,116 @@ export default function AiTravel() {
         
         <main className="flex-1 lg:ml-[300px]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 sm:pb-32">
-            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-6 text-center">Plan your next adventure</h1>
-
-            <div className="mb-6 sm:mb-8">
-              <BudgetSlider budget={budget} onBudgetChange={setBudget} min={500} max={1000000} />
+            <div className="text-center mb-8">
+              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                Plan Your Perfect
+              </h1>
+              <div className="inline-block bg-gradient-to-r from-orange-400 to-yellow-400 text-black px-6 py-2 rounded-full text-xl sm:text-2xl font-bold mb-6">
+                Staycation or Vacation
+              </div>
+              <p className="text-slate-300 text-lg">
+                Set your budget and group size to discover amazing destinations
+              </p>
             </div>
 
-            <div className="mt-6 sm:mt-8">
-              <h3 className="flex items-center gap-2 text-orange-400 mb-3 text-sm">
-                <Sparkles className="h-4 w-4" /> Explore more ideas
+            {/* Trip Type Toggle */}
+            <div className="mb-8 flex justify-center">
+              <div className="bg-slate-800/50 p-2 rounded-2xl border border-slate-600/30">
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setTripType('staycation')}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
+                      tripType === 'staycation'
+                        ? 'bg-blue-600 text-white shadow-lg'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                    }`}
+                  >
+                    🏠 Staycation
+                  </button>
+                  <button
+                    onClick={() => setTripType('vacation')}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
+                      tripType === 'vacation'
+                        ? 'bg-blue-600 text-white shadow-lg'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                    }`}
+                  >
+                    ✈️ Vacation
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Budget Slider */}
+            <div className="mb-8">
+              <label className="block text-white font-medium mb-4">Budget Range</label>
+              <BudgetSlider budget={budget} onBudgetChange={setBudget} min={100} max={1000000} />
+              <div className="text-center mt-2">
+                <span className="text-orange-400 text-lg font-semibold">
+                  Perfect for a nice {tripType} day
+                </span>
+              </div>
+            </div>
+
+            {/* Group Size */}
+            <div className="mb-8">
+              <label className="block text-white font-medium mb-4 flex items-center gap-2">
+                👥 Group Size
+              </label>
+              <div className="flex items-center justify-center gap-4 bg-slate-800/50 p-4 rounded-2xl border border-slate-600/30">
+                <button
+                  onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
+                  className="w-12 h-12 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-xl transition-colors"
+                >
+                  −
+                </button>
+                <span className="text-2xl font-bold text-white min-w-[3rem] text-center">
+                  {groupSize}
+                </span>
+                <button
+                  onClick={() => setGroupSize(groupSize + 1)}
+                  className="w-12 h-12 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-xl transition-colors"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Zip Code Input */}
+            <div className="mb-8">
+              <label className="block text-white font-medium mb-4">
+                Enter Zip Code {tripType === 'staycation' ? '(for staycations)' : ''}
+              </label>
+              <input
+                type="text"
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value)}
+                placeholder="Enter Zip Code"
+                className="w-full bg-slate-800/50 border border-slate-600/30 rounded-2xl px-6 py-4 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+              />
+            </div>
+
+            {/* Find My Trips Button */}
+            <div className="text-center mb-8">
+              <button
+                onClick={() => {
+                  const location = zipCode ? `near ${zipCode}` : '';
+                  const message = `Plan a ${tripType} for ${groupSize} ${groupSize === 1 ? 'person' : 'people'} with a budget of $${budget} ${location}`;
+                  handleSendMessage(message);
+                }}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl font-bold text-lg flex items-center gap-2 mx-auto transition-all transform hover:scale-105 shadow-lg"
+              >
+                📍 Find My Trips
+              </button>
+            </div>
+
+            {/* Suggested Themes */}
+            <div className="mt-8">
+              <h3 className="flex items-center gap-2 text-orange-400 mb-4 text-sm justify-center">
+                <Sparkles className="h-4 w-4" /> Or explore these ideas
               </h3>
-              <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
-                {dailyThemes.map((theme, i) => (
+              <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 justify-center">
+                {dailyThemes.slice(0, 4).map((theme, i) => (
                   <button
                     key={i}
                     onClick={() => handleSendMessage(`Plan ${theme} under $${budget}`)}
