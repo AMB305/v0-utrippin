@@ -64,7 +64,6 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
 import HotelsMiami from "./pages/HotelsMiami";
-import AiTravel from "./pages/AiTravel";
 import UploadTrips from "./pages/admin/UploadTrips";
 import ImageGeneration from "./pages/ImageGeneration";
 import Bookings from "./pages/Bookings";
@@ -77,7 +76,7 @@ import NotFound from "./pages/NotFound";
 import ExploreMerged from "@/pages/ExploreMerged";
 import AiTravelResults from "./pages/AiTravelResults";
 import ExploreAiTravel from "./pages/ExploreAiTravel";
-import { BudgetTripsView } from "@/components/BudgetTripsView";
+import AiTravel from "./pages/AiTravel";
 
 const queryClient = new QueryClient();
 
@@ -141,7 +140,7 @@ const App = () => (
                   <Route path="/family-travel" element={<FamilyTravel />} />
                   <Route path="/solo-travel" element={<SoloTravel />} />
                   <Route path="/events" element={<Events />} />
-                  <Route path="/ai-travel" element={<div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900"><div className="container mx-auto px-4 py-8"><BudgetTripsView /></div></div>} />
+                  <Route path="/ai-travel" element={<AiTravel />} />
                   <Route path="/ai-travel-results" element={<AiTravelResults />} />
                   <Route path="/name-your-price" element={<ExploreMerged />} />
                   <Route path="/melanin" element={<Melanin />} />
