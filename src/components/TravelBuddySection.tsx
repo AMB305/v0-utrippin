@@ -96,10 +96,10 @@ const TravelBuddySection = () => {
         </div>
 
         {/* How It Works */}
-        <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-12 mb-12 border border-white/20 shadow-soft">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4 text-lovable-warm-gray">How It Works</h3>
-            <p className="text-lg text-lovable-warm-gray/70 max-w-2xl mx-auto">
+        <div className="bg-white rounded-xl p-8 mb-12 border border-gray-100 shadow-sm">
+          <div className="text-center mb-8">
+            <h3 className="text-3xl font-bold mb-4 text-gray-800">How It Works</h3>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Book your perfect flight in just three simple steps
             </p>
           </div>
@@ -124,20 +124,18 @@ const TravelBuddySection = () => {
             ].map((step, index) => (
               <div key={index} className="flex items-center w-full md:w-auto">
                 <div className="text-center flex-1 md:flex-none px-4 md:px-6">
-                  <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <step.icon className="w-8 h-8 text-white" />
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-800 font-bold text-xl">
+                    {index + 1}
                   </div>
-                  <div className="text-sm font-semibold text-lovable-warm-gray/60 mb-2 uppercase tracking-wider">
-                    STEP {index + 1}
-                  </div>
-                  <h4 className="font-bold text-lg mb-3 text-lovable-warm-gray">{step.title}</h4>
-                  <p className="text-lovable-warm-gray/70 text-sm leading-relaxed max-w-48 mx-auto">
+                  <h4 className="font-bold text-lg mb-3 text-gray-800">STEP {index + 1}</h4>
+                  <h5 className="font-semibold text-lg mb-2 text-gray-800">{step.title}</h5>
+                  <p className="text-gray-600 text-sm leading-relaxed max-w-48 mx-auto">
                     {step.description}
                   </p>
                 </div>
                 {index < 2 && (
                   <div className="hidden md:flex flex-shrink-0 mx-6">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-lovable-warm-gray/40">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-gray-400">
                       <path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
