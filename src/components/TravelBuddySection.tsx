@@ -96,64 +96,34 @@ const TravelBuddySection = () => {
         </div>
 
         {/* How It Works */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 mb-12 border border-white/20 shadow-soft">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4 text-lovable-warm-gray">How does it work</h3>
-            <p className="text-lovable-warm-gray/70 max-w-2xl mx-auto">
-              Connect with fellow travelers, share experiences, and create unforgettable memories together through our simple process
-            </p>
-          </div>
-          
-          <div className="flex items-center justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 max-w-5xl w-full">
-              {[
-                {
-                  icon: Users,
-                  step: "STEP 1",
-                  title: "Create Your Profile",
-                  description: "Share your travel style, interests, and upcoming trips to help us find your perfect match"
-                },
-                {
-                  icon: Heart,
-                  step: "STEP 2", 
-                  title: "Find Matches",
-                  description: "Our AI matches you with compatible travel buddies based on your preferences and travel goals"
-                },
-                {
-                  icon: MessageCircle,
-                  step: "STEP 3",
-                  title: "Connect & Chat",
-                  description: "Start conversations with potential travel buddies and get to know each other better"
-                },
-                {
-                  icon: Calendar,
-                  step: "STEP 4",
-                  title: "Plan & Travel",
-                  description: "Plan your adventure together and embark on unforgettable journeys with your new travel buddy"
-                }
-              ].map((step, index) => (
-                <div key={index} className="flex flex-col items-center relative">
-                  <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mb-6 shadow-lg">
-                    <step.icon className="w-10 h-10 text-white" />
-                  </div>
-                  
-                  <div className="text-center">
-                    <div className="text-sm font-bold text-lovable-warm-gray/60 mb-2 tracking-wider">{step.step}</div>
-                    <h4 className="font-bold text-lg mb-3 text-lovable-warm-gray">{step.title}</h4>
-                    <p className="text-sm text-lovable-warm-gray/70 leading-relaxed">{step.description}</p>
-                  </div>
-                  
-                  {/* Arrow between steps */}
-                  {index < 3 && (
-                    <div className="hidden md:block absolute top-10 -right-6 text-lovable-warm-gray/40">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                  )}
+        <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 mb-12 border border-white/20 shadow-soft">
+          <h3 className="text-2xl font-bold text-center mb-8 text-lovable-warm-gray">How It Works</h3>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Users,
+                title: "Create Your Profile",
+                description: "Share your travel style, interests, and upcoming trips"
+              },
+              {
+                icon: Heart,
+                title: "Find Matches",
+                description: "Our AI matches you with compatible travel buddies"
+              },
+              {
+                icon: MessageCircle,
+                title: "Connect & Plan",
+                description: "Chat, plan together, and embark on amazing adventures"
+              }
+            ].map((step, index) => (
+              <div key={index} className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-lovable-coral to-lovable-peach rounded-full flex items-center justify-center mx-auto mb-4 shadow-medium">
+                  <step.icon className="w-8 h-8 text-white" />
                 </div>
-              ))}
-            </div>
+                <h4 className="font-bold text-lg mb-2 text-lovable-warm-gray">{step.title}</h4>
+                <p className="text-lovable-warm-gray/70">{step.description}</p>
+              </div>
+            ))}
           </div>
         </div>
 
