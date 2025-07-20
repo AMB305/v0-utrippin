@@ -104,7 +104,7 @@ const TravelBuddySection = () => {
             </p>
           </div>
           
-          <div className="flex items-center justify-center max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-center max-w-5xl mx-auto gap-4 md:gap-0">
             {[
               {
                 icon: MapPin,
@@ -122,8 +122,8 @@ const TravelBuddySection = () => {
                 description: "Secure booking with 24/7 customer support and flexible options"
               }
             ].map((step, index) => (
-              <div key={index} className="flex items-center">
-                <div className="text-center flex-1 px-4">
+              <div key={index} className="flex items-center w-full md:w-auto">
+                <div className="text-center flex-1 md:flex-none px-4 md:px-6">
                   <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <step.icon className="w-8 h-8 text-white" />
                   </div>
@@ -136,7 +136,7 @@ const TravelBuddySection = () => {
                   </p>
                 </div>
                 {index < 2 && (
-                  <div className="flex-shrink-0 mx-4">
+                  <div className="hidden md:flex flex-shrink-0 mx-6">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-lovable-warm-gray/40">
                       <path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
