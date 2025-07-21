@@ -130,16 +130,7 @@ export default function MobileFlightPopup({ isOpen, onClose }: MobileFlightPopup
       
       {/* Popup */}
       <div className={`mobile-flight-popup fixed bottom-0 left-0 right-0 bg-gradient-to-br from-white to-blue-50 shadow-2xl z-50 md:hidden transform transition-transform duration-300 ease-out rounded-t-3xl border-t border-blue-100 ${isClosing ? 'animate-slide-down' : 'animate-slide-up'}`}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 pt-12">
-          <h2 className="text-xl font-bold text-gray-800">Find Your Perfect Flight</h2>
-          <button
-            onClick={handleClose}
-            className="p-2 hover:bg-blue-50 rounded-full transition-colors"
-          >
-            <X className="w-6 h-6 text-gray-600" />
-          </button>
-        </div>
+
 
         {/* Content */}
         <div className="p-6 max-h-[80vh] overflow-y-auto">
