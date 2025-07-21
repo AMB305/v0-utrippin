@@ -85,10 +85,8 @@ const EnhancedLanguageSelector = ({ className = "", variant = "default" }: Enhan
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        className="bg-background border border-border shadow-elegant z-[9999] fixed" 
+        className="bg-background border border-border shadow-elegant z-[100]" 
         align="end"
-        sideOffset={8}
-        avoidCollisions={true}
       >
         {languages.map((language) => (
           <DropdownMenuItem 
