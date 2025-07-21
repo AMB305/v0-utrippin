@@ -366,7 +366,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     <ChevronDown className="w-4 h-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg rounded-lg z-50">
+                <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg rounded-lg z-[9999] fixed" sideOffset={8}>
                   <Link to="/experiences">
                     <DropdownMenuItem className="flex items-center gap-2 cursor-pointer py-2 text-gray-700 hover:text-black hover:bg-gray-50">
                       <Sparkles className="w-4 h-4" />
