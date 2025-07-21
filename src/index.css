@@ -3,6 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* BlackTomato Font System - Clean Sans-Serif */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Gothic&display=swap');
+
 /* Mobile touch targets for better UX */
 .touch-target-44 {
   min-width: 44px;
@@ -19,7 +23,7 @@
   display: none;  /* Safari and Chrome */
 }
 
-/* Modern, lovable design system with warmth and delight */
+/* BlackTomato Design System - Minimal & Elegant + Lovable system combined */
 
 @layer base {
   :root {
@@ -72,6 +76,13 @@
     --travel-navy: 217 32% 17%;
     --travel-gray: 217 10% 47%;
     --travel-light: 210 17% 98%;
+
+    /* BlackTomato specific colors for homepage components */
+    --blacktomato-black: 0 0% 0%;
+    --blacktomato-white: 0 0% 100%;
+    --blacktomato-gray: 0 0% 45%;
+    --blacktomato-light-gray: 0 0% 96%;
+    --blacktomato-border: 0 0% 90%;
 
     /* Enhanced gradients with more personality */
     --gradient-hero: linear-gradient(135deg, hsl(275 85% 60%), hsl(15 85% 65%), hsl(43 96% 65%));
@@ -134,6 +145,9 @@
   html {
     overflow-x: hidden;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    /* Prevent layout shift from scrollbar appearance */
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -143,6 +157,10 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent width changes when scrollbar appears/disappears */
+    width: 100vw;
+    margin: 0;
+    padding: 0;
   }
 
   /* Enhanced typography hierarchy */
@@ -186,6 +204,26 @@
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+@keyframes fade-in {
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
+}
+
+@keyframes slide-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
 }
 
 @keyframes fadeInUp {
@@ -400,8 +438,16 @@
     animation: float 6s ease-in-out infinite;
   }
 
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+  }
+
   .animate-fade-in-up {
     animation: fadeInUp 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out;
   }
 
   .animate-scale-in {
@@ -410,6 +456,18 @@
 
   .animate-slide-in-left {
     animation: slideInLeft 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-slide-down {
+    animation: slideDownOut 0.3s ease-in;
+  }
+
+  .animate-fade-out {
+    animation: fadeOut 0.3s ease-in;
   }
 
   .animate-bounce-in {
@@ -480,4 +538,548 @@
   .btn-lovable {
     border: 2px solid hsl(var(--primary));
   }
+}
+
+/* Prevent layout shift from dropdowns and modals */
+[data-radix-popper-content-wrapper] {
+  z-index: 9999 !important;
+}
+
+/* Ensure dropdown menus don't affect document flow */
+[data-radix-dropdown-menu-content],
+[data-radix-select-content] {
+  position: fixed !important;
+  z-index: 9999 !important;
+  max-height: 50vh !important;
+  overflow-y: auto !important;
+}
+
+/* Force scrollbar to always be visible to prevent layout shifts */
+:root {
+  scrollbar-gutter: stable;
+}
+
+/* Dropdown specific fixes */
+[role="menu"],
+[role="listbox"] {
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* Prevent body scroll when dropdowns are open on mobile */
+@media (max-width: 768px) {
+  body:has([data-state="open"]) {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+}
+
+/* BlackTomato Homepage Specific Styles */
+
+/* Hero Section */
+.hero-section-set {
+  height: calc(100vh - 112px) !important;
+}
+
+@media screen and (max-width: 920px) {
+  .hero-section-set {
+    height: calc(100vh - 48px) !important;
+  }
+}
+
+/* Typography overrides for BlackTomato style - HOMEPAGE CONTENT ONLY */
+.blacktomato-homepage h1 {
+  font-family: fantasy;
+  font-size: 3.75rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 2px !important;
+  line-height: .9em !important;
+  text-transform: uppercase;
+}
+
+.blacktomato-homepage h2 {
+  font-family: fantasy;
+  font-size: 3rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 2px !important;
+  line-height: .9em !important;
+  text-transform: uppercase;
+}
+
+.blacktomato-homepage p {
+  font-family: 'Brandon Grotesque', Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  font-size: 1.0625rem;
+  letter-spacing: 2.85px;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+/* Button styling - HOMEPAGE CONTENT ONLY, EXCLUDING MOBILE POPUP AND DESKTOP FLIGHT WIDGET */
+.blacktomato-homepage button:not(.mobile-flight-popup button):not(.mobile-flight-popup *) {
+  background: #2563eb !important;
+  border-radius: 999px;
+}
+
+/* Override BlackTomato button styles for mobile flight popup */
+.mobile-flight-popup button,
+.mobile-flight-popup input,
+.mobile-flight-popup select {
+  background: initial !important;
+}
+
+/* Override BlackTomato button styles for desktop flight widget */
+.blacktomato-homepage .flight-widget-section button {
+  background: initial !important;
+  border-radius: initial !important;
+}
+
+/* Comprehensive overrides for desktop flight widget to prevent BlackTomato style interference */
+.blacktomato-homepage .flight-widget-section button[type="button"] {
+  background: initial !important;
+  border-radius: initial !important;
+}
+
+.blacktomato-homepage .flight-widget-section button[type="submit"] {
+  background: #1664ff !important; /* Restore Expedia blue for search button */
+  border-radius: 9999px !important; /* Restore rounded-full */
+}
+
+.blacktomato-homepage .flight-widget-section button:hover {
+  background: initial !important;
+}
+
+.blacktomato-homepage .flight-widget-section button[type="submit"]:hover {
+  background: #1d4ed8 !important; /* Darker blue on hover for search button */
+}
+
+/* Remove BlackTomato forced backgrounds from mobile popup - but allow our specific blue elements */
+.mobile-flight-popup button:not([style*="#0068ef"]):not([style*="#e7f3ff"]) {
+  background: initial !important;
+}
+
+.mobile-flight-popup input:not([style*="#0068ef"]):not([style*="#e7f3ff"]) {
+  background: initial !important;
+}
+
+.mobile-flight-popup select:not([style*="#0068ef"]):not([style*="#e7f3ff"]) {
+  background: initial !important;
+}
+
+/* Ensure our blue elements show properly */
+.mobile-flight-popup button[style*="#0068ef"] {
+  background: #0068ef !important;
+  color: white !important;
+}
+
+.mobile-flight-popup button[style*="#e7f3ff"] {
+  background: #e7f3ff !important;
+  color: #0068ef !important;
+}
+
+/* Specific blue background overrides for popup buttons */
+.mobile-flight-popup button[style*="backgroundColor: #0068ef"] {
+  background-color: #0068ef !important;
+}
+
+.mobile-flight-popup button[style*="backgroundColor:#0068ef"] {
+  background-color: #0068ef !important;
+}
+
+/* Force blue backgrounds for our specific mobile popup buttons */
+.mobile-flight-popup .w-full[style*="#0068ef"] {
+  background: #0068ef !important;
+}
+
+.mobile-flight-popup .flex-1[style*="#0068ef"] {
+  background: #0068ef !important;
+}
+
+/* Super specific overrides to ensure blue shows up */
+.mobile-flight-popup button.w-full.text-white {
+  background: #0068ef !important;
+  background-color: #0068ef !important;
+}
+
+.mobile-flight-popup button.flex-1.text-white {
+  background: #0068ef !important;
+  background-color: #0068ef !important;
+}
+
+/* Override any competing styles for the main search button */
+.mobile-flight-popup div.space-y-4 > button.w-full {
+  background: #0068ef !important;
+  background-color: #0068ef !important;
+}
+
+/* Trip type button specific override */
+.mobile-flight-popup div.flex.bg-blue-50 button.flex-1.text-white {
+  background: #0068ef !important;
+  background-color: #0068ef !important;
+}
+
+/* Most specific rules to override any conflicting styles */
+.mobile-flight-popup .space-y-3 .flex button[style*="backgroundColor"] {
+  background: #0068ef !important;
+  background-color: #0068ef !important;
+}
+
+.mobile-flight-popup .space-y-4 button[style*="backgroundColor"] {
+  background: #0068ef !important;
+  background-color: #0068ef !important;
+}
+
+/* Brute force the search button specifically */
+button.w-full.text-white.py-6.rounded-3xl {
+  background: #0068ef !important;
+  background-color: #0068ef !important;
+}
+
+/* Brute force the trip type buttons */
+button.flex-1.py-3.px-4.rounded-xl.text-white {
+  background: #0068ef !important;
+  background-color: #0068ef !important;
+}
+
+/* Mobile specific overrides - highest priority */
+@media (max-width: 768px) {
+  .mobile-flight-popup button[style*="#0068ef"] {
+    background: #0068ef !important;
+    background-color: #0068ef !important;
+  }
+  
+  .mobile-flight-popup button.text-white {
+    background: #0068ef !important;
+    background-color: #0068ef !important;
+  }
+  
+  .mobile-flight-popup .space-y-4 > button {
+    background: #0068ef !important;
+    background-color: #0068ef !important;
+  }
+}
+
+/* Restore white backgrounds for cards */
+.mobile-flight-popup .bg-white {
+  background: rgb(255 255 255) !important;
+}
+
+/* Restore blue gradient background for popup container */
+.mobile-flight-popup.bg-gradient-to-br {
+  background: linear-gradient(135deg, rgb(255 255 255), rgb(239 246 255)) !important;
+}
+
+/* Restore specific button styles in mobile popup */
+.mobile-flight-popup .bg-blue-500 {
+  background: #0068ef !important;
+  border-radius: 1.5rem !important;
+}
+
+.mobile-flight-popup .bg-gradient-to-r {
+  background: #0068ef !important;
+}
+
+.mobile-flight-popup .hover\:bg-blue-200:hover {
+  background: rgb(191 219 254) !important;
+}
+
+.mobile-flight-popup .hover\:from-blue-600:hover {
+  background: #0068ef !important;
+}
+
+.mobile-flight-popup .bg-white\/10 {
+  background: rgba(255 255 255 / 0.1) !important;
+}
+
+.mobile-flight-popup .hover\:bg-white\/5:hover {
+  background: rgba(255 255 255 / 0.05) !important;
+}
+
+.mobile-flight-popup .hover\:bg-white\/10:hover {
+  background: rgba(255 255 255 / 0.1) !important;
+}
+
+/* Ensure transparent backgrounds stay transparent */
+.mobile-flight-popup .bg-transparent {
+  background: transparent !important;
+}
+
+.mobile-flight-popup .bg-gray-100 {
+  background: rgb(243 244 246) !important;
+}
+
+.mobile-flight-popup .hover\:bg-gray-200:hover {
+  background: rgb(229 231 235) !important;
+}
+
+/* Date picker modal specific styles */
+.mobile-flight-popup .hover\:bg-gray-50:hover {
+  background: rgb(249 250 251) !important;
+}
+
+.mobile-flight-popup .hover\:bg-blue-50:hover {
+  background: rgb(239 246 255) !important;
+}
+
+.mobile-flight-popup .hover\:border-blue-300:hover {
+  border-color: rgb(147 197 253) !important;
+}
+
+.mobile-flight-popup .hover\:text-blue-600:hover {
+  color: #0068ef !important;
+}
+
+.mobile-flight-popup .border-dashed {
+  border-style: dashed !important;
+}
+
+.mobile-flight-popup .border-2 {
+  border-width: 2px !important;
+}
+
+.mobile-flight-popup .border-gray-300 {
+  border-color: rgb(209 213 219) !important;
+}
+
+/* Desktop flight widget dropdown styling */
+.blacktomato-homepage .flight-widget-section .relative {
+  position: relative;
+}
+
+.blacktomato-homepage .flight-widget-section .absolute {
+  position: absolute;
+}
+
+.blacktomato-homepage .flight-widget-section .z-20 {
+  z-index: 20;
+}
+
+/* Section-specific styles - SCOPED TO HOMEPAGE ONLY */
+.blacktomato-homepage .start-journey-section .grid > div > div {
+  height: 550px;
+}
+
+.blacktomato-homepage .start-journey-section .grid > div > div > img {
+  height: 100%;
+}
+
+.blacktomato-homepage .explore-our-trip {
+  background: url(https://images.blacktomato.com/2022/09/Itineraries-Home-scaled.jpg?auto=compress%2Cformat&ixlib=php-3.3.1&q=82&s=d80b073…);
+  padding: 150px 0px;
+}
+
+.blacktomato-homepage .explore-our-trip .grid > div {
+  height: 550px;
+}
+
+.blacktomato-homepage .explore-our-trip h3 {
+  color: #ffffff;
+  font-family: 'Brandon Grotesque', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  line-height: 1.4;
+}
+
+.blacktomato-homepage .explore-our-trip h4 {
+  color: #ffffff;
+  font-family: 'Brandon Grotesque', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 1.6px;
+  line-height: 1.4;
+  text-transform: lowercase;
+}
+
+.blacktomato-homepage .explore-our-trip button {
+  background: transparent !important;
+}
+
+/* Background color fixes - SCOPED TO HOMEPAGE ONLY */
+.blacktomato-homepage .bg-gray-900 {
+  background: #0048a4 !important;
+}
+
+.blacktomato-homepage .bg-gradient-to-r.from-orange-500.to-orange-600 {
+  background: #0048a4 !important;
+}
+
+.blacktomato-homepage .bg-gradient-to-r.from-orange-500.to-orange-600 h2 {
+  color: #fff;
+}
+
+/* Guide to Travel section - SCOPED TO HOMEPAGE ONLY */
+.blacktomato-homepage .guide-to-travel-section {
+  padding: 0;
+}
+
+.blacktomato-homepage .guide-to-travel-section .check-content-side-area {
+  padding: 50px 0px 50px 300px;
+}
+
+.blacktomato-homepage .guide-to-travel-section .set-img-area {
+  height: 100%;
+  width: 100%;
+}
+
+/* Flight Widget Section Styling for Homepage - Desktop Optimized */
+.blacktomato-homepage .flight-widget-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #f3f4f6 100%) !important;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.blacktomato-homepage .flight-widget-section h2 {
+  color: #1f2937 !important;
+  font-family: 'Brandon Grotesque', Helvetica, Arial, sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+.blacktomato-homepage .flight-widget-section p {
+  color: #6b7280 !important;
+  font-family: 'Brandon Grotesque', Helvetica, Arial, sans-serif !important;
+  font-size: 1rem !important;
+  letter-spacing: 1px !important;
+  line-height: 1.5 !important;
+  text-transform: none !important;
+}
+
+/* Desktop-specific enhancements for flight widget */
+@media (min-width: 768px) {
+  .blacktomato-homepage .flight-widget-section {
+    padding: 80px 0 !important;
+  }
+  
+  .blacktomato-homepage .flight-widget-section h2 {
+    font-size: 2.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .blacktomato-homepage .flight-widget-section p {
+    font-size: 1.125rem !important;
+    max-width: 600px !important;
+    margin: 0 auto 3rem auto !important;
+  }
+}
+
+/* Mobile Flight Popup Enhancements */
+@media (max-width: 767px) {
+  /* Hide desktop flight widget on mobile */
+  .blacktomato-homepage .flight-widget-section {
+    display: none !important;
+  }
+  
+  /* Floating flight button styling */
+  .floating-flight-button {
+    animation: float-gentle 3s ease-in-out infinite;
+    backdrop-filter: blur(10px);
+  }
+  
+  .floating-flight-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(147, 51, 234, 0.5) !important;
+  }
+  
+  /* Mobile popup animations */
+  .mobile-flight-popup:not(.animate-slide-down) {
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .mobile-flight-popup-backdrop:not(.animate-fade-out) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  /* Blue gradient enhancements for mobile popup */
+  .mobile-flight-popup {
+    box-shadow: 0 25px 50px rgba(0, 104, 239, 0.15) !important;
+  }
+}
+
+/* Gentle floating animation for mobile button */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDownOut {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* BlackTomato Component System */
+@layer components {
+  /* Minimal cards */
+  .blacktomato-card {
+    @apply bg-white border-0 rounded-none shadow-soft;
+  }
+
+  .blacktomato-card:hover {
+    @apply shadow-medium;
+  }
+
+  /* BlackTomato buttons - minimal and clean */
+  .btn-blacktomato {
+    @apply px-8 py-3 bg-black text-white text-sm font-medium tracking-widest uppercase border-0 cursor-pointer transition-all duration-300;
+  }
+
+  .btn-blacktomato:hover {
+    @apply bg-gray-800;
+  }
+
+  /* Outline button style */
+  .btn-blacktomato-outline {
+    @apply px-8 py-3 bg-transparent text-black border border-black text-sm font-medium tracking-widest uppercase transition-all duration-300;
+  }
+
+  .btn-blacktomato-outline:hover {
+    @apply bg-black text-white;
+  }
+
+  /* White button on dark backgrounds */
+  .btn-blacktomato-white {
+    @apply px-8 py-3 bg-white text-black text-sm font-medium tracking-widest uppercase border-0 cursor-pointer transition-all duration-300;
+  }
+
+  .btn-blacktomato-white:hover {
+    @apply bg-gray-100;
+  }
+
+  /* Typography utilities */
+  .text-blacktomato-black { color: hsl(var(--blacktomato-black)); }
+  .text-blacktomato-white { color: hsl(var(--blacktomato-white)); }
+  .text-blacktomato-gray { color: hsl(var(--blacktomato-gray)); }
+  
+  .bg-blacktomato-black { background-color: hsl(var(--blacktomato-black)); }
+  .bg-blacktomato-white { background-color: hsl(var(--blacktomato-white)); }
+  .bg-blacktomato-light-gray { background-color: hsl(var(--blacktomato-light-gray)); }
 }

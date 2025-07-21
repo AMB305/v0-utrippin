@@ -64,7 +64,15 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Lovable color palette
+				// BlackTomato color palette for homepage components
+				blacktomato: {
+					black: 'hsl(var(--blacktomato-black))',
+					white: 'hsl(var(--blacktomato-white))',
+					gray: 'hsl(var(--blacktomato-gray))',
+					'light-gray': 'hsl(var(--blacktomato-light-gray))',
+					border: 'hsl(var(--blacktomato-border))'
+				},
+				// Lovable color palette (keep existing)
 				lovable: {
 					coral: 'hsl(var(--lovable-coral))',
 					'coral-light': 'hsl(var(--lovable-coral-light))',
@@ -129,6 +137,14 @@ export default {
 					from: { height: 'var(--radix-accordion-content-height)' },
 					to: { height: '0' }
 				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				'slide-up': {
+					'0%': { opacity: '0', transform: 'translateY(30px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
 				'fade-in-up': {
 					'0%': { opacity: '0', transform: 'translateY(30px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
@@ -162,6 +178,8 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.6s ease-out',
+				'slide-up': 'slide-up 0.6s ease-out',
 				'fade-in-up': 'fade-in-up 0.6s ease-out',
 				'scale-in': 'scale-in 0.4s ease-out',
 				'slide-in-left': 'slide-in-left 0.5s ease-out',
@@ -171,8 +189,7 @@ export default {
 				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
 				'pulse-slow': 'pulse 3s ease-in-out infinite',
 				'spin-slow': 'spin 6s linear infinite',
-				'bounce-slow': 'bounce 4s infinite',
-				'float': 'float 6s ease-in-out infinite'
+				'bounce-slow': 'bounce 4s infinite'
 			},
 			utilities: {
 				'.scrollbar-hide': {
@@ -191,16 +208,7 @@ export default {
 		}
 	},
 	plugins: [
-		require("tailwindcss-animate"),
-		function({ addUtilities }: any) {
-			addUtilities({
-				'.hover-scale': {
-					'@apply transition-transform duration-200 hover:scale-105': {},
-				},
-				'.border-b-3': {
-					'border-bottom-width': '3px',
-				}
-			});
-		}
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
+		require("tailwindcss-animate")
 	],
 } satisfies Config;
