@@ -28,10 +28,10 @@ const Index = () => {
         keywords="budget travel, cheap flights, hotel deals, travel packages, AI travel planner"
       />
 
-      {/* Navigation - Outside BlackTomato styling */}
+      {/* Navigation - Outside main content */}
       <Header />
       
-      <div className="min-h-screen bg-white blacktomato-homepage">
+      <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <EnhancedHeroSection />
 

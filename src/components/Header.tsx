@@ -80,9 +80,9 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
   };
 
   return (
-    <div className="bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50 shadow-sm">
-      {/* Top Navigation Line - Logo, Search, User Actions, Mobile Menu */}
-      <div className="border-b border-border/50">
+    <div className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+              {/* Top Navigation Line - Logo, Search, User Actions, Mobile Menu */}
+        <div className="border-b border-gray-200/50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-12">
             {/* Left: Logo */}
@@ -131,7 +131,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     </Button>
                   </Link>
                   <Link to="/auth">
-                    <Button size="sm" className="text-xs h-7 px-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0">
+                    <Button size="sm" className="text-xs h-7 px-3 bg-black hover:bg-gray-800 text-white border-0">
                       Register
                     </Button>
                   </Link>
@@ -164,7 +164,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                           />
                           <button 
                             type="submit" 
-                            className="w-full bg-primary hover:bg-primary-hover text-primary-foreground py-2 px-4 rounded-md text-sm font-medium transition-colors"
+                            className="w-full bg-black hover:bg-gray-800 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors"
                           >
                             {mobileSearchIata ? 'Search Flights' : 'Search Destinations'}
                           </button>
@@ -292,7 +292,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                             </Button>
                           </Link>
                           <Link to="/auth" onClick={closeMobileMenu}>
-                            <Button className="w-full text-base py-3 bg-primary hover:bg-primary-hover text-primary-foreground">
+                            <Button className="w-full text-base py-3 bg-black hover:bg-gray-800 text-white">
                               JOIN VIP
                             </Button>
                           </Link>
@@ -323,8 +323,8 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     variant="ghost" 
                     className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
                       currentActiveTab === tab.key
-                        ? 'text-black bg-gray-100 shadow-sm'
-                        : 'text-gray-700 hover:text-black hover:bg-gray-50'
+                        ? 'text-black bg-gray-200 shadow-sm'
+                        : 'text-gray-700 hover:text-black hover:bg-gray-100'
                     }`}
                   >
                     {tab.icon}
@@ -339,8 +339,8 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   variant="ghost" 
                   className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
                     currentActiveTab === 'ai'
-                      ? 'text-black bg-gray-100 shadow-sm'
-                      : 'text-gray-700 hover:text-black hover:bg-gray-50'
+                      ? 'text-black bg-gray-200 shadow-sm'
+                      : 'text-gray-700 hover:text-black hover:bg-gray-100'
                   }`}
                 >
                   <Bot className="w-4 h-4" />

@@ -5,7 +5,8 @@
 
 /* BlackTomato Font System - Clean Sans-Serif */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=League+Gothic&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=League+Gothic&display=swap" rel="stylesheet');
 
 /* Mobile touch targets for better UX */
 .touch-target-44 {
@@ -23,50 +24,62 @@
   display: none;  /* Safari and Chrome */
 }
 
-/* BlackTomato Design System - Minimal & Elegant + Lovable system combined */
+/* BlackTomato Design System - Minimal & Elegant */
 
 @layer base {
   :root {
-    --background: 252 100% 99%;
-    --foreground: 222 84% 4.9%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 84% 4.9%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 84% 4.9%;
+    --popover-foreground: 0 0% 0%;
 
-    /* Blue primary palette for white with blue trim */
-    --primary: 215 100% 55%;
+    /* BlackTomato monochromatic palette */
+    --primary: 0 0% 0%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 215 100% 50%;
+    --primary-hover: 0 0% 20%;
 
-    /* Softer secondary tones */
-    --secondary: 320 20% 96%;
-    --secondary-foreground: 222 84% 4.9%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 320 15% 97%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 320 25% 95%;
-    --accent-foreground: 222 84% 4.9%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 320 20% 92%;
-    --input: 320 20% 92%;
-    --ring: 275 85% 60%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 0%;
 
-    /* Lovable color palette - warm and inviting */
-    --lovable-coral: 15 85% 65%;
-    --lovable-coral-light: 15 85% 85%;
-    --lovable-peach: 30 95% 75%;
-    --lovable-lavender: 275 50% 75%;
-    --lovable-mint: 160 50% 75%;
-    --lovable-sage: 140 25% 65%;
-    --lovable-cream: 45 50% 95%;
-    --lovable-warm-gray: 30 8% 25%;
+    /* BlackTomato specific colors */
+    --blacktomato-black: 0 0% 0%;
+    --blacktomato-white: 0 0% 100%;
+    --blacktomato-gray: 0 0% 45%;
+    --blacktomato-light-gray: 0 0% 96%;
+    --blacktomato-border: 0 0% 90%;
+
+    /* Minimal shadows */
+    --shadow-soft: 0 1px 3px hsl(0 0% 0% / 0.1);
+    --shadow-medium: 0 4px 6px hsl(0 0% 0% / 0.1);
+    --shadow-large: 0 10px 15px hsl(0 0% 0% / 0.1);
+
+    --radius: 0rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 0% 0%;
 
     /* Travel-specific enhanced colors */
     --travel-blue: 210 100% 60%;
@@ -115,25 +128,25 @@
   }
 
   .dark {
-    --background: 0 0% 100%;
-    --foreground: 222 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 84% 4.9%;
-    --primary: 215 100% 55%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 320 20% 96%;
-    --secondary-foreground: 222 84% 4.9%;
-    --muted: 320 15% 97%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 320 25% 95%;
-    --accent-foreground: 222 84% 4.9%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 4%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 4%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 0 0% 4%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 320 20% 92%;
-    --input: 320 20% 92%;
-    --ring: 215 100% 55%;
+    --border: 0 0% 10%;
+    --input: 0 0% 10%;
+    --ring: 0 0% 100%;
   }
 }
 
@@ -145,9 +158,6 @@
   html {
     overflow-x: hidden;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    /* Prevent layout shift from scrollbar appearance */
-    overflow-y: scroll;
-    scrollbar-gutter: stable;
   }
 
   body {
@@ -157,39 +167,37 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Prevent width changes when scrollbar appears/disappears */
-    width: 100vw;
-    margin: 0;
-    padding: 0;
+     font-family: Brandon Grotesque, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-size: 1.0625rem;
+   
+    line-height: 1.5;
+    text-transform: none;
   }
 
-  /* Enhanced typography hierarchy */
+  /* BlackTomato Typography - Ultra clean and minimal */
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
-    background: var(--gradient-hero);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    @apply text-4xl md:text-6xl lg:text-7xl font-extralight tracking-tight text-blacktomato-black;
     line-height: 1.1;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl font-bold tracking-tight text-lovable-warm-gray;
+    @apply text-3xl md:text-4xl lg:text-5xl font-light tracking-tight text-blacktomato-black;
     line-height: 1.2;
   }
 
   h3 {
-    @apply text-2xl md:text-3xl font-semibold tracking-tight text-lovable-warm-gray;
+    @apply text-2xl md:text-3xl font-light tracking-tight text-blacktomato-black;
     line-height: 1.3;
   }
 
   h4 {
-    @apply text-xl md:text-2xl font-semibold text-lovable-warm-gray;
+    @apply text-xl md:text-2xl font-normal text-blacktomato-black;
     line-height: 1.4;
   }
 
   p {
-    @apply text-base md:text-lg leading-relaxed text-muted-foreground;
+    @apply text-base md:text-lg leading-relaxed text-blacktomato-gray font-light;
   }
 
   .text-gradient {
@@ -1142,4 +1150,230 @@ button.flex-1.py-3.px-4.rounded-xl.text-white {
   .bg-blacktomato-black { background-color: hsl(var(--blacktomato-black)); }
   .bg-blacktomato-white { background-color: hsl(var(--blacktomato-white)); }
   .bg-blacktomato-light-gray { background-color: hsl(var(--blacktomato-light-gray)); }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .blacktomato-card {
+    @apply mx-4;
+  }
+  
+  .btn-blacktomato {
+    @apply px-6 py-2 text-xs;
+  }
+  
+  h1 {
+    @apply text-3xl;
+  }
+  
+  h2 {
+    @apply text-2xl;
+  }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/*Rana Code Here*/
+
+
+#root > div.min-h-screen.bg-white > div.relative.-mt-28.z-30 > div > div > section > div > form > div.md\:col-span-4.xl\:col-span-1.space-y-4 > div > select:nth-child(2) {
+    width: 100%;
+}
+
+section.why-utrippin-section svg {
+        background: #2563eb;
+    border-radius: 100px;
+    padding: 10px;
+    color: #fff;
+}
+section.why-utrippin-section > div > div:nth-child(3) > div {
+    border-radius: 100px;
+    padding: 15px 25px;
+}
+
+.absolute.bottom-6 {
+    color: #fff;
+    background: #0cc;
+    width: 100%;
+    left: 0;
+    padding: 10px 25px;
+    background-color: #2563eb8c;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+.absolute.bottom-6 h3,  .absolute.bottom-6 p
+{
+color:#fff;
+margin-bottom:0;
+}
+
+
+
+h1 {
+    font-family: fantasy;
+    font-size: 3.75rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 2px !important;
+    line-height: .9em !important;
+    text-transform: uppercase;
+}
+h2 {
+    font-family: fantasy;
+    font-size: 3rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 2px !important;
+    line-height: .9em !important;
+    text-transform: uppercase;
+}
+
+p
+{
+    font-family: Brandon Grotesque, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-size: 1.0625rem;
+    letter-spacing: 2.85px;
+    line-height: 1.5;
+    text-transform: none;
+}
+button {
+    background: #2563eb !important;
+    border-radius: 0px !important;
+}
+
+/* Override navbar/header buttons to remove blue background */
+.bg-white\/95 button,
+.sticky.top-0 button,
+header button,
+nav button {
+    background: transparent !important;
+}
+
+/* Specific header button styling */
+.sticky.top-0 .bg-black {
+    background: black !important;
+}
+
+.sticky.top-0 .hover\:bg-gray-800:hover {
+    background: #374151 !important;
+}
+
+.sticky.top-0 .bg-gray-200 {
+    background: #e5e7eb !important;
+}
+
+.sticky.top-0 .hover\:bg-gray-100:hover {
+    background: #f3f4f6 !important;
+}
+
+#root > div.min-h-screen.bg-white > div.pt-20 > section.py-20.px-4.bg-gray-900.text-white {
+    background: #0048a4;
+}
+#root > div.min-h-screen.bg-white > div.pt-20 > section.py-20.px-4.bg-gradient-to-r.from-orange-500.to-orange-600.text-white {
+    background: #0048a4;
+}
+
+#root > div.min-h-screen.bg-white > div.pt-20 > section.py-20.px-4.bg-gradient-to-r.from-orange-500.to-orange-600.text-white h2
+{
+  color : #fff;
+}
+input.w-full.h-12.px-4.border.border-gray-200.rounded-lg.text-sm.bg-white.focus\:ring-2.focus\:ring-blue-500.focus\:border-blue-500.focus\:outline-none.transition-all {
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+#root > div.min-h-screen.bg-white > div.relative.-mt-28.z-30 > div > div > section > div > ul {
+    position: absolute;
+    margin-top: 50px;
+}
+
+
+select.h-10.border.border-gray-200.rounded-lg.px-3.text-sm.bg-white.focus\:ring-2.focus\:ring-blue-500.focus\:border-blue-500.focus\:outline-none {
+    width: 100%;
+}
+
+#root > div.min-h-screen.bg-white > div.pt-20 > section.bg-gray-800.py-20.px-4 > div {
+    max-width: 100rem;
+}
+
+section.explore-our-trip {
+    background: url(https://images.blacktomato.com/2022/09/Itineraries-Home-scaled.jpg?auto=compress%2Cformat&ixlib=php-3.3.1&q=82&s=d80b073…);
+    padding: 150px 0px;
+}
+
+#root > div.min-h-screen.bg-white > div.pt-20 > section.bg-gray-800.py-20.px-4 > div > div > div.flex-1 > div > div > div.absolute.bottom-0.left-0.right-0.p-4.text-white h3
+{
+    color: #ffffff;
+    font-family: Brandon Grotesque, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    line-height: 1.4;
+}
+#root > div.min-h-screen.bg-white > div.pt-20 > section.bg-gray-800.py-20.px-4 > div > div > div.flex-1 > div > div > div.absolute.bottom-0.left-0.right-0.p-4.text-white h4
+{
+    color: #ffffff;
+    font-family: Brandon Grotesque, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 1.6px;
+    line-height: 1.4;
+    text-transform: lowercase;
+
+}
+
+#root > div.min-h-screen.bg-white > div.pt-20 > section.bg-gray-800.py-20.px-4 > div > div > div.flex-1 > div > div
+{
+	    height: 35rem;
+}
+
+#root > div.min-h-screen.bg-white > div.pt-20 > section.bg-gray-800.py-20.px-4 > div > div > div.flex-1 > div > div > div button {
+    background: #00000000 !important;
+}
+
+@media (max-width: 920px) {
+    .hero-section-set {
+        height: calc(100vh - 48px) !important;
+    }
+}
+
+/*Update with classes*/
+.hero-section-set {
+    height: calc(100vh - 120px) !important;
+}
+section.smart-travel-section.py-20.px-4.bg-gray-50 > div > div:nth-child(3) > div {
+    display: inline-block;
+}
+
+section.start-journey-section.py-20.px-4.bg-white > div > div.grid.grid-cols-1.md\:grid-cols-3.lg\:grid-cols-5.gap-6.mb-12 > div > div {
+    height: 550px;
+}
+
+section.start-journey-section.py-20.px-4.bg-white > div > div.grid.grid-cols-1.md\:grid-cols-3.lg\:grid-cols-5.gap-6.mb-12 > div > div > img {
+height:100%;
+}
+
+section.explore-our-trip.bg-gray-800.py-20.px-4 > div > div > div.flex-1 > div > div {
+    height: 550px;
+}
+section.guide-to-travel-section {
+    padding: 0;
+}
+section.guide-to-travel-section .check-content-side-area {
+    padding: 50px 0px 50px 300px;
+}
+section.guide-to-travel-section .set-img-area {
+    height: 100%;
+    width: 100%;
 }

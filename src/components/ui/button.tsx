@@ -25,11 +25,11 @@ const buttonVariants = cva(
         "travel-gold": "bg-gradient-to-r from-travel-gold to-yellow-500 text-white hover:from-yellow-500 hover:to-travel-gold hover:scale-105 hover:-translate-y-0.5 shadow-medium"
       },
       size: {
-        default: "h-10 px-6 py-2",
-        sm: "h-8 rounded-lg px-4 text-xs",
-        lg: "h-12 rounded-xl px-8 text-base",
+        default: "px-8 py-3",
+        sm: "px-6 py-2 text-xs",
+        lg: "px-10 py-4 text-base",
         xl: "h-14 rounded-2xl px-10 text-lg",
-        icon: "h-10 w-10 rounded-xl",
+        icon: "h-10 w-10",
       },
     },
     defaultVariants: {
