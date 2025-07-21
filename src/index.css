@@ -619,7 +619,6 @@
 
 /* Button styling - HOMEPAGE CONTENT ONLY, EXCLUDING MOBILE POPUP AND DESKTOP FLIGHT WIDGET */
 .blacktomato-homepage button:not(.mobile-flight-popup button):not(.mobile-flight-popup *) {
-  background: #2563eb !important;
   border-radius: 999px;
 }
 
@@ -643,7 +642,7 @@
 }
 
 .blacktomato-homepage .flight-widget-section button[type="submit"] {
-  background: #1664ff !important; /* Restore Expedia blue for search button */
+  background: #0068ef !important; /* Updated to match mobile blue */
   border-radius: 9999px !important; /* Restore rounded-full */
 }
 
@@ -652,7 +651,68 @@
 }
 
 .blacktomato-homepage .flight-widget-section button[type="submit"]:hover {
-  background: #1d4ed8 !important; /* Darker blue on hover for search button */
+  background: #0068ef !important; /* Keep same blue on hover with opacity */
+  opacity: 0.9 !important;
+}
+
+/* Ensure desktop widget blue elements show properly */
+.blacktomato-homepage .flight-widget-section button[style*="#0068ef"] {
+  background: #0068ef !important;
+  color: white !important;
+}
+
+.blacktomato-homepage .flight-widget-section button[style*="#e7f3ff"] {
+  background: #e7f3ff !important;
+  color: #0068ef !important;
+}
+
+/* Specific desktop flight widget color overrides */
+.blacktomato-homepage .flight-widget-section .w-full[style*="#0068ef"] {
+  background: #0068ef !important;
+}
+
+.blacktomato-homepage .flight-widget-section .flex-1[style*="#0068ef"] {
+  background: #0068ef !important;
+}
+
+.blacktomato-homepage .flight-widget-section .w-8[style*="#e7f3ff"] {
+  background: #e7f3ff !important;
+}
+
+/* Trip type tabs - ensure only selected gets blue background */
+.blacktomato-homepage .flight-widget-section .flex-1[style*="transparent"] {
+  background: transparent !important;
+}
+
+/* More specific override for trip type buttons - Reset all first */
+.blacktomato-homepage .flight-widget-section button.flex-1 {
+  background: transparent !important;
+  border-radius: 0.5rem !important; /* rounded-lg */
+}
+
+.blacktomato-homepage .flight-widget-section button.flex-1[style*="background-color: transparent"] {
+  background: transparent !important;
+}
+
+.blacktomato-homepage .flight-widget-section button.flex-1[style*="background-color: rgb(0, 104, 239)"] {
+  background: #0068ef !important;
+}
+
+.blacktomato-homepage .flight-widget-section button.flex-1[style*="#0068ef"] {
+  background: #0068ef !important;
+}
+
+/* Ensure non-selected trip type buttons stay transparent */
+.blacktomato-homepage .flight-widget-section div.flex.bg-blue-50 button.flex-1:not([style*="#0068ef"]) {
+  background: transparent !important;
+  color: rgb(29 78 216) !important; /* text-blue-700 */
+}
+
+/* Passenger button specific styling */
+.blacktomato-homepage .flight-widget-section .relative button.bg-white {
+  background: white !important;
+  color: black !important;
+  border-color: #0068ef !important;
 }
 
 /* Remove BlackTomato forced backgrounds from mobile popup - but allow our specific blue elements */

@@ -164,9 +164,12 @@ export default function ExpediaWidget() {
               }}
               className={`flex-1 py-2 px-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
                 tripType === type
-                  ? 'bg-blue-500 text-white shadow-md'
+                  ? 'text-white shadow-md'
                   : 'text-blue-700 hover:text-blue-900 hover:bg-blue-100'
               }`}
+              style={{
+                backgroundColor: tripType === type ? '#0068ef' : 'transparent',
+              }}
             >
               {type}
             </button>
@@ -177,8 +180,8 @@ export default function ExpediaWidget() {
         {tripType === 'Multi-city' && (
           <div className="bg-blue-50 rounded-lg p-3">
             <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-              <span className="text-xs text-blue-700">
+              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#0068ef' }}></div>
+              <span className="text-xs" style={{ color: '#0068ef' }}>
                 Multi-city bookings will be handled through Expedia's advanced search
               </span>
             </div>
@@ -275,11 +278,15 @@ export default function ExpediaWidget() {
 
       {/* Passengers Section */}
       <div className="relative">
-        <Users className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+        <Users className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 z-10" style={{ color: '#0068ef' }} />
         <button
           type="button"
           onClick={() => setShowPassengerDropdown(!showPassengerDropdown)}
-          className="w-full pl-12 pr-4 py-4 text-left border border-gray-200 rounded-xl text-base bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
+          className="w-full pl-12 pr-4 py-4 text-left border rounded-xl text-base focus:ring-2 focus:outline-none hover:bg-gray-100 transition-colors bg-white"
+          style={{
+            color: 'black',
+            borderColor: '#0068ef'
+          }}
         >
           {formatPassengerText()}
         </button>
@@ -300,18 +307,20 @@ export default function ExpediaWidget() {
                   <button
                     type="button"
                     onClick={() => handlePassengerChange('adults', false)}
-                    className="w-8 h-8 rounded-full bg-blue-100 hover:bg-blue-200 flex items-center justify-center"
+                    className="w-8 h-8 rounded-full hover:bg-blue-200 flex items-center justify-center transition-colors"
                     disabled={passengers.adults <= 1}
+                    style={{ backgroundColor: '#e7f3ff' }}
                   >
-                    <span className="text-blue-600 font-bold">-</span>
+                    <span className="font-bold" style={{ color: '#0068ef' }}>-</span>
                   </button>
                   <span className="w-6 text-center font-medium">{passengers.adults}</span>
                   <button
                     type="button"
                     onClick={() => handlePassengerChange('adults', true)}
-                    className="w-8 h-8 rounded-full bg-blue-100 hover:bg-blue-200 flex items-center justify-center"
+                    className="w-8 h-8 rounded-full hover:bg-blue-200 flex items-center justify-center transition-colors"
+                    style={{ backgroundColor: '#e7f3ff' }}
                   >
-                    <span className="text-blue-600 font-bold">+</span>
+                    <span className="font-bold" style={{ color: '#0068ef' }}>+</span>
                   </button>
                 </div>
               </div>
@@ -326,18 +335,20 @@ export default function ExpediaWidget() {
                   <button
                     type="button"
                     onClick={() => handlePassengerChange('children', false)}
-                    className="w-8 h-8 rounded-full bg-blue-100 hover:bg-blue-200 flex items-center justify-center"
+                    className="w-8 h-8 rounded-full hover:bg-blue-200 flex items-center justify-center transition-colors"
                     disabled={passengers.children <= 0}
+                    style={{ backgroundColor: '#e7f3ff' }}
                   >
-                    <span className="text-blue-600 font-bold">-</span>
+                    <span className="font-bold" style={{ color: '#0068ef' }}>-</span>
                   </button>
                   <span className="w-6 text-center font-medium">{passengers.children}</span>
                   <button
                     type="button"
                     onClick={() => handlePassengerChange('children', true)}
-                    className="w-8 h-8 rounded-full bg-blue-100 hover:bg-blue-200 flex items-center justify-center"
+                    className="w-8 h-8 rounded-full hover:bg-blue-200 flex items-center justify-center transition-colors"
+                    style={{ backgroundColor: '#e7f3ff' }}
                   >
-                    <span className="text-blue-600 font-bold">+</span>
+                    <span className="font-bold" style={{ color: '#0068ef' }}>+</span>
                   </button>
                 </div>
               </div>
@@ -352,18 +363,20 @@ export default function ExpediaWidget() {
                   <button
                     type="button"
                     onClick={() => handlePassengerChange('infants', false)}
-                    className="w-8 h-8 rounded-full bg-blue-100 hover:bg-blue-200 flex items-center justify-center"
+                    className="w-8 h-8 rounded-full hover:bg-blue-200 flex items-center justify-center transition-colors"
                     disabled={passengers.infants <= 0}
+                    style={{ backgroundColor: '#e7f3ff' }}
                   >
-                    <span className="text-blue-600 font-bold">-</span>
+                    <span className="font-bold" style={{ color: '#0068ef' }}>-</span>
                   </button>
                   <span className="w-6 text-center font-medium">{passengers.infants}</span>
                   <button
                     type="button"
                     onClick={() => handlePassengerChange('infants', true)}
-                    className="w-8 h-8 rounded-full bg-blue-100 hover:bg-blue-200 flex items-center justify-center"
+                    className="w-8 h-8 rounded-full hover:bg-blue-200 flex items-center justify-center transition-colors"
+                    style={{ backgroundColor: '#e7f3ff' }}
                   >
-                    <span className="text-blue-600 font-bold">+</span>
+                    <span className="font-bold" style={{ color: '#0068ef' }}>+</span>
                   </button>
                 </div>
               </div>
@@ -381,9 +394,12 @@ export default function ExpediaWidget() {
                       onClick={() => setCabinClass(cabin)}
                       className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                         cabinClass === cabin
-                          ? 'bg-blue-500 text-white'
+                          ? 'text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
+                      style={{
+                        backgroundColor: cabinClass === cabin ? '#0068ef' : '',
+                      }}
                     >
                       {cabin}
                     </button>
@@ -394,7 +410,10 @@ export default function ExpediaWidget() {
               <button
                 type="button"
                 onClick={() => setShowPassengerDropdown(false)}
-                className="w-full mt-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors"
+                className="w-full mt-4 py-2 text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
+                style={{
+                  backgroundColor: '#0068ef'
+                }}
               >
                 Done
               </button>
@@ -406,14 +425,17 @@ export default function ExpediaWidget() {
       {/* Search Button */}
       <button 
         type="submit"
-        className="w-full py-4 bg-[#1664ff] text-white font-semibold rounded-full text-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+        className="w-full py-4 text-white font-semibold rounded-full text-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:opacity-90"
+        style={{
+          backgroundColor: '#0068ef'
+        }}
       >
         Search Flights
       </button>
       
       {/* Expedia Branding */}
       <div className="text-center text-xs text-gray-500 mt-4 pt-3 border-t border-gray-100">
-        Powered by <span className="font-semibold">Expedia</span> — Official Utrippin Affiliate Partner
+        Powered by <span className="font-semibold" style={{ color: '#0068ef' }}>Expedia</span> — Official Utrippin Affiliate Partner
       </div>
     </form>
   );
