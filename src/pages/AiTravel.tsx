@@ -983,21 +983,23 @@ export default function AiTravel() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => setTripType('staycation')}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
-                      tripType === 'staycation'
-                        ? 'bg-blue-600 text-white shadow-lg'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-                    }`}
+                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
+                       tripType === 'staycation'
+                         ? 'bg-blue-600 text-white shadow-lg'
+                         : 'hover:bg-slate-700/50'
+                     }`}
+                     style={{color: tripType === 'staycation' ? '#ffffff' : '#0f2948'}}
                   >
                     🏠 Staycation
                   </button>
                   <button
                     onClick={() => setTripType('vacation')}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
-                      tripType === 'vacation'
-                        ? 'bg-blue-600 text-white shadow-lg'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-                    }`}
+                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
+                       tripType === 'vacation'
+                         ? 'bg-blue-600 text-white shadow-lg'
+                         : 'hover:bg-slate-700/50'
+                     }`}
+                     style={{color: tripType === 'vacation' ? '#ffffff' : '#0f2948'}}
                   >
                     ✈️ Vacation
                   </button>
@@ -1018,7 +1020,7 @@ export default function AiTravel() {
 
             {/* Group Size */}
             <div className="mb-8">
-              <label className="block text-white font-medium mb-4 flex items-center gap-2">
+              <label className="block font-medium mb-4 flex items-center gap-2" style={{color: '#0f2948'}}>
                 👥 Group Size
               </label>
               <div className="flex items-center justify-center gap-4 bg-slate-800/50 p-4 rounded-2xl border border-slate-600/30">
@@ -1042,7 +1044,7 @@ export default function AiTravel() {
 
             {/* Zip Code Input */}
             <div className="mb-8">
-              <label className="block text-white font-medium mb-4">
+              <label className="block font-medium mb-4" style={{color: '#0f2948'}}>
                 Enter Zip Code {tripType === 'staycation' ? '(for staycations)' : ''}
               </label>
               <input
