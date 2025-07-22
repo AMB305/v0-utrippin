@@ -148,7 +148,7 @@ const AiTravel = () => {
                 {/* Main Content - Bot and Text centered and moved up */}
                 <div className="flex-1 flex flex-col items-center justify-start pt-6 px-6">
                   <BlurFade delay={0.1} inView>
-                    <div className="flex items-center gap-2 mb-6 justify-start w-full -ml-4">
+                    <div className="flex items-center gap-1 mb-6 justify-start w-full -ml-4">
                       {/* Keila Bot with Float Animation */}
                       <img 
                         src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
