@@ -1028,7 +1028,7 @@ export default function AiTravel() {
                   <button
                     key={i}
                     onClick={() => handleSendMessage(`Plan ${theme} under $${budget}`)}
-                    className="bg-slate-700/50 hover:bg-slate-600/60 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-slate-500/20 transition-all whitespace-nowrap flex-shrink-0"
+                    className="bg-blue-600/50 hover:bg-blue-500/60 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all whitespace-nowrap flex-shrink-0"
                   >
                     {theme}
                   </button>
