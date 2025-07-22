@@ -214,7 +214,7 @@ const AiTravel = () => {
                   </Button>
                 </div>
 
-                {/* Chat Messages */
+                {/* Chat Messages */}
                 <div className="flex-1 overflow-y-auto bg-black">
                   {mobileChatMessages.map((message) => (
                     <div key={message.id} className="px-4 py-3">
