@@ -52,8 +52,8 @@ export const BudgetSlider: React.FC<BudgetSliderProps> = ({
 
   return (
     <div className="w-full max-w-md mx-auto space-y-4">
-      <div className="flex justify-between items-center">
-        <label className="text-sm font-medium text-white/80">
+      <div className="flex justify-between items-center" style={{color: '#0f2948'}}>
+        <label className="text-sm font-medium" style={{color: '#0f2948'}}>
           Budget Range
         </label>
         <div className="flex items-center gap-2">
@@ -84,8 +84,8 @@ export const BudgetSlider: React.FC<BudgetSliderProps> = ({
       </div>
       
       <div className="flex justify-between text-xs text-white/60">
-        <span>{formatBudget(min)}</span>
-        <span>{formatBudget(max)}</span>
+        <span style={{color: '#0f2948'}}>{formatBudget(min)}</span>
+        <span style={{color: '#0f2948'}}>{formatBudget(max)}</span>
       </div>
     </div>
   );

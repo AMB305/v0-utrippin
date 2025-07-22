@@ -21,6 +21,11 @@ import { ResponsiveContainer, ResponsiveGrid } from '@/components/ResponsiveDesi
 import { AccessibleButton, SkipNavigation } from '@/components/AccessibilityEnhancements';
 import { FormField, FormValidation, validationRules } from '@/components/EnhancedFormValidation';
 import keilaLogo from '@/assets/Keila_logo.png';
+import travelImage1 from '@/assets/travel-image-1.png';
+import travelImage2 from '@/assets/travel-image-2.png';
+import travelImage3 from '@/assets/travel-image-3.png';
+import travelImage4 from '@/assets/travel-image-4.png';
+import travelImage5 from '@/assets/travel-image-5.png';
 import TravelCarousel from '@/components/TravelCarousel';
 import { TextAnimate } from "@/components/magicui/text-animate";  
 import { BlurFade } from "@/components/magicui/blur-fade";
@@ -56,6 +61,13 @@ const scrollingStyles = `
 
   .animate-scroll-right {
     animation: scroll-right 20s linear infinite;
+  }
+
+  .card-item:hover ~ .animate-scroll-left,
+  .card-item:hover ~ .animate-scroll-right,
+  .animate-scroll-left:hover,
+  .animate-scroll-right:hover {
+    animation-play-state: paused;
   }
 
   .marquee-left, .marquee-right {
@@ -582,16 +594,8 @@ export default function AiTravel() {
   const renderCard = (card: CardData, key: string) => (
     <div 
       key={key}
-      className="relative inline-block shadow-lg hover:shadow-xl transition-all duration-300 group card-item" 
-      style={{ 
-        width: '480px', 
-        height: '174px', 
-        background: '#f5f7fa', 
-        borderRadius: '8px 0 8px 8px',
-        marginRight: '45px',
-        padding: '20px',
-        fontSize: '16px'
-      }}
+      className="relative flex-shrink-0 w-[480px] h-[174px] border border-border rounded-lg mr-12 p-5 shadow-lg hover:shadow-xl transition-all duration-300 group card-item hover:scale-[1.02] cursor-pointer"
+      style={{ backgroundColor: '#f5f7fa' }}
     >
       <div className="flex items-center gap-3 mb-4">
         <div className={`w-8 h-8 ${card.bgColor} rounded-lg flex items-center justify-center`}>
@@ -1033,7 +1037,6 @@ export default function AiTravel() {
             </div>
                   </div>
                         </div>
-
         <Footer />
       </div>
       

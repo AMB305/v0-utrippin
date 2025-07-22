@@ -122,6 +122,12 @@ serve(async (req) => {
   try {
     const { message, conversationHistory = [], isMobileChat = false } = await req.json();
 
+    console.log('📱 Mobile Chat Debug:', { 
+      isMobileChat, 
+      messageLength: message?.length,
+      historyLength: conversationHistory?.length 
+    });
+
     if (!message) {
       return new Response(
         JSON.stringify({ error: 'Message is required' }),
