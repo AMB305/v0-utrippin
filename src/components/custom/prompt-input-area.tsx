@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { cn } from '@/lib/utils';
 
@@ -31,6 +31,19 @@ export const PromptInputArea = ({
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const uploadInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize textarea based on content
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      // Reset height to auto to get the correct scrollHeight
+      textarea.style.height = 'auto';
+      // Set height to scrollHeight with a reasonable max height
+      const newHeight = Math.min(textarea.scrollHeight, 300); // Max height of 300px
+      textarea.style.height = `${newHeight}px`;
+    }
+  }, [input]);
 
   const suggestionPrompts = [
     {
@@ -110,84 +123,88 @@ export const PromptInputArea = ({
             opacity: 0.8
           } as React.CSSProperties}
         ></div>
-        <div className="relative rounded-xl">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit();
-              }
-            }}
-            className="flex field-sizing-content max-h-[80px] md:max-h-[200px] w-full rounded-xl px-4 py-3 leading-relaxed text-foreground placeholder:text-muted-foreground/70 focus-visible:outline-none [resize:none] shadow-none border-none focus-visible:ring-0 bg-transparent"
-            placeholder="Ask me anything about your trip.."
-            aria-label="Enter your prompt"
-          />
-          <div className="flex items-center justify-between gap-2 py-2 px-3 bg-transparent transition-colors">
-            <div className="flex items-center gap-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <label
-                    htmlFor="file-upload"
-                    className="hover:bg-card-foreground/10 border border-input flex h-8 w-8 cursor-pointer items-center justify-center rounded-2xl"
-                  >
-                    <input
-                      type="file"
-                      multiple
-                      onChange={handleFileChange}
-                      className="hidden"
-                      id="file-upload"
-                      ref={uploadInputRef}
-                    />
-                    <Plus className="size-3" />
-                  </label>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="text-xs">Attach files</p>
-                </TooltipContent>
-              </Tooltip>
+        
+        <Textarea
+          ref={textareaRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
+          className="flex w-full rounded-xl px-4 py-3 leading-relaxed text-foreground placeholder:text-muted-foreground/70 focus-visible:outline-none [resize:none] shadow-none border-none focus-visible:ring-0 bg-transparent min-h-[60px] overflow-hidden"
+          placeholder="Ask me anything about your trip.."
+          aria-label="Enter your prompt"
+          style={{ height: 'auto' }}
+        />
+        
+        <div className="flex items-center justify-between gap-2 py-2 px-3 bg-transparent transition-colors">
+          <div className="flex items-center gap-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <label
+                  htmlFor="file-upload"
+                  className="hover:bg-card-foreground/10 border border-input flex h-8 w-8 cursor-pointer items-center justify-center rounded-2xl"
+                >
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleFileChange}
+                    className="hidden"
+                    id="file-upload"
+                    ref={uploadInputRef}
+                  />
+                  <Plus className="size-3" />
+                </label>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="text-xs">Attach files</p>
+              </TooltipContent>
+            </Tooltip>
 
-              {files.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {files.map((file, index) => (
-                    <Tooltip key={index}>
-                      <TooltipTrigger asChild>
-                        <div className="bg-secondary flex items-center gap-2 rounded-lg px-3 py-2 text-sm">
-                          <span className="max-w-[120px] truncate">
-                            {file.name}
-                          </span>
-                          <button
-                            onClick={() => handleRemoveFile(index)}
-                            className="hover:bg-secondary/50 rounded-full p-1"
-                          >
-                            <X className="size-4" />
-                          </button>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="text-xs">{file.name}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  ))}
-                </div>
-              )}
-            </div>
-            <Button
-              size="icon"
-              className="rounded-full size-8 cursor-pointer bg-primary hover:bg-primary/90"
-              onClick={handleSubmit}
-              type="submit"
-            >
-              {isLoading ? (
-                <Loader className="w-[7px] h-[7px] animate-spin" />
-              ) : (
-                <ArrowUp className="w-[7px] h-[7px]" />
-              )}
-            </Button>
+            {files.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {files.map((file, index) => (
+                  <Tooltip key={index}>
+                    <TooltipTrigger asChild>
+                      <div className="bg-secondary flex items-center gap-2 rounded-lg px-3 py-2 text-sm">
+                        <span className="max-w-[120px] truncate">
+                          {file.name}
+                        </span>
+                        <button
+                          onClick={() => handleRemoveFile(index)}
+                          className="hover:bg-secondary/50 rounded-full p-1"
+                        >
+                          <X className="size-4" />
+                        </button>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">{file.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
+            )}
           </div>
+          
+          <Button
+            size="icon"
+            className="rounded-full size-8 cursor-pointer bg-primary hover:bg-primary/90"
+            onClick={handleSubmit}
+            type="submit"
+          >
+            {isLoading ? (
+              <Loader className="w-[7px] h-[7px] animate-spin" />
+            ) : (
+              <ArrowUp className="w-[7px] h-[7px]" />
+            )}
+          </Button>
         </div>
       </div>
+      
       {showSuggestions && (
         <div className="flex flex-wrap gap-2 items-center justify-center">
           {suggestionPrompts.map((prompt) => (
