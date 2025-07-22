@@ -1,30 +1,32 @@
+
 import React from 'react';
 
 const UtrippinLogo = () => {
   const gradientColors = [
-    '#0070f3',
-    '#0066e0',
-    '#005ccc',
-    '#0052b8',
-    '#0048a4',
-    '#003e90',
-    '#00347c',
-    '#002a68'
+    '#1f2937', // gray-800
+    '#374151', // gray-700
+    '#4b5563', // gray-600
+    '#6b7280', // gray-500
+    '#9ca3af', // gray-400
+    '#d1d5db', // gray-300
+    '#e5e7eb', // gray-200
+    '#f3f4f6'  // gray-100
   ];
 
   const letters = ['U','T','R','I','P','P','I','N'];
 
   return (
-    <div className="flex justify-center space-x-0.5">
+    <div className="flex justify-center space-x-1">
       {letters.map((char, i) => (
         <span
           key={i}
           className={`
-            block w-5 h-5 md:w-7 md:h-7 
-            text-white font-bold text-center text-xs md:text-sm
-            leading-[1.25rem] md:leading-[1.75rem] 
+            block w-6 h-6 md:w-8 md:h-8 
+            text-white font-bold text-center text-sm md:text-base
+            leading-6 md:leading-8 
             animate-fade-in 
-            transition-all duration-300 hover:-translate-y-2 hover:scale-110 hover:brightness-125 hover:shadow-lg
+            transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:brightness-125 hover:shadow-lg
+            rounded-md
           `}
           style={{
             backgroundColor: gradientColors[i],

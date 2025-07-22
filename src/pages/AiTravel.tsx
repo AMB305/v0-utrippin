@@ -29,7 +29,8 @@ import {
   ArrowLeft,
   Star,
   Clock,
-  ExternalLink
+  ExternalLink,
+  Languages
 } from "lucide-react";
 import { TripSummaryCard } from "@/components/TripSummaryCard";
 import { MapComponent } from "@/components/MapComponent";
@@ -37,6 +38,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { TextAnimate } from "@/components/magicui/text-animate";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { MobileQuickQuestions } from "@/components/MobileQuickQuestions";
+import UtrippinLogo from "@/components/UtrippinLogo";
 
 interface ChatMessage {
   id: string;
@@ -124,42 +126,55 @@ const AiTravel = () => {
         canonical="https://utrippin.ai/ai-travel"
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black text-white">
+      <div className="min-h-screen bg-white text-gray-900">
         {isMobile ? (
-          <div className="flex flex-col h-screen">
+          <div className="flex flex-col h-screen bg-white">
             {!hasStartedChat ? (
-              // Welcome Screen
-              <div className="flex-1 flex flex-col">
-                <div className="flex-1 flex flex-col justify-center items-center px-6 py-8">
-                  <BlurFade delay={0.25} inView>
-                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-2xl">
-                      <Sparkles className="h-10 w-10 text-white" />
+              // Welcome Screen - TripGenie Style
+              <div className="flex-1 flex flex-col bg-white">
+                {/* Header with Logo and Greeting */}
+                <div className="px-6 pt-12 pb-4">
+                  <BlurFade delay={0.1} inView>
+                    <div className="flex flex-col items-center mb-6">
+                      <UtrippinLogo />
+                      <div className="mt-4 text-center">
+                        <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h2" className='text-xl font-semibold text-gray-900 mb-2'>
+                          I'm Keila! Your Ultimate Adventure Planner
+                        </TextAnimate>
+                      </div>
                     </div>
                   </BlurFade>
-                  <div className="flex flex-col w-full items-center gap-2 pt-2 pb-7 text-center">
-                    <TextAnimate animation="blurInUp" delay={0.5} by="character" once as="h1" className='leading-8 font-normal text-2xl text-foreground'>
-                      Hey I'm Keila, Your Ultimate Adventure Planner
-                    </TextAnimate>
+                  
+                  {/* Hi there! in upper left corner */}
+                  <BlurFade delay={0.5} inView>
+                    <div className="text-left">
+                      <h1 className="text-2xl font-bold text-gray-900 mb-2">Hi there!</h1>
+                      <p className="text-gray-600 text-base">Ask me anything about your next trip!</p>
+                    </div>
+                  </BlurFade>
+                </div>
 
-                    <TextAnimate animation="blurIn" delay={0.8} as="p" className='leading-6 text-lg text-muted-foreground'>
-                      Ask me anything about your next trip!
-                    </TextAnimate>
-                  </div>
-
-                  {/* Mobile Quick Questions */}
-                  <BlurFade delay={1.0} inView>
+                {/* Mobile Quick Questions */}
+                <div className="flex-1 px-2">
+                  <BlurFade delay={0.7} inView>
                     <MobileQuickQuestions onQuestionSelect={handleMobileSubmit} />
                   </BlurFade>
                 </div>
 
-                {/* Mobile Input Area */}
-                <div className="p-4 bg-slate-900/50 backdrop-blur border-t border-slate-700/50">
+                {/* Mobile Input Area with Live Translate */}
+                <div className="p-4 bg-white border-t border-gray-100">
+                  <div className="flex gap-2 mb-2">
+                    <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs border-gray-200">
+                      <Languages className="h-3 w-3" />
+                      Live Translate
+                    </Button>
+                  </div>
                   <div className="flex gap-2">
                     <Input
                       value={mobileInput}
                       onChange={(e) => setMobileInput(e.target.value)}
                       placeholder="Ask me about your travel plans..."
-                      className="flex-1 bg-slate-800/50 border-slate-600 text-white placeholder-slate-400"
+                      className="flex-1 bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500"
                     />
                     <Button
                       onClick={() => handleMobileSubmit(mobileInput)}
@@ -173,74 +188,42 @@ const AiTravel = () => {
               </div>
             ) : (
               // Chat Interface
-              <div className="flex flex-col h-screen">
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button variant="ghost" className="absolute top-4 left-4 md:hidden">
-                      <ArrowLeft className="w-5 h-5 mr-2" />
-                      Back
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent side="left" className="w-full sm:max-w-sm">
-                    <SheetHeader className="text-left">
-                      <SheetTitle>Settings</SheetTitle>
-                    </SheetHeader>
-
-                    <div className="space-y-4">
-                      <div>
-                        <p className="text-sm font-medium leading-none">Trip Preferences</p>
-                        <p className="text-sm text-muted-foreground">
-                          Customize your trip settings to get the most relevant recommendations.
-                        </p>
-                      </div>
-                      <Separator />
-                      <div>
-                        <p className="text-sm font-medium leading-none">Account</p>
-                        <p className="text-sm text-muted-foreground">Manage your account settings.</p>
-                      </div>
-                      <Separator />
-                      <div>
-                        <Button variant="outline" className="w-full">
-                          Logout
-                        </Button>
-                      </div>
-                    </div>
-                  </SheetContent>
-                </Sheet>
-
-                <div className="px-4 py-2 border-b border-slate-700/50 flex items-center justify-between">
+              <div className="flex flex-col h-screen bg-white">
+                {/* Chat Header */}
+                <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white">
                   <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="icon" className="md:hidden">
-                      <Menu className="w-5 h-5" />
+                    <Button variant="ghost" size="icon" onClick={() => setHasStartedChat(false)}>
+                      <ArrowLeft className="w-5 h-5" />
                     </Button>
-                    <h1 className="text-lg font-semibold">
-                      {trips && trips.length > 0 ? trips[0].title : "Travel Planning"}
+                    <h1 className="text-lg font-semibold text-gray-900">
+                      Travel Planning
                     </h1>
                   </div>
-                  <Button variant="secondary" size="sm">
+                  <Button variant="outline" size="sm" className="border-gray-200">
                     Save Trip
                   </Button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto">
+                {/* Chat Messages */}
+                <div className="flex-1 overflow-y-auto bg-gray-50">
                   {mobileChatMessages.map((message) => (
                     <div key={message.id} className="px-4 py-3">
-                      <div className="flex flex-col">
+                      <div className="flex flex-col space-y-3">
                         {/* User Message */}
                         <div className="flex justify-end">
-                          <div className="bg-blue-600 text-white px-4 py-2 rounded-2xl max-w-2/3">
+                          <div className="bg-blue-600 text-white px-4 py-2 rounded-2xl max-w-[80%]">
                             <p className="text-sm leading-relaxed">{message.question}</p>
                           </div>
                         </div>
 
                         {/* AI Response */}
                         {message.response && (
-                          <div className="flex justify-start mt-2">
-                            <div className="bg-slate-800/60 backdrop-blur-sm text-white px-4 py-2 rounded-2xl max-w-2/3 border border-slate-700/50">
+                          <div className="flex justify-start">
+                            <div className="bg-white text-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-200 shadow-sm">
                               {message.loading ? (
                                 <p>Loading...</p>
                               ) : (
-                                <p className="text-sm leading-relaxed text-slate-200">{message.response}</p>
+                                <p className="text-sm leading-relaxed">{message.response}</p>
                               )}
                             </div>
                           </div>
@@ -250,13 +233,20 @@ const AiTravel = () => {
                   ))}
                 </div>
 
-                <div className="p-4 bg-slate-900/50 backdrop-blur border-t border-slate-700/50">
+                {/* Chat Input with Live Translate */}
+                <div className="p-4 bg-white border-t border-gray-200">
+                  <div className="flex gap-2 mb-2">
+                    <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs border-gray-200">
+                      <Languages className="h-3 w-3" />
+                      Live Translate
+                    </Button>
+                  </div>
                   <div className="flex gap-2">
                     <Input
                       value={mobileInput}
                       onChange={(e) => setMobileInput(e.target.value)}
                       placeholder="Ask me anything..."
-                      className="flex-1 bg-slate-800/50 border-slate-600 text-white placeholder-slate-400"
+                      className="flex-1 bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500"
                     />
                     <Button
                       onClick={() => handleMobileSubmit(mobileInput)}
@@ -271,8 +261,9 @@ const AiTravel = () => {
             )}
           </div>
         ) : (
-          <div className="max-w-5xl mx-auto px-6 py-12">
-            <h1 className="text-3xl font-bold mb-6 text-center">AI Travel Planner</h1>
+          // Desktop Layout
+          <div className="max-w-5xl mx-auto px-6 py-12 bg-white">
+            <h1 className="text-3xl font-bold mb-6 text-center text-gray-900">AI Travel Planner</h1>
 
             <Tabs defaultValue="chat" className="w-full">
               <TabsList className="justify-center mb-8">
@@ -289,20 +280,21 @@ const AiTravel = () => {
                   Settings
                 </TabsTrigger>
               </TabsList>
+              
               <TabsContent value="chat" className="space-y-4">
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold">Plan Your Next Adventure</h2>
-                  <p className="text-md text-slate-400">
+                  <h2 className="text-2xl font-semibold text-gray-900">Plan Your Next Adventure</h2>
+                  <p className="text-md text-gray-600">
                     Get personalized travel recommendations and itineraries powered by AI.
                   </p>
                 </div>
 
-                <Card className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 text-white">
+                <Card className="bg-white border border-gray-200 text-gray-900">
                   <Card className="bg-transparent border-0 shadow-none">
                     <div className="p-4">
                       <Textarea
                         placeholder="Tell me where you want to go..."
-                        className="w-full bg-slate-700 border-slate-600 text-white placeholder-slate-400 resize-none"
+                        className="w-full bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 resize-none"
                       />
                       <div className="flex justify-end mt-2">
                         <Button className="bg-blue-600 hover:bg-blue-700 text-white">
@@ -317,8 +309,8 @@ const AiTravel = () => {
 
               <TabsContent value="trips" className="space-y-4">
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold">Your Saved Trips</h2>
-                  <p className="text-md text-slate-400">
+                  <h2 className="text-2xl font-semibold text-gray-900">Your Saved Trips</h2>
+                  <p className="text-md text-gray-600">
                     View and manage your saved travel itineraries.
                   </p>
                 </div>
@@ -328,10 +320,10 @@ const AiTravel = () => {
                 ) : trips && trips.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {trips.map((trip) => (
-                      <Card key={trip.id} className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 text-white p-4">
+                      <Card key={trip.id} className="bg-white border border-gray-200 text-gray-900 p-4">
                         <h3 className="text-lg font-semibold mb-2">{trip.title}</h3>
-                        <p className="text-slate-400 mb-2">{trip.destination}</p>
-                        <div className="flex justify-between items-center text-sm text-slate-500">
+                        <p className="text-gray-600 mb-2">{trip.destination}</p>
+                        <div className="flex justify-between items-center text-sm text-gray-500">
                           <span>{trip.start_date} - {trip.end_date}</span>
                           <span>${trip.budget}</span>
                         </div>
@@ -345,13 +337,13 @@ const AiTravel = () => {
 
               <TabsContent value="settings" className="space-y-4">
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold">Settings</h2>
-                  <p className="text-md text-slate-400">
+                  <h2 className="text-2xl font-semibold text-gray-900">Settings</h2>
+                  <p className="text-md text-gray-600">
                     Customize your travel preferences and account settings.
                   </p>
                 </div>
 
-                <Card className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 text-white">
+                <Card className="bg-white border border-gray-200 text-gray-900">
                   <div className="p-4">
                     <p>Settings content here...</p>
                   </div>
