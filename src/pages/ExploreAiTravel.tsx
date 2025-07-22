@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { BudgetSlider } from "@/components/BudgetSlider";
-
+import { SimpleChatInput } from "@/components/SimpleChatInput";
 import { SmartImage } from "@/components/SmartImage";
 import { SEOHead } from "@/components/SEOHead";
 import { fallbackTrips } from "@/data/fallbackTrips";
 import destinations from "@/data/destinations";
 import { affiliateConfig } from "@/config/affiliateConfig";
-import keilaLogo from "@/assets/Keila_logo.png";
 
 const ExploreAiTravel = () => {
   const [budget, setBudget] = useState(3000);
@@ -47,44 +46,6 @@ const ExploreAiTravel = () => {
           <h1 className="text-4xl font-bold mb-6 text-center">
             Explore Destinations & Plan with AI
           </h1>
-
-          {/* Keila Hero Section */}
-          <div className="mb-12 bg-gradient-to-br from-slate-100 to-slate-200 text-slate-800 rounded-3xl p-12 text-center">
-            <div className="flex justify-center items-center mb-6">
-              <img src={keilaLogo} alt="Keila" className="h-16 w-16 mr-4" />
-              <h2 className="text-5xl font-bold text-slate-900">Keila</h2>
-            </div>
-            <p className="text-xl text-slate-700 mb-8 max-w-2xl mx-auto">
-              Your most comprehensive and free AI Trip Planner by <span className="text-blue-600 font-semibold">Trip.com</span>
-            </p>
-            
-            <div className="flex items-center justify-center bg-white rounded-2xl p-8 max-w-md mx-auto shadow-lg">
-              <div className="bg-slate-900 p-4 rounded-xl mr-6">
-                <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center">
-                  <div className="grid grid-cols-3 gap-1">
-                    {[...Array(9)].map((_, i) => (
-                      <div key={i} className="w-2 h-2 bg-slate-900 rounded-sm"></div>
-                    ))}
-                  </div>
-                  <div className="absolute bg-blue-600 text-white text-xs px-2 py-1 rounded mt-8 ml-8">
-                    Trip
-                  </div>
-                </div>
-              </div>
-              <div className="text-left">
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                  Experience AI travel magic now on the Trip.com app
-                </h3>
-                <p className="text-slate-600 text-sm">
-                  Scan the QR code using your phone's camera.
-                </p>
-              </div>
-            </div>
-            
-            <p className="text-slate-600 mt-6 text-sm">
-              🔍 Find out more
-            </p>
-          </div>
 
           {/* Budget Trips */}
           <div className="mb-12">
@@ -179,6 +140,24 @@ const ExploreAiTravel = () => {
             </div>
           </div>
 
+          {/* AI Travel Assistant */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4 text-center">
+              Try our AI Travel Assistant
+            </h2>
+            <SimpleChatInput
+              onSendMessage={(msg) => {
+                setLastQuery(msg);
+                alert(`(Mock) Chat: ${msg}`);
+              }}
+              placeholder="Ask me to plan a weekend getaway..."
+            />
+            {lastQuery && (
+              <div className="mt-4 text-center text-slate-400 text-sm">
+                Last query: "{lastQuery}"
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
