@@ -1023,7 +1023,7 @@ export default function AiTravel() {
               <label className="block font-medium mb-4 flex items-center gap-2" style={{color: '#0f2948'}}>
                 👥 Group Size
               </label>
-              <div className="flex items-center justify-center gap-4 bg-slate-800/50 p-4 rounded-2xl border border-slate-600/30">
+              <div className="flex items-center justify-center gap-4 p-4 rounded-2xl border border-slate-600/30" style={{backgroundColor: '#59c8ff'}}>
                 <button
                   onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
                   className="w-12 h-12 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-xl transition-colors"
