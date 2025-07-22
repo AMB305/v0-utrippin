@@ -118,6 +118,61 @@ const AiTravel = () => {
     }
   };
 
+  const handleImageCapture = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      // Show loading state in chat
+      setHasStartedChat(true);
+      
+      // Create a loading message for image recognition
+      const loadingMessage = "🔍 Identifying landmark...";
+      sendMobileChatMessage(loadingMessage);
+
+      // Create form data
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // Call the recognize-image edge function
+      const { data, error } = await supabase.functions.invoke('recognize-image', {
+        body: formData,
+      });
+
+      if (error) {
+        console.error('Error recognizing image:', error);
+        toast({
+          title: "Image recognition failed",
+          description: "Unable to identify the landmark. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data.success && data.response) {
+        // Send the AI response as a new message
+        sendMobileChatMessage(`📸 Live Guide: ${data.response}`);
+      } else {
+        toast({
+          title: "No landmark detected",
+          description: "I couldn't identify any landmarks in this image. Try taking a clearer photo of a notable location.",
+          variant: "destructive",
+        });
+      }
+
+    } catch (error) {
+      console.error('Error processing image:', error);
+      toast({
+        title: "Error processing image",
+        description: "Something went wrong while analyzing your photo. Please try again.",
+        variant: "destructive",
+      });
+    }
+
+    // Clear the input so the same file can be selected again
+    event.target.value = '';
+  };
+
   return (
     <>
       <SEOHead
@@ -185,7 +240,21 @@ const AiTravel = () => {
                       onChange={(e) => setMobileInput(e.target.value)}
                       placeholder="Ask me about your travel plans..."
                       className="flex-1 bg-gray-900 border-gray-800 text-white placeholder-gray-500"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleMobileSubmit(mobileInput);
+                        }
+                      }}
                     />
+                    {/* Camera Button for Live Guide */}
+                    <Button
+                      onClick={() => document.getElementById('camera-input')?.click()}
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      disabled={mobileChatLoading}
+                    >
+                      <Camera className="h-4 w-4" />
+                    </Button>
                     <Button
                       onClick={() => handleMobileSubmit(mobileInput)}
                       disabled={!mobileInput.trim() || mobileChatLoading}
@@ -194,6 +263,16 @@ const AiTravel = () => {
                       <Send className="h-4 w-4" />
                     </Button>
                   </div>
+                  
+                  {/* Hidden camera input */}
+                  <input
+                    id="camera-input"
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    style={{ display: 'none' }}
+                    onChange={handleImageCapture}
+                  />
                 </div>
               </div>
             ) : (
@@ -257,7 +336,21 @@ const AiTravel = () => {
                       onChange={(e) => setMobileInput(e.target.value)}
                       placeholder="Ask me anything..."
                       className="flex-1 bg-gray-900 border-gray-800 text-white placeholder-gray-500"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleMobileSubmit(mobileInput);
+                        }
+                      }}
                     />
+                    {/* Camera Button for Live Guide */}
+                    <Button
+                      onClick={() => document.getElementById('camera-input')?.click()}
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      disabled={mobileChatLoading}
+                    >
+                      <Camera className="h-4 w-4" />
+                    </Button>
                     <Button
                       onClick={() => handleMobileSubmit(mobileInput)}
                       disabled={!mobileInput.trim() || mobileChatLoading}

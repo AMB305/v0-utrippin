@@ -26,3 +26,9 @@ verify_jwt = false
 
 [functions.expedia-hotel-lookup]
 verify_jwt = false
+
+[functions.recognize-image]
+verify_jwt = false
+
+[functions.get-suggested-questions]
+verify_jwt = false
