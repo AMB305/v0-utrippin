@@ -19,6 +19,7 @@ import { Sparkles } from "lucide-react";
 import { ResponsiveContainer, ResponsiveGrid } from '@/components/ResponsiveDesignFixes';
 import { AccessibleButton, SkipNavigation } from '@/components/AccessibilityEnhancements';
 import { FormField, FormValidation, validationRules } from '@/components/EnhancedFormValidation';
+import keilaLogo from '@/assets/Keila_logo.png';
 
 interface Trip {
   name: string;
@@ -137,34 +138,101 @@ export default function AiTravel() {
       )}
       <Header />
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black text-white">
-        <div className="flex flex-1">
-          {/* Mobile sidebar overlay */}
-          <div className="lg:hidden fixed left-0 top-0 w-[280px] h-full z-50 transform -translate-x-full transition-transform duration-300">
-            <ConversationSidebar
-              conversations={preferences.savedConversations || []}
-              onNewConversation={() => {
-                setAiTrips([]);
-                setSelectedTrip(null);
-                setShowTripPlanner(false);
-              }}
-            />
+        
+        <main className="flex-1">
+          {/* New Keila Hero Section */}
+          <div 
+            className="text-gray-800 px-4 flex items-center justify-center" 
+            style={{ 
+              position: 'relative',
+              width: '100%',
+              height: 'calc(100vh - 115px)',
+              padding: '100px 0',
+              boxSizing: 'border-box',
+              textAlign: 'center',
+              backgroundImage: 'url(/src/assets/ai_travel_bg.png)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'bottom',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="max-w-4xl mx-auto text-center">
+              {/* Keila Logo and Title */}
+              <div className="flex items-center justify-center gap-4 mb-8">
+                <img 
+                  src={keilaLogo} 
+                  alt="Keila" 
+                  className="w-40 h-40 object-contain"
+                />
+                <div className="text-6xl sm:text-7xl font-bold" style={{ color: '#0f2948' }}>
+                  Meet Keila
+                </div>
+              </div>
+              
+              <p className="text-3xl font-bold mb-16 whitespace-nowrap" style={{ color: '#0f2948' }}>
+                Your most comprehensive and free AI Trip Planner by <span className="text-blue-600 font-medium">utrippin<span className="text-yellow-500">.</span>ai</span>
+              </p>
+              
+              {/* Try Keila on App Section */}
+              <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 mb-8 max-w-2xl mx-auto">
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Try Keila on App
+                  </h3>
+                  <p className="text-lg text-gray-600 mb-6">
+                    Experience AI travel magic on your mobile device
+                  </p>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-colors">
+                    Download App
+                  </button>
+                </div>
+              </div>
+              
+              {/* Find out more link */}
+              <div className="text-center">
+                <div 
+                  className="text-base text-gray-700 hover:text-gray-900 font-medium cursor-pointer"
+                  onClick={() => {
+                    document.getElementById('trip-planner-section')?.scrollIntoView({ 
+                      behavior: 'smooth' 
+                    });
+                  }}
+                >
+                  🔍 Find out more
+                </div>
+                        </div>
+        </div>
+      </div>
+
+      {/* Keila Responds Section */}
+      <div id="trip-planner-section" className="px-4" style={{ background: '#f5f7fa', paddingTop: '56px', overflow: 'hidden' }}>
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-12">
+            <h2 className="font-bold" style={{ lineHeight: 'normal', fontSize: '46px', margin: '0 0 12px 20%', color: '#0f294D' }}>
+              Keila Responds to
+            </h2>
+            <h3 className="font-bold" style={{ 
+              position: 'relative',
+              padding: '0 20%',
+              marginBottom: '61px',
+              fontSize: '54px',
+              fontWeight: '700',
+              lineHeight: 'normal', 
+              color: 'transparent', 
+              WebkitBackgroundClip: 'text', 
+              backgroundClip: 'text', 
+              backgroundImage: 'linear-gradient(-266.03deg, #59c8ff 6.6%, #7378e6 85.42%)'
+            }}>
+              All Your Travel Questions
+            </h3>
           </div>
 
-          {/* Desktop sidebar - positioned below header */}
-          <div className="hidden lg:block w-[300px] bg-slate-900 border-r border-slate-700 overflow-y-auto">
-            <ConversationSidebar
-              conversations={preferences.savedConversations || []}
-              onNewConversation={() => {
-                setAiTrips([]);
-                setSelectedTrip(null);
-                setShowTripPlanner(false);
-              }}
-            />
-          </div>
-        
-          <main className="flex-1 overflow-x-hidden">
-          {/* Hero Section */}
-          <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4">
+        </div>
+      </div>
+
+      {/* Original Hero Section */}
+          <div id="trip-planner-section" className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
                 Describe your perfect trip and budget!
@@ -231,7 +299,7 @@ export default function AiTravel() {
             </div>
           </div>
 
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 sm:pb-32">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
             {/* Form Section */}
             <div className="text-center mb-8">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
@@ -478,19 +546,8 @@ export default function AiTravel() {
               </>
             )}
           </div>
+        </main>
 
-          {/* Chat input */}
-          <div className="fixed bottom-0 left-0 lg:left-[300px] right-0 bg-gradient-to-t from-slate-900 to-transparent p-4 sm:p-6 z-20">
-            <div className="max-w-2xl mx-auto">
-              <ChatInput
-                onSendMessage={handleSendMessage}
-                placeholder="Type something like 'Plan me a weekend getaway...'"
-              />
-            </div>
-          </div>
-          </main>
-        </div>
-        
         <Footer />
       </div>
       
