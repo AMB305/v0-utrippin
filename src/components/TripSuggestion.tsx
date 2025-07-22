@@ -32,7 +32,7 @@ export const TripSuggestion = ({
           href={buildExpediaUrl("Flights", location, camref)}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl p-3 transition-colors shadow-lg hover:shadow-blue-500/25"
+          className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 transition-colors shadow-lg hover:shadow-blue-500/25"
           title="Flights"
         >
           <Plane className="h-5 w-5" />
