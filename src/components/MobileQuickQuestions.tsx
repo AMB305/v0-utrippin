@@ -175,9 +175,9 @@ export const MobileQuickQuestions: React.FC<MobileQuickQuestionsProps> = ({ onQu
               key={item.id}
               onClick={() => handleQuestionClick(item)}
               disabled={isLocationLoading || !questions}
-              className={`${item.color} border-2 rounded-xl p-6 text-left transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100`}
+              className={`${item.color} border-2 rounded-xl p-6 text-left transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 min-h-[120px] flex flex-col justify-between`}
             >
-              <div className="flex flex-col items-start gap-3">
+              <div className="flex flex-col items-start gap-3 h-full">
                 <div className="flex items-center gap-2">
                   {isLocationLoading ? (
                     <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
@@ -186,7 +186,7 @@ export const MobileQuickQuestions: React.FC<MobileQuickQuestionsProps> = ({ onQu
                   )}
                   <span className="text-sm font-semibold text-gray-300">{item.title}</span>
                 </div>
-                <p className="text-xs text-gray-500 leading-relaxed line-clamp-3">
+                <p className="text-xs text-gray-500 leading-relaxed flex-1">
                   {isLocationLoading ? "Finding gems near you..." : questionText}
                 </p>
               </div>
