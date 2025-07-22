@@ -172,6 +172,20 @@ export const TripBoard: React.FC = () => {
                 <Share className="w-4 h-4 mr-1" />
                 Share
               </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-orange-500 text-orange-400 hover:bg-orange-500/10 hover:text-orange-300"
+                onClick={() => {
+                  toast({
+                    title: "Connect with Travel Agent",
+                    description: "Feature coming soon! Get personalized assistance with your trip.",
+                  });
+                }}
+              >
+                <Share className="w-4 h-4 mr-1" />
+                Share with Travel Agent
+              </Button>
               <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
                 <Heart className={`w-4 h-4 mr-1 ${trip.is_favorite ? 'fill-red-500 text-red-500' : ''}`} />
                 {trip.is_favorite ? 'Favorited' : 'Favorite'}
