@@ -20,6 +20,41 @@ import { ResponsiveContainer, ResponsiveGrid } from '@/components/ResponsiveDesi
 import { AccessibleButton, SkipNavigation } from '@/components/AccessibilityEnhancements';
 import { FormField, FormValidation, validationRules } from '@/components/EnhancedFormValidation';
 import keilaLogo from '@/assets/Keila_logo.png';
+import TravelCarousel from '@/components/TravelCarousel';
+
+// Add CSS animations for auto-scrolling
+const scrollingStyles = `
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-33.33%);
+    }
+  }
+
+  @keyframes scroll-right {
+    0% {
+      transform: translateX(-33.33%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+
+  .animate-scroll-left {
+    animation: scroll-left 20s linear infinite;
+  }
+
+  .animate-scroll-right {
+    animation: scroll-right 20s linear infinite;
+  }
+
+  .marquee-left, .marquee-right {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+`;
 
 interface Trip {
   name: string;
@@ -32,6 +67,14 @@ interface Trip {
   hotels_url?: string;
   cars_url?: string;
   details?: string;
+}
+
+interface CardData {
+  icon: string;
+  bgColor: string;
+  badgeColor: string;
+  category: string;
+  question: string;
 }
 
 export default function AiTravel() {
@@ -68,6 +111,99 @@ export default function AiTravel() {
     return trips.length > 0 ? trips.slice(0, 6) : [];
   }, [trips]);
 
+  // Card data arrays
+  const firstRowCards = [
+    {
+      icon: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+      bgColor: "bg-teal-500",
+      badgeColor: "from-teal-100 to-teal-50 text-teal-700 border-teal-200",
+      category: "✨ Things to do",
+      question: "Are there any famous seafood restaurants in Tokyo?"
+    },
+    {
+      icon: "M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z",
+      bgColor: "bg-purple-500",
+      badgeColor: "from-purple-100 to-purple-50 text-purple-700 border-purple-200",
+      category: "📅 Itinerary plan",
+      question: "What should I include in a 5-day itinerary for Paris?"
+    },
+    {
+      icon: "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",
+      bgColor: "bg-red-500",
+      badgeColor: "from-red-100 to-red-50 text-red-700 border-red-200",
+      category: "🏨 Stays",
+      question: "Are there any famous seafood restaurants in Tokyo?"
+    },
+    {
+      icon: "M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z",
+      bgColor: "bg-green-500",
+      badgeColor: "from-green-100 to-green-50 text-green-700 border-green-200",
+      category: "🎯 Activities",
+      question: "Which outdoor activities are popular in New Zealand?"
+    }
+  ];
+
+  const secondRowCards = [
+    {
+      icon: "M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z",
+      bgColor: "bg-blue-500",
+      badgeColor: "from-blue-100 to-blue-50 text-blue-700 border-blue-200",
+      category: "✈️ Flights",
+      question: "How can I avoid jet lag on long-haul flights?"
+    },
+    {
+      icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
+      bgColor: "bg-orange-500",
+      badgeColor: "from-orange-100 to-orange-50 text-orange-700 border-orange-200",
+      category: "💡 Tips",
+      question: "What is the best time to visit Italy?"
+    },
+    {
+      icon: "M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z",
+      bgColor: "bg-indigo-500",
+      badgeColor: "from-indigo-100 to-indigo-50 text-indigo-700 border-indigo-200",
+      category: "🛫 Flights",
+      question: "How can I avoid jet lag on long-haul flights?"
+    },
+    {
+      icon: "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z",
+      bgColor: "bg-pink-500",
+      badgeColor: "from-pink-100 to-pink-50 text-pink-700 border-pink-200",
+      category: "📋 Bookings",
+      question: "What is the best time to visit Italy?"
+    }
+  ];
+
+  const renderCard = (card: CardData, key: string) => (
+    <div 
+      key={key}
+      className="relative inline-block shadow-lg hover:shadow-xl transition-all duration-300 group card-item" 
+      style={{ 
+        width: '480px', 
+        height: '174px', 
+        background: '#f5f7fa', 
+        borderRadius: '8px 0 8px 8px',
+        marginRight: '45px',
+        padding: '20px',
+        fontSize: '16px'
+      }}
+    >
+      <div className="flex items-center gap-3 mb-4">
+        <div className={`w-8 h-8 ${card.bgColor} rounded-lg flex items-center justify-center`}>
+          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d={card.icon}/>
+          </svg>
+        </div>
+        <span className={`bg-gradient-to-r ${card.badgeColor} px-4 py-2 rounded-full text-sm font-semibold border`}>
+          {card.category}
+        </span>
+      </div>
+      <p className="text-gray-700 font-medium group-hover:text-gray-900 transition-colors">
+        {card.question}
+      </p>
+    </div>
+  );
+
   const handleSendMessage = async (message: string) => {
     setIsGeneratingTrips(true);
     sendMessage(message);
@@ -96,6 +232,7 @@ export default function AiTravel() {
 
   return (
     <>
+      <style>{scrollingStyles}</style>
       <SkipNavigation />
       <SEOHead 
         title="AI Travel Planner - Smart Trip Planning | Utrippin.ai"
@@ -206,7 +343,7 @@ export default function AiTravel() {
 
       {/* Keila Responds Section */}
       <div id="trip-planner-section" className="px-4" style={{ background: '#f5f7fa', paddingTop: '56px', overflow: 'hidden' }}>
-        <div className="max-w-7xl mx-auto">
+        <div className="mx-auto">
           {/* Header */}
           <div className="mb-12">
             <h2 className="font-bold" style={{ lineHeight: 'normal', fontSize: '46px', margin: '0 0 12px 20%', color: '#0f294D' }}>
@@ -228,21 +365,126 @@ export default function AiTravel() {
             </h3>
           </div>
 
+          {/* Travel Destinations Carousel */}
+          <div className="mb-16">
+            <TravelCarousel 
+              images={Array(5).fill('/src/assets/picture_image.png')}
+              className="mb-8"
+            />
+          </div>
+
+          {/* Keila Benefits Section */}
+          <div className="picture-scroll">
+            <p className="plus" style={{ fontSize: '32px', fontWeight: '700', marginLeft: '20%', color: '#0f294D' }}>
+              Plus,
+            </p>
+            <p className="more-benefits" style={{ fontSize: '32px', fontWeight: '700', marginLeft: '20%', color: '#0f294D' }}>
+              Keila Has More Benefits...
+            </p>
+            <div className="bottom-desc" style={{ 
+              display: 'flex', 
+              marginLeft: '20%', 
+              marginTop: '35px', 
+              maxWidth: '1160px', 
+              paddingBottom: '122px' 
+            }}>
+                             <p style={{ display: 'flex', flex: '1 1', paddingRight: '64px' }}>
+                 <img src="https://dimg04.tripcdn.com/images/1qd6412000eigq23mE2D9.png" alt="Attractions icon" style={{ width: '48px', height: '48px' }} />
+                 <span style={{ display: 'inline-block', verticalAlign: 'top', fontSize: '20px' }}>Over 1 million attractions covering more than 180 countries or regions</span>
+               </p>
+               <p style={{ display: 'flex', flex: '1 1', paddingRight: '64px' }}>
+                 <img src="https://dimg04.tripcdn.com/images/1qd6o12000eigptmg60CA.png" alt="Advice icon" style={{ width: '48px', height: '48px' }} />
+                 <span style={{ display: 'inline-block', verticalAlign: 'top', fontSize: '20px' }}>Advice for every step of your trip</span>
+               </p>
+               <p style={{ display: 'flex', flex: '1 1', paddingRight: '64px' }}>
+                 <img src="https://dimg04.tripcdn.com/images/1qd5c12000eigq32z1E19.png" alt="App icon" style={{ width: '48px', height: '48px' }} />
+                 <span style={{ display: 'inline-block', verticalAlign: 'top', fontSize: '20px' }}>A user-friendly, convenient app that you can use on the go</span>
+               </p>
+                         </div>
+           </div>
         </div>
       </div>
+      
+
+          {/* TripGenie More to Offer Section */}
+          <div className="py-16" style={{ background: '#fff', paddingTop: '56px', overflow: 'hidden' }}>
+            <div className="mb-12">
+              <h2 className="font-bold" style={{ 
+                lineHeight: 'normal', 
+                fontSize: '46px', 
+                margin: '0 0 12px 20%', 
+                color: '#0f294D' 
+              }}>
+                TripGenie Has a Lot
+              </h2>
+              <h3 className="font-bold" style={{ 
+                position: 'relative',
+                padding: '0 20%',
+                marginBottom: '61px',
+                fontSize: '54px',
+                fontWeight: '700',
+                lineHeight: 'normal', 
+                color: 'transparent', 
+                WebkitBackgroundClip: 'text', 
+                backgroundClip: 'text', 
+                backgroundImage: 'linear-gradient(-266.03deg, #59c8ff 6.6%, #7378e6 85.42%)'
+              }}>
+                More to Offer...
+              </h3>
+            </div>
+
+                         {/* Auto-scrolling rows */}
+             <div className="relative overflow-hidden">
+               {/* First row - moves left */}
+               <div className="marquee-left mb-6">
+                 <div className="flex animate-scroll-left">
+                   {/* First set */}
+                   {firstRowCards.map((card, index) => renderCard(card, `first-${index}`))}
+                   
+                   {/* Second set - duplicate for seamless loop */}
+                   {firstRowCards.map((card, index) => renderCard(card, `first-dup1-${index}`))}
+                   
+                   {/* Third set - duplicate for seamless loop */}
+                   {firstRowCards.map((card, index) => renderCard(card, `first-dup2-${index}`))}
+                 </div>
+               </div>
+
+               {/* Second row - moves right */}
+               <div className="marquee-right">
+                 <div className="flex animate-scroll-right">
+                   {/* First set */}
+                   {secondRowCards.map((card, index) => renderCard(card, `second-${index}`))}
+                   
+                   {/* Second set - duplicate for seamless loop */}
+                   {secondRowCards.map((card, index) => renderCard(card, `second-dup1-${index}`))}
+                   
+                   {/* Third set - duplicate for seamless loop */}
+                   {secondRowCards.map((card, index) => renderCard(card, `second-dup2-${index}`))}
+                 </div>
+               </div>
+             </div>
+          </div>
+
 
       {/* Original Hero Section */}
-          <div id="trip-planner-section" className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4">
+          <div id="trip-planner-section" className="bg-[#f5f7fa] text-white py-16 px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+              <div className="text-4xl sm:text-5xl font-bold mb-6" style={{ color: '#0f294D' }}>
                 Describe your perfect trip and budget!
-              </h1>
-              <p className="text-xl sm:text-2xl text-blue-100 mb-12">
+              </div>
+              <p className="text-xl sm:text-2xl text-blue-100 mb-12" style={{ 
+                lineHeight: 'normal', 
+                color: 'transparent', 
+                fontWeight: '700',
+                WebkitBackgroundClip: 'text', 
+                backgroundClip: 'text', 
+                backgroundImage: 'linear-gradient(-266.03deg, #59c8ff 6.6%, #7378e6 85.42%)'
+              }}>
                 Get custom itineraries, dates, and budgets tailored just for you.
               </p>
               
               {/* Main Input Section */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 mb-8">
+              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
                 <div className="flex items-center gap-4 bg-white rounded-2xl p-2 mb-6">
                   <div className="bg-blue-600 rounded-xl p-3 flex-shrink-0">
                     <Sparkles className="w-6 h-6 text-white" />
@@ -274,14 +516,14 @@ export default function AiTravel() {
                     Generate
                   </button>
                 </div>
-                <p className="text-blue-100 text-lg">
+                <p className="text-[#0f294D] text-lg font-bold">
                   Describe your perfect trip...
                 </p>
               </div>
 
               {/* Features */}
               <div className="mb-8">
-                <p className="text-blue-100 text-lg mb-4">
+                <p className="text-[#0f294D] text-lg mb-4 font-bold">
                   Powered by advanced AI • Personalized recommendations • Real-time pricing
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
