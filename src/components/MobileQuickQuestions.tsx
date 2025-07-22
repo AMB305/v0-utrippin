@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Compass, MapPin, Zap } from 'lucide-react';
 import { useLocation } from '@/hooks/useLocation';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 
 interface MobileQuickQuestionsProps {
@@ -55,6 +57,7 @@ export const MobileQuickQuestions: React.FC<MobileQuickQuestionsProps> = ({ onQu
   const { toast } = useToast();
   const [questions, setQuestions] = useState<QuestionSet | null>(null);
   const [loadingQuestions, setLoadingQuestions] = useState(true);
+  const [showInsiderDialog, setShowInsiderDialog] = useState(false);
 
   // Fetch location-specific questions on component mount
   useEffect(() => {
@@ -106,6 +109,12 @@ export const MobileQuickQuestions: React.FC<MobileQuickQuestionsProps> = ({ onQu
     
     const questionText = questions[item.questionKey];
     
+    // Special handling for Insider questions - show intent dialog
+    if (item.questionKey === 'insider') {
+      setShowInsiderDialog(true);
+      return;
+    }
+    
     if (!item.isLocationBased) {
       onQuestionSelect(questionText);
       return;
@@ -136,6 +145,42 @@ export const MobileQuickQuestions: React.FC<MobileQuickQuestionsProps> = ({ onQu
         description: error?.message || "Please enable location services in your settings to get suggestions near you.",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleInsiderChoice = async (useLocation: boolean) => {
+    setShowInsiderDialog(false);
+    const questionText = questions?.insider;
+    
+    if (!questionText) return;
+
+    if (useLocation) {
+      try {
+        toast({
+          title: "Finding gems near you...",
+          description: "Getting your location to provide personalized suggestions.",
+        });
+
+        const locationData = await getCurrentLocation();
+        
+        let enhancedQuestion = questionText;
+        if (locationData.locationName) {
+          enhancedQuestion = `${questionText} For context, my current location is ${locationData.locationName}.`;
+        } else {
+          enhancedQuestion = `${questionText} For context, my current coordinates are ${locationData.latitude.toFixed(4)}, ${locationData.longitude.toFixed(4)}.`;
+        }
+
+        onQuestionSelect(enhancedQuestion);
+      } catch (locationError) {
+        console.error('Location error:', locationError);
+        toast({
+          title: "Location access needed",
+          description: error?.message || "Please enable location services in your settings to get suggestions near you.",
+          variant: "destructive",
+        });
+      }
+    } else {
+      onQuestionSelect(questionText);
     }
   };
 
@@ -194,6 +239,35 @@ export const MobileQuickQuestions: React.FC<MobileQuickQuestionsProps> = ({ onQu
           );
         })}
       </div>
+
+      {/* Insider Intent Dialog */}
+      <Dialog open={showInsiderDialog} onOpenChange={setShowInsiderDialog}>
+        <DialogContent className="bg-black border-gray-800 text-white max-w-sm mx-auto">
+          <DialogHeader>
+            <DialogTitle className="text-white text-center">Cultural Experiences</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-gray-300 text-sm text-center">
+              Would you like culturally rich experiences near you or general tips?
+            </p>
+            <div className="space-y-3">
+              <Button 
+                onClick={() => handleInsiderChoice(true)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Near Me
+              </Button>
+              <Button 
+                onClick={() => handleInsiderChoice(false)}
+                variant="outline"
+                className="w-full border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
+              >
+                General Tips
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

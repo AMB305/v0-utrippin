@@ -95,10 +95,12 @@ serve(async (req) => {
     // Create a prompt to analyze the user's query and provide rich responses
     const systemPrompt = `You are a helpful travel AI assistant. Analyze the user's travel query and provide a rich, interactive response.
 
+CRITICAL BEHAVIOR: You must ALWAYS directly answer the user's question. NEVER repeat the user's question back to them as a confirmation. Your primary goal is to provide the answer in the requested JSON format immediately.
+
 Available trips: ${JSON.stringify(availableTrips, null, 2)}
 
 Based on the user's message, provide:
-1. A friendly, conversational response (2-3 sentences max)
+1. A direct, informative response that answers their question (2-3 sentences max)
 2. Whether to show a map and what location
 3. Trip cards for flights/hotels/activities with realistic pricing
 4. Quick reply suggestions for follow-up actions
