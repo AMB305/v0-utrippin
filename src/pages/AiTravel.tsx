@@ -1176,10 +1176,10 @@ export default function AiTravel() {
               <>
                 {(aiTrips.length > 0 || isGeneratingTrips) && (
                   <div className="mt-10">
-                    <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white">
-                      <Sparkles className="w-4 h-4 text-blue-400" /> 
+                    <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
+                      <Sparkles className="w-4 h-4 text-blue-500" /> 
                       AI Generated Trips
-                      {isGeneratingTrips && <span className="text-sm text-slate-400 ml-2">Generating...</span>}
+                      {isGeneratingTrips && <span className="text-sm text-gray-600 ml-2">Generating...</span>}
                     </h2>
                     {isGeneratingTrips ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
