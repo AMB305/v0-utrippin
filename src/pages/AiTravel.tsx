@@ -540,129 +540,145 @@ export default function AiTravel() {
         </main>
 
         {/* Budget Trip Planning Section - Hidden on Mobile */}
-        <div className="hidden md:block bg-white" style={{color: '#f5f7fa'}}>
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-            {/* Form Section */}
-            <div className="text-center mb-8">
-              <div className="text-3xl sm:text-4xl font-bold mb-4" style={{color: '#0f2948'}}>
-                Plan Your Perfect
+        <div className="hidden md:block bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 border-t border-border/10">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+            
+            {/* Header Section */}
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-medium mb-6 shadow-lg">
+                <Sparkles className="h-4 w-4" />
+                Trip Planner
               </div>
-              <div className="inline-block bg-gradient-to-r from-orange-400 to-yellow-400 text-black px-6 py-2 rounded-full text-xl sm:text-2xl font-bold mb-6">
-                Staycation or Vacation
-              </div>
-              <div className="text-lg" style={{color: '#0f2948', fontSize: '14px'}}>
-                Set your budget and group size to discover amazing destinations
-              </div>
+              <h2 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent mb-4">
+                Plan Your Perfect Adventure
+              </h2>
+              <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+                Customize your journey with our intelligent trip planner. Set your preferences and discover amazing destinations.
+              </p>
             </div>
 
-            {/* Trip Type Toggle */}
-            <div className="mb-8 flex justify-center">
-              <div className="bg-gray-100 border border-gray-200 p-2 rounded-2xl shadow-sm">
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setTripType('staycation')}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
-                      tripType === 'staycation'
-                        ? 'bg-blue-600 text-white shadow-lg'
-                          : 'hover:bg-gray-200'
-                    }`}
-                     style={{color: tripType === 'staycation' ? '#ffffff' : '#0f2948'}}
-                  >
-                    🏠 Staycation
-                  </button>
-                  <button
-                    onClick={() => setTripType('vacation')}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
-                      tripType === 'vacation'
-                        ? 'bg-blue-600 text-white shadow-lg'
-                         : 'hover:bg-gray-200'
-                    }`}
-                     style={{color: tripType === 'vacation' ? '#ffffff' : '#0f2948'}}
-                  >
-                    ✈️ Vacation
-                  </button>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+              
+              {/* Left Column - Controls */}
+              <div className="space-y-8">
+                
+                {/* Trip Type Toggle */}
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+                  <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                    🎯 Trip Type
+                  </h3>
+                  <div className="bg-slate-100/80 p-2 rounded-xl">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setTripType('staycation')}
+                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all ${
+                          tripType === 'staycation'
+                            ? 'bg-white text-blue-600 shadow-md border border-blue-200'
+                            : 'text-slate-600 hover:bg-white/50'
+                        }`}
+                      >
+                        🏠 Staycation
+                      </button>
+                      <button
+                        onClick={() => setTripType('vacation')}
+                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all ${
+                          tripType === 'vacation'
+                            ? 'bg-white text-blue-600 shadow-md border border-blue-200'
+                            : 'text-slate-600 hover:bg-white/50'
+                        }`}
+                      >
+                        ✈️ Vacation
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Group Size */}
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+                  <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                    👥 Group Size
+                  </h3>
+                  <div className="flex items-center justify-center gap-6 bg-slate-50/80 p-4 rounded-xl">
+                    <button
+                      onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
+                      className="w-12 h-12 bg-white hover:bg-blue-50 text-blue-600 rounded-full font-bold text-xl transition-all hover:shadow-md border border-blue-200"
+                    >
+                      −
+                    </button>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-slate-800">{groupSize}</div>
+                      <div className="text-sm text-slate-500">{groupSize === 1 ? 'person' : 'people'}</div>
+                    </div>
+                    <button
+                      onClick={() => setGroupSize(groupSize + 1)}
+                      className="w-12 h-12 bg-white hover:bg-blue-50 text-blue-600 rounded-full font-bold text-xl transition-all hover:shadow-md border border-blue-200"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Zip Code Input */}
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+                  <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                    📍 Location {tripType === 'staycation' ? '(Staycation Area)' : '(Starting Point)'}
+                  </h3>
+                  <input
+                    type="text"
+                    value={zipCode}
+                    onChange={(e) => setZipCode(e.target.value)}
+                    placeholder="Enter your zip code"
+                    className="w-full bg-white/80 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                  />
                 </div>
               </div>
-            </div>
 
-            {/* Budget Slider */}
-            <div className="mb-8">
-              <label className="block font-medium mb-4" style={{color: '#0f2948'}}>Budget Range</label>
-              <BudgetSlider budget={budget} onBudgetChange={setBudget} min={100} max={1000000} />
-              <div className="text-center mt-2">
-                <span className="text-orange-400 text-lg font-semibold">
-                  Perfect for a nice {tripType} day
-                </span>
-              </div>
-            </div>
+              {/* Right Column - Budget & Action */}
+              <div className="space-y-8">
+                
+                {/* Budget Slider */}
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+                  <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                    💰 Budget Range
+                  </h3>
+                  <BudgetSlider budget={budget} onBudgetChange={setBudget} min={100} max={1000000} />
+                  <div className="text-center mt-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
+                    <span className="text-blue-600 font-semibold">
+                      Perfect for a ${budget.toLocaleString()} {tripType}
+                    </span>
+                  </div>
+                </div>
 
-            {/* Group Size */}
-            <div className="mb-8">
-              <label className="block font-medium mb-4 flex items-center gap-2" style={{color: '#0f2948'}}>
-                👥 Group Size
-              </label>
-              <div className="flex items-center justify-center gap-4 bg-gray-100 border border-gray-200 p-4 rounded-2xl shadow-sm">
-                <button
-                  onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
-                  className="w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-xl font-bold text-xl transition-colors"
-                >
-                  −
-                </button>
-                <span className="text-2xl font-bold text-gray-800 min-w-[3rem] text-center">
-                  {groupSize}
-                </span>
-                <button
-                  onClick={() => setGroupSize(groupSize + 1)}
-                  className="w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-xl font-bold text-xl transition-colors"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* Zip Code Input */}
-            <div className="mb-8">
-              <label className="block font-medium mb-4" style={{color: '#0f2948'}}>
-                Enter Zip Code {tripType === 'staycation' ? '(for staycations)' : ''}
-              </label>
-              <input
-                type="text"
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
-                placeholder="Enter Zip Code"
-                className="w-full bg-gray-100 border border-gray-200 rounded-2xl px-6 py-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors shadow-sm"
-              />
-            </div>
-
-            {/* Find My Trips Button */}
-            <div className="text-center mb-8">
-              <button
-                onClick={() => {
-                  const location = zipCode ? `near ${zipCode}` : '';
-                  const message = `Plan a ${tripType} for ${groupSize} ${groupSize === 1 ? 'person' : 'people'} with a budget of $${budget} ${location}`;
-                  handleSendMessage(message);
-                }}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl font-bold text-lg flex items-center gap-2 mx-auto transition-all transform hover:scale-105 shadow-lg"
-              >
-                📍 Find My Trips
-              </button>
-            </div>
-
-            {/* Suggested Themes */}
-            <div className="mt-8">
-              <h3 className="flex items-center gap-2 text-orange-400 mb-4 text-sm justify-center">
-                <Sparkles className="h-4 w-4" /> Or explore these ideas
-              </h3>
-              <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 justify-center">
-                {dailyThemes.slice(0, 4).map((theme, i) => (
+                {/* Action Button */}
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
                   <button
-                    key={i}
-                    onClick={() => handleSendMessage(`Plan ${theme} under $${budget}`)}
-                    className="bg-slate-700/50 hover:bg-slate-600/60 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-slate-500/20 transition-all whitespace-nowrap flex-shrink-0"
+                    onClick={() => {
+                      const location = zipCode ? `near ${zipCode}` : '';
+                      const message = `Plan a ${tripType} for ${groupSize} ${groupSize === 1 ? 'person' : 'people'} with a budget of $${budget} ${location}`;
+                      handleSendMessage(message);
+                    }}
+                    className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white px-6 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
                   >
-                    {theme}
+                    <Sparkles className="h-5 w-5" />
+                    Create My Trip Plan
                   </button>
-                ))}
+                  
+                  {/* Quick Suggestions */}
+                  <div className="mt-6">
+                    <h4 className="text-sm font-medium text-slate-600 mb-3 text-center">Quick Ideas</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {dailyThemes.slice(0, 4).map((theme, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleSendMessage(`Plan ${theme} under $${budget}`)}
+                          className="bg-gradient-to-r from-slate-100 to-blue-50 hover:from-blue-50 hover:to-indigo-50 text-slate-700 text-xs px-3 py-2 rounded-lg border border-slate-200 hover:border-blue-300 transition-all text-center"
+                        >
+                          {theme}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
                   </div>
