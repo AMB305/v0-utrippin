@@ -1197,16 +1197,6 @@ export default function AiTravel() {
                   </div>
                 )}
 
-                {aiTrips.length === 0 && curatedTrips.length > 0 && (
-                  <div className="mt-8 sm:mt-10">
-                    <h2 className="text-lg font-semibold mb-4 text-white">Curated Trips for Your Budget</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                      {curatedTrips.map((trip, i) => (
-                        <TripSuggestion key={i} trip={trip} camref="1101l5dQSW" onSelect={() => setSelectedTrip(trip)} />
-                      ))}
-                    </div>
-                  </div>
-                )}
               </>
             )}
             </div>
