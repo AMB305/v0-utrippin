@@ -226,12 +226,21 @@ const AiTravel = () => {
                   </div>
                 </div>
 
-                {/* Mobile Input Area with Live Translate */}
+                {/* Mobile Input Area with Live Translate and Live Guide */}
                 <div className="p-4 bg-black border-t border-gray-800">
                   <div className="flex gap-2 mb-2">
                     <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs border-gray-800 text-gray-400 hover:bg-gray-900">
                       <Languages className="h-3 w-3" />
                       Live Translate
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex items-center gap-1 text-xs border-gray-800 text-purple-400 hover:bg-gray-900 hover:text-purple-300"
+                      onClick={() => document.getElementById('camera-input')?.click()}
+                    >
+                      <Camera className="h-3 w-3" />
+                      Live Guide
                     </Button>
                   </div>
                   <div className="flex gap-2">
@@ -322,12 +331,21 @@ const AiTravel = () => {
                   ))}
                 </div>
 
-                {/* Chat Input with Live Translate */}
+                {/* Chat Input with Live Translate and Live Guide */}
                 <div className="p-4 bg-black border-t border-gray-800">
                   <div className="flex gap-2 mb-2">
                     <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs border-gray-800 text-gray-400 hover:bg-gray-900">
                       <Languages className="h-3 w-3" />
                       Live Translate
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex items-center gap-1 text-xs border-gray-800 text-purple-400 hover:bg-gray-900 hover:text-purple-300"
+                      onClick={() => document.getElementById('camera-input')?.click()}
+                    >
+                      <Camera className="h-3 w-3" />
+                      Live Guide
                     </Button>
                   </div>
                   <div className="flex gap-2">
