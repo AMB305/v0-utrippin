@@ -142,24 +142,6 @@ const AiTravel = () => {
                     <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6">
                       Register
                     </Button>
-                    {/* Three dots menu for restarting chat */}
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      onClick={() => {
-                        console.log("Three dots clicked - resetting chat");
-                        alert("Three dots clicked!"); // Simple test
-                        setHasStartedChat(false);
-                        clearMobileChat();
-                      }}
-                      className="text-gray-600 hover:text-gray-900"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <circle cx="3" cy="10" r="1.5" />
-                        <circle cx="10" cy="10" r="1.5" />
-                        <circle cx="17" cy="10" r="1.5" />
-                      </svg>
-                    </Button>
                   </div>
                 </div>
 
@@ -227,28 +209,9 @@ const AiTravel = () => {
                       Travel Planning
                     </h1>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" className="border-gray-800 text-gray-400 hover:bg-gray-900">
-                      Save Trip
-                    </Button>
-                    {/* Three dots menu for restarting chat */}
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      onClick={() => {
-                        console.log("Chat three dots clicked - resetting chat");
-                        setHasStartedChat(false);
-                        clearMobileChat();
-                      }}
-                      className="text-gray-400 hover:text-white"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <circle cx="3" cy="10" r="1.5" />
-                        <circle cx="10" cy="10" r="1.5" />
-                        <circle cx="17" cy="10" r="1.5" />
-                      </svg>
-                    </Button>
-                  </div>
+                  <Button variant="outline" size="sm" className="border-gray-800 text-gray-400 hover:bg-gray-900">
+                    Save Trip
+                  </Button>
                 </div>
 
                 {/* Chat Messages */
