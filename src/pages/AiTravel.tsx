@@ -21,6 +21,11 @@ import { ResponsiveContainer, ResponsiveGrid } from '@/components/ResponsiveDesi
 import { AccessibleButton, SkipNavigation } from '@/components/AccessibilityEnhancements';
 import { FormField, FormValidation, validationRules } from '@/components/EnhancedFormValidation';
 import keilaLogo from '@/assets/Keila_logo.png';
+import travelImage1 from '@/assets/travel-image-1.png';
+import travelImage2 from '@/assets/travel-image-2.png';
+import travelImage3 from '@/assets/travel-image-3.png';
+import travelImage4 from '@/assets/travel-image-4.png';
+import travelImage5 from '@/assets/travel-image-5.png';
 import TravelCarousel from '@/components/TravelCarousel';
 
 // Add CSS animations for auto-scrolling
@@ -790,7 +795,7 @@ export default function AiTravel() {
           {/* Travel Destinations Carousel */}
           <div className="mb-16">
             <TravelCarousel 
-              images={['https://dimg04.tripcdn.com/images/1qd3r12000eo3dbd1066D.png', '/src/assets/picture_image.png', '/src/assets/picture_image.png', '/src/assets/picture_image.png', '/src/assets/picture_image.png']}
+              images={[travelImage1, travelImage2, travelImage3, travelImage4, travelImage5]}
               className="mb-8"
             />
           </div>
