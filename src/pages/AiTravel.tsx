@@ -966,9 +966,9 @@ export default function AiTravel() {
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 ">
             {/* Form Section */}
             <div className="text-center mb-8">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              <div className="text-3xl sm:text-4xl font-bold mb-4" style={{color: '#f5f7fa'}}>
                 Plan Your Perfect
-              </h2>
+              </div>
               <div className="inline-block bg-gradient-to-r from-orange-400 to-yellow-400 text-black px-6 py-2 rounded-full text-xl sm:text-2xl font-bold mb-6">
                 Staycation or Vacation
               </div>
