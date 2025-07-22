@@ -29,6 +29,10 @@ interface ChatMessage {
     enhanced_hotels_url: string;
     reason: string;
   }>;
+  callsToAction?: Array<{
+    text: string;
+    action: string;
+  }>;
 }
 
 interface Trip {
@@ -187,7 +191,8 @@ export const useChatAI = (trips: Trip[]) => {
                 tripCards: data.tripCards,
                 quickReplies: data.quickReplies,
                 recommendations: data.recommendations,
-                trips: data.trips
+                trips: data.trips,
+                callsToAction: data.callsToAction
               }
             : msg
         ));

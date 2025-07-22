@@ -38,6 +38,8 @@ import { SEOHead } from "@/components/SEOHead";
 import { TextAnimate } from "@/components/magicui/text-animate";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { MobileQuickQuestions } from "@/components/MobileQuickQuestions";
+import { KeilaThinking } from "@/components/KeilaThinking";
+import { ChatCTAButtons } from "@/components/ChatCTAButtons";
 import UtrippinLogo from "@/components/UtrippinLogo";
 
 interface ChatMessage {
@@ -67,6 +69,10 @@ interface ChatMessage {
     enhanced_flights_url: string;
     enhanced_hotels_url: string;
     reason: string;
+  }>;
+  callsToAction?: Array<{
+    text: string;
+    action: string;
   }>;
 }
 
@@ -323,14 +329,24 @@ const AiTravel = () => {
                           </div>
                         </div>
 
+                        {/* Loading State */}
+                        {message.loading && <KeilaThinking />}
+
                         {/* AI Response */}
-                        {message.response && (
+                        {message.response && !message.loading && (
                           <div className="flex justify-start">
                             <div className="bg-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
-                              {message.loading ? (
-                                <p className="text-gray-300">Loading...</p>
-                              ) : (
-                                <p className="text-sm leading-relaxed text-gray-200">{message.response}</p>
+                              <p className="text-sm leading-relaxed text-gray-200">{message.response}</p>
+                              {/* CTA Buttons */}
+                              {message.callsToAction && (
+                                <ChatCTAButtons 
+                                  ctas={message.callsToAction} 
+                                  onContinueChat={() => {
+                                    // Focus the input when "Continue Chat" is clicked
+                                    const input = document.querySelector('input[placeholder="Ask me anything..."]') as HTMLInputElement;
+                                    input?.focus();
+                                  }}
+                                />
                               )}
                             </div>
                           </div>

@@ -97,6 +97,12 @@ serve(async (req) => {
 
 CRITICAL BEHAVIOR: You must ALWAYS directly answer the user's question. NEVER repeat the user's question back to them as a confirmation. Your primary goal is to provide the answer in the requested JSON format immediately.
 
+CRITICAL BEHAVIOR: You must always conclude your response by providing a calls_to_action array with one or two clear next steps for the user.
+
+If you have provided a detailed plan for a specific location (like Miami), the primary CTA should be: { "text": "Plan Your Trip to [Location]", "action": "/flights" }.
+
+Always offer a second, conversational CTA like: { "text": "Ask another question", "action": "CONTINUE_CHAT" }.
+
 Available trips: ${JSON.stringify(availableTrips, null, 2)}
 
 Based on the user's message, provide:
@@ -105,6 +111,7 @@ Based on the user's message, provide:
 3. Trip cards for flights/hotels/activities with realistic pricing
 4. Quick reply suggestions for follow-up actions
 5. Up to 3 most relevant trip recommendations
+6. Clear calls to action for next steps
 
 Respond in this JSON format:
 {
@@ -126,6 +133,12 @@ Respond in this JSON format:
     {
       "tripId": "trip_id_here",
       "reason": "Brief reason why this trip matches"
+    }
+  ],
+  "callsToAction": [
+    {
+      "text": "Call to action text for a button",
+      "action": "A URL or a predefined command like 'CONTINUE_CHAT'"
     }
   ]
 }`;
@@ -221,7 +234,10 @@ Respond in this JSON format:
         flights: "✈️ Found perfect flight options",
         hotels: "🏨 Curated hotel recommendations"
       },
-      trips: recommendedTrips
+      trips: recommendedTrips,
+      callsToAction: parsedResponse.callsToAction || [
+        { text: "Ask another question", action: "CONTINUE_CHAT" }
+      ]
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
