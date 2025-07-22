@@ -984,14 +984,14 @@ export default function AiTravel() {
 
             {/* Trip Type Toggle */}
             <div className="mb-8 flex justify-center">
-              <div className="bg-slate-800/50 p-2 rounded-2xl border border-slate-600/30">
+              <div className="bg-gray-100 border border-gray-200 p-2 rounded-2xl shadow-sm">
                 <div className="flex gap-2">
                   <button
                     onClick={() => setTripType('staycation')}
                      className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
                        tripType === 'staycation'
                          ? 'bg-blue-600 text-white shadow-lg'
-                         : 'hover:bg-slate-700/50'
+                          : 'hover:bg-gray-200'
                      }`}
                      style={{color: tripType === 'staycation' ? '#ffffff' : '#0f2948'}}
                   >
@@ -1002,7 +1002,7 @@ export default function AiTravel() {
                      className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
                        tripType === 'vacation'
                          ? 'bg-blue-600 text-white shadow-lg'
-                         : 'hover:bg-slate-700/50'
+                         : 'hover:bg-gray-200'
                      }`}
                      style={{color: tripType === 'vacation' ? '#ffffff' : '#0f2948'}}
                   >
@@ -1028,19 +1028,19 @@ export default function AiTravel() {
               <label className="block font-medium mb-4 flex items-center gap-2" style={{color: '#0f2948'}}>
                 👥 Group Size
               </label>
-              <div className="flex items-center justify-center gap-4 bg-slate-800/50 p-4 rounded-2xl border border-slate-600/30">
+              <div className="flex items-center justify-center gap-4 bg-gray-100 border border-gray-200 p-4 rounded-2xl shadow-sm">
                 <button
                   onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
-                  className="w-12 h-12 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-xl transition-colors"
+                  className="w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-xl font-bold text-xl transition-colors"
                 >
                   −
                 </button>
-                <span className="text-2xl font-bold text-white min-w-[3rem] text-center">
+                <span className="text-2xl font-bold text-gray-800 min-w-[3rem] text-center">
                   {groupSize}
                 </span>
                 <button
                   onClick={() => setGroupSize(groupSize + 1)}
-                  className="w-12 h-12 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-xl transition-colors"
+                  className="w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-xl font-bold text-xl transition-colors"
                 >
                   +
                 </button>
@@ -1057,7 +1057,7 @@ export default function AiTravel() {
                 value={zipCode}
                 onChange={(e) => setZipCode(e.target.value)}
                 placeholder="Enter Zip Code"
-                className="w-full bg-slate-800/50 border border-slate-600/30 rounded-2xl px-6 py-4 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-gray-100 border border-gray-200 rounded-2xl px-6 py-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors shadow-sm"
               />
             </div>
 
