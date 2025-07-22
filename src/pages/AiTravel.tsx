@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useTrips } from "@/hooks/useTrips";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useChatAI } from "@/hooks/useChatAI";
@@ -22,8 +22,15 @@ import { AccessibleButton, SkipNavigation } from '@/components/AccessibilityEnha
 import { FormField, FormValidation, validationRules } from '@/components/EnhancedFormValidation';
 import keilaLogo from '@/assets/Keila_logo.png';
 import TravelCarousel from '@/components/TravelCarousel';
+import { TextAnimate } from "@/components/magicui/text-animate";  
+import { BlurFade } from "@/components/magicui/blur-fade";
+import { PromptInputArea } from '@/components/custom/prompt-input-area';
+import { ChatContainer, Message as MessageType } from '@/components/custom/chat-container';
+// import { Navbar } from '@/components/custom/navbar';
+import { useChat } from '@/hooks/use-chat';
+import UtrippinLogo from '@/components/UtrippinLogo';
 
-// Add CSS animations for auto-scrolling
+// Add CSS animations for auto-scrolling and darkmode styles
 const scrollingStyles = `
   @keyframes scroll-left {
     0% {
@@ -55,6 +62,371 @@ const scrollingStyles = `
     overflow: hidden;
     white-space: nowrap;
   }
+
+  /* Darkmode styles for Home component */
+  .dark-home-component {
+    --background-elevated: rgba(22, 23, 26, 1);
+    --foreground: rgba(250, 250, 250, 1);
+    --background: rgba(18, 19, 22, 1);
+    --layout: rgba(18, 19, 22, 1);
+    --card: rgba(43, 46, 53, 0.3);
+    --card-hover: rgba(60, 63, 72, 0.3);
+    --card-solid: rgba(43, 46, 53, 0.3);
+    --card-inner: rgba(12, 12, 16, 0.3);
+    --card-foreground: rgba(250, 250, 250, 0.6);
+    --primary: rgba(28, 103, 243, 1);
+    --primary-soft: rgba(0, 25, 72, 1);
+    --primary-foreground: rgba(250, 250, 250, 1);
+    --secondary: rgba(43, 46, 53, 0.3);
+    --secondary-foreground: rgba(250, 250, 250, 1);
+    --muted: rgba(38, 41, 45, 1);
+    --muted-foreground: rgba(150, 152, 158, 1);
+    --accent: rgba(26, 28, 31, 1);
+    --accent-foreground: rgba(250, 250, 250, 1);
+    --border: rgba(36, 38, 44, 1);
+    --input: rgba(36, 38, 44, 1);
+    --input-hover: rgba(44, 47, 54, 1);
+    --bubble: rgba(23, 37, 84, 1);
+    
+    background-color: rgba(18, 19, 22, 1);
+    color: rgba(250, 250, 250, 1);
+  }
+
+  .dark-home-component * {
+    border-color: rgba(36, 38, 44, 1);
+  }
+
+  .dark-home-component .bg-card {
+    background-color: rgba(43, 46, 53, 0.3);
+    backdrop-filter: blur(20px);
+  }
+
+  .dark-home-component .text-foreground {
+    color: rgba(250, 250, 250, 1);
+  }
+
+  .dark-home-component .text-foreground\\/80 {
+    color: rgba(250, 250, 250, 0.8);
+  }
+
+  .dark-home-component .text-foreground\\/70 {
+    color: rgba(250, 250, 250, 0.7);
+  }
+
+  .dark-home-component .text-foreground\\/60 {
+    color: rgba(250, 250, 250, 0.6);
+  }
+
+  .dark-home-component .text-foreground\\/50 {
+    color: rgba(250, 250, 250, 0.5);
+  }
+
+  .dark-home-component .text-muted-foreground {
+    color: rgba(150, 152, 158, 1);
+  }
+
+  .dark-home-component .bg-primary {
+    background-color: rgba(28, 103, 243, 1);
+  }
+
+  .dark-home-component .hover\\:bg-primary\\/90:hover {
+    background-color: rgba(28, 103, 243, 0.9);
+  }
+
+  .dark-home-component .bg-primary\\/10 {
+    background-color: rgba(28, 103, 243, 0.1);
+  }
+
+  .dark-home-component .border-primary\\/20 {
+    border-color: rgba(28, 103, 243, 0.2);
+  }
+
+  .dark-home-component .bg-secondary {
+    background-color: rgba(43, 46, 53, 0.3);
+  }
+
+  .dark-home-component .hover\\:bg-card-foreground\\/10:hover {
+    background-color: rgba(250, 250, 250, 0.1);
+  }
+
+  .dark-home-component .border-input {
+    border-color: rgba(36, 38, 44, 1);
+  }
+
+  .dark-home-component .hover\\:bg-primary\\/10:hover {
+    background-color: rgba(28, 103, 243, 0.1);
+  }
+
+  .dark-home-component .text-neutral-500 {
+    color: rgba(150, 152, 158, 1);
+  }
+
+  .dark-home-component .placeholder\\:text-muted-foreground\\/70::placeholder {
+    color: rgba(150, 152, 158, 0.7);
+  }
+
+  .dark-home-component .shadow-2 {
+    box-shadow: 0 1px 2px rgba(11, 12, 14, 0.02);
+  }
+
+  /* Navbar specific darkmode styles */
+  .dark-home-component nav {
+    background-color: rgba(43, 46, 53, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(36, 38, 44, 1);
+  }
+
+  .dark-home-component nav .hover\\:bg-card:hover {
+    background-color: rgba(60, 63, 72, 0.3);
+  }
+
+  .dark-home-component nav .bg-card {
+    background-color: rgba(60, 63, 72, 0.3);
+  }
+
+  /* ChatContainer darkmode styles */
+  .dark-home-component .bg-transparent {
+    background-color: transparent;
+  }
+
+  /* Input area darkmode styles */
+  .dark-home-component .bg-card.border-primary\\/20 {
+    background-color: rgba(43, 46, 53, 0.3);
+    border-color: rgba(28, 103, 243, 0.2);
+  }
+
+  .dark-home-component .focus-visible\\:outline-none:focus-visible {
+    outline: none;
+  }
+
+  .dark-home-component .focus-visible\\:ring-0:focus-visible {
+    box-shadow: none;
+  }
+
+  /* Suggestion chips darkmode styles */
+  .dark-home-component .text-neutral-500 {
+    color: rgba(150, 152, 158, 1);
+  }
+
+  .dark-home-component .border-input {
+    border-color: rgba(36, 38, 44, 1);
+  }
+
+  .dark-home-component .hover\\:bg-primary\\/10:hover {
+    background-color: rgba(28, 103, 243, 0.15);
+  }
+
+  /* Icon colors for darkmode - more vibrant for dark background */
+  .dark-home-component .text-green-600 {
+    color: rgba(34, 197, 94, 1);
+  }
+
+  .dark-home-component .text-cyan-600 {
+    color: rgba(8, 145, 178, 1);
+  }
+
+  .dark-home-component .text-indigo-600 {
+    color: rgba(99, 102, 241, 1);
+  }
+
+  .dark-home-component .text-yellow-600 {
+    color: rgba(202, 138, 4, 1);
+  }
+
+  .dark-home-component .text-pink-600 {
+    color: rgba(219, 39, 119, 1);
+  }
+
+  .dark-home-component .text-pink-500 {
+    color: rgba(236, 72, 153, 1);
+  }
+
+  /* Suggestion buttons hover state */
+  .dark-home-component button[variant="outline"]:hover {
+    background-color: rgba(28, 103, 243, 0.1);
+    border-color: rgba(28, 103, 243, 0.3);
+    color: rgba(250, 250, 250, 0.9);
+  }
+
+  /* File upload button darkmode */
+  .dark-home-component .hover\\:bg-card-foreground\\/10:hover {
+    background-color: rgba(250, 250, 250, 0.1);
+  }
+
+  /* AdvancedTripPlanner darkmode styles */
+  .dark-home-component .bg-slate-900 {
+    background-color: rgba(22, 23, 26, 1);
+  }
+
+  .dark-home-component .bg-slate-800 {
+    background-color: rgba(36, 38, 44, 1);
+  }
+
+  .dark-home-component .bg-slate-800\\/50 {
+    background-color: rgba(36, 38, 44, 0.5);
+  }
+
+  .dark-home-component .bg-slate-800\\/70 {
+    background-color: rgba(36, 38, 44, 0.7);
+  }
+
+  .dark-home-component .bg-slate-700 {
+    background-color: rgba(43, 46, 53, 1);
+  }
+
+  .dark-home-component .hover\\:bg-slate-600:hover {
+    background-color: rgba(60, 63, 72, 1);
+  }
+
+  .dark-home-component .hover\\:bg-slate-800\\/70:hover {
+    background-color: rgba(36, 38, 44, 0.7);
+  }
+
+  .dark-home-component .border-slate-600 {
+    border-color: rgba(60, 63, 72, 1);
+  }
+
+  .dark-home-component .border-blue-500\\/20 {
+    border-color: rgba(28, 103, 243, 0.2);
+  }
+
+  .dark-home-component .text-slate-400 {
+    color: rgba(150, 152, 158, 1);
+  }
+
+  .dark-home-component .text-slate-300 {
+    color: rgba(210, 210, 210, 1);
+  }
+
+  .dark-home-component .text-white {
+    color: rgba(250, 250, 250, 1);
+  }
+
+  /* Status badge colors */
+  .dark-home-component .bg-yellow-500\\/20 {
+    background-color: rgba(232, 162, 0, 0.2);
+  }
+
+  .dark-home-component .text-yellow-400 {
+    color: rgba(251, 191, 36, 1);
+  }
+
+  .dark-home-component .bg-green-500\\/20 {
+    background-color: rgba(0, 145, 107, 0.2);
+  }
+
+  .dark-home-component .text-green-400 {
+    color: rgba(34, 197, 94, 1);
+  }
+
+  .dark-home-component .bg-blue-500\\/20 {
+    background-color: rgba(28, 103, 243, 0.2);
+  }
+
+  .dark-home-component .text-blue-400 {
+    color: rgba(96, 165, 250, 1);
+  }
+
+  /* Button colors for trip planner */
+  .dark-home-component .bg-blue-600 {
+    background-color: rgba(28, 103, 243, 1);
+  }
+
+  .dark-home-component .hover\\:bg-blue-500:hover {
+    background-color: rgba(59, 130, 246, 1);
+  }
+
+  .dark-home-component .bg-green-600 {
+    background-color: rgba(0, 145, 107, 1);
+  }
+
+  .dark-home-component .hover\\:bg-green-500:hover {
+    background-color: rgba(34, 197, 94, 1);
+  }
+
+  /* Modal overlay */
+  .dark-home-component .bg-black\\/70 {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  /* Form inputs in modals */
+  .dark-home-component input,
+  .dark-home-component select {
+    background-color: rgba(36, 38, 44, 1);
+    border-color: rgba(60, 63, 72, 1);
+    color: rgba(250, 250, 250, 1);
+  }
+
+  .dark-home-component input::placeholder {
+    color: rgba(150, 152, 158, 0.7);
+  }
+
+  .dark-home-component input:focus,
+  .dark-home-component select:focus {
+    border-color: rgba(28, 103, 243, 0.5);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(28, 103, 243, 0.1);
+  }
+
+  /* Header integration with darkmode */
+  .dark-home-component > header,
+  .dark-home-component > div > header {
+    background-color: rgba(22, 23, 26, 1);
+    border-bottom-color: rgba(36, 38, 44, 1);
+  }
+
+  /* Footer integration with darkmode */
+  .dark-home-component + div footer,
+  .dark-home-component footer {
+    background-color: rgba(22, 23, 26, 1);
+    border-top-color: rgba(36, 38, 44, 1);
+  }
+
+  /* Button darkmode styles */
+  .dark-home-component .hover\\:bg-secondary\\/50:hover {
+    background-color: rgba(43, 46, 53, 0.15);
+  }
+
+  /* Animate bounce for loading dots */
+  .dark-home-component .animate-bounce {
+    animation: bounce 1s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: none;
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  @keyframes shine {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+
+  .animate-shine {
+    animation: shine var(--duration, 4s) infinite linear;
+  }
+
+  /* Darkmode shimmer effect */
+  .dark-home-component .motion-safe\\:animate-shine {
+    animation: shine var(--duration, 4s) infinite linear;
+  }
+
+  .dark-home-component .will-change-\\[background-position\\] {
+    will-change: background-position;
+  }
 `;
 
 interface Trip {
@@ -68,6 +440,8 @@ interface Trip {
   hotels_url?: string;
   cars_url?: string;
   details?: string;
+  destination?: string;
+  description?: string;
 }
 
 interface CardData {
@@ -76,6 +450,18 @@ interface CardData {
   badgeColor: string;
   category: string;
   question: string;
+}
+
+interface AISuggestion {
+  name?: string;
+  destination?: string;
+  description?: string;
+}
+
+interface AIResponse {
+  response?: string;
+  suggestions?: (AISuggestion | string)[];
+  trips?: Trip[];
 }
 
 export default function AiTravel() {
@@ -93,94 +479,23 @@ export default function AiTravel() {
   const [showTripPlanner, setShowTripPlanner] = useState(false);
   const { preferences } = usePersonalization();
   
-  // Mobile chat states
-  const [showMobileChat, setShowMobileChat] = useState(false);
-  const [mobileChatMessages, setMobileChatMessages] = useState<{role: 'user' | 'assistant', content: string}[]>([]);
-  const [isLoadingResponse, setIsLoadingResponse] = useState(false);
-  
-  // Voice recording states
-  const [isRecording, setIsRecording] = useState(false);
-  
-  // Mobile chat menu state
-  const [showMobileChatMenu, setShowMobileChatMenu] = useState(false);
-  
-  // Auto-scroll to bottom when new messages are added
-  useEffect(() => {
-    if (showMobileChat && mobileChatMessages.length > 0) {
-      setTimeout(() => {
-        const messagesContainer = document.querySelector('.mobile-chat-messages');
-        if (messagesContainer) {
-          messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-      }, 100);
-    }
-  }, [mobileChatMessages, showMobileChat, isLoadingResponse]);
+  // New chat functionality for desktop
+  const [desktopMessages, setDesktopMessages] = useState<MessageType[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Close mobile chat menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showMobileChatMenu && !(event.target as Element).closest('.mobile-chat-menu')) {
-        setShowMobileChatMenu(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showMobileChatMenu]);
-
-  // Voice recording functionality
-  const startVoiceRecording = () => {
-    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
-      
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = 'en-US';
-      
-      recognition.onstart = () => {
-        setIsRecording(true);
-      };
-      
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        const inputElement = document.querySelector('.voice-input') as HTMLInputElement;
-        if (inputElement) {
-          inputElement.value = transcript;
-        }
-        setIsRecording(false);
-      };
-      
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      recognition.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
-        setIsRecording(false);
-        
-        // Show user-friendly error message
-        if (event.error === 'not-allowed') {
-          alert('Microphone access denied. Please allow microphone permissions and try again.');
-        } else {
-          alert('Voice recognition failed. Please try again.');
-        }
-      };
-      
-      recognition.onend = () => {
-        setIsRecording(false);
-      };
-      
-      recognition.start();
-    } else {
-      alert('Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari.');
-    }
+  const addDesktopMessage = (message: MessageType) => {
+    setDesktopMessages((prevMessages) => [...prevMessages, message]);
   };
 
-  const stopVoiceRecording = () => {
-    setIsRecording(false);
+  const clearDesktopMessages = () => {
+    setDesktopMessages([]);
   };
+  
+
+  
+
+
+
 
   const allThemes = [
     "city breaks", "weekend spa retreats", "nearby attractions",
@@ -294,67 +609,183 @@ export default function AiTravel() {
     </div>
   );
 
-  const handleSendMessage = async (message: string) => {
-    // Check if on mobile and switch to chat mode
-    const isMobile = window.innerWidth < 768;
-    
-    if (isMobile) {
-      // Add user message to mobile chat
-      setMobileChatMessages(prev => [...prev, { role: 'user', content: message }]);
-      setShowMobileChat(true);
-      setIsLoadingResponse(true);
+    // Desktop chat submit handler with AI integration
+  const handleDesktopSubmit = async (message: string, files: File[]) => {
+    if (message.trim() || files.length > 0) {
+      const userMessage: MessageType = {
+        id: desktopMessages.length + 1,
+        role: 'user',
+        content: message.trim(),
+        files: files,
+      };
       
+      addDesktopMessage(userMessage);
+      
+      // Add loading message
+      const loadingMessage: MessageType = {
+        id: desktopMessages.length + 2,
+        role: 'assistant',
+        content: (
+          <div className="flex items-center gap-2">
+            <div className="flex space-x-1">
+              <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+              <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+            </div>
+            <span className="text-muted-foreground">Planning your perfect trip...</span>
+          </div>
+        ),
+      };
+      addDesktopMessage(loadingMessage);
+
       try {
-        // Generate AI response (simplified for now - you can integrate your specific API later)
-        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
-        
-        // Create AI response content
-        let aiResponse = "I'd be happy to help you plan your trip! Here are some suggestions based on your request:\n\n";
-        
-        try {
-          // Call ai-trip-planner endpoint directly for mobile chat
-          const { data, error: apiError } = await supabase.functions.invoke('ai-trip-planner', {
+        // Call AI trip planner API
+        const { data, error: apiError } = await supabase.functions.invoke<AIResponse>('ai-trip-planner', {
             body: {
-              message,
-              conversationHistory: mobileChatMessages.map(msg => ({
+            message: message.trim(),
+            conversationHistory: desktopMessages
+              .filter(msg => msg.role === 'user' || msg.role === 'assistant')
+              .map(msg => ({
                 role: msg.role,
-                content: msg.content
+                content: typeof msg.content === 'string' ? msg.content : message.trim()
               })),
-              isMobileChat: true
-            }
-          });
+            budget: budget,
+            groupSize: groupSize,
+            zipCode: zipCode,
+            tripType: tripType,
+            preferences: preferences,
+            isMobile: true
+          }
+        });
+
+        // Remove loading message
+        setDesktopMessages(prev => prev.slice(0, prev.length - 1));
 
           if (apiError) {
             throw new Error(apiError.message);
           }
+
+        let aiResponseContent = (
+          <div className="flex flex-col gap-2">
+            <h3 className='text-foreground/80 text-lg font-semibold'>
+              Great question! Let me help you plan an amazing trip.
+            </h3>
+            <p className='text-foreground/60'>
+              Based on your request, I'll create a personalized itinerary that matches your preferences and budget.
+            </p>
+          </div>
+        );
           
           if (data?.response) {
-            aiResponse = data.response;
-          } else {
-            aiResponse = "I'd be happy to help you plan your trip! Could you provide more details about your destination, dates, and preferences?";
+          // Format the AI response properly
+          aiResponseContent = (
+            <div className="flex flex-col gap-3">
+              <div 
+                className="prose prose-sm max-w-none text-foreground/90"
+                dangerouslySetInnerHTML={{
+                  __html: data.response
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+                    .replace(/\n\n/g, '</p><p class="text-foreground/80">')
+                    .replace(/\n/g, '<br>')
+                    .replace(/^/, '<p class="text-foreground/80">')
+                    .replace(/$/, '</p>')
+                }}
+              />
+              {data.suggestions && data.suggestions.length > 0 && (
+                <div className="mt-4 p-4 bg-card/50 rounded-xl border border-border/50">
+                  <h4 className="text-foreground/80 font-medium mb-2">Suggested Destinations:</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    {data.suggestions.slice(0, 4).map((suggestion: AISuggestion | string, index: number) => (
+                      <button
+                        key={index}
+                        onClick={() => handleDesktopSubmit(`Tell me more about ${typeof suggestion === 'string' ? suggestion : (suggestion.name || suggestion.destination || 'this destination')}`, [])}
+                        className="text-left p-2 rounded-lg bg-secondary/50 hover:bg-secondary/80 transition-colors"
+                      >
+                        <span className="text-foreground/90 text-sm">
+                          {typeof suggestion === 'string' ? suggestion : (suggestion.name || suggestion.destination || 'Destination')}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        } else if (data?.trips && data.trips.length > 0) {
+          // Handle trip recommendations
+          aiResponseContent = (
+            <div className="flex flex-col gap-3">
+              <h3 className='text-foreground/80 text-lg font-semibold'>
+                Here are some amazing trip suggestions for you!
+              </h3>
+              <div className="grid gap-3">
+                {data.trips.slice(0, 3).map((trip: Trip, index: number) => (
+                  <div key={index} className="p-4 bg-card/50 rounded-xl border border-border/50">
+                    <h4 className="text-foreground font-medium mb-2">{trip.name || trip.destination}</h4>
+                    <p className="text-foreground/70 text-sm mb-2">{trip.description || trip.summary}</p>
+                    {trip.budget && (
+                      <span className="text-primary font-medium text-sm">
+                        Budget: ${trip.budget.toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        const aiResponse: MessageType = {
+          id: desktopMessages.length + 2,
+          role: 'assistant',
+          content: aiResponseContent,
+        };
+        
+        addDesktopMessage(aiResponse);
+
+        // Also trigger the existing trip generation for additional suggestions
+        try {
+          const result = await generateTrips(message.trim(), budget);
+          if (result && result.length > 0) {
+            setAiTrips(result.slice(0, 6));
           }
         } catch (tripError) {
-          console.log('Trip generation failed, using fallback response:', tripError);
-          aiResponse = "I can help you plan an amazing trip! Could you tell me more about:\n\n• **Where would you like to go?** - Your dream destination\n• **When are you planning to travel?** - Dates or season\n• **What's your approximate budget?** - Per person or total\n• **What type of activities interest you?** - Culture, adventure, relaxation, etc.\n\nI'll create a personalized itinerary just for you!";
+          console.log('Additional trip generation failed:', tripError);
         }
-        
-        // Add AI response to mobile chat
-        setMobileChatMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
-        setSelectedTrip(null);
-        
-        // API call to ai-trip-planner is now handled above in the main try block
-        
+
       } catch (error) {
-        console.error('Error in mobile chat:', error);
-        setMobileChatMessages(prev => [...prev, { 
+        console.error('Error calling AI API:', error);
+        
+        // Remove loading message
+        setDesktopMessages(prev => prev.slice(0, prev.length - 1));
+        
+        // Add error message
+        const errorResponse: MessageType = {
+          id: desktopMessages.length + 2,
           role: 'assistant', 
-          content: "I'm sorry, I'm having trouble connecting right now. Please try again in a moment." 
-        }]);
-      } finally {
-        setIsLoadingResponse(false);
+          content: (
+            <div className="flex flex-col gap-2">
+              <h3 className='text-foreground/80 text-lg font-semibold'>
+                I'm having trouble connecting right now
+              </h3>
+              <p className='text-foreground/60'>
+                Please try again in a moment. In the meantime, I can help you plan a trip if you provide more details about your destination, dates, and preferences.
+              </p>
+              <div className="mt-2 p-3 bg-muted/50 rounded-lg">
+                <p className="text-foreground/70 text-sm">
+                  <strong>Tip:</strong> Try asking something like "Plan a 5-day trip to Paris for 2 people with a $3000 budget"
+                </p>
+              </div>
+            </div>
+          ),
+        };
+        addDesktopMessage(errorResponse);
       }
-    } else {
-      // Desktop behavior (existing)
+    }
+  };
+
+  const handleSendMessage = async (message: string) => {
+    // Unified behavior for all devices
     setIsGeneratingTrips(true);
     sendMessage(message);
     
@@ -367,7 +798,6 @@ export default function AiTravel() {
       setSelectedTrip(null);
     } finally {
       setIsGeneratingTrips(false);
-      }
     }
   };
 
@@ -424,572 +854,85 @@ export default function AiTravel() {
           onClose={() => setShowTripPlanner(false)}
         />
       )}
-      {/* Mobile-only TripGenie Interface */}
-      <div className="block md:hidden min-h-screen bg-white">
-        <div className="flex flex-col h-screen">
-          {/* Use existing Header component */}
-          <div className="block md:hidden">
+
       <Header />
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 flex flex-col overflow-y-auto bg-white">
-            {!showMobileChat ? (
-              <div className="p-4">
-                <h1 className="text-2xl font-normal text-blue-500 mb-6">Hi there!</h1>
-            
-            {/* Question Cards */}
-            <div className="grid grid-cols-1 gap-4 mb-6">
-              {/* First Row */}
-                             <div className="grid grid-cols-2 gap-4">
-                 <div 
-                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
-                   onClick={() => handleSendMessage("Can you help me list the best scenic hotels in Barcelona?")}
-                 >
-                   <div className="flex items-center gap-2 mb-2">
-                     <span className="text-red-500 text-sm">🏨</span>
-                     <span className="text-red-500 text-sm font-medium">Hotels</span>
-                   </div>
-                   <p className="text-gray-800 text-sm leading-relaxed">
-                     Can you help me list the <strong>best scenic hotels</strong> in Barcelona?
-                   </p>
-                 </div>
-                 
-                 <div 
-                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
-                   onClick={() => handleSendMessage("Can I use my mobile phone abroad without roaming charges?")}
-                 >
-                   <div className="flex items-center gap-2 mb-2">
-                     <span className="text-orange-500 text-sm">💡</span>
-                     <span className="text-orange-500 text-sm font-medium">Inspiration</span>
-                   </div>
-                   <p className="text-gray-800 text-sm leading-relaxed">
-                     Can I use my mobile phone abroad without roaming charges?
-                   </p>
-                 </div>
-               </div>
-
-              {/* Second Row */}
-                             <div className="grid grid-cols-2 gap-4">
-                 <div 
-                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
-                   onClick={() => handleSendMessage("What are some luxury hotels in Shanghai?")}
-                 >
-                   <div className="flex items-center gap-2 mb-2">
-                     <span className="text-red-500 text-sm">🏨</span>
-                     <span className="text-red-500 text-sm font-medium">Hotels</span>
-                   </div>
-                   <p className="text-gray-800 text-sm leading-relaxed">
-                     What are some <strong>luxury hotels</strong> in Shanghai?
-                   </p>
-                 </div>
-                 
-                 <div 
-                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
-                   onClick={() => handleSendMessage("How do I get a flight upgrade?")}
-                 >
-                   <div className="flex items-center gap-2 mb-2">
-                     <span className="text-blue-500 text-sm">✈️</span>
-                     <span className="text-blue-500 text-sm font-medium">Flights</span>
-                   </div>
-                   <p className="text-gray-800 text-sm leading-relaxed">
-                     How do I get a flight upgrade?
-                   </p>
-                 </div>
-               </div>
-            </div>
-
-            {/* Refresh Questions Button */}
-            <div className="text-center mb-8">
-              <button className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                Refresh Questions
-              </button>
-            </div>
-
-            {/* Bottom Actions */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              <button className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <span className="text-xs text-gray-600">Recognize Image</span>
-              </button>
+      {/* Responsive view for all devices */}
+      <div className="flex flex-col min-h-screen bg-background dark-home-component">
+        
+        <main className="flex-1 flex min-h-[calc(100vh-115px)]">
               
-              <button className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                  </svg>
-                </div>
-                <span className="text-xs text-gray-600">Live Translate</span>
-              </button>
-              
-              <button className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <span className="text-xs text-gray-600">Live Guide</span>
-              </button>
-                         </div>
-              </div>
-            ) : (
-                             /* Chat Conversation View */
-               <div className="flex flex-col h-full bg-gray-50">
-                 {/* Chat Header */}
-                 <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
-                   <div className="flex items-center gap-2">
+          {/* Main Content - Responsive */}
+          <div className="flex-1 flex flex-col items-center justify-center gap-4 md:gap-7 pb-16 md:pb-24 lg:pb-4 px-2 md:px-0">
+            {desktopMessages?.length <= 0 && (
+              <>
+                <BlurFade delay={0.25} inView>
+                  <div className="w-[70px] -mb-6">
                      <img 
                        src={keilaLogo} 
                        alt="Keila" 
-                       className="w-8 h-8 object-contain"
+                      className="w-full h-auto object-contain"
                      />
-                     <span className="font-semibold text-gray-800">Keila</span>
                    </div>
-                   
-                   {/* 3 Dots Menu */}
-                   <div className="relative mobile-chat-menu">
-                     <button 
-                       onClick={() => setShowMobileChatMenu(!showMobileChatMenu)}
-                       className="flex items-center justify-center w-8 h-8 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors"
-                     >
-                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                         <circle cx="12" cy="5" r="2"/>
-                         <circle cx="12" cy="12" r="2"/>
-                         <circle cx="12" cy="19" r="2"/>
-                       </svg>
-                     </button>
-                     
-                     {/* Dropdown Menu */}
-                     {showMobileChatMenu && (
-                       <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                         <button 
-                           onClick={() => {
-                             setShowMobileChat(false);
-                             setMobileChatMessages([]);
-                             setShowMobileChatMenu(false);
-                           }}
-                           className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors"
-                         >
-                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                           </svg>
-                           Start a New Chat
-                         </button>
-                       </div>
-                     )}
-                   </div>
-                </div>
+                </BlurFade>
+                <div className="flex flex-col w-full items-center gap-2 pt-4 pb-7 text-center">
+                  <TextAnimate animation="blurInUp" delay={0.5} by="character" once as="h1" className='leading-8 font-normal text-2xl text-foreground'>
+                    Ready to explore the world?
+                  </TextAnimate>
 
-                                                  {/* Messages */}
-                 <div className="flex-1 overflow-y-auto p-4 space-y-4 mobile-chat-messages bg-gray-50">
-                   {mobileChatMessages.map((message, index) => (
-                     <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                       <div className={`max-w-[85%] p-4 rounded-2xl ${
-                         message.role === 'user' 
-                           ? 'bg-slate-600 text-white rounded-br-md shadow-md' 
-                           : 'bg-white text-gray-800 rounded-bl-md shadow-md border border-gray-100'
-                       }`}>
-                         <div 
-                           className="whitespace-pre-line text-sm leading-relaxed"
-                           dangerouslySetInnerHTML={{
-                             __html: message.content
-                               .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                               .replace(/\n/g, '<br>')
-                           }}
-                         />
+                  <TextAnimate animation="blurIn" delay={0.8} as="p" className='leading-6 text-lg text-muted-foreground'>
+                    Let's plan your dream trip! ✨
+                  </TextAnimate>
                        </div>
-                     </div>
-                   ))}
-                  
-                                     {/* Loading indicator */}
-                   {isLoadingResponse && (
-                     <div className="flex justify-start">
-                       <div className="bg-white text-gray-800 rounded-2xl rounded-bl-md p-4 max-w-[85%] shadow-md border border-gray-100">
-                         <div className="flex items-center space-x-2">
-                           <div className="flex space-x-1">
-                             <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                             <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                             <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                           </div>
-                           <span className="text-sm text-gray-600">Keila is typing...</span>
-                         </div>
+              </>
+            )}
+
+            {desktopMessages?.length > 0 && (
+              <div
+                ref={containerRef}
+                className="w-full h-full overflow-y-auto flex justify-center"
+              >
+                <div className="max-w-[752px] w-full px-4">
+                  <ChatContainer messages={desktopMessages} containerRef={containerRef} />
                        </div>
                      </div>
                    )}
-                </div>
-              </div>
-            )}
-           </div>
 
-                      {/* Input Area */}
-           <div className="border-t border-gray-200 p-4 bg-white">
-             <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-3">
-               <input
-                 type="text"
-                 placeholder={
-                   isRecording 
-                     ? "🎤 Listening..." 
-                     : showMobileChat 
-                       ? "Type your message..." 
-                       : "Ask anything you want..."
-                 }
-                 className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-500 voice-input"
-                 disabled={isLoadingResponse || isRecording}
-                 onKeyPress={(e) => {
-                   if (e.key === 'Enter') {
-                     const target = e.target as HTMLInputElement;
-                     if (target.value.trim() && !isLoadingResponse && !isRecording) {
-                       handleSendMessage(target.value);
-                       target.value = '';
-                     }
-                   }
-                 }}
-               />
-                             <button 
-                 className={`p-2 rounded-full transition-colors ${
-                   isRecording 
-                     ? 'bg-red-500 text-white animate-pulse' 
-                     : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                 }`}
-                 onClick={isRecording ? stopVoiceRecording : startVoiceRecording}
-                 disabled={isLoadingResponse}
-                 title={isRecording ? "Recording... Click to stop" : "Click to record voice message"}
-               >
-                 {isRecording ? (
-                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                     <path d="M6 6h12v12H6z"/>
-                   </svg>
-                 ) : (
-                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a5 5 0 1110 0v6a3 3 0 01-3 3z" />
-                   </svg>
-                 )}
-               </button>
-                             <button 
-                 className={`p-2 rounded-full transition-colors ${
-                   isLoadingResponse || isRecording
-                     ? 'bg-gray-400 cursor-not-allowed' 
-                     : 'bg-blue-600 hover:bg-blue-700'
-                 }`}
-                 disabled={isLoadingResponse || isRecording}
-                 onClick={(e) => {
-                   const input = (e.target as HTMLButtonElement).parentElement?.querySelector('input') as HTMLInputElement;
-                   if (input?.value.trim() && !isLoadingResponse && !isRecording) {
-                     handleSendMessage(input.value);
-                     input.value = '';
-                   }
-                 }}
-               >
-                 <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                 </svg>
-               </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Desktop view */}
-      <div className="hidden md:flex flex-col min-h-screen">
-
-      <Header />
-        
-        <main className="flex-1">
-          {/* New Keila Hero Section */}
-          <div 
-            className="text-gray-800 px-4 flex items-center justify-center" 
-            style={{ 
-              position: 'relative',
-              width: '100%',
-              height: 'calc(100vh - 115px)',
-              padding: '100px 0',
-              boxSizing: 'border-box',
-              textAlign: 'center',
-              backgroundImage: 'url(/src/assets/ai_travel_bg.png)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'bottom',
-              backgroundRepeat: 'no-repeat'
-            }}
-          >
-            <div className="max-w-4xl mx-auto text-center">
-              {/* Keila Logo and Title */}
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <img 
-                  src={keilaLogo} 
-                  alt="Keila" 
-                  className="w-40 h-40 object-contain"
-                />
-                <div className="text-6xl sm:text-7xl font-bold" style={{ color: '#0f2948' }}>
-                  Meet Keila
-                </div>
-              </div>
-              
-              <p className="text-3xl font-bold mb-16 whitespace-nowrap" style={{ color: '#0f2948' }}>
-                Your most comprehensive and free AI Trip Planner by <span className="text-blue-600 font-medium">utrippin<span className="text-yellow-500">.</span>ai</span>
-              </p>
-              
-              {/* Try Keila on App Section */}
-              <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 mb-8 max-w-2xl mx-auto">
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    Try Keila on App
-                  </h3>
-                  <p className="text-lg text-gray-600 mb-6">
-                    Experience AI travel magic on your mobile device
-                  </p>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-colors">
-                    Download App
-                  </button>
-                </div>
-              </div>
-              
-              {/* Find out more link */}
-              <div className="text-center">
-                <div 
-                  className="text-base text-gray-700 hover:text-gray-900 font-medium cursor-pointer"
-                  onClick={() => {
-                    document.getElementById('trip-planner-section')?.scrollIntoView({ 
-                      behavior: 'smooth' 
-                    });
-                  }}
-                >
-                  🔍 Find out more
-                </div>
-                        </div>
-        </div>
-      </div>
-
-      {/* Keila Responds Section */}
-      <div id="trip-planner-section" className="px-4" style={{ background: '#f5f7fa', paddingTop: '56px', overflow: 'hidden' }}>
-        <div className="mx-auto">
-          {/* Header */}
-          <div className="mb-12">
-            <h2 className="font-bold" style={{ lineHeight: 'normal', fontSize: '46px', margin: '0 0 12px 20%', color: '#0f294D' }}>
-              Keila Responds to
-            </h2>
-            <h3 className="font-bold" style={{ 
-              position: 'relative',
-              padding: '0 20%',
-              marginBottom: '61px',
-              fontSize: '54px',
-              fontWeight: '700',
-              lineHeight: 'normal', 
-              color: 'transparent', 
-              WebkitBackgroundClip: 'text', 
-              backgroundClip: 'text', 
-              backgroundImage: 'linear-gradient(-266.03deg, #59c8ff 6.6%, #7378e6 85.42%)'
-            }}>
-              All Your Travel Questions
-            </h3>
-          </div>
-
-          {/* Travel Destinations Carousel */}
-          <div className="mb-16">
-            <TravelCarousel 
-              images={Array(5).fill('/src/assets/picture_image.png')}
-              className="mb-8"
+            <PromptInputArea
+              onSubmit={handleDesktopSubmit}
+              showSuggestions={desktopMessages?.length <= 0}
+              className="max-w-[752px] w-full px-2"
             />
-          </div>
-
-          {/* Keila Benefits Section */}
-          <div className="picture-scroll">
-            <p className="plus" style={{ fontSize: '32px', fontWeight: '700', marginLeft: '20%', color: '#0f294D' }}>
-              Plus,
-            </p>
-            <p className="more-benefits" style={{ fontSize: '32px', fontWeight: '700', marginLeft: '20%', color: '#0f294D' }}>
-              Keila Has More Benefits...
-            </p>
-            <div className="bottom-desc" style={{ 
-              display: 'flex', 
-              marginLeft: '20%', 
-              marginTop: '35px', 
-              maxWidth: '1160px', 
-              paddingBottom: '122px' 
-            }}>
-                             <p style={{ display: 'flex', flex: '1 1', paddingRight: '64px' }}>
-                 <img src="https://dimg04.tripcdn.com/images/1qd6412000eigq23mE2D9.png" alt="Attractions icon" style={{ width: '48px', height: '48px' }} />
-                 <span style={{ display: 'inline-block', verticalAlign: 'top', fontSize: '20px' }}>Over 1 million attractions covering more than 180 countries or regions</span>
-               </p>
-               <p style={{ display: 'flex', flex: '1 1', paddingRight: '64px' }}>
-                 <img src="https://dimg04.tripcdn.com/images/1qd6o12000eigptmg60CA.png" alt="Advice icon" style={{ width: '48px', height: '48px' }} />
-                 <span style={{ display: 'inline-block', verticalAlign: 'top', fontSize: '20px' }}>Advice for every step of your trip</span>
-               </p>
-               <p style={{ display: 'flex', flex: '1 1', paddingRight: '64px' }}>
-                 <img src="https://dimg04.tripcdn.com/images/1qd5c12000eigq32z1E19.png" alt="App icon" style={{ width: '48px', height: '48px' }} />
-                 <span style={{ display: 'inline-block', verticalAlign: 'top', fontSize: '20px' }}>A user-friendly, convenient app that you can use on the go</span>
-               </p>
-                         </div>
-           </div>
-        </div>
-      </div>
-      
-
-          {/* Keila More to Offer Section */}
-          <div className="py-16" style={{ background: '#fff', paddingTop: '56px', overflow: 'hidden' }}>
-            <div className="mb-12">
-              <h2 className="font-bold" style={{ 
-                lineHeight: 'normal', 
-                fontSize: '46px', 
-                margin: '0 0 12px 20%', 
-                color: '#0f294D' 
-              }}>
-                Keila Has a Lot
-              </h2>
-              <h3 className="font-bold" style={{ 
-                position: 'relative',
-                padding: '0 20%',
-                marginBottom: '61px',
-                fontSize: '54px',
-                fontWeight: '700',
-                lineHeight: 'normal', 
-                color: 'transparent', 
-                WebkitBackgroundClip: 'text', 
-                backgroundClip: 'text', 
-                backgroundImage: 'linear-gradient(-266.03deg, #59c8ff 6.6%, #7378e6 85.42%)'
-              }}>
-                More to Offer...
-              </h3>
             </div>
+        </main>
 
-                         {/* Auto-scrolling rows */}
-             <div className="relative overflow-hidden">
-               {/* First row - moves left */}
-               <div className="marquee-left mb-6">
-                 <div className="flex animate-scroll-left">
-                   {/* First set */}
-                   {firstRowCards.map((card, index) => renderCard(card, `first-${index}`))}
-                   
-                   {/* Second set - duplicate for seamless loop */}
-                   {firstRowCards.map((card, index) => renderCard(card, `first-dup1-${index}`))}
-                   
-                   {/* Third set - duplicate for seamless loop */}
-                   {firstRowCards.map((card, index) => renderCard(card, `first-dup2-${index}`))}
-                 </div>
-               </div>
-
-               {/* Second row - moves right */}
-               <div className="marquee-right">
-                 <div className="flex animate-scroll-right">
-                   {/* First set */}
-                   {secondRowCards.map((card, index) => renderCard(card, `second-${index}`))}
-                   
-                   {/* Second set - duplicate for seamless loop */}
-                   {secondRowCards.map((card, index) => renderCard(card, `second-dup1-${index}`))}
-                   
-                   {/* Third set - duplicate for seamless loop */}
-                   {secondRowCards.map((card, index) => renderCard(card, `second-dup2-${index}`))}
-                 </div>
-               </div>
-             </div>
-          </div>
-
-
-      {/* Original Hero Section */}
-          <div id="trip-planner-section" className="bg-[#f5f7fa] text-white py-16 px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="text-4xl sm:text-5xl font-bold mb-6" style={{ color: '#0f294D' }}>
-                Describe your perfect trip and budget!
-              </div>
-              <p className="text-xl sm:text-2xl text-blue-100 mb-12" style={{ 
-                lineHeight: 'normal', 
-                color: 'transparent', 
-                fontWeight: '700',
-                WebkitBackgroundClip: 'text', 
-                backgroundClip: 'text', 
-                backgroundImage: 'linear-gradient(-266.03deg, #59c8ff 6.6%, #7378e6 85.42%)'
-              }}>
-                Get custom itineraries, dates, and budgets tailored just for you.
-              </p>
-              
-              {/* Main Input Section */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
-                <div className="flex items-center gap-4 bg-white rounded-2xl p-2 mb-6">
-                  <div className="bg-blue-600 rounded-xl p-3 flex-shrink-0">
-                    <Sparkles className="w-6 h-6 text-white" />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Plan me a trip to Mexico in Nov for 3 people"
-                    className="flex-1 text-gray-800 text-lg px-4 py-3 bg-transparent outline-none placeholder-gray-500"
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        const target = e.target as HTMLInputElement;
-                        if (target.value.trim()) {
-                          handleSendMessage(target.value);
-                          target.value = '';
-                        }
-                      }
-                    }}
-                  />
-                  <button
-                    onClick={(e) => {
-                      const input = (e.target as HTMLButtonElement).parentElement?.querySelector('input') as HTMLInputElement;
-                      if (input?.value.trim()) {
-                        handleSendMessage(input.value);
-                        input.value = '';
-                      }
-                    }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold text-lg transition-colors"
-                  >
-                    Generate
-                  </button>
-                </div>
-                <p className="text-[#0f294D] text-lg font-bold">
-                  Describe your perfect trip...
-                </p>
-              </div>
-
-              {/* Features */}
-              <div className="mb-8">
-                <p className="text-[#0f294D] text-lg mb-4 font-bold">
-                  Powered by advanced AI • Personalized recommendations • Real-time pricing
-                </p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <span className="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-medium">
-                    🎯 Custom Itineraries
-                  </span>
-                  <span className="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-medium">
-                    💰 Budget Optimization
-                  </span>
-                  <span className="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-medium">
-                    📅 Real-time Booking
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-black text-white">
+        {/* Budget Trip Planning Section - Hidden on Mobile */}
+        <div className="hidden md:block bg-white" style={{color: '#f5f7fa'}}>
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 ">
             {/* Form Section */}
             <div className="text-center mb-8">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              <div className="text-3xl sm:text-4xl font-bold mb-4" style={{color: '#0f2948'}}>
                 Plan Your Perfect
-              </h2>
+              </div>
               <div className="inline-block bg-gradient-to-r from-orange-400 to-yellow-400 text-black px-6 py-2 rounded-full text-xl sm:text-2xl font-bold mb-6">
                 Staycation or Vacation
               </div>
-              <p className="text-slate-300 text-lg">
+              <div className="text-lg" style={{color: '#0f2948', fontSize: '14px'}}>
                 Set your budget and group size to discover amazing destinations
-              </p>
+              </div>
             </div>
 
             {/* Trip Type Toggle */}
             <div className="mb-8 flex justify-center">
-              <div className="bg-slate-800/50 p-2 rounded-2xl border border-slate-600/30">
+              <div className="bg-gray-100 border border-gray-200 p-2 rounded-2xl shadow-sm">
                 <div className="flex gap-2">
                   <button
                     onClick={() => setTripType('staycation')}
                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
                       tripType === 'staycation'
                         ? 'bg-blue-600 text-white shadow-lg'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                          : 'hover:bg-gray-200'
                     }`}
+                     style={{color: tripType === 'staycation' ? '#ffffff' : '#0f2948'}}
                   >
                     🏠 Staycation
                   </button>
@@ -998,8 +941,9 @@ export default function AiTravel() {
                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
                       tripType === 'vacation'
                         ? 'bg-blue-600 text-white shadow-lg'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                         : 'hover:bg-gray-200'
                     }`}
+                     style={{color: tripType === 'vacation' ? '#ffffff' : '#0f2948'}}
                   >
                     ✈️ Vacation
                   </button>
@@ -1009,7 +953,7 @@ export default function AiTravel() {
 
             {/* Budget Slider */}
             <div className="mb-8">
-              <label className="block text-white font-medium mb-4">Budget Range</label>
+              <label className="block font-medium mb-4" style={{color: '#0f2948'}}>Budget Range</label>
               <BudgetSlider budget={budget} onBudgetChange={setBudget} min={100} max={1000000} />
               <div className="text-center mt-2">
                 <span className="text-orange-400 text-lg font-semibold">
@@ -1020,22 +964,22 @@ export default function AiTravel() {
 
             {/* Group Size */}
             <div className="mb-8">
-              <label className="block text-white font-medium mb-4 flex items-center gap-2">
+              <label className="block font-medium mb-4 flex items-center gap-2" style={{color: '#0f2948'}}>
                 👥 Group Size
               </label>
-              <div className="flex items-center justify-center gap-4 bg-slate-800/50 p-4 rounded-2xl border border-slate-600/30">
+              <div className="flex items-center justify-center gap-4 bg-gray-100 border border-gray-200 p-4 rounded-2xl shadow-sm">
                 <button
                   onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
-                  className="w-12 h-12 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-xl transition-colors"
+                  className="w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-xl font-bold text-xl transition-colors"
                 >
                   −
                 </button>
-                <span className="text-2xl font-bold text-white min-w-[3rem] text-center">
+                <span className="text-2xl font-bold text-gray-800 min-w-[3rem] text-center">
                   {groupSize}
                 </span>
                 <button
                   onClick={() => setGroupSize(groupSize + 1)}
-                  className="w-12 h-12 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-xl transition-colors"
+                  className="w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-xl font-bold text-xl transition-colors"
                 >
                   +
                 </button>
@@ -1044,7 +988,7 @@ export default function AiTravel() {
 
             {/* Zip Code Input */}
             <div className="mb-8">
-              <label className="block text-white font-medium mb-4">
+              <label className="block font-medium mb-4" style={{color: '#0f2948'}}>
                 Enter Zip Code {tripType === 'staycation' ? '(for staycations)' : ''}
               </label>
               <input
@@ -1052,7 +996,7 @@ export default function AiTravel() {
                 value={zipCode}
                 onChange={(e) => setZipCode(e.target.value)}
                 placeholder="Enter Zip Code"
-                className="w-full bg-slate-800/50 border border-slate-600/30 rounded-2xl px-6 py-4 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-gray-100 border border-gray-200 rounded-2xl px-6 py-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors shadow-sm"
               />
             </div>
 
@@ -1087,142 +1031,13 @@ export default function AiTravel() {
                 ))}
               </div>
             </div>
-
-            {selectedTrip ? (
-              <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-                <div className="bg-slate-800 rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-y-auto relative">
-                  {/* Close button - always visible */}
-                  <button 
-                    onClick={() => setSelectedTrip(null)} 
-                    className="absolute top-4 right-4 z-10 text-white hover:text-gray-300 text-3xl bg-black/50 rounded-full w-12 h-12 flex items-center justify-center"
-                  >
-                    ×
-                  </button>
-                  
-                  {/* Hero Image */}
-                  <div className="relative h-48 md:h-64 overflow-hidden rounded-t-3xl">
-                    <SmartImage
-                      destination={selectedTrip.name}
-                      description={selectedTrip.summary || selectedTrip.detailedDescription}
-                      className="w-full h-full object-cover"
-                      alt={selectedTrip.name}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   </div>
-                  
-                  <div className="p-6">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-3 text-white pr-12">{selectedTrip.name}</h2>
-                    <p className="text-blue-400 text-lg mb-4">{selectedTrip.summary}</p>
-                    
-                    {/* Detailed Description */}
-                    {selectedTrip.detailedDescription && (
-                      <div className="mb-6">
-                        <h3 className="text-lg font-semibold text-white mb-3">Experience</h3>
-                        <div className="text-slate-300 leading-relaxed text-sm">
-                          {selectedTrip.detailedDescription}
                         </div>
-                      </div>
-                    )}
-                    
-                    {/* Highlights */}
-                    {selectedTrip.highlights && selectedTrip.highlights.length > 0 && (
-                      <div className="mb-6">
-                        <h3 className="text-lg font-semibold text-white mb-3">Trip Highlights</h3>
-                        <div className="space-y-2">
-                          {selectedTrip.highlights.map((highlight, index) => (
-                            <div key={index} className="flex items-start gap-3 text-slate-300 text-sm">
-                              <span className="text-blue-400 mt-1">✦</span>
-                              <span>{highlight}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    
-                     {/* Booking Buttons */}
-                     <ResponsiveGrid cols="1 sm:3" className="pt-4 border-t border-slate-700">
-                        <AccessibleButton
-                          onClick={() => window.open(`https://www.expedia.com/Flights?CAMREF=1101l5dQSW&destination=${encodeURIComponent(selectedTrip.name)}`, '_blank')}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl font-medium transition-colors text-center"
-                          ariaLabel={`Book flight to ${selectedTrip.name}`}
-                        >
-                          ✈️ Book Flight
-                        </AccessibleButton>
-                        <AccessibleButton
-                          onClick={() => window.open(`https://www.expedia.com/Hotels?CAMREF=1101l5dQSW&destination=${encodeURIComponent(selectedTrip.name)}`, '_blank')}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl font-medium transition-colors text-center"
-                          ariaLabel={`Book hotel in ${selectedTrip.name}`}
-                        >
-                          🏨 Book Hotel
-                        </AccessibleButton>
-                        <AccessibleButton
-                          onClick={() => window.open(`https://www.expedia.com/Cars?CAMREF=1101l5dQSW&destination=${encodeURIComponent(selectedTrip.name)}`, '_blank')}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl font-medium transition-colors text-center"
-                          ariaLabel={`Book car rental in ${selectedTrip.name}`}
-                        >
-                          🚗 Book Car
-                        </AccessibleButton>
-                     </ResponsiveGrid>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <>
-                {(aiTrips.length > 0 || isGeneratingTrips) && (
-                  <div className="mt-10">
-                    <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white">
-                      <Sparkles className="w-4 h-4 text-blue-400" /> 
-                      AI Generated Trips
-                      {isGeneratingTrips && <span className="text-sm text-slate-400 ml-2">Generating...</span>}
-                    </h2>
-                    {isGeneratingTrips ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                        {[1, 2, 3, 4, 5, 6].map((i) => (
-                          <div key={i} className="bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-700 animate-pulse">
-                            <div className="h-5 bg-slate-700 rounded mb-2"></div>
-                            <div className="h-16 bg-slate-700 rounded mb-4"></div>
-                            <div className="flex gap-3">
-                              <div className="h-8 w-20 bg-slate-700 rounded"></div>
-                              <div className="h-8 w-20 bg-slate-700 rounded"></div>
-                              <div className="h-8 w-20 bg-slate-700 rounded"></div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                        {aiTrips.map((trip, i) => (
-                          <TripSuggestion key={i} trip={trip} camref="1101l5dQSW" onSelect={() => setSelectedTrip(trip)} />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
 
-                {aiTrips.length === 0 && curatedTrips.length > 0 && (
-                  <div className="mt-8 sm:mt-10">
-                    <h2 className="text-lg font-semibold mb-4 text-white">Curated Trips for Your Budget</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                      {curatedTrips.map((trip, i) => (
-                        <TripSuggestion key={i} trip={trip} camref="1101l5dQSW" onSelect={() => setSelectedTrip(trip)} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-            </div>
-          </div>
-        </main>
-
-        <div className="hidden md:block">
         <Footer />
-        </div>
       </div>
       
-      <div className="hidden md:block">
       <BackToTop />
-      </div>
     </>
   );
 }

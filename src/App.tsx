@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
+import { ChatProvider } from "@/providers/chat-provider";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ErrorBoundaryEnhanced } from "@/components/ErrorBoundaryEnhanced";
 import { KeyboardNavigationIndicator } from "@/components/AccessibilityEnhancements";
@@ -86,7 +87,8 @@ const App = () => (
       <ThemeProvider defaultTheme="light" storageKey="ui-theme">
         <BrowserRouter>
           <AuthProvider>
-            <TooltipProvider>
+            <ChatProvider>
+              <TooltipProvider>
               <KeyboardNavigationIndicator />
               <Toaster />
               <Sonner />
@@ -160,6 +162,7 @@ const App = () => (
                 </Routes>
               </ErrorBoundaryEnhanced>
             </TooltipProvider>
+            </ChatProvider>
           </AuthProvider>
         </BrowserRouter>
       </ThemeProvider>

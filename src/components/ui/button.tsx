@@ -12,7 +12,7 @@ const buttonVariants = cva(
       variant: {
         default: "btn-lovable text-white hover:scale-105 hover:-translate-y-0.5 active:scale-95 active:translate-y-0",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-soft",
-        outline: "btn-secondary border-2 border-primary text-primary hover:bg-primary hover:text-white hover:-translate-y-0.5 shadow-soft",
+        outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white hover:-translate-y-0.5 shadow-soft",
         secondary: "bg-gradient-to-r from-lovable-mint to-lovable-sage text-white hover:from-lovable-sage hover:to-lovable-mint hover:scale-105 hover:-translate-y-0.5 shadow-soft",
         ghost: "hover:bg-accent hover:text-accent-foreground hover:scale-105 transition-all duration-200",
         link: "text-primary underline-offset-4 hover:underline hover:text-lovable-coral transition-colors",
