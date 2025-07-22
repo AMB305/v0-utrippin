@@ -40,6 +40,7 @@ import { BlurFade } from "@/components/magicui/blur-fade";
 import { MobileQuickQuestions } from "@/components/MobileQuickQuestions";
 import { KeilaThinking } from "@/components/KeilaThinking";
 import { ChatCTAButtons } from "@/components/ChatCTAButtons";
+import { SaveTripDialog } from "@/components/SaveTripDialog";
 import UtrippinLogo from "@/components/UtrippinLogo";
 
 interface ChatMessage {
@@ -89,6 +90,8 @@ interface Trip {
 const AiTravel = () => {
   const [mobileInput, setMobileInput] = useState("");
   const [hasStartedChat, setHasStartedChat] = useState(false);
+  const [showSaveTripDialog, setShowSaveTripDialog] = useState(false);
+  const [lastChatResponse, setLastChatResponse] = useState<any>(null);
   const isMobile = useIsMobile();
   const { toast } = useToast();
 
@@ -133,6 +136,35 @@ const AiTravel = () => {
       setHasStartedChat(true);
       sendMobileChatMessage(question);
     }
+  };
+
+  // Update last chat response when messages change
+  React.useEffect(() => {
+    if (mobileChatMessages.length > 0) {
+      const lastMessage = mobileChatMessages[mobileChatMessages.length - 1];
+      if (lastMessage.response && !lastMessage.loading) {
+        setLastChatResponse({
+          response: lastMessage.response,
+          tripCards: lastMessage.tripCards,
+          recommendations: lastMessage.recommendations,
+          mapLocation: lastMessage.mapLocation,
+          quickReplies: lastMessage.quickReplies,
+          callsToAction: lastMessage.callsToAction
+        });
+      }
+    }
+  }, [mobileChatMessages]);
+
+  const handleSaveTrip = () => {
+    if (!lastChatResponse) {
+      toast({
+        title: "No trip to save",
+        description: "Please have a conversation with Keila first to save a trip.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setShowSaveTripDialog(true);
   };
 
   const handleImageCapture = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -323,7 +355,9 @@ const AiTravel = () => {
                       </h1>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white">
+                  <Button variant="outline" size="sm" className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white"
+                    onClick={handleSaveTrip}
+                  >
                     Save Trip
                   </Button>
                 </div>
@@ -510,6 +544,14 @@ const AiTravel = () => {
           </div>
         )}
       </div>
+
+      {/* Save Trip Dialog */}
+      <SaveTripDialog
+        open={showSaveTripDialog}
+        onOpenChange={setShowSaveTripDialog}
+        tripData={lastChatResponse}
+        destination={lastChatResponse?.mapLocation}
+      />
     </>
   );
 };

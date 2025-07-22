@@ -891,6 +891,45 @@ export type Database = {
           },
         ]
       }
+      saved_trips: {
+        Row: {
+          created_at: string
+          destination: string | null
+          id: string
+          image_url: string | null
+          is_favorite: boolean | null
+          summary: string | null
+          trip_data: Json
+          trip_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          destination?: string | null
+          id?: string
+          image_url?: string | null
+          is_favorite?: boolean | null
+          summary?: string | null
+          trip_data: Json
+          trip_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string | null
+          id?: string
+          image_url?: string | null
+          is_favorite?: boolean | null
+          summary?: string | null
+          trip_data?: Json
+          trip_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       search_history: {
         Row: {
           check_in_date: string | null

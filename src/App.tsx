@@ -78,6 +78,8 @@ import ExploreMerged from "@/pages/ExploreMerged";
 import AiTravelResults from "./pages/AiTravelResults";
 import ExploreAiTravel from "./pages/ExploreAiTravel";
 import AiTravel from "./pages/AiTravel";
+import MyTrips from "./pages/MyTrips";
+import TripBoard from "./pages/TripBoard";
 
 const queryClient = new QueryClient();
 
@@ -142,8 +144,10 @@ const App = () => (
                   <Route path="/family-travel" element={<FamilyTravel />} />
                   <Route path="/solo-travel" element={<SoloTravel />} />
                   <Route path="/events" element={<Events />} />
-                  <Route path="/ai-travel" element={<AiTravel />} />
-                  <Route path="/ai-travel-results" element={<AiTravelResults />} />
+                   <Route path="/ai-travel" element={<AiTravel />} />
+                   <Route path="/my-trips" element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
+                   <Route path="/trip-board/:tripId" element={<ProtectedRoute><TripBoard /></ProtectedRoute>} />
+                   <Route path="/ai-travel-results" element={<AiTravelResults />} />
                   <Route path="/name-your-price" element={<ExploreMerged />} />
                   <Route path="/melanin" element={<Melanin />} />
                   <Route path="/seo-reports" element={<SEOReports />} />
