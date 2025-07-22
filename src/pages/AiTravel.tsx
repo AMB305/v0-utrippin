@@ -327,12 +327,15 @@ export default function AiTravel() {
           // Check if response is JSON format (for mobile chat) or HTML format (for full trip planning)
           let parsedResponse = null;
           try {
+            // Try to parse the response as JSON
             parsedResponse = JSON.parse(data.response);
+            console.log('Parsed JSON response:', parsedResponse);
           } catch (e) {
+            console.log('Response is not JSON, treating as HTML/text');
             // Not JSON, treat as HTML/text response
           }
 
-          if (parsedResponse && parsedResponse.title && parsedResponse.content) {
+          if (parsedResponse && typeof parsedResponse === 'object' && parsedResponse.title) {
             // Handle JSON format response with improved display
             aiResponseContent = (
               <div className="flex flex-col gap-4">
