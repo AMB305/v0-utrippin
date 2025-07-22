@@ -23,3 +23,6 @@ verify_jwt = false
 
 [functions.unified-image-search]
 verify_jwt = false
+
+[functions.expedia-hotel-lookup]
+verify_jwt = false

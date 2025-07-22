@@ -19,6 +19,8 @@ import { TextAnimate } from "@/components/magicui/text-animate";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { PromptInputArea } from '@/components/custom/prompt-input-area';
 import { ChatContainer, Message as MessageType } from '@/components/custom/chat-container';
+import { EnhancedTravelResponse } from '@/components/EnhancedTravelResponse';
+import { useExpediaIntegration } from '@/hooks/useExpediaIntegration';
 
 // Add CSS animations for darkmode styles and custom scrollbars
 const scrollingStyles = `
@@ -317,6 +319,7 @@ export default function AiTravel() {
   const [showTripPlanner, setShowTripPlanner] = useState(false);
   const [isGeneratingTrips, setIsGeneratingTrips] = useState(false);
   const { preferences } = usePersonalization();
+  const { parseAIResponse } = useExpediaIntegration();
   
   // New chat functionality for desktop
   const [desktopMessages, setDesktopMessages] = useState<MessageType[]>([]);
@@ -475,7 +478,23 @@ export default function AiTravel() {
             console.error('Response does not appear to be JSON format, treating as plain text');
           }
 
-          if (parsedResponse && parsedResponse.title && parsedResponse.content) {
+          // Check for new JSON format with recommendations
+          if (parsedResponse && parsedResponse.title && parsedResponse.recommendations) {
+            const travelResponse = parseAIResponse(data.response);
+            
+            if (travelResponse) {
+              aiResponseContent = (
+                <EnhancedTravelResponse
+                  response={travelResponse}
+                  onFollowUpClick={(question) => {
+                    // Auto-send the follow-up question
+                    setTimeout(() => handleDesktopSubmit(question, []), 100);
+                  }}
+                  destination={message} // Use original message as context for destination
+                />
+              );
+            }
+          } else if (parsedResponse && parsedResponse.title && parsedResponse.content) {
             // Handle JSON format response with improved display
             aiResponseContent = (
               <div className="flex flex-col gap-4">
