@@ -289,41 +289,48 @@ const AiTravel = () => {
             ) : (
               // Chat Interface
               <div className="flex flex-col h-screen bg-black">
-                {/* Chat Header */}
-                <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between bg-black">
+                {/* Chat Header with Keila branding */}
+                <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between bg-black flex-shrink-0">
                   <div className="flex items-center gap-3">
                     <Button variant="ghost" size="icon" onClick={() => setHasStartedChat(false)}>
-                      <ArrowLeft className="w-5 h-5" />
+                      <ArrowLeft className="w-5 h-5 text-white" />
                     </Button>
-                    <h1 className="text-lg font-semibold text-white">
-                      Travel Planning
-                    </h1>
+                    <div className="flex items-center gap-2">
+                      <img 
+                        src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
+                        alt="Keila Bot" 
+                        className="w-8 h-8"
+                      />
+                      <h1 className="text-lg font-bold text-white">
+                        Let's Go!
+                      </h1>
+                    </div>
                   </div>
-                  <Button variant="outline" size="sm" className="border-gray-800 text-gray-400 hover:bg-gray-900">
+                  <Button variant="outline" size="sm" className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white">
                     Save Trip
                   </Button>
                 </div>
 
-                {/* Chat Messages */}
-                <div className="flex-1 overflow-y-auto bg-black">
+                {/* Chat Messages - with proper flex to ensure input stays visible */}
+                <div className="flex-1 overflow-y-auto bg-black pb-2">
                   {mobileChatMessages.map((message) => (
                     <div key={message.id} className="px-4 py-3">
                       <div className="flex flex-col space-y-3">
                         {/* User Message */}
                         <div className="flex justify-end">
-                          <div className="bg-blue-600 text-white px-4 py-2 rounded-2xl max-w-[80%]">
-                            <p className="text-sm leading-relaxed">{message.question}</p>
+                          <div className="bg-blue-600 px-4 py-2 rounded-2xl max-w-[80%]">
+                            <p className="text-sm leading-relaxed text-white">{message.question}</p>
                           </div>
                         </div>
 
                         {/* AI Response */}
                         {message.response && (
                           <div className="flex justify-start">
-                            <div className="bg-gray-900 text-white px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
+                            <div className="bg-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
                               {message.loading ? (
-                                <p>Loading...</p>
+                                <p className="text-gray-300">Loading...</p>
                               ) : (
-                                <p className="text-sm leading-relaxed">{message.response}</p>
+                                <p className="text-sm leading-relaxed text-gray-200">{message.response}</p>
                               )}
                             </div>
                           </div>
@@ -333,8 +340,8 @@ const AiTravel = () => {
                   ))}
                 </div>
 
-                {/* Chat Input with Live Translate and Live Guide */}
-                <div className="p-4 bg-black border-t border-gray-800">
+                {/* Chat Input with Live Translate and Live Guide - Always visible at bottom */}
+                <div className="p-4 bg-black border-t border-gray-800 flex-shrink-0">
                   <div className="flex gap-2 mb-2">
                     <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs border-gray-800 text-gray-400 hover:bg-gray-900">
                       <Languages className="h-3 w-3" />
