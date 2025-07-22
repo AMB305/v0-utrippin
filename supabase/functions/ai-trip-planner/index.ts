@@ -343,49 +343,6 @@ Remember: Use ONLY the specified classnames above. Do not use h1, h2, h3, h4, h5
       }
     }
 
-    // For mobile chat, ensure the response is valid JSON
-    if (isMobileChat) {
-      let validJsonResponse = aiResponse;
-      
-      try {
-        // Try to parse the response to validate it's JSON
-        JSON.parse(aiResponse);
-        console.log('AI returned valid JSON');
-      } catch (parseError) {
-        console.log('AI response is not valid JSON, attempting to extract/fix:', aiResponse.substring(0, 200) + '...');
-        
-        // Try to extract JSON from the response if it's wrapped in text
-        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          try {
-            JSON.parse(jsonMatch[0]);
-            validJsonResponse = jsonMatch[0];
-            console.log('Extracted valid JSON from response');
-          } catch (extractError) {
-            console.log('Extracted JSON is still invalid, creating fallback');
-            // Create a fallback JSON response
-            validJsonResponse = JSON.stringify({
-              title: "Travel Planning Assistant ✈️",
-              subtitle: "Let me help you plan your perfect trip",
-              content: aiResponse.replace(/```json|```/g, '').trim(),
-              utrippin_link: "https://utrippin.ai"
-            });
-          }
-        } else {
-          console.log('No JSON found in response, creating fallback');
-          // Create a fallback JSON response
-          validJsonResponse = JSON.stringify({
-            title: "Travel Planning Assistant ✈️", 
-            subtitle: "Let me help you plan your perfect trip",
-            content: aiResponse.trim(),
-            utrippin_link: "https://utrippin.ai"
-          });
-        }
-      }
-      
-      aiResponse = validJsonResponse;
-    }
-
     return new Response(
       JSON.stringify({ 
         response: aiResponse,
