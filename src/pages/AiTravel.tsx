@@ -157,14 +157,13 @@ const AiTravel = () => {
                   {/* Hi there! in upper left corner */}
                   <BlurFade delay={0.5} inView>
                     <div className="text-left">
-                      <h1 className="text-2xl font-bold text-white mb-2">Hi there!</h1>
-                      <p className="text-gray-300 text-base">Ask me anything about your next trip!</p>
+                      <h1 className="text-2xl font-bold text-white mb-4">Hi there!</h1>
                     </div>
                   </BlurFade>
                 </div>
 
                 {/* Mobile Quick Questions */}
-                <div className="flex-1 px-2">
+                <div className="flex-1 px-2 mt-2">
                   <BlurFade delay={0.7} inView>
                     <MobileQuickQuestions onQuestionSelect={handleMobileSubmit} />
                   </BlurFade>
