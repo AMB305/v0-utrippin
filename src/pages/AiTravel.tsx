@@ -894,7 +894,7 @@ export default function AiTravel() {
                 </BlurFade>
                 <div className="flex flex-col w-full items-center gap-2 pt-4 pb-7 text-center">
                   <TextAnimate animation="blurInUp" delay={0.5} by="character" once as="h1" className='leading-8 font-normal text-2xl text-foreground'>
-                    Ready to explore the world?
+                    Hey, I'm Keila your personal Travel Agent!
                   </TextAnimate>
 
                   <TextAnimate animation="blurIn" delay={0.8} as="p" className='leading-6 text-lg text-muted-foreground'>
