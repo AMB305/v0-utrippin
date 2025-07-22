@@ -85,7 +85,7 @@ export const BudgetSlider: React.FC<BudgetSliderProps> = ({
       
       <div className="flex justify-between text-xs text-white/60">
         <span style={{color: '#0f2948'}}>{formatBudget(min)}</span>
-        <span>{formatBudget(max)}</span>
+        <span style={{color: '#0f2948'}}>{formatBudget(max)}</span>
       </div>
     </div>
   );
