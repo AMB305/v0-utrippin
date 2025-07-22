@@ -1007,7 +1007,7 @@ export default function AiTravel() {
 
             {/* Budget Slider */}
             <div className="mb-8">
-              <label className="block text-white font-medium mb-4">Budget Range</label>
+              <label className="block font-medium mb-4" style={{color: '#0f2948'}}>Budget Range</label>
               <BudgetSlider budget={budget} onBudgetChange={setBudget} min={100} max={1000000} />
               <div className="text-center mt-2">
                 <span className="text-orange-400 text-lg font-semibold">
