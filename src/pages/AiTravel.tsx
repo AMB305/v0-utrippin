@@ -148,12 +148,12 @@ const AiTravel = () => {
                 {/* Main Content - Bot and Text on one line */}
                 <div className="flex-1 flex flex-col items-center justify-start pt-12 px-6">
                   <BlurFade delay={0.1} inView>
-                    <div className="flex items-center gap-3 mb-8 justify-center">
-                      {/* Keila Bot with Animation */}
+                    <div className="flex items-center gap-2 mb-8 justify-center">
+                      {/* Keila Bot with Float Animation */}
                       <img 
                         src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
                         alt="Keila Bot" 
-                        className="w-16 h-16 animate-pulse hover:scale-110 transition-transform duration-300"
+                        className="w-16 h-16 animate-float hover:scale-110 transition-transform duration-300"
                       />
                       
                       {/* Greeting Text - Moved closer */}
