@@ -120,7 +120,7 @@ export const PromptInputArea = ({
                 handleSubmit();
               }
             }}
-            className="flex field-sizing-content max-h-[80px] md:max-h-[200px] w-full rounded-xl px-4 py-3 leading-relaxed text-foreground placeholder:text-muted-foreground/70 focus-visible:outline-none [resize:none] shadow-none border-none focus-visible:ring-0 bg-transparent"
+            className="flex field-sizing-content min-h-[48px] max-h-[300px] w-full rounded-xl px-4 py-3 leading-relaxed text-foreground placeholder:text-muted-foreground/70 focus-visible:outline-none [resize:none] shadow-none border-none focus-visible:ring-0 bg-transparent"
             placeholder="Ask me anything about your trip.."
             aria-label="Enter your prompt"
           />
