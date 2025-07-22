@@ -137,8 +137,11 @@ const AiTravel = () => {
                   <BlurFade delay={0.1} inView>
                     <div className="flex flex-col items-center mb-6">
                       <UtrippinLogo />
-                      <div className="mt-4 text-center">
-                        <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h2" className='text-xl font-semibold text-gray-900 mb-2'>
+                      <div className="mt-4 text-center flex items-center justify-center gap-2">
+                        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                          <span className="text-white font-bold text-sm">🤖</span>
+                        </div>
+                        <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h2" className='text-xl font-semibold text-gray-900 mb-0'>
                           I'm Keila! Your Ultimate Adventure Planner
                         </TextAnimate>
                       </div>

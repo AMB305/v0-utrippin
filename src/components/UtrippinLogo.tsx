@@ -3,14 +3,14 @@ import React from 'react';
 
 const UtrippinLogo = () => {
   const gradientColors = [
-    '#1f2937', // gray-800
-    '#374151', // gray-700
-    '#4b5563', // gray-600
-    '#6b7280', // gray-500
-    '#9ca3af', // gray-400
-    '#d1d5db', // gray-300
-    '#e5e7eb', // gray-200
-    '#f3f4f6'  // gray-100
+    '#1e40af', // blue-800
+    '#1d4ed8', // blue-700
+    '#2563eb', // blue-600
+    '#3b82f6', // blue-500
+    '#60a5fa', // blue-400
+    '#93c5fd', // blue-300
+    '#bfdbfe', // blue-200
+    '#dbeafe'  // blue-100
   ];
 
   const letters = ['U','T','R','I','P','P','I','N'];
