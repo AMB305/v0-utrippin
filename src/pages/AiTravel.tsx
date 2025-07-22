@@ -163,7 +163,7 @@ const AiTravel = () => {
                 </div>
 
                 {/* Mobile Quick Questions */}
-                <div className="flex-1 px-2 -mt-2">
+                <div className="flex-1 px-2 -mt-6">
                   <BlurFade delay={0.7} inView>
                     <MobileQuickQuestions onQuestionSelect={handleMobileSubmit} />
                   </BlurFade>
