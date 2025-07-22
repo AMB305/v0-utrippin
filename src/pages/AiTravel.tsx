@@ -352,7 +352,7 @@ export default function AiTravel() {
                     {parsedResponse.title}
                   </h3>
                   {parsedResponse.subtitle && (
-                    <p className="text-foreground/70 text-sm">
+                    <p className="text-foreground/80 text-base">
                       {parsedResponse.subtitle}
                     </p>
                   )}
