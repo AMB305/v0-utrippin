@@ -406,7 +406,7 @@ export default function AiTravel() {
       </div>
       
 
-          {/* TripGenie More to Offer Section */}
+          {/* Keila More to Offer Section */}
           <div className="py-16" style={{ background: '#fff', paddingTop: '56px', overflow: 'hidden' }}>
             <div className="mb-12">
               <h2 className="font-bold" style={{ 
@@ -415,7 +415,7 @@ export default function AiTravel() {
                 margin: '0 0 12px 20%', 
                 color: '#0f294D' 
               }}>
-                TripGenie Has a Lot
+                Keila Has a Lot
               </h2>
               <h3 className="font-bold" style={{ 
                 position: 'relative',
