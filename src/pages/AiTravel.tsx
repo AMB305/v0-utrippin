@@ -972,7 +972,7 @@ export default function AiTravel() {
               <div className="inline-block bg-gradient-to-r from-orange-400 to-yellow-400 text-black px-6 py-2 rounded-full text-xl sm:text-2xl font-bold mb-6">
                 Staycation or Vacation
               </div>
-              <p className="text-slate-300 text-lg">
+              <p className="text-lg" style={{color: '#0f2948'}}>
                 Set your budget and group size to discover amazing destinations
               </p>
             </div>
