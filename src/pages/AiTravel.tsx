@@ -146,9 +146,9 @@ const AiTravel = () => {
                 </div>
 
                 {/* Main Content - Bot and Text on one line */}
-                <div className="flex-1 flex flex-col items-center justify-center px-6">
+                <div className="flex-1 flex flex-col items-center justify-start pt-12 px-6">
                   <BlurFade delay={0.1} inView>
-                    <div className="flex items-center gap-4 mb-12">
+                    <div className="flex items-center gap-4 mb-8">
                       {/* Keila Bot */}
                       <img 
                         src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
@@ -157,14 +157,14 @@ const AiTravel = () => {
                       />
                       
                       {/* Greeting Text */}
-                      <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent leading-tight">
-                        Hey, I&apos;m Keila your personal Travel Agent!
+                      <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent leading-tight">
+                        Hey! I&apos;m Keila, Your Ultimate Adventure Planner
                       </TextAnimate>
                     </div>
                   </BlurFade>
 
                   {/* Mobile Quick Questions - Moved up */}
-                  <div className="px-2 -mt-4">
+                  <div className="px-2 -mt-2">
                     <BlurFade delay={0.7} inView>
                       <MobileQuickQuestions onQuestionSelect={handleMobileSubmit} />
                     </BlurFade>
