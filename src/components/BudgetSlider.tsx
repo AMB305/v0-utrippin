@@ -52,7 +52,7 @@ export const BudgetSlider: React.FC<BudgetSliderProps> = ({
 
   return (
     <div className="w-full max-w-md mx-auto space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center" style={{color: '#0f2948'}}>
         <label className="text-sm font-medium text-white/80">
           Budget Range
         </label>
