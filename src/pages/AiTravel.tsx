@@ -130,34 +130,45 @@ const AiTravel = () => {
         {isMobile ? (
           <div className="flex flex-col h-screen bg-black">
             {!hasStartedChat ? (
-              // Welcome Screen - TripGenie Style
+              // Welcome Screen - Exact TripGenie Style
               <div className="flex-1 flex flex-col bg-black">
-                {/* Header with Bot and Greeting */}
-                <div className="px-6 pt-20 pb-8 text-center">
+                {/* Header Bar - UTRIPPIN with buttons */}
+                <div className="flex items-center justify-between px-6 py-4 bg-white">
+                  <UtrippinLogo />
+                  <div className="flex items-center gap-4">
+                    <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
+                      Log In
+                    </Button>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6">
+                      Register
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Main Content - Bot and Text on one line */}
+                <div className="flex-1 flex flex-col items-center justify-center px-6">
                   <BlurFade delay={0.1} inView>
-                    <div className="flex flex-col items-center">
-                      {/* Keila Bot - Using actual image */}
-                      <div className="mb-6">
-                        <img 
-                          src="/lovable-uploads/8d7ffeac-15d4-4d41-b225-662bd28a4932.png" 
-                          alt="Keila Bot" 
-                          className="w-24 h-24"
-                        />
-                      </div>
+                    <div className="flex items-center gap-4 mb-12">
+                      {/* Keila Bot */}
+                      <img 
+                        src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
+                        alt="Keila Bot" 
+                        className="w-20 h-20"
+                      />
                       
                       {/* Greeting Text */}
-                      <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-4xl font-bold mb-8 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent leading-tight">
+                      <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent leading-tight">
                         Hey, I&apos;m Keila your personal Travel Agent!
                       </TextAnimate>
                     </div>
                   </BlurFade>
-                </div>
 
-                {/* Mobile Quick Questions */}
-                <div className="flex-1 px-2">
-                  <BlurFade delay={0.7} inView>
-                    <MobileQuickQuestions onQuestionSelect={handleMobileSubmit} />
-                  </BlurFade>
+                  {/* Mobile Quick Questions - Moved up */}
+                  <div className="px-2 -mt-4">
+                    <BlurFade delay={0.7} inView>
+                      <MobileQuickQuestions onQuestionSelect={handleMobileSubmit} />
+                    </BlurFade>
+                  </div>
                 </div>
 
                 {/* Mobile Input Area with Live Translate */}
