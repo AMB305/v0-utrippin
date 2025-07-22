@@ -898,6 +898,8 @@ export type Database = {
           id: string
           image_url: string | null
           is_favorite: boolean | null
+          is_public: boolean | null
+          share_id: string | null
           summary: string | null
           trip_data: Json
           trip_name: string
@@ -910,6 +912,8 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_favorite?: boolean | null
+          is_public?: boolean | null
+          share_id?: string | null
           summary?: string | null
           trip_data: Json
           trip_name: string
@@ -922,6 +926,8 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_favorite?: boolean | null
+          is_public?: boolean | null
+          share_id?: string | null
           summary?: string | null
           trip_data?: Json
           trip_name?: string

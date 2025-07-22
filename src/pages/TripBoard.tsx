@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, MapPin, Calendar, Share, Heart, Edit3 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { ShareTripDialog } from '@/components/ShareTripDialog';
 
 interface TripData {
   response?: string;
@@ -41,6 +42,7 @@ export const TripBoard: React.FC = () => {
   const { toast } = useToast();
   const [trip, setTrip] = useState<SavedTrip | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showShareDialog, setShowShareDialog] = useState(false);
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -161,7 +163,12 @@ export const TripBoard: React.FC = () => {
                 <Edit3 className="w-4 h-4 mr-1" />
                 Edit
               </Button>
-              <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                onClick={() => setShowShareDialog(true)}
+              >
                 <Share className="w-4 h-4 mr-1" />
                 Share
               </Button>
@@ -299,6 +306,16 @@ export const TripBoard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Share Dialog */}
+      {trip && (
+        <ShareTripDialog
+          open={showShareDialog}
+          onOpenChange={setShowShareDialog}
+          tripId={trip.id}
+          tripName={trip.trip_name}
+        />
+      )}
     </div>
   );
 };

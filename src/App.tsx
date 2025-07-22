@@ -80,6 +80,7 @@ import ExploreAiTravel from "./pages/ExploreAiTravel";
 import AiTravel from "./pages/AiTravel";
 import MyTrips from "./pages/MyTrips";
 import TripBoard from "./pages/TripBoard";
+import PublicTripView from "./pages/PublicTripView";
 
 const queryClient = new QueryClient();
 
@@ -147,6 +148,7 @@ const App = () => (
                    <Route path="/ai-travel" element={<AiTravel />} />
                    <Route path="/my-trips" element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
                    <Route path="/trip-board/:tripId" element={<ProtectedRoute><TripBoard /></ProtectedRoute>} />
+                   <Route path="/trip/:shareId" element={<PublicTripView />} />
                    <Route path="/ai-travel-results" element={<AiTravelResults />} />
                   <Route path="/name-your-price" element={<ExploreMerged />} />
                   <Route path="/melanin" element={<Melanin />} />
