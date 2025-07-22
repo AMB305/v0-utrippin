@@ -911,7 +911,7 @@ export default function AiTravel() {
 
         {/* Budget Trip Planning Section - Hidden on Mobile */}
         <div className="hidden md:block bg-white" style={{color: '#f5f7fa'}}>
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 ">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 text-gray-800">
             {/* Form Section */}
             <div className="text-center mb-8">
               <div className="text-3xl sm:text-4xl font-bold mb-4" style={{color: '#0f2948'}}>
