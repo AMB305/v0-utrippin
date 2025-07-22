@@ -560,7 +560,7 @@ export default function AiTravel() {
             <div className="space-y-6">
               
               {/* Trip Type Toggle */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
                 <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
                   🎯 Trip Type
                 </h3>
@@ -591,7 +591,7 @@ export default function AiTravel() {
               </div>
 
               {/* Budget Slider */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
                 <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
                   💰 Budget Range
                 </h3>
@@ -604,7 +604,7 @@ export default function AiTravel() {
               </div>
 
               {/* Group Size */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
                 <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
                   👥 Group Size
                 </h3>
@@ -629,7 +629,7 @@ export default function AiTravel() {
               </div>
 
               {/* Location Input */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
                 <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
                   📍 Location {tripType === 'staycation' ? '(Staycation Area)' : '(Starting Point)'}
                 </h3>
@@ -643,7 +643,7 @@ export default function AiTravel() {
               </div>
 
               {/* Action Button & Quick Suggestions */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
                 <button
                   onClick={() => {
                     const location = zipCode ? `near ${zipCode}` : '';
