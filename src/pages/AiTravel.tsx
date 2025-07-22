@@ -22,7 +22,6 @@ import { AccessibleButton, SkipNavigation } from '@/components/AccessibilityEnha
 import { FormField, FormValidation, validationRules } from '@/components/EnhancedFormValidation';
 import keilaLogo from '@/assets/Keila_logo.png';
 import TravelCarousel from '@/components/TravelCarousel';
-import { TravelSuggestionsGrid } from '@/components/TravelSuggestionsGrid';
 
 // Add CSS animations for auto-scrolling
 const scrollingStyles = `
@@ -439,9 +438,65 @@ export default function AiTravel() {
               <div className="p-4">
                 <h1 className="text-2xl font-normal text-blue-500 mb-6">Hi there!</h1>
             
-            {/* Travel Suggestions Grid */}
-            <div className="mb-6">
-              <TravelSuggestionsGrid onSuggestionClick={handleSendMessage} />
+            {/* Question Cards */}
+            <div className="grid grid-cols-1 gap-4 mb-6">
+              {/* First Row */}
+                             <div className="grid grid-cols-2 gap-4">
+                 <div 
+                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                   onClick={() => handleSendMessage("Can you help me list the best scenic hotels in Barcelona?")}
+                 >
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="text-red-500 text-sm">🏨</span>
+                     <span className="text-red-500 text-sm font-medium">Hotels</span>
+                   </div>
+                   <p className="text-gray-800 text-sm leading-relaxed">
+                     Can you help me list the <strong>best scenic hotels</strong> in Barcelona?
+                   </p>
+                 </div>
+                 
+                 <div 
+                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                   onClick={() => handleSendMessage("Can I use my mobile phone abroad without roaming charges?")}
+                 >
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="text-orange-500 text-sm">💡</span>
+                     <span className="text-orange-500 text-sm font-medium">Inspiration</span>
+                   </div>
+                   <p className="text-gray-800 text-sm leading-relaxed">
+                     Can I use my mobile phone abroad without roaming charges?
+                   </p>
+                 </div>
+               </div>
+
+              {/* Second Row */}
+                             <div className="grid grid-cols-2 gap-4">
+                 <div 
+                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                   onClick={() => handleSendMessage("What are some luxury hotels in Shanghai?")}
+                 >
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="text-red-500 text-sm">🏨</span>
+                     <span className="text-red-500 text-sm font-medium">Hotels</span>
+                   </div>
+                   <p className="text-gray-800 text-sm leading-relaxed">
+                     What are some <strong>luxury hotels</strong> in Shanghai?
+                   </p>
+                 </div>
+                 
+                 <div 
+                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                   onClick={() => handleSendMessage("How do I get a flight upgrade?")}
+                 >
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="text-blue-500 text-sm">✈️</span>
+                     <span className="text-blue-500 text-sm font-medium">Flights</span>
+                   </div>
+                   <p className="text-gray-800 text-sm leading-relaxed">
+                     How do I get a flight upgrade?
+                   </p>
+                 </div>
+               </div>
             </div>
 
             {/* Refresh Questions Button */}
