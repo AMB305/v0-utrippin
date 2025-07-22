@@ -1012,7 +1012,7 @@ export default function AiTravel() {
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value)}
                   placeholder="Enter your zip code"
-                  className="w-full max-w-md mx-auto block bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                  className="w-full max-w-md mx-auto block bg-card border border-input rounded-xl px-4 py-3 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                 />
               </div>
 
