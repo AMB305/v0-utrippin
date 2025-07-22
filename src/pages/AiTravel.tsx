@@ -51,6 +51,13 @@ const scrollingStyles = `
     animation: scroll-right 20s linear infinite;
   }
 
+  .card-item:hover ~ .animate-scroll-left,
+  .card-item:hover ~ .animate-scroll-right,
+  .animate-scroll-left:hover,
+  .animate-scroll-right:hover {
+    animation-play-state: paused;
+  }
+
   .marquee-left, .marquee-right {
     overflow: hidden;
     white-space: nowrap;
