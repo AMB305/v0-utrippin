@@ -175,7 +175,7 @@ export const MobileQuickQuestions: React.FC<MobileQuickQuestionsProps> = ({ onQu
               key={item.id}
               onClick={() => handleQuestionClick(item)}
               disabled={isLocationLoading || !questions}
-              className={`${item.color} border-2 rounded-xl p-4 text-left transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100`}
+              className={`${item.color} border-2 rounded-xl p-6 text-left transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100`}
             >
               <div className="flex flex-col items-start gap-3">
                 <div className="flex items-center gap-2">
