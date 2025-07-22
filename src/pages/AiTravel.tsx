@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useTrips } from "@/hooks/useTrips";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useChatAI } from "@/hooks/useChatAI";
@@ -8,73 +8,20 @@ import { useAITripPlanner } from "@/hooks/useAITripPlanner";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/SEOHead";
 import { BudgetSlider } from "@/components/BudgetSlider";
-import { ChatInput } from "@/components/ChatInput";
-import { TripSuggestion } from "@/components/TripSuggestion";
-import { ConversationSidebar } from "@/components/ConversationSidebar";
 import AITripPlannerDisplay from "@/components/AITripPlannerDisplay";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BackToTop } from '@/components/BackToTop';
-import { SmartImage } from "@/components/SmartImage";
 import { Sparkles } from "lucide-react";
-import { ResponsiveContainer, ResponsiveGrid } from '@/components/ResponsiveDesignFixes';
-import { AccessibleButton, SkipNavigation } from '@/components/AccessibilityEnhancements';
-import { FormField, FormValidation, validationRules } from '@/components/EnhancedFormValidation';
+import { SkipNavigation } from '@/components/AccessibilityEnhancements';
 import keilaLogo from '@/assets/Keila_logo.png';
-import travelImage1 from '@/assets/travel-image-1.png';
-import travelImage2 from '@/assets/travel-image-2.png';
-import travelImage3 from '@/assets/travel-image-3.png';
-import travelImage4 from '@/assets/travel-image-4.png';
-import travelImage5 from '@/assets/travel-image-5.png';
-import TravelCarousel from '@/components/TravelCarousel';
 import { TextAnimate } from "@/components/magicui/text-animate";  
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { PromptInputArea } from '@/components/custom/prompt-input-area';
 import { ChatContainer, Message as MessageType } from '@/components/custom/chat-container';
-// import { Navbar } from '@/components/custom/navbar';
-import { useChat } from '@/hooks/use-chat';
-import UtrippinLogo from '@/components/UtrippinLogo';
 
-// Add CSS animations for auto-scrolling and darkmode styles
+// Add CSS animations for darkmode styles
 const scrollingStyles = `
-  @keyframes scroll-left {
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-33.33%);
-    }
-  }
-
-  @keyframes scroll-right {
-    0% {
-      transform: translateX(-33.33%);
-    }
-    100% {
-      transform: translateX(0%);
-    }
-  }
-
-  .animate-scroll-left {
-    animation: scroll-left 20s linear infinite;
-  }
-
-  .animate-scroll-right {
-    animation: scroll-right 20s linear infinite;
-  }
-
-  .card-item:hover ~ .animate-scroll-left,
-  .card-item:hover ~ .animate-scroll-right,
-  .animate-scroll-left:hover,
-  .animate-scroll-right:hover {
-    animation-play-state: paused;
-  }
-
-  .marquee-left, .marquee-right {
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
   /* Darkmode styles for Home component */
   .dark-home-component {
     --background-elevated: rgba(22, 23, 26, 1);
@@ -181,26 +128,6 @@ const scrollingStyles = `
     box-shadow: 0 1px 2px rgba(11, 12, 14, 0.02);
   }
 
-  /* Navbar specific darkmode styles */
-  .dark-home-component nav {
-    background-color: rgba(43, 46, 53, 0.3);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(36, 38, 44, 1);
-  }
-
-  .dark-home-component nav .hover\\:bg-card:hover {
-    background-color: rgba(60, 63, 72, 0.3);
-  }
-
-  .dark-home-component nav .bg-card {
-    background-color: rgba(60, 63, 72, 0.3);
-  }
-
-  /* ChatContainer darkmode styles */
-  .dark-home-component .bg-transparent {
-    background-color: transparent;
-  }
-
   /* Input area darkmode styles */
   .dark-home-component .bg-card.border-primary\\/20 {
     background-color: rgba(43, 46, 53, 0.3);
@@ -216,182 +143,12 @@ const scrollingStyles = `
   }
 
   /* Suggestion chips darkmode styles */
-  .dark-home-component .text-neutral-500 {
-    color: rgba(150, 152, 158, 1);
-  }
-
   .dark-home-component .border-input {
     border-color: rgba(36, 38, 44, 1);
   }
 
   .dark-home-component .hover\\:bg-primary\\/10:hover {
     background-color: rgba(28, 103, 243, 0.15);
-  }
-
-  /* Icon colors for darkmode - more vibrant for dark background */
-  .dark-home-component .text-green-600 {
-    color: rgba(34, 197, 94, 1);
-  }
-
-  .dark-home-component .text-cyan-600 {
-    color: rgba(8, 145, 178, 1);
-  }
-
-  .dark-home-component .text-indigo-600 {
-    color: rgba(99, 102, 241, 1);
-  }
-
-  .dark-home-component .text-yellow-600 {
-    color: rgba(202, 138, 4, 1);
-  }
-
-  .dark-home-component .text-pink-600 {
-    color: rgba(219, 39, 119, 1);
-  }
-
-  .dark-home-component .text-pink-500 {
-    color: rgba(236, 72, 153, 1);
-  }
-
-  /* Suggestion buttons hover state */
-  .dark-home-component button[variant="outline"]:hover {
-    background-color: rgba(28, 103, 243, 0.1);
-    border-color: rgba(28, 103, 243, 0.3);
-    color: rgba(250, 250, 250, 0.9);
-  }
-
-  /* File upload button darkmode */
-  .dark-home-component .hover\\:bg-card-foreground\\/10:hover {
-    background-color: rgba(250, 250, 250, 0.1);
-  }
-
-  /* AdvancedTripPlanner darkmode styles */
-  .dark-home-component .bg-slate-900 {
-    background-color: rgba(22, 23, 26, 1);
-  }
-
-  .dark-home-component .bg-slate-800 {
-    background-color: rgba(36, 38, 44, 1);
-  }
-
-  .dark-home-component .bg-slate-800\\/50 {
-    background-color: rgba(36, 38, 44, 0.5);
-  }
-
-  .dark-home-component .bg-slate-800\\/70 {
-    background-color: rgba(36, 38, 44, 0.7);
-  }
-
-  .dark-home-component .bg-slate-700 {
-    background-color: rgba(43, 46, 53, 1);
-  }
-
-  .dark-home-component .hover\\:bg-slate-600:hover {
-    background-color: rgba(60, 63, 72, 1);
-  }
-
-  .dark-home-component .hover\\:bg-slate-800\\/70:hover {
-    background-color: rgba(36, 38, 44, 0.7);
-  }
-
-  .dark-home-component .border-slate-600 {
-    border-color: rgba(60, 63, 72, 1);
-  }
-
-  .dark-home-component .border-blue-500\\/20 {
-    border-color: rgba(28, 103, 243, 0.2);
-  }
-
-  .dark-home-component .text-slate-400 {
-    color: rgba(150, 152, 158, 1);
-  }
-
-  .dark-home-component .text-slate-300 {
-    color: rgba(210, 210, 210, 1);
-  }
-
-  .dark-home-component .text-white {
-    color: rgba(250, 250, 250, 1);
-  }
-
-  /* Status badge colors */
-  .dark-home-component .bg-yellow-500\\/20 {
-    background-color: rgba(232, 162, 0, 0.2);
-  }
-
-  .dark-home-component .text-yellow-400 {
-    color: rgba(251, 191, 36, 1);
-  }
-
-  .dark-home-component .bg-green-500\\/20 {
-    background-color: rgba(0, 145, 107, 0.2);
-  }
-
-  .dark-home-component .text-green-400 {
-    color: rgba(34, 197, 94, 1);
-  }
-
-  .dark-home-component .bg-blue-500\\/20 {
-    background-color: rgba(28, 103, 243, 0.2);
-  }
-
-  .dark-home-component .text-blue-400 {
-    color: rgba(96, 165, 250, 1);
-  }
-
-  /* Button colors for trip planner */
-  .dark-home-component .bg-blue-600 {
-    background-color: rgba(28, 103, 243, 1);
-  }
-
-  .dark-home-component .hover\\:bg-blue-500:hover {
-    background-color: rgba(59, 130, 246, 1);
-  }
-
-  .dark-home-component .bg-green-600 {
-    background-color: rgba(0, 145, 107, 1);
-  }
-
-  .dark-home-component .hover\\:bg-green-500:hover {
-    background-color: rgba(34, 197, 94, 1);
-  }
-
-  /* Modal overlay */
-  .dark-home-component .bg-black\\/70 {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-
-  /* Form inputs in modals */
-  .dark-home-component input,
-  .dark-home-component select {
-    background-color: rgba(36, 38, 44, 1);
-    border-color: rgba(60, 63, 72, 1);
-    color: rgba(250, 250, 250, 1);
-  }
-
-  .dark-home-component input::placeholder {
-    color: rgba(150, 152, 158, 0.7);
-  }
-
-  .dark-home-component input:focus,
-  .dark-home-component select:focus {
-    border-color: rgba(28, 103, 243, 0.5);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(28, 103, 243, 0.1);
-  }
-
-  /* Header integration with darkmode */
-  .dark-home-component > header,
-  .dark-home-component > div > header {
-    background-color: rgba(22, 23, 26, 1);
-    border-bottom-color: rgba(36, 38, 44, 1);
-  }
-
-  /* Footer integration with darkmode */
-  .dark-home-component + div footer,
-  .dark-home-component footer {
-    background-color: rgba(22, 23, 26, 1);
-    border-top-color: rgba(36, 38, 44, 1);
   }
 
   /* Button darkmode styles */
@@ -415,29 +172,23 @@ const scrollingStyles = `
     }
   }
 
-  @keyframes shine {
-    0% {
-      background-position: 0% 0%;
-    }
-    50% {
-      background-position: 100% 100%;
-    }
-    100% {
-      background-position: 0% 0%;
-    }
+  /* Form inputs in modals */
+  .dark-home-component input,
+  .dark-home-component select {
+    background-color: rgba(36, 38, 44, 1);
+    border-color: rgba(60, 63, 72, 1);
+    color: rgba(250, 250, 250, 1);
   }
 
-  .animate-shine {
-    animation: shine var(--duration, 4s) infinite linear;
+  .dark-home-component input::placeholder {
+    color: rgba(150, 152, 158, 0.7);
   }
 
-  /* Darkmode shimmer effect */
-  .dark-home-component .motion-safe\\:animate-shine {
-    animation: shine var(--duration, 4s) infinite linear;
-  }
-
-  .dark-home-component .will-change-\\[background-position\\] {
-    will-change: background-position;
+  .dark-home-component input:focus,
+  .dark-home-component select:focus {
+    border-color: rgba(28, 103, 243, 0.5);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(28, 103, 243, 0.1);
   }
 `;
 
@@ -454,14 +205,6 @@ interface Trip {
   details?: string;
   destination?: string;
   description?: string;
-}
-
-interface CardData {
-  icon: string;
-  bgColor: string;
-  badgeColor: string;
-  category: string;
-  question: string;
 }
 
 interface AISuggestion {
@@ -483,11 +226,10 @@ export default function AiTravel() {
   const [zipCode, setZipCode] = useState('');
   const debouncedBudget = useDebounce(budget, 1000);
   const { trips } = useTrips({ budget: debouncedBudget });
-  const { messages, sendMessage } = useChatAI(trips);
+  const { sendMessage } = useChatAI(trips);
   const { generateTrips } = useEnhancedOpenAITrips();
   const { messages: tripPlannerMessages, sendMessage: sendTripPlannerMessage } = useAITripPlanner();
   const [aiTrips, setAiTrips] = useState<Trip[]>([]);
-  const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
   const [showTripPlanner, setShowTripPlanner] = useState(false);
   const { preferences } = usePersonalization();
   
@@ -499,16 +241,6 @@ export default function AiTravel() {
     setDesktopMessages((prevMessages) => [...prevMessages, message]);
   };
 
-  const clearDesktopMessages = () => {
-    setDesktopMessages([]);
-  };
-  
-
-  
-
-
-
-
   const allThemes = [
     "city breaks", "weekend spa retreats", "nearby attractions",
     "3-day getaways", "food & wine tours", "cultural festivals",
@@ -517,103 +249,13 @@ export default function AiTravel() {
   ];
 
   const [dailyThemes, setDailyThemes] = useState<string[]>([]);
-  const [isGeneratingTrips, setIsGeneratingTrips] = useState(false);
 
   useEffect(() => {
     const shuffled = [...allThemes].sort(() => 0.5 - Math.random());
     setDailyThemes(shuffled.slice(0, 6));
   }, []);
 
-  const curatedTrips = useMemo(() => {
-    return trips.length > 0 ? trips.slice(0, 6) : [];
-  }, [trips]);
-
-  // Card data arrays
-  const firstRowCards = [
-    {
-      icon: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
-      bgColor: "bg-teal-500",
-      badgeColor: "from-teal-100 to-teal-50 text-teal-700 border-teal-200",
-      category: "✨ Things to do",
-      question: "Are there any famous seafood restaurants in Tokyo?"
-    },
-    {
-      icon: "M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z",
-      bgColor: "bg-purple-500",
-      badgeColor: "from-purple-100 to-purple-50 text-purple-700 border-purple-200",
-      category: "📅 Itinerary plan",
-      question: "What should I include in a 5-day itinerary for Paris?"
-    },
-    {
-      icon: "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",
-      bgColor: "bg-red-500",
-      badgeColor: "from-red-100 to-red-50 text-red-700 border-red-200",
-      category: "🏨 Stays",
-      question: "Are there any famous seafood restaurants in Tokyo?"
-    },
-    {
-      icon: "M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z",
-      bgColor: "bg-green-500",
-      badgeColor: "from-green-100 to-green-50 text-green-700 border-green-200",
-      category: "🎯 Activities",
-      question: "Which outdoor activities are popular in New Zealand?"
-    }
-  ];
-
-  const secondRowCards = [
-    {
-      icon: "M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z",
-      bgColor: "bg-blue-500",
-      badgeColor: "from-blue-100 to-blue-50 text-blue-700 border-blue-200",
-      category: "✈️ Flights",
-      question: "How can I avoid jet lag on long-haul flights?"
-    },
-    {
-      icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
-      bgColor: "bg-orange-500",
-      badgeColor: "from-orange-100 to-orange-50 text-orange-700 border-orange-200",
-      category: "💡 Tips",
-      question: "What is the best time to visit Italy?"
-    },
-    {
-      icon: "M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z",
-      bgColor: "bg-indigo-500",
-      badgeColor: "from-indigo-100 to-indigo-50 text-indigo-700 border-indigo-200",
-      category: "🛫 Flights",
-      question: "How can I avoid jet lag on long-haul flights?"
-    },
-    {
-      icon: "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z",
-      bgColor: "bg-pink-500",
-      badgeColor: "from-pink-100 to-pink-50 text-pink-700 border-pink-200",
-      category: "📋 Bookings",
-      question: "What is the best time to visit Italy?"
-    }
-  ];
-
-  const renderCard = (card: CardData, key: string) => (
-    <div 
-      key={key}
-      className="relative flex-shrink-0 w-[480px] h-[174px] border border-border rounded-lg mr-12 p-5 shadow-lg hover:shadow-xl transition-all duration-300 group card-item hover:scale-[1.02] cursor-pointer"
-      style={{ backgroundColor: '#f5f7fa' }}
-    >
-      <div className="flex items-center gap-3 mb-4">
-        <div className={`w-8 h-8 ${card.bgColor} rounded-lg flex items-center justify-center`}>
-          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d={card.icon}/>
-          </svg>
-        </div>
-        <span className={`bg-gradient-to-r ${card.badgeColor} px-4 py-2 rounded-full text-sm font-semibold border`}>
-          {card.category}
-        </span>
-      </div>
-      <p className="text-gray-700 font-medium group-hover:text-gray-900 transition-colors">
-        {card.question}
-      </p>
-    </div>
-  );
-
-    // Desktop chat submit handler with AI integration
+  // Desktop chat submit handler with AI integration
   const handleDesktopSubmit = async (message: string, files: File[]) => {
     if (message.trim() || files.length > 0) {
       const userMessage: MessageType = {
@@ -658,7 +300,7 @@ export default function AiTravel() {
             zipCode: zipCode,
             tripType: tripType,
             preferences: preferences,
-            isMobile: true
+            isMobileChat: true
           }
         });
 
@@ -790,7 +432,6 @@ export default function AiTravel() {
 
   const handleSendMessage = async (message: string) => {
     // Unified behavior for all devices
-    setIsGeneratingTrips(true);
     sendMessage(message);
     
     // Send to trip planner but don't auto-show the modal
@@ -799,21 +440,10 @@ export default function AiTravel() {
     try {
       const result = await generateTrips(message, budget);
       setAiTrips(result.slice(0, 6));
-      setSelectedTrip(null);
-    } finally {
-      setIsGeneratingTrips(false);
+    } catch (error) {
+      console.error('Error generating trips:', error);
     }
   };
-
-  // Debug logging
-  console.log('AI Travel Debug:', {
-    showTripPlanner,
-    tripPlannerMessagesLength: tripPlannerMessages.length,
-    tripPlannerMessages: tripPlannerMessages.slice(0, 2) // Show first 2 messages for debugging
-  });
-
-  // Only show trip planner when user explicitly requests it
-  // Don't auto-show on message load
 
   return (
     <>
@@ -863,7 +493,7 @@ export default function AiTravel() {
       {/* Responsive view for all devices */}
       <div className="flex flex-col min-h-screen bg-background dark-home-component">
         
-        <main className="flex-1 flex min-h-[calc(100vh-115px)]">
+        <main className="flex-1 flex min-h-[calc(100vh-190px)] md:min-h-[calc(100vh-115px)]">
               
           {/* Main Content - Responsive */}
           <div className="flex-1 flex flex-col items-center justify-center gap-4 md:gap-7 pb-16 md:pb-24 lg:pb-4 px-2 md:px-0">
@@ -911,7 +541,7 @@ export default function AiTravel() {
 
         {/* Budget Trip Planning Section - Hidden on Mobile */}
         <div className="hidden md:block bg-white" style={{color: '#f5f7fa'}}>
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 text-gray-800">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
             {/* Form Section */}
             <div className="text-center mb-8">
               <div className="text-3xl sm:text-4xl font-bold mb-4" style={{color: '#0f2948'}}>
@@ -1000,7 +630,7 @@ export default function AiTravel() {
                 value={zipCode}
                 onChange={(e) => setZipCode(e.target.value)}
                 placeholder="Enter Zip Code"
-                className="w-full bg-gray-100 border border-gray-200 rounded-2xl px-6 py-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:bg-gray-100 transition-colors shadow-sm"
+                className="w-full bg-gray-100 border border-gray-200 rounded-2xl px-6 py-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors shadow-sm"
               />
             </div>
 
@@ -1028,7 +658,7 @@ export default function AiTravel() {
                   <button
                     key={i}
                     onClick={() => handleSendMessage(`Plan ${theme} under $${budget}`)}
-                    className="bg-blue-600/50 hover:bg-blue-500/60 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all whitespace-nowrap flex-shrink-0"
+                    className="bg-slate-700/50 hover:bg-slate-600/60 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-slate-500/20 transition-all whitespace-nowrap flex-shrink-0"
                   >
                     {theme}
                   </button>

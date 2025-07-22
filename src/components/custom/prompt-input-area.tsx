@@ -61,13 +61,23 @@ export const PromptInputArea = ({
 
   const handleSubmit = async () => {
     if (input.trim() || files.length > 0) {
-      setIsLoading(true);
-      await onSubmit(input.trim(), files);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
+      const messageToSend = input.trim();
+      const filesToSend = [...files];
+      
+      // Clear input immediately for better UX
       setInput('');
       setFiles([]);
+      setIsLoading(true);
+      
+      try {
+        await onSubmit(messageToSend, filesToSend);
+      } catch (error) {
+        console.error('Error submitting message:', error);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+      }
     }
   };
 
