@@ -790,7 +790,7 @@ export default function AiTravel() {
           {/* Travel Destinations Carousel */}
           <div className="mb-16">
             <TravelCarousel 
-              images={['https://dimg04.tripcdn.com/images/1qd3w12000eo3cz8x1671.png', '/src/assets/picture_image.png', '/src/assets/picture_image.png', '/src/assets/picture_image.png', '/src/assets/picture_image.png']}
+              images={['https://dimg04.tripcdn.com/images/1qd3r12000eo3dbd1066D.png', '/src/assets/picture_image.png', '/src/assets/picture_image.png', '/src/assets/picture_image.png', '/src/assets/picture_image.png']}
               className="mb-8"
             />
           </div>
