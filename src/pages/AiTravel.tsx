@@ -132,38 +132,52 @@ const AiTravel = () => {
             {!hasStartedChat ? (
               // Welcome Screen - TripGenie Style
               <div className="flex-1 flex flex-col bg-black">
-                {/* Header with Logo and Greeting */}
-                <div className="px-6 pt-12 pb-4">
+                {/* Header with Bot and Greeting */}
+                <div className="px-6 pt-12 pb-8 text-center">
                   <BlurFade delay={0.1} inView>
-                    <div className="flex flex-col items-center mb-6">
-                      <UtrippinLogo />
-                      <div className="mt-4 text-center flex items-center justify-center gap-2">
-                        <div className="relative w-12 h-10 bg-gray-800 rounded-2xl flex items-center justify-center border-2 border-gray-600 shadow-lg flex-shrink-0">
-                          {/* Chat bubble tail */}
-                          <div className="absolute -bottom-1 left-3 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-gray-800"></div>
-                          {/* Eyes */}
-                          <div className="absolute w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" style={{ top: '10px', left: '14px' }}></div>
-                          <div className="absolute w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" style={{ top: '10px', right: '14px' }}></div>
-                          {/* Smile */}
-                          <div className="absolute w-4 h-0.5 bg-cyan-400 rounded-full" style={{ bottom: '8px', left: '50%', transform: 'translateX(-50%)' }}></div>
+                    <div className="flex flex-col items-center mb-8">
+                      {/* Keila Bot */}
+                      <div className="relative w-20 h-16 bg-gray-800 rounded-2xl flex items-center justify-center border-2 border-gray-600 shadow-lg mb-4">
+                        {/* Chat bubble tail */}
+                        <div className="absolute -bottom-2 left-6 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-gray-800"></div>
+                        {/* Left eye with eyelashes */}
+                        <div className="absolute" style={{ top: '16px', left: '20px' }}>
+                          <div className="relative">
+                            <div className="w-3 h-3 bg-cyan-400 rounded-full border border-cyan-300"></div>
+                            <div className="absolute top-0 left-0 w-2 h-2 bg-gray-900 rounded-full ml-0.5 mt-0.5"></div>
+                            <div className="absolute top-0 left-1 w-1 h-1 bg-white rounded-full"></div>
+                            {/* Eyelashes */}
+                            <div className="absolute -top-1 left-0 w-0.5 h-1 bg-gray-900 rotate-12"></div>
+                            <div className="absolute -top-1 left-1 w-0.5 h-1 bg-gray-900"></div>
+                            <div className="absolute -top-1 right-0 w-0.5 h-1 bg-gray-900 -rotate-12"></div>
+                          </div>
                         </div>
-                        <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h2" className="text-lg font-semibold text-white mb-0 leading-tight">
-                          I&apos;m Keila! Your Ultimate Adventure Planner
-                        </TextAnimate>
+                        {/* Right eye with eyelashes */}
+                        <div className="absolute" style={{ top: '16px', right: '20px' }}>
+                          <div className="relative">
+                            <div className="w-3 h-3 bg-cyan-400 rounded-full border border-cyan-300"></div>
+                            <div className="absolute top-0 left-0 w-2 h-2 bg-gray-900 rounded-full ml-0.5 mt-0.5"></div>
+                            <div className="absolute top-0 left-1 w-1 h-1 bg-white rounded-full"></div>
+                            {/* Eyelashes */}
+                            <div className="absolute -top-1 left-0 w-0.5 h-1 bg-gray-900 rotate-12"></div>
+                            <div className="absolute -top-1 left-1 w-0.5 h-1 bg-gray-900"></div>
+                            <div className="absolute -top-1 right-0 w-0.5 h-1 bg-gray-900 -rotate-12"></div>
+                          </div>
+                        </div>
+                        {/* Smile */}
+                        <div className="absolute w-8 h-2 bg-cyan-400 rounded-full" style={{ bottom: '14px', left: '50%', transform: 'translateX(-50%)' }}></div>
                       </div>
-                    </div>
-                  </BlurFade>
-                  
-                  {/* Hi there! in upper left corner */}
-                  <BlurFade delay={0.5} inView>
-                    <div className="text-left">
-                      <h1 className="text-2xl font-bold text-white mb-4">Hi there!</h1>
+                      
+                      {/* Greeting Text */}
+                      <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-3xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+                        Hey, I&apos;m Keila your personal Travel Agent!
+                      </TextAnimate>
                     </div>
                   </BlurFade>
                 </div>
 
                 {/* Mobile Quick Questions */}
-                <div className="flex-1 px-2 -mt-6">
+                <div className="flex-1 px-2">
                   <BlurFade delay={0.7} inView>
                     <MobileQuickQuestions onQuestionSelect={handleMobileSubmit} />
                   </BlurFade>
