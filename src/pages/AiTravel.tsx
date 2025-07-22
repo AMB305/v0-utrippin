@@ -137,18 +137,18 @@ const AiTravel = () => {
                   <BlurFade delay={0.1} inView>
                     <div className="flex flex-col items-center mb-6">
                       <UtrippinLogo />
-                      <div className="mt-4 text-center flex items-center justify-center gap-3">
-                        <div className="relative w-16 h-12 bg-gray-800 rounded-2xl flex items-center justify-center border-2 border-gray-600 shadow-lg">
+                      <div className="mt-4 text-center flex items-center justify-center gap-2">
+                        <div className="relative w-12 h-10 bg-gray-800 rounded-2xl flex items-center justify-center border-2 border-gray-600 shadow-lg flex-shrink-0">
                           {/* Chat bubble tail */}
-                          <div className="absolute -bottom-2 left-4 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-gray-800"></div>
+                          <div className="absolute -bottom-1 left-3 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-gray-800"></div>
                           {/* Eyes */}
-                          <div className="absolute w-2 h-2 bg-cyan-400 rounded-full animate-pulse" style={{ top: '14px', left: '18px' }}></div>
-                          <div className="absolute w-2 h-2 bg-cyan-400 rounded-full animate-pulse" style={{ top: '14px', right: '18px' }}></div>
+                          <div className="absolute w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" style={{ top: '10px', left: '14px' }}></div>
+                          <div className="absolute w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" style={{ top: '10px', right: '14px' }}></div>
                           {/* Smile */}
-                          <div className="absolute w-6 h-1 bg-cyan-400 rounded-full" style={{ bottom: '12px', left: '50%', transform: 'translateX(-50%)' }}></div>
+                          <div className="absolute w-4 h-0.5 bg-cyan-400 rounded-full" style={{ bottom: '8px', left: '50%', transform: 'translateX(-50%)' }}></div>
                         </div>
-                        <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h2" className='text-xl font-semibold text-white mb-0'>
-                          I'm Keila! Your Ultimate Adventure Planner
+                        <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h2" className="text-lg font-semibold text-white mb-0 leading-tight">
+                          I&apos;m Keila! Your Ultimate Adventure Planner
                         </TextAnimate>
                       </div>
                     </div>
