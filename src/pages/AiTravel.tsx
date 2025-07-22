@@ -231,6 +231,7 @@ export default function AiTravel() {
   const { messages: tripPlannerMessages, sendMessage: sendTripPlannerMessage } = useAITripPlanner();
   const [aiTrips, setAiTrips] = useState<Trip[]>([]);
   const [showTripPlanner, setShowTripPlanner] = useState(false);
+  const [isGeneratingTrips, setIsGeneratingTrips] = useState(false);
   const { preferences } = usePersonalization();
   
   // New chat functionality for desktop
@@ -323,40 +324,117 @@ export default function AiTravel() {
         );
           
           if (data?.response) {
-          // Format the AI response properly
-          aiResponseContent = (
-            <div className="flex flex-col gap-3">
-              <div 
-                className="prose prose-sm max-w-none text-foreground/90"
-                dangerouslySetInnerHTML={{
-                  __html: data.response
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
-                    .replace(/\n\n/g, '</p><p class="text-foreground/80">')
-                    .replace(/\n/g, '<br>')
-                    .replace(/^/, '<p class="text-foreground/80">')
-                    .replace(/$/, '</p>')
-                }}
-              />
-              {data.suggestions && data.suggestions.length > 0 && (
-                <div className="mt-4 p-4 bg-card/50 rounded-xl border border-border/50">
-                  <h4 className="text-foreground/80 font-medium mb-2">Suggested Destinations:</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {data.suggestions.slice(0, 4).map((suggestion: AISuggestion | string, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => handleDesktopSubmit(`Tell me more about ${typeof suggestion === 'string' ? suggestion : (suggestion.name || suggestion.destination || 'this destination')}`, [])}
-                        className="text-left p-2 rounded-lg bg-secondary/50 hover:bg-secondary/80 transition-colors"
-                      >
-                        <span className="text-foreground/90 text-sm">
-                          {typeof suggestion === 'string' ? suggestion : (suggestion.name || suggestion.destination || 'Destination')}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
+          // Check if response is JSON format (for mobile chat) or HTML format (for full trip planning)
+          let parsedResponse = null;
+          try {
+            parsedResponse = JSON.parse(data.response);
+          } catch (e) {
+            // Not JSON, treat as HTML/text response
+          }
+
+          if (parsedResponse && parsedResponse.title && parsedResponse.content) {
+            // Handle JSON format response
+            aiResponseContent = (
+              <div className="flex flex-col gap-4">
+                {/* Title */}
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-foreground text-xl font-bold">
+                    {parsedResponse.title}
+                  </h3>
+                  {parsedResponse.subtitle && (
+                    <p className="text-foreground/70 text-sm">
+                      {parsedResponse.subtitle}
+                    </p>
+                  )}
                 </div>
-              )}
-            </div>
-          );
+                
+                {/* Content */}
+                <div 
+                  className="prose prose-sm max-w-none text-foreground/90"
+                  dangerouslySetInnerHTML={{
+                    __html: parsedResponse.content
+                      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+                      .replace(/\n\n/g, '</p><p class="text-foreground/80">')
+                      .replace(/\n/g, '<br>')
+                      .replace(/^/, '<p class="text-foreground/80">')
+                      .replace(/$/, '</p>')
+                  }}
+                />
+
+                {/* Utrippin Link */}
+                {parsedResponse.utrippin_link && (
+                  <div className="mt-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                    <a 
+                      href={parsedResponse.utrippin_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:text-primary/80 font-medium text-sm flex items-center gap-2 transition-colors"
+                    >
+                      🌟 Explore more at Utrippin.ai
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+                )}
+
+                {/* Suggestions */}
+                {data.suggestions && data.suggestions.length > 0 && (
+                  <div className="mt-4 p-4 bg-card/50 rounded-xl border border-border/50">
+                    <h4 className="text-foreground/80 font-medium mb-2">Suggested Destinations:</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {data.suggestions.slice(0, 4).map((suggestion: AISuggestion | string, index: number) => (
+                        <button
+                          key={index}
+                          onClick={() => handleDesktopSubmit(`Tell me more about ${typeof suggestion === 'string' ? suggestion : (suggestion.name || suggestion.destination || 'this destination')}`, [])}
+                          className="text-left p-2 rounded-lg bg-secondary/50 hover:bg-secondary/80 transition-colors"
+                        >
+                          <span className="text-foreground/90 text-sm">
+                            {typeof suggestion === 'string' ? suggestion : (suggestion.name || suggestion.destination || 'Destination')}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          } else {
+            // Handle HTML/text format response (existing behavior)
+            aiResponseContent = (
+              <div className="flex flex-col gap-3">
+                <div 
+                  className="prose prose-sm max-w-none text-foreground/90"
+                  dangerouslySetInnerHTML={{
+                    __html: data.response
+                      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+                      .replace(/\n\n/g, '</p><p class="text-foreground/80">')
+                      .replace(/\n/g, '<br>')
+                      .replace(/^/, '<p class="text-foreground/80">')
+                      .replace(/$/, '</p>')
+                  }}
+                />
+                {data.suggestions && data.suggestions.length > 0 && (
+                  <div className="mt-4 p-4 bg-card/50 rounded-xl border border-border/50">
+                    <h4 className="text-foreground/80 font-medium mb-2">Suggested Destinations:</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {data.suggestions.slice(0, 4).map((suggestion: AISuggestion | string, index: number) => (
+                        <button
+                          key={index}
+                          onClick={() => handleDesktopSubmit(`Tell me more about ${typeof suggestion === 'string' ? suggestion : (suggestion.name || suggestion.destination || 'this destination')}`, [])}
+                          className="text-left p-2 rounded-lg bg-secondary/50 hover:bg-secondary/80 transition-colors"
+                        >
+                          <span className="text-foreground/90 text-sm">
+                            {typeof suggestion === 'string' ? suggestion : (suggestion.name || suggestion.destination || 'Destination')}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          }
         } else if (data?.trips && data.trips.length > 0) {
           // Handle trip recommendations
           aiResponseContent = (
@@ -431,17 +509,17 @@ export default function AiTravel() {
   };
 
   const handleSendMessage = async (message: string) => {
-    // Unified behavior for all devices
-    sendMessage(message);
-    
-    // Send to trip planner but don't auto-show the modal
-    await sendTripPlannerMessage(message);
+    setIsGeneratingTrips(true);
     
     try {
+      // Use the generateTrips hook to create trip suggestions
       const result = await generateTrips(message, budget);
       setAiTrips(result.slice(0, 6));
     } catch (error) {
-      console.error('Error generating trips:', error);
+      console.error('Trip generation failed:', error);
+      setAiTrips([]); // Clear any existing trips
+    } finally {
+      setIsGeneratingTrips(false);
     }
   };
 
@@ -672,6 +750,66 @@ export default function AiTravel() {
                   </div>
                 </div>
               </div>
+
+              {/* AI Generated Trips Display */}
+              {(aiTrips.length > 0 || isGeneratingTrips) && (
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+                  <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-blue-600" /> 
+                    AI Generated Trips
+                    {isGeneratingTrips && <span className="text-sm text-slate-500 ml-2">Generating...</span>}
+                  </h3>
+                  {isGeneratingTrips ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                      {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div key={i} className="bg-white/50 p-4 sm:p-5 rounded-2xl border border-slate-200 animate-pulse">
+                          <div className="h-5 bg-slate-300 rounded mb-2"></div>
+                          <div className="h-16 bg-slate-300 rounded mb-4"></div>
+                          <div className="flex gap-3">
+                            <div className="h-8 w-20 bg-slate-300 rounded"></div>
+                            <div className="h-8 w-20 bg-slate-300 rounded"></div>
+                            <div className="h-8 w-20 bg-slate-300 rounded"></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                      {aiTrips.map((trip, i) => (
+                        <div key={i} className="bg-white/80 p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-blue-300 transition-colors shadow-sm">
+                          <h4 className="text-slate-800 font-semibold text-lg mb-2">{trip.name || trip.destination}</h4>
+                          <p className="text-slate-600 text-sm mb-4 line-clamp-3">{trip.description || trip.summary}</p>
+                          {trip.budget && (
+                            <p className="text-blue-600 font-medium text-sm mb-3">
+                              Budget: ${trip.budget.toLocaleString()}
+                            </p>
+                          )}
+                          <div className="flex gap-2 flex-wrap">
+                            <button
+                              onClick={() => window.open(`https://utrippin.ai/flights?destination=${encodeURIComponent(trip.name || trip.destination || '')}`, '_blank')}
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                            >
+                              ✈️ Flights
+                            </button>
+                            <button
+                              onClick={() => window.open(`https://utrippin.ai/hotels?destination=${encodeURIComponent(trip.name || trip.destination || '')}`, '_blank')}
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                            >
+                              🏨 Hotels
+                            </button>
+                            <button
+                              onClick={() => window.open(`https://utrippin.ai/cars?destination=${encodeURIComponent(trip.name || trip.destination || '')}`, '_blank')}
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                            >
+                              🚗 Cars
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
                   </div>
                         </div>

@@ -108,6 +108,20 @@ export const PromptInputArea = ({
     }
   };
 
+  const handleSuggestionClick = async (promptValue: string) => {
+    setIsLoading(true);
+    
+    try {
+      await onSubmit(promptValue, []);
+    } catch (error) {
+      console.error('Error submitting suggestion:', error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-4 w-full", className)}>
       <div className="w-full rounded-xl bg-card relative overflow-hidden border-2 border-primary/20">
@@ -212,7 +226,8 @@ export const PromptInputArea = ({
               variant="outline"
               className="border-2 border-input gap-2 px-5 font-normal cursor-pointer text-neutral-500 hover:bg-primary/10"
               key={prompt.value}
-              onClick={() => setInput(prompt.value)}
+              onClick={() => handleSuggestionClick(prompt.value)}
+              disabled={isLoading}
             >
               <div className="hidden md:block">{prompt.icon}</div>
               {prompt.value}
