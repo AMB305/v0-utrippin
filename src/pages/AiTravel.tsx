@@ -20,8 +20,92 @@ import { BlurFade } from "@/components/magicui/blur-fade";
 import { PromptInputArea } from '@/components/custom/prompt-input-area';
 import { ChatContainer, Message as MessageType } from '@/components/custom/chat-container';
 
-// Add CSS animations for darkmode styles
+// Add CSS animations for darkmode styles and custom scrollbars
 const scrollingStyles = `
+  /* Custom Scrollbar Styles */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.3);
+    border-radius: 3px;
+    transition: all 0.2s ease;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.5);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:active {
+    background: rgba(156, 163, 175, 0.7);
+  }
+
+  /* Dark mode scrollbar */
+  .dark-home-component .custom-scrollbar {
+    scrollbar-color: rgba(75, 85, 99, 0.4) transparent;
+  }
+
+  .dark-home-component .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(75, 85, 99, 0.4);
+  }
+
+  .dark-home-component .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(75, 85, 99, 0.6);
+  }
+
+  .dark-home-component .custom-scrollbar::-webkit-scrollbar-thumb:active {
+    background: rgba(75, 85, 99, 0.8);
+  }
+
+  /* Smooth scrolling */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+
+  /* Hide scrollbar when not hovering */
+  .auto-hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .auto-hide-scrollbar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .auto-hide-scrollbar:hover::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    opacity: 1;
+  }
+
+  .auto-hide-scrollbar:hover {
+    scrollbar-width: thin;
+  }
+
+
+
+  /* Smooth scroll enhancement */
+  @media (prefers-reduced-motion: no-preference) {
+    .smooth-scroll {
+      scroll-behavior: smooth;
+    }
+  }
+
   /* Darkmode styles for Home component */
   .dark-home-component {
     --background-elevated: rgba(22, 23, 26, 1);
@@ -242,6 +326,25 @@ export default function AiTravel() {
     setDesktopMessages((prevMessages) => [...prevMessages, message]);
   };
 
+
+
+  // Auto-scroll to bottom when new message is added
+  useEffect(() => {
+    if (containerRef.current && desktopMessages.length > 0) {
+      const container = containerRef.current;
+      const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+      
+      if (isNearBottom) {
+        setTimeout(() => {
+          container.scrollTo({
+            top: container.scrollHeight,
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
+    }
+  }, [desktopMessages]);
+
   const allThemes = [
     "city breaks", "weekend spa retreats", "nearby attractions",
     "3-day getaways", "food & wine tours", "cultural festivals",
@@ -326,26 +429,56 @@ export default function AiTravel() {
           if (data?.response) {
           // Check if response is JSON format (for mobile chat) or HTML format (for full trip planning)
           let parsedResponse = null;
+          
+          // Check if response looks like JSON (starts with { and ends with })
+          const trimmedResponse = data.response.trim();
+          if (trimmedResponse.startsWith('{') && trimmedResponse.endsWith('}')) {
           try {
+              // Try parsing the response as-is first
             parsedResponse = JSON.parse(data.response);
           } catch (e) {
-            // Not JSON, treat as HTML/text response
+              console.error('Initial JSON parse failed:', e.message);
+              console.error('Attempting manual JSON extraction...');
+              
+              // Try to extract JSON manually using regex and clean it
+              try {
+                const jsonMatch = data.response.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                  const extractedJson = jsonMatch[0];
+                  console.log('Extracted JSON (first 200 chars):', extractedJson.substring(0, 200));
+                  
+                  // Clean the extracted JSON by properly handling control characters
+                  const basicCleaned = extractedJson
+                    .replace(/[\r\n\t\f\v]/g, ' ')  // Replace whitespace control chars with single space
+                    // eslint-disable-next-line no-control-regex
+                    .replace(/[\x00-\x08\x0E-\x1F]/g, '')  // Remove other control characters
+                    .replace(/\s+/g, ' ')  // Normalize multiple spaces to single space
+                    .trim(); // Remove leading/trailing spaces
+                  
+                  const rawParsed = JSON.parse(basicCleaned);
+                  
+                  // Clean up the parsed object by trimming spaces from keys and values
+                  parsedResponse = {};
+                  for (const [key, value] of Object.entries(rawParsed)) {
+                    const cleanKey = key.trim();
+                    const cleanValue = typeof value === 'string' ? value.trim() : value;
+                    parsedResponse[cleanKey] = cleanValue;
+                  }
+                } 
+              } catch (extractError) {
+                console.error('Manual extraction also failed:', extractError.message);
+                console.error('This response will be treated as plain text');
+                // Will fall through to treat as HTML/text response
+              }
+            }
+          } else {
+            console.error('Response does not appear to be JSON format, treating as plain text');
           }
 
           if (parsedResponse && parsedResponse.title && parsedResponse.content) {
             // Handle JSON format response with improved display
             aiResponseContent = (
               <div className="flex flex-col gap-4">
-                {/* JSON Structure Debug Panel - removable via toggle */}
-                <details className="bg-muted/20 rounded-lg p-3 border border-border/30">
-                  <summary className="text-foreground/70 text-xs font-medium cursor-pointer hover:text-foreground/90 transition-colors">
-                    View JSON Response Structure
-                  </summary>
-                  <pre className="mt-2 text-xs text-foreground/60 bg-background/50 p-2 rounded border overflow-x-auto">
-                    {JSON.stringify(parsedResponse, null, 2)}
-                  </pre>
-                </details>
-
                 {/* Title */}
                 <div className="flex flex-col gap-1">
                   <h3 className="text-foreground text-xl font-bold">
@@ -358,18 +491,143 @@ export default function AiTravel() {
                   )}
                 </div>
                 
-                {/* Content */}
-                <div 
-                  className="prose prose-sm max-w-none text-foreground/90"
+                {                /* Content */}
+                <div className="prose prose-sm max-w-none">
+                  {(() => {
+                    // Better parsing for content with extra spaces from JSON cleaning
+                    const content = parsedResponse.content;
+                    
+                    // Split content and process it to handle spaced bullet points
+                    const parts = content.split(/•/).filter(part => part.trim());
+                    
+                    if (parts.length > 1) {
+                      // We have bullet points
+                      const introText = parts[0].trim();
+                      const bulletPoints = parts.slice(1);
+                      
+                      return (
+                        <div className="space-y-3">
+                          {/* Intro text if exists */}
+                          {introText && (
+                            <p className="text-foreground/80 mb-3 leading-relaxed text-xs"
                   dangerouslySetInnerHTML={{
-                    __html: parsedResponse.content
+                                 __html: introText
                       .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
-                      .replace(/\n\n/g, '</p><p class="text-foreground/80">')
-                      .replace(/\n/g, '<br>')
-                      .replace(/^/, '<p class="text-foreground/80">')
-                      .replace(/$/, '</p>')
-                  }}
-                />
+                                   .replace(/utrippin\.ai\/packages/g, '<a href="https://utrippin.ai/packages" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 underline">utrippin.ai/packages</a>')
+                               }}
+                            />
+                          )}
+                          
+                          {/* Process bullet points by category */}
+                          {(() => {
+                            let currentCategory = '';
+                            let currentBullets = [];
+                            const result = [];
+                            
+                            bulletPoints.forEach((bullet, index) => {
+                              const text = bullet.trim();
+                              
+                              // Check if this is a category header (contains ':' and doesn't have '-')
+                              if (text.includes(':') && !text.includes(' - ')) {
+                                // Save previous category if exists
+                                if (currentCategory && currentBullets.length > 0) {
+                                  result.push({ category: currentCategory, bullets: currentBullets });
+                                }
+                                // Start new category
+                                currentCategory = text.replace(':', '').trim();
+                                currentBullets = [];
+                              } else {
+                                // This is a bullet point
+                                currentBullets.push(text);
+                              }
+                              
+                              // Handle last category
+                              if (index === bulletPoints.length - 1 && currentBullets.length > 0) {
+                                result.push({ category: currentCategory, bullets: currentBullets });
+                              }
+                            });
+                            
+                            // If no categories found, treat all as simple bullets
+                            if (result.length === 0) {
+                              result.push({ category: '', bullets: bulletPoints.map(b => b.trim()) });
+                            }
+                            
+                            return result.map((section, sectionIndex) => (
+                              <div key={sectionIndex} className="mb-4">
+                                {section.category && (
+                                  <h4 className="text-foreground font-semibold text-xs mb-2">
+                                    {section.category}
+                                  </h4>
+                                )}
+                                <ul className="space-y-1.5 ml-3">
+                                  {section.bullets.map((bullet, bulletIndex) => {
+                                    const text = bullet.trim();
+                                    
+                                    // Check if it's a destination with dash (e.g., "Maldives - Overwater bungalows...")
+                                    if (text.includes(' - ')) {
+                                      const dashIndex = text.indexOf(' - ');
+                                      const destination = text.substring(0, dashIndex).trim();
+                                      const description = text.substring(dashIndex + 3).trim();
+                                      
+                                      return (
+                                        <li key={bulletIndex} className="flex items-start gap-2 p-2 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg border border-primary/20 hover:border-primary/30 transition-colors">
+                                          <span className="text-primary mt-0.5">•</span>
+                                          <div>
+                                            <h5 className="text-foreground font-semibold text-xs">
+                                              {destination}
+                                            </h5>
+                                            <p className="text-foreground/70 text-xs">{description}</p>
+                                          </div>
+                                        </li>
+                                      );
+                                    } else {
+                                      return (
+                                        <li key={bulletIndex} className="flex items-start gap-2 text-foreground/80">
+                                          <span className="text-primary mt-0.5">•</span>
+                                          <span className="text-xs">{text}</span>
+                                        </li>
+                                      );
+                                    }
+                                  })}
+                                </ul>
+                              </div>
+                            ));
+                          })()}
+                          
+                          {/* Check for remaining content after bullet points */}
+                          {(() => {
+                            const lastPart = bulletPoints[bulletPoints.length - 1];
+                            const afterBullets = lastPart?.split(/(?:Let me know|You can also|To help)/);
+                            if (afterBullets && afterBullets.length > 1) {
+                              const remainingText = 'Let me know' + afterBullets.slice(1).join('Let me know');
+                              return (
+                                <p className="text-foreground/80 mt-3 leading-relaxed text-xs"
+                                   dangerouslySetInnerHTML={{
+                                     __html: remainingText
+                                       .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+                                       .replace(/utrippin\.ai\/packages/g, '<a href="https://utrippin.ai/packages" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 underline">utrippin.ai/packages</a>')
+                                   }}
+                                />
+                              );
+                            }
+                            return null;
+                          })()}
+                        </div>
+                      );
+                    } else {
+                      // No bullet points, regular paragraph
+                      return (
+                        <p className="text-foreground/80 mb-3 leading-relaxed text-xs"
+                           dangerouslySetInnerHTML={{
+                             __html: content
+                               .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+                               .replace(/utrippin\.ai\/packages/g, '<a href="https://utrippin.ai/packages" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 underline">utrippin.ai/packages</a>')
+                           }}
+                        />
+                      );
+                    }
+                  })()}
+                </div>
 
                 {/* Additional JSON fields if present */}
                 {parsedResponse.highlights && Array.isArray(parsedResponse.highlights) && (
@@ -498,16 +756,6 @@ export default function AiTravel() {
         
         addDesktopMessage(aiResponse);
 
-        // Also trigger the existing trip generation for additional suggestions
-        try {
-          const result = await generateTrips(message.trim(), budget);
-          if (result && result.length > 0) {
-            setAiTrips(result.slice(0, 6));
-          }
-        } catch (tripError) {
-          console.log('Additional trip generation failed:', tripError);
-        }
-
       } catch (error) {
         console.error('Error calling AI API:', error);
         
@@ -544,11 +792,11 @@ export default function AiTravel() {
     
     try {
       // Use the generateTrips hook to create trip suggestions
-      const result = await generateTrips(message, budget);
-      setAiTrips(result.slice(0, 6));
+        const result = await generateTrips(message, budget);
+        setAiTrips(result.slice(0, 6));
     } catch (error) {
       console.error('Trip generation failed:', error);
-      setAiTrips([]); // Clear any existing trips
+        setAiTrips([]); // Clear any existing trips
     } finally {
       setIsGeneratingTrips(false);
     }
@@ -598,16 +846,43 @@ export default function AiTravel() {
         />
       )}
 
-      <Header />
+      {/* Fixed Header */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/10 shadow-sm">
+        <Header />
+      </div>
+      
       {/* Responsive view for all devices */}
-      <div className="flex flex-col min-h-screen bg-background dark-home-component">
+      <div className="flex flex-col bg-background dark-home-component smooth-scroll mt-[50px] lg:mt-[114px]">
         
-        <main className="flex-1 flex min-h-[calc(100vh-190px)] md:min-h-[calc(100vh-115px)]">
+        <main className="flex-1 flex min-h-[calc(100vh-50px)] lg:min-h-[calc(100vh-114px)]">
               
           {/* Main Content - Responsive */}
-          <div className="flex-1 flex flex-col items-center justify-center gap-4 md:gap-7 pb-16 md:pb-24 lg:pb-4 px-2 md:px-0">
-            {desktopMessages?.length <= 0 && (
-              <>
+          <div className="flex-1 flex flex-col items-center px-2 md:px-0">
+            {/* Chat area with fixed height when messages exist */}
+            {desktopMessages?.length > 0 ? (
+              <div className="w-full flex-1 flex flex-col max-w-[752px] py-4 relative">
+                {/* Chat Messages Container with fixed height and scroll */}
+                <div
+                  ref={containerRef}
+                  className="flex-1 overflow-y-auto mb-4 custom-scrollbar smooth-scroll max-h-[calc(100vh-220px)] lg:max-h-[calc(100vh-280px)]"
+                >
+                  <div className="w-full px-4">
+                    <ChatContainer messages={desktopMessages} containerRef={containerRef} />
+                  </div>
+                </div>
+                
+                {/* Input area fixed at bottom */}
+                <div className="flex-shrink-0">
+                  <PromptInputArea
+                    onSubmit={handleDesktopSubmit}
+                    showSuggestions={false}
+                    className="w-full px-2"
+                  />
+                </div>
+              </div>
+            ) : (
+              /* Welcome screen when no messages */
+              <div className="flex-1 flex flex-col items-center justify-center gap-4 md:gap-7 pb-16 md:pb-24 lg:pb-4">
                 <BlurFade delay={0.25} inView>
                   <div className="w-[70px] -mb-6">
                      <img 
@@ -626,30 +901,20 @@ export default function AiTravel() {
                     Let's plan your dream trip! ✨
                   </TextAnimate>
                        </div>
-              </>
-            )}
-
-            {desktopMessages?.length > 0 && (
-              <div
-                ref={containerRef}
-                className="w-full h-full overflow-y-auto flex justify-center"
-              >
-                <div className="max-w-[752px] w-full px-4">
-                  <ChatContainer messages={desktopMessages} containerRef={containerRef} />
-                       </div>
-                     </div>
-                   )}
-
+                
+                {/* Input area for welcome screen */}
             <PromptInputArea
               onSubmit={handleDesktopSubmit}
-              showSuggestions={desktopMessages?.length <= 0}
+                  showSuggestions={true}
               className="max-w-[752px] w-full px-2"
             />
+              </div>
+            )}
             </div>
         </main>
 
         {/* Budget Trip Planning Section - Hidden on Mobile */}
-        <div className="hidden md:block bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 border-t border-border/10">
+        <div className="hidden md:block bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 border-t border-border/10 custom-scrollbar">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
             
             {/* Header Section */}
@@ -844,7 +1109,9 @@ export default function AiTravel() {
             </div>
                   </div>
                         </div>
-        <Footer />
+        <div className="hidden md:block">
+          <Footer />
+        </div>
       </div>
       
       <BackToTop />
