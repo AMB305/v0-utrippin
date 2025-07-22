@@ -557,126 +557,118 @@ export default function AiTravel() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div className="space-y-6">
               
-              {/* Left Column - Controls */}
-              <div className="space-y-8">
-                
-                {/* Trip Type Toggle */}
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
-                  <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                    🎯 Trip Type
-                  </h3>
-                  <div className="bg-slate-100/80 p-2 rounded-xl">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setTripType('staycation')}
-                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all ${
-                          tripType === 'staycation'
-                            ? 'bg-white text-blue-600 shadow-md border border-blue-200'
-                            : 'text-slate-600 hover:bg-white/50'
-                        }`}
-                      >
-                        🏠 Staycation
-                      </button>
-                      <button
-                        onClick={() => setTripType('vacation')}
-                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all ${
-                          tripType === 'vacation'
-                            ? 'bg-white text-blue-600 shadow-md border border-blue-200'
-                            : 'text-slate-600 hover:bg-white/50'
-                        }`}
-                      >
-                        ✈️ Vacation
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Group Size */}
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
-                  <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                    👥 Group Size
-                  </h3>
-                  <div className="flex items-center justify-center gap-6 bg-slate-50/80 p-4 rounded-xl">
+              {/* Trip Type Toggle */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                  🎯 Trip Type
+                </h3>
+                <div className="bg-slate-100/80 p-2 rounded-xl max-w-md mx-auto">
+                  <div className="flex gap-2">
                     <button
-                      onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
-                      className="w-12 h-12 bg-white hover:bg-blue-50 text-blue-600 rounded-full font-bold text-xl transition-all hover:shadow-md border border-blue-200"
+                      onClick={() => setTripType('staycation')}
+                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all ${
+                        tripType === 'staycation'
+                          ? 'bg-white text-blue-600 shadow-md border border-blue-200'
+                          : 'text-slate-600 hover:bg-white/50'
+                      }`}
                     >
-                      −
+                      🏠 Staycation
                     </button>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-slate-800">{groupSize}</div>
-                      <div className="text-sm text-slate-500">{groupSize === 1 ? 'person' : 'people'}</div>
-                    </div>
                     <button
-                      onClick={() => setGroupSize(groupSize + 1)}
-                      className="w-12 h-12 bg-white hover:bg-blue-50 text-blue-600 rounded-full font-bold text-xl transition-all hover:shadow-md border border-blue-200"
+                      onClick={() => setTripType('vacation')}
+                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all ${
+                        tripType === 'vacation'
+                          ? 'bg-white text-blue-600 shadow-md border border-blue-200'
+                          : 'text-slate-600 hover:bg-white/50'
+                      }`}
                     >
-                      +
+                      ✈️ Vacation
                     </button>
                   </div>
-                </div>
-
-                {/* Zip Code Input */}
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
-                  <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                    📍 Location {tripType === 'staycation' ? '(Staycation Area)' : '(Starting Point)'}
-                  </h3>
-                  <input
-                    type="text"
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
-                    placeholder="Enter your zip code"
-                    className="w-full bg-white/80 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
-                  />
                 </div>
               </div>
 
-              {/* Right Column - Budget & Action */}
-              <div className="space-y-8">
-                
-                {/* Budget Slider */}
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
-                  <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                    💰 Budget Range
-                  </h3>
-                  <BudgetSlider budget={budget} onBudgetChange={setBudget} min={100} max={1000000} />
-                  <div className="text-center mt-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
-                    <span className="text-blue-600 font-semibold">
-                      Perfect for a ${budget.toLocaleString()} {tripType}
-                    </span>
-                  </div>
+              {/* Budget Slider */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                  💰 Budget Range
+                </h3>
+                <BudgetSlider budget={budget} onBudgetChange={setBudget} min={100} max={1000000} />
+                <div className="text-center mt-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg max-w-md mx-auto">
+                  <span className="text-blue-600 font-semibold">
+                    Perfect for a ${budget.toLocaleString()} {tripType}
+                  </span>
                 </div>
+              </div>
 
-                {/* Action Button */}
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+              {/* Group Size */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                  👥 Group Size
+                </h3>
+                <div className="flex items-center justify-center gap-6 bg-slate-50/80 p-4 rounded-xl max-w-md mx-auto">
                   <button
-                    onClick={() => {
-                      const location = zipCode ? `near ${zipCode}` : '';
-                      const message = `Plan a ${tripType} for ${groupSize} ${groupSize === 1 ? 'person' : 'people'} with a budget of $${budget} ${location}`;
-                      handleSendMessage(message);
-                    }}
-                    className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white px-6 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
+                    className="w-12 h-12 bg-white hover:bg-blue-50 text-blue-600 rounded-full font-bold text-xl transition-all hover:shadow-md border border-blue-200"
                   >
-                    <Sparkles className="h-5 w-5" />
-                    Create My Trip Plan
+                    −
                   </button>
-                  
-                  {/* Quick Suggestions */}
-                  <div className="mt-6">
-                    <h4 className="text-sm font-medium text-slate-600 mb-3 text-center">Quick Ideas</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {dailyThemes.slice(0, 4).map((theme, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleSendMessage(`Plan ${theme} under $${budget}`)}
-                          className="bg-gradient-to-r from-slate-100 to-blue-50 hover:from-blue-50 hover:to-indigo-50 text-slate-700 text-xs px-3 py-2 rounded-lg border border-slate-200 hover:border-blue-300 transition-all text-center"
-                        >
-                          {theme}
-                        </button>
-                      ))}
-                    </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-slate-800">{groupSize}</div>
+                    <div className="text-sm text-slate-500">{groupSize === 1 ? 'person' : 'people'}</div>
+                  </div>
+                  <button
+                    onClick={() => setGroupSize(groupSize + 1)}
+                    className="w-12 h-12 bg-white hover:bg-blue-50 text-blue-600 rounded-full font-bold text-xl transition-all hover:shadow-md border border-blue-200"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Location Input */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                  📍 Location {tripType === 'staycation' ? '(Staycation Area)' : '(Starting Point)'}
+                </h3>
+                <input
+                  type="text"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                  placeholder="Enter your zip code"
+                  className="w-full max-w-md mx-auto block bg-white/80 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                />
+              </div>
+
+              {/* Action Button & Quick Suggestions */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl">
+                <button
+                  onClick={() => {
+                    const location = zipCode ? `near ${zipCode}` : '';
+                    const message = `Plan a ${tripType} for ${groupSize} ${groupSize === 1 ? 'person' : 'people'} with a budget of $${budget} ${location}`;
+                    handleSendMessage(message);
+                  }}
+                  className="w-full max-w-md mx-auto block bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white px-6 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl mb-6"
+                >
+                  <Sparkles className="h-5 w-5" />
+                  Create My Trip Plan
+                </button>
+                
+                {/* Quick Suggestions */}
+                <div>
+                  <h4 className="text-sm font-medium text-slate-600 mb-3 text-center">Quick Ideas</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-2xl mx-auto">
+                    {dailyThemes.slice(0, 4).map((theme, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleSendMessage(`Plan ${theme} under $${budget}`)}
+                        className="bg-gradient-to-r from-slate-100 to-blue-50 hover:from-blue-50 hover:to-indigo-50 text-slate-700 text-xs px-3 py-2 rounded-lg border border-slate-200 hover:border-blue-300 transition-all text-center"
+                      >
+                        {theme}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
