@@ -126,24 +126,22 @@ const AiTravel = () => {
         canonical="https://utrippin.ai/ai-travel"
       />
       
-      <div className="min-h-screen bg-white text-gray-900">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 text-white">
         {isMobile ? (
-          <div className="flex flex-col h-screen bg-white">
+          <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900">
             {!hasStartedChat ? (
               // Welcome Screen - TripGenie Style
-              <div className="flex-1 flex flex-col bg-white">
+              <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900">
                 {/* Header with Logo and Greeting */}
                 <div className="px-6 pt-12 pb-4">
                   <BlurFade delay={0.1} inView>
                     <div className="flex flex-col items-center mb-6">
                       <UtrippinLogo />
                       <div className="mt-4 text-center flex items-center justify-center gap-3">
-                        <div className="relative w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center border-2 border-gray-600">
-                          <div className="absolute w-2 h-2 bg-cyan-400 rounded-full" style={{ top: '18px', left: '16px' }}></div>
-                          <div className="absolute w-2 h-2 bg-cyan-400 rounded-full" style={{ top: '18px', right: '16px' }}></div>
-                          <div className="absolute w-3 h-1 bg-cyan-400 rounded-full" style={{ bottom: '16px' }}></div>
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                          <Sparkles className="w-6 h-6 text-white" />
                         </div>
-                        <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h2" className='text-xl font-semibold text-gray-900 mb-0'>
+                        <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h2" className='text-xl font-semibold text-white mb-0'>
                           I'm Keila! Your Ultimate Adventure Planner
                         </TextAnimate>
                       </div>
@@ -153,8 +151,8 @@ const AiTravel = () => {
                   {/* Hi there! in upper left corner */}
                   <BlurFade delay={0.5} inView>
                     <div className="text-left">
-                      <h1 className="text-2xl font-bold text-gray-900 mb-2">Hi there!</h1>
-                      <p className="text-gray-600 text-base">Ask me anything about your next trip!</p>
+                      <h1 className="text-2xl font-bold text-white mb-2">Hi there!</h1>
+                      <p className="text-gray-300 text-base">Ask me anything about your next trip!</p>
                     </div>
                   </BlurFade>
                 </div>
@@ -167,9 +165,9 @@ const AiTravel = () => {
                 </div>
 
                 {/* Mobile Input Area with Live Translate */}
-                <div className="p-4 bg-white border-t border-gray-100">
+                <div className="p-4 bg-gray-800/50 border-t border-gray-700">
                   <div className="flex gap-2 mb-2">
-                    <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs border-gray-200">
+                    <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs border-gray-600 text-gray-300 hover:bg-gray-700">
                       <Languages className="h-3 w-3" />
                       Live Translate
                     </Button>
@@ -179,7 +177,7 @@ const AiTravel = () => {
                       value={mobileInput}
                       onChange={(e) => setMobileInput(e.target.value)}
                       placeholder="Ask me about your travel plans..."
-                      className="flex-1 bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500"
+                      className="flex-1 bg-gray-700/50 border-gray-600 text-white placeholder-gray-400"
                     />
                     <Button
                       onClick={() => handleMobileSubmit(mobileInput)}
@@ -193,24 +191,24 @@ const AiTravel = () => {
               </div>
             ) : (
               // Chat Interface
-              <div className="flex flex-col h-screen bg-white">
+              <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900">
                 {/* Chat Header */}
-                <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white">
+                <div className="px-4 py-3 border-b border-gray-700 flex items-center justify-between bg-gray-800/50">
                   <div className="flex items-center gap-3">
                     <Button variant="ghost" size="icon" onClick={() => setHasStartedChat(false)}>
                       <ArrowLeft className="w-5 h-5" />
                     </Button>
-                    <h1 className="text-lg font-semibold text-gray-900">
+                    <h1 className="text-lg font-semibold text-white">
                       Travel Planning
                     </h1>
                   </div>
-                  <Button variant="outline" size="sm" className="border-gray-200">
+                  <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-700">
                     Save Trip
                   </Button>
                 </div>
 
                 {/* Chat Messages */}
-                <div className="flex-1 overflow-y-auto bg-gray-50">
+                <div className="flex-1 overflow-y-auto bg-gray-800/30">
                   {mobileChatMessages.map((message) => (
                     <div key={message.id} className="px-4 py-3">
                       <div className="flex flex-col space-y-3">
@@ -224,7 +222,7 @@ const AiTravel = () => {
                         {/* AI Response */}
                         {message.response && (
                           <div className="flex justify-start">
-                            <div className="bg-white text-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-200 shadow-sm">
+                            <div className="bg-gray-800 text-white px-4 py-2 rounded-2xl max-w-[80%] border border-gray-600">
                               {message.loading ? (
                                 <p>Loading...</p>
                               ) : (
@@ -239,9 +237,9 @@ const AiTravel = () => {
                 </div>
 
                 {/* Chat Input with Live Translate */}
-                <div className="p-4 bg-white border-t border-gray-200">
+                <div className="p-4 bg-gray-800/50 border-t border-gray-700">
                   <div className="flex gap-2 mb-2">
-                    <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs border-gray-200">
+                    <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs border-gray-600 text-gray-300 hover:bg-gray-700">
                       <Languages className="h-3 w-3" />
                       Live Translate
                     </Button>
@@ -251,7 +249,7 @@ const AiTravel = () => {
                       value={mobileInput}
                       onChange={(e) => setMobileInput(e.target.value)}
                       placeholder="Ask me anything..."
-                      className="flex-1 bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500"
+                      className="flex-1 bg-gray-700/50 border-gray-600 text-white placeholder-gray-400"
                     />
                     <Button
                       onClick={() => handleMobileSubmit(mobileInput)}
