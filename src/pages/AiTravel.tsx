@@ -136,34 +136,35 @@ export default function AiTravel() {
         />
       )}
       
-      {/* Mobile sidebar overlay */}
-      <div className="lg:hidden fixed left-0 top-0 w-[280px] h-screen z-50 transform -translate-x-full transition-transform duration-300">
-        <ConversationSidebar
-          conversations={preferences.savedConversations || []}
-          onNewConversation={() => {
-            setAiTrips([]);
-            setSelectedTrip(null);
-            setShowTripPlanner(false);
-          }}
-        />
-      </div>
-
-      {/* Desktop sidebar - always visible on large screens */}
-      <div className="hidden lg:block fixed left-0 top-0 w-[300px] h-screen bg-slate-900 border-r border-slate-700 z-40">
-        <ConversationSidebar
-          conversations={preferences.savedConversations || []}
-          onNewConversation={() => {
-            setAiTrips([]);
-            setSelectedTrip(null);
-            setShowTripPlanner(false);
-          }}
-        />
-      </div>
-
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black text-white">
         <Header />
         
-        <main className="flex-1 lg:ml-[300px]">
+        <div className="flex flex-1">
+          {/* Mobile sidebar overlay */}
+          <div className="lg:hidden fixed left-0 top-0 w-[280px] h-full z-50 transform -translate-x-full transition-transform duration-300">
+            <ConversationSidebar
+              conversations={preferences.savedConversations || []}
+              onNewConversation={() => {
+                setAiTrips([]);
+                setSelectedTrip(null);
+                setShowTripPlanner(false);
+              }}
+            />
+          </div>
+
+          {/* Desktop sidebar - positioned below header */}
+          <div className="hidden lg:block w-[300px] bg-slate-900 border-r border-slate-700 overflow-y-auto">
+            <ConversationSidebar
+              conversations={preferences.savedConversations || []}
+              onNewConversation={() => {
+                setAiTrips([]);
+                setSelectedTrip(null);
+                setShowTripPlanner(false);
+              }}
+            />
+          </div>
+        
+          <main className="flex-1 overflow-x-hidden">
           {/* Hero Section */}
           <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4">
             <div className="max-w-4xl mx-auto text-center">
@@ -489,8 +490,9 @@ export default function AiTravel() {
               />
             </div>
           </div>
-        </main>
-
+          </main>
+        </div>
+        
         <Footer />
       </div>
       
