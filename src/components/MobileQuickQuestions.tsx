@@ -12,28 +12,28 @@ const quickQuestions = [
     title: "Planner",
     question: "Plan a 3-day itinerary for a first-timer in Miami.",
     icon: Calendar,
-    color: "bg-gray-800/50 border-gray-600 hover:border-blue-400 hover:bg-gray-700/50"
+    color: "bg-gray-900 border-gray-800 hover:border-gray-700 hover:bg-gray-800"
   },
   {
     id: 2,
     title: "Compass", 
     question: "Show me the best spots to experience Afro-Caribbean culture in Miami.",
     icon: Compass,
-    color: "bg-gray-800/50 border-gray-600 hover:border-purple-400 hover:bg-gray-700/50"
+    color: "bg-gray-900 border-gray-800 hover:border-gray-700 hover:bg-gray-800"
   },
   {
     id: 3,
     title: "Insider",
     question: "Where can I find the best nightlife beyond the big South Beach clubs?",
     icon: Users,
-    color: "bg-gray-800/50 border-gray-600 hover:border-orange-400 hover:bg-gray-700/50"
+    color: "bg-gray-900 border-gray-800 hover:border-gray-700 hover:bg-gray-800"
   },
   {
     id: 4,
     title: "Ultimate",
     question: "What are the best free things to do in Miami Beach?",
     icon: DollarSign,
-    color: "bg-gray-800/50 border-gray-600 hover:border-green-400 hover:bg-gray-700/50"
+    color: "bg-gray-900 border-gray-800 hover:border-gray-700 hover:bg-gray-800"
   }
 ];
 
@@ -51,10 +51,10 @@ export const MobileQuickQuestions: React.FC<MobileQuickQuestionsProps> = ({ onQu
             >
               <div className="flex flex-col items-start gap-3">
                 <div className="flex items-center gap-2">
-                  <IconComponent className="h-5 w-5 text-gray-300" />
-                  <span className="text-sm font-semibold text-white">{item.title}</span>
+                  <IconComponent className="h-5 w-5 text-gray-400" />
+                  <span className="text-sm font-semibold text-gray-300">{item.title}</span>
                 </div>
-                <p className="text-xs text-gray-300 leading-relaxed line-clamp-3">
+                <p className="text-xs text-gray-500 leading-relaxed line-clamp-3">
                   {item.question}
                 </p>
               </div>
