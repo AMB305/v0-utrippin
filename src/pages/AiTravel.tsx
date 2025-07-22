@@ -962,7 +962,7 @@ export default function AiTravel() {
               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-black text-white">
+          <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 ">
             {/* Form Section */}
             <div className="text-center mb-8">
