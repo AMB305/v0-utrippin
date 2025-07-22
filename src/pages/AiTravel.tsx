@@ -157,7 +157,7 @@ const AiTravel = () => {
                       />
                       
                       {/* Greeting Text - Properly centered */}
-                      <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent leading-tight">
+                      <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-lg font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent leading-tight">
                         Hi there! I&apos;m Keila
                       </TextAnimate>
                     </div>
