@@ -5,6 +5,7 @@ import { useChatAI } from "@/hooks/useChatAI";
 import { usePersonalization } from "@/hooks/usePersonalization";
 import { useEnhancedOpenAITrips } from "@/hooks/useEnhancedOpenAITrips";
 import { useAITripPlanner } from "@/hooks/useAITripPlanner";
+import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/SEOHead";
 import { BudgetSlider } from "@/components/BudgetSlider";
 import { ChatInput } from "@/components/ChatInput";
@@ -91,6 +92,95 @@ export default function AiTravel() {
   const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
   const [showTripPlanner, setShowTripPlanner] = useState(false);
   const { preferences } = usePersonalization();
+  
+  // Mobile chat states
+  const [showMobileChat, setShowMobileChat] = useState(false);
+  const [mobileChatMessages, setMobileChatMessages] = useState<{role: 'user' | 'assistant', content: string}[]>([]);
+  const [isLoadingResponse, setIsLoadingResponse] = useState(false);
+  
+  // Voice recording states
+  const [isRecording, setIsRecording] = useState(false);
+  
+  // Mobile chat menu state
+  const [showMobileChatMenu, setShowMobileChatMenu] = useState(false);
+  
+  // Auto-scroll to bottom when new messages are added
+  useEffect(() => {
+    if (showMobileChat && mobileChatMessages.length > 0) {
+      setTimeout(() => {
+        const messagesContainer = document.querySelector('.mobile-chat-messages');
+        if (messagesContainer) {
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+      }, 100);
+    }
+  }, [mobileChatMessages, showMobileChat, isLoadingResponse]);
+
+  // Close mobile chat menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showMobileChatMenu && !(event.target as Element).closest('.mobile-chat-menu')) {
+        setShowMobileChatMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMobileChatMenu]);
+
+  // Voice recording functionality
+  const startVoiceRecording = () => {
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+      
+      recognition.onstart = () => {
+        setIsRecording(true);
+      };
+      
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        const inputElement = document.querySelector('.voice-input') as HTMLInputElement;
+        if (inputElement) {
+          inputElement.value = transcript;
+        }
+        setIsRecording(false);
+      };
+      
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsRecording(false);
+        
+        // Show user-friendly error message
+        if (event.error === 'not-allowed') {
+          alert('Microphone access denied. Please allow microphone permissions and try again.');
+        } else {
+          alert('Voice recognition failed. Please try again.');
+        }
+      };
+      
+      recognition.onend = () => {
+        setIsRecording(false);
+      };
+      
+      recognition.start();
+    } else {
+      alert('Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari.');
+    }
+  };
+
+  const stopVoiceRecording = () => {
+    setIsRecording(false);
+  };
 
   const allThemes = [
     "city breaks", "weekend spa retreats", "nearby attractions",
@@ -205,6 +295,66 @@ export default function AiTravel() {
   );
 
   const handleSendMessage = async (message: string) => {
+    // Check if on mobile and switch to chat mode
+    const isMobile = window.innerWidth < 768;
+    
+    if (isMobile) {
+      // Add user message to mobile chat
+      setMobileChatMessages(prev => [...prev, { role: 'user', content: message }]);
+      setShowMobileChat(true);
+      setIsLoadingResponse(true);
+      
+      try {
+        // Generate AI response (simplified for now - you can integrate your specific API later)
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
+        
+        // Create AI response content
+        let aiResponse = "I'd be happy to help you plan your trip! Here are some suggestions based on your request:\n\n";
+        
+        try {
+          // Call ai-trip-planner endpoint directly for mobile chat
+          const { data, error: apiError } = await supabase.functions.invoke('ai-trip-planner', {
+            body: {
+              message,
+              conversationHistory: mobileChatMessages.map(msg => ({
+                role: msg.role,
+                content: msg.content
+              })),
+              isMobileChat: true
+            }
+          });
+
+          if (apiError) {
+            throw new Error(apiError.message);
+          }
+          
+          if (data?.response) {
+            aiResponse = data.response;
+          } else {
+            aiResponse = "I'd be happy to help you plan your trip! Could you provide more details about your destination, dates, and preferences?";
+          }
+        } catch (tripError) {
+          console.log('Trip generation failed, using fallback response:', tripError);
+          aiResponse = "I can help you plan an amazing trip! Could you tell me more about:\n\n• **Where would you like to go?** - Your dream destination\n• **When are you planning to travel?** - Dates or season\n• **What's your approximate budget?** - Per person or total\n• **What type of activities interest you?** - Culture, adventure, relaxation, etc.\n\nI'll create a personalized itinerary just for you!";
+        }
+        
+        // Add AI response to mobile chat
+        setMobileChatMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
+        setSelectedTrip(null);
+        
+        // API call to ai-trip-planner is now handled above in the main try block
+        
+      } catch (error) {
+        console.error('Error in mobile chat:', error);
+        setMobileChatMessages(prev => [...prev, { 
+          role: 'assistant', 
+          content: "I'm sorry, I'm having trouble connecting right now. Please try again in a moment." 
+        }]);
+      } finally {
+        setIsLoadingResponse(false);
+      }
+    } else {
+      // Desktop behavior (existing)
     setIsGeneratingTrips(true);
     sendMessage(message);
     
@@ -217,6 +367,7 @@ export default function AiTravel() {
       setSelectedTrip(null);
     } finally {
       setIsGeneratingTrips(false);
+      }
     }
   };
 
@@ -273,8 +424,281 @@ export default function AiTravel() {
           onClose={() => setShowTripPlanner(false)}
         />
       )}
+      {/* Mobile-only TripGenie Interface */}
+      <div className="block md:hidden min-h-screen bg-white">
+        <div className="flex flex-col h-screen">
+          {/* Use existing Header component */}
+          <div className="block md:hidden">
       <Header />
-      <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black text-white">
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 flex flex-col overflow-y-auto bg-white">
+            {!showMobileChat ? (
+              <div className="p-4">
+                <h1 className="text-2xl font-normal text-blue-500 mb-6">Hi there!</h1>
+            
+            {/* Question Cards */}
+            <div className="grid grid-cols-1 gap-4 mb-6">
+              {/* First Row */}
+                             <div className="grid grid-cols-2 gap-4">
+                 <div 
+                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                   onClick={() => handleSendMessage("Can you help me list the best scenic hotels in Barcelona?")}
+                 >
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="text-red-500 text-sm">🏨</span>
+                     <span className="text-red-500 text-sm font-medium">Hotels</span>
+                   </div>
+                   <p className="text-gray-800 text-sm leading-relaxed">
+                     Can you help me list the <strong>best scenic hotels</strong> in Barcelona?
+                   </p>
+                 </div>
+                 
+                 <div 
+                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                   onClick={() => handleSendMessage("Can I use my mobile phone abroad without roaming charges?")}
+                 >
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="text-orange-500 text-sm">💡</span>
+                     <span className="text-orange-500 text-sm font-medium">Inspiration</span>
+                   </div>
+                   <p className="text-gray-800 text-sm leading-relaxed">
+                     Can I use my mobile phone abroad without roaming charges?
+                   </p>
+                 </div>
+               </div>
+
+              {/* Second Row */}
+                             <div className="grid grid-cols-2 gap-4">
+                 <div 
+                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                   onClick={() => handleSendMessage("What are some luxury hotels in Shanghai?")}
+                 >
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="text-red-500 text-sm">🏨</span>
+                     <span className="text-red-500 text-sm font-medium">Hotels</span>
+                   </div>
+                   <p className="text-gray-800 text-sm leading-relaxed">
+                     What are some <strong>luxury hotels</strong> in Shanghai?
+                   </p>
+                 </div>
+                 
+                 <div 
+                   className="bg-gray-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                   onClick={() => handleSendMessage("How do I get a flight upgrade?")}
+                 >
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="text-blue-500 text-sm">✈️</span>
+                     <span className="text-blue-500 text-sm font-medium">Flights</span>
+                   </div>
+                   <p className="text-gray-800 text-sm leading-relaxed">
+                     How do I get a flight upgrade?
+                   </p>
+                 </div>
+               </div>
+            </div>
+
+            {/* Refresh Questions Button */}
+            <div className="text-center mb-8">
+              <button className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Refresh Questions
+              </button>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <button className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <span className="text-xs text-gray-600">Recognize Image</span>
+              </button>
+              
+              <button className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                  </svg>
+                </div>
+                <span className="text-xs text-gray-600">Live Translate</span>
+              </button>
+              
+              <button className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="text-xs text-gray-600">Live Guide</span>
+              </button>
+                         </div>
+              </div>
+            ) : (
+                             /* Chat Conversation View */
+               <div className="flex flex-col h-full bg-gray-50">
+                 {/* Chat Header */}
+                 <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+                   <div className="flex items-center gap-2">
+                     <img 
+                       src={keilaLogo} 
+                       alt="Keila" 
+                       className="w-8 h-8 object-contain"
+                     />
+                     <span className="font-semibold text-gray-800">Keila</span>
+                   </div>
+                   
+                   {/* 3 Dots Menu */}
+                   <div className="relative mobile-chat-menu">
+                     <button 
+                       onClick={() => setShowMobileChatMenu(!showMobileChatMenu)}
+                       className="flex items-center justify-center w-8 h-8 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors"
+                     >
+                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                         <circle cx="12" cy="5" r="2"/>
+                         <circle cx="12" cy="12" r="2"/>
+                         <circle cx="12" cy="19" r="2"/>
+                       </svg>
+                     </button>
+                     
+                     {/* Dropdown Menu */}
+                     {showMobileChatMenu && (
+                       <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                         <button 
+                           onClick={() => {
+                             setShowMobileChat(false);
+                             setMobileChatMessages([]);
+                             setShowMobileChatMenu(false);
+                           }}
+                           className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                         >
+                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                           </svg>
+                           Start a New Chat
+                         </button>
+                       </div>
+                     )}
+                   </div>
+                </div>
+
+                                                  {/* Messages */}
+                 <div className="flex-1 overflow-y-auto p-4 space-y-4 mobile-chat-messages bg-gray-50">
+                   {mobileChatMessages.map((message, index) => (
+                     <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                       <div className={`max-w-[85%] p-4 rounded-2xl ${
+                         message.role === 'user' 
+                           ? 'bg-slate-600 text-white rounded-br-md shadow-md' 
+                           : 'bg-white text-gray-800 rounded-bl-md shadow-md border border-gray-100'
+                       }`}>
+                         <div 
+                           className="whitespace-pre-line text-sm leading-relaxed"
+                           dangerouslySetInnerHTML={{
+                             __html: message.content
+                               .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                               .replace(/\n/g, '<br>')
+                           }}
+                         />
+                       </div>
+                     </div>
+                   ))}
+                  
+                                     {/* Loading indicator */}
+                   {isLoadingResponse && (
+                     <div className="flex justify-start">
+                       <div className="bg-white text-gray-800 rounded-2xl rounded-bl-md p-4 max-w-[85%] shadow-md border border-gray-100">
+                         <div className="flex items-center space-x-2">
+                           <div className="flex space-x-1">
+                             <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                             <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                             <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                           </div>
+                           <span className="text-sm text-gray-600">Keila is typing...</span>
+                         </div>
+                       </div>
+                     </div>
+                   )}
+                </div>
+              </div>
+            )}
+           </div>
+
+                      {/* Input Area */}
+           <div className="border-t border-gray-200 p-4 bg-white">
+             <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-3">
+               <input
+                 type="text"
+                 placeholder={
+                   isRecording 
+                     ? "🎤 Listening..." 
+                     : showMobileChat 
+                       ? "Type your message..." 
+                       : "Ask anything you want..."
+                 }
+                 className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-500 voice-input"
+                 disabled={isLoadingResponse || isRecording}
+                 onKeyPress={(e) => {
+                   if (e.key === 'Enter') {
+                     const target = e.target as HTMLInputElement;
+                     if (target.value.trim() && !isLoadingResponse && !isRecording) {
+                       handleSendMessage(target.value);
+                       target.value = '';
+                     }
+                   }
+                 }}
+               />
+                             <button 
+                 className={`p-2 rounded-full transition-colors ${
+                   isRecording 
+                     ? 'bg-red-500 text-white animate-pulse' 
+                     : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                 }`}
+                 onClick={isRecording ? stopVoiceRecording : startVoiceRecording}
+                 disabled={isLoadingResponse}
+                 title={isRecording ? "Recording... Click to stop" : "Click to record voice message"}
+               >
+                 {isRecording ? (
+                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                     <path d="M6 6h12v12H6z"/>
+                   </svg>
+                 ) : (
+                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a5 5 0 1110 0v6a3 3 0 01-3 3z" />
+                   </svg>
+                 )}
+               </button>
+                             <button 
+                 className={`p-2 rounded-full transition-colors ${
+                   isLoadingResponse || isRecording
+                     ? 'bg-gray-400 cursor-not-allowed' 
+                     : 'bg-blue-600 hover:bg-blue-700'
+                 }`}
+                 disabled={isLoadingResponse || isRecording}
+                 onClick={(e) => {
+                   const input = (e.target as HTMLButtonElement).parentElement?.querySelector('input') as HTMLInputElement;
+                   if (input?.value.trim() && !isLoadingResponse && !isRecording) {
+                     handleSendMessage(input.value);
+                     input.value = '';
+                   }
+                 }}
+               >
+                 <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                 </svg>
+               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Desktop view */}
+      <div className="hidden md:flex flex-col min-h-screen">
+
+      <Header />
         
         <main className="flex-1">
           {/* New Keila Hero Section */}
@@ -540,8 +964,8 @@ export default function AiTravel() {
               </div>
             </div>
           </div>
-
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-black text-white">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 ">
             {/* Form Section */}
             <div className="text-center mb-8">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
@@ -787,13 +1211,18 @@ export default function AiTravel() {
                 )}
               </>
             )}
+            </div>
           </div>
         </main>
 
+        <div className="hidden md:block">
         <Footer />
+        </div>
       </div>
       
+      <div className="hidden md:block">
       <BackToTop />
+      </div>
     </>
   );
 }

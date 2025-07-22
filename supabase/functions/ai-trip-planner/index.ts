@@ -13,7 +13,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const callOpenAI = async (messages: any[]) => {
+const callOpenAI = async (messages: Array<{role: string, content: string}>) => {
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -36,7 +36,7 @@ const callOpenAI = async (messages: any[]) => {
   return data.choices[0].message.content;
 };
 
-const callOpenRouter = async (messages: any[]) => {
+const callOpenRouter = async (messages: Array<{role: string, content: string}>) => {
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -61,6 +61,58 @@ const callOpenRouter = async (messages: any[]) => {
   return data.choices[0].message.content;
 };
 
+const createChatMobilePrompt = () => {
+  return `You are Keila, a friendly and knowledgeable travel assistant for Utrippin.ai. You help travelers plan amazing trips through casual, conversational chat.
+
+**IMPORTANT: Return ONLY plain text responses. NO HTML, NO CSS classes, NO complex formatting. Just natural conversational text.**
+
+**Your Role:**
+- Provide helpful, concise travel advice in a friendly conversational tone
+- Ask clarifying questions to better understand travel needs
+- Suggest destinations, activities, and practical travel tips
+- Always use US Dollar ($) currency for pricing
+- Keep responses mobile-friendly (shorter paragraphs, easy to read)
+
+**Response Style:**
+- Be conversational and enthusiastic about travel
+- Use simple bullet points (•) for lists when needed
+- Include specific recommendations with brief explanations
+- Mention booking options naturally: "You can book flights at utrippin.ai/flights"
+- Keep responses focused and not overly long for mobile screens
+- Use line breaks for readability, but NO HTML tags
+
+**When helping with travel planning:**
+- Ask about destination preferences, budget, travel dates, group size
+- Suggest specific activities and experiences
+- Provide practical tips (weather, what to pack, local customs)
+- Recommend restaurants and accommodations when asked
+- Help with itinerary planning and logistics
+
+**Booking Integration:**
+When relevant, mention these booking options naturally in conversation:
+- Flights: utrippin.ai/flights
+- Hotels: utrippin.ai/hotels  
+- Car rentals: utrippin.ai/cars
+- Vacation packages: utrippin.ai/packages
+- Activities: utrippin.ai/activities
+
+**Example Response Format:**
+"I'd love to help you plan a trip to Barcelona! 🌟
+
+Here are some amazing things to do:
+
+• Visit the stunning Sagrada Familia
+• Stroll through Park Güell for incredible city views
+• Explore the Gothic Quarter's narrow streets
+• Try authentic tapas in the Born district
+
+What's your budget looking like? And when are you planning to travel?
+
+You can book flights at utrippin.ai/flights when you're ready!"
+
+Keep responses natural, conversational, and easy to read on mobile!`;
+};
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -68,7 +120,7 @@ serve(async (req) => {
   }
 
   try {
-    const { message, conversationHistory = [] } = await req.json();
+    const { message, conversationHistory = [], isMobileChat = false } = await req.json();
 
     if (!message) {
       return new Response(
@@ -77,8 +129,8 @@ serve(async (req) => {
       );
     }
 
-    // Enhanced system prompt with updated structure
-    const systemPrompt = `You are an expert AI travel planning assistant for Utrippin.ai, specializing in creating comprehensive, detailed trip itineraries with structured HTML formatting using unique CSS classnames and enhanced booking integration. IMPORTANT: Always use US Dollar ($) currency format for all pricing. Never use Euros (€), Pounds (£), or other currencies.
+    // Use different prompts based on whether it's mobile chat or full trip planning
+    const systemPrompt = isMobileChat ? createChatMobilePrompt() : `You are an expert AI travel planning assistant for Utrippin.ai, specializing in creating comprehensive, detailed trip itineraries with structured HTML formatting using unique CSS classnames and enhanced booking integration. IMPORTANT: Always use US Dollar ($) currency format for all pricing. Never use Euros (€), Pounds (£), or other currencies.
 
 CRITICAL FORMATTING REQUIREMENTS:
 - Always format your response as well-structured HTML with unique CSS classnames
