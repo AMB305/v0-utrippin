@@ -362,17 +362,42 @@ export default function AiTravel() {
                 </div>
                 
                 {/* Content */}
-                <div 
-                  className="prose prose-sm max-w-none text-foreground/90"
-                  dangerouslySetInnerHTML={{
-                    __html: parsedResponse.content
-                      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
-                      .replace(/\n\n/g, '</p><p class="text-foreground/80">')
-                      .replace(/\n/g, '<br>')
-                      .replace(/^/, '<p class="text-foreground/80">')
-                      .replace(/$/, '</p>')
-                  }}
-                />
+                <div className="prose prose-sm max-w-none text-foreground/90">
+                  {parsedResponse.content.split('\n').map((paragraph: string, index: number) => {
+                    if (paragraph.trim() === '') return null;
+                    
+                    // Handle bullet points
+                    if (paragraph.trim().startsWith('•') || paragraph.trim().startsWith('-')) {
+                      return (
+                        <div key={index} className="flex items-start gap-2 mb-2">
+                          <span className="text-primary mt-1">•</span>
+                          <span className="text-foreground/80">
+                            {paragraph.replace(/^[•\-]\s*/, '')}
+                          </span>
+                        </div>
+                      );
+                    }
+                    
+                    // Handle regular paragraphs
+                    return (
+                      <p key={index} className="text-foreground/80 mb-3">
+                        {paragraph.replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+                          .split('<strong').map((part, i) => {
+                            if (i === 0) return part;
+                            const [boldPart, ...rest] = part.split('</strong>');
+                            return (
+                              <span key={i}>
+                                <strong className="text-foreground font-semibold">
+                                  {boldPart.replace(' class="text-foreground font-semibold">', '')}
+                                </strong>
+                                {rest.join('</strong>')}
+                              </span>
+                            );
+                          })}
+                      </p>
+                    );
+                  })}
+                </div>
 
                 {/* Additional JSON fields if present */}
                 {parsedResponse.highlights && Array.isArray(parsedResponse.highlights) && (
