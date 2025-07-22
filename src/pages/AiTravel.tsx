@@ -31,11 +31,11 @@ import {
   Clock,
   ExternalLink
 } from "lucide-react";
-import { TripCard } from "@/components/TripCard";
+import { TripSummaryCard } from "@/components/TripSummaryCard";
 import { MapComponent } from "@/components/MapComponent";
 import { SEOHead } from "@/components/SEOHead";
-import TextAnimate from "@/components/TextAnimate";
-import BlurFade from "@/components/magicui/blur-fade";
+import { TextAnimate } from "@/components/magicui/text-animate";
+import { BlurFade } from "@/components/magicui/blur-fade";
 import { MobileQuickQuestions } from "@/components/MobileQuickQuestions";
 
 interface ChatMessage {
@@ -70,14 +70,12 @@ interface ChatMessage {
 
 interface Trip {
   id: string;
-  name: string;
-  summary: string;
+  title: string;
+  destination: string;
   start_date: string;
   end_date: string;
-  enhanced_flights_url: string;
-  enhanced_hotels_url: string;
-  event_name: string;
-  event_date: string;
+  budget: number;
+  user_id: string;
 }
 
 const AiTravel = () => {
@@ -108,7 +106,7 @@ const AiTravel = () => {
     sendMessage: sendMobileChatMessage,
     clearChat: clearMobileChat,
     loading: mobileChatLoading,
-  } = useChatAI(trips || []);
+  } = useChatAI([]);
 
   const handleMobileSubmit = (message: string) => {
     if (message.trim()) {
@@ -216,7 +214,7 @@ const AiTravel = () => {
                       <Menu className="w-5 h-5" />
                     </Button>
                     <h1 className="text-lg font-semibold">
-                      {trips && trips.length > 0 ? trips[0].name : "Philippines Adventure"}
+                      {trips && trips.length > 0 ? trips[0].title : "Travel Planning"}
                     </h1>
                   </div>
                   <Button variant="secondary" size="sm">
@@ -330,7 +328,14 @@ const AiTravel = () => {
                 ) : trips && trips.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {trips.map((trip) => (
-                      <TripCard key={trip.id} trip={trip} />
+                      <Card key={trip.id} className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 text-white p-4">
+                        <h3 className="text-lg font-semibold mb-2">{trip.title}</h3>
+                        <p className="text-slate-400 mb-2">{trip.destination}</p>
+                        <div className="flex justify-between items-center text-sm text-slate-500">
+                          <span>{trip.start_date} - {trip.end_date}</span>
+                          <span>${trip.budget}</span>
+                        </div>
+                      </Card>
                     ))}
                   </div>
                 ) : (
