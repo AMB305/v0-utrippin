@@ -212,7 +212,7 @@ export const PromptInputArea = ({
               variant="outline"
               className="border-2 border-input gap-2 px-5 font-normal cursor-pointer text-neutral-500 hover:bg-primary/10"
               key={prompt.value}
-              onClick={() => setInput(prompt.value)}
+              onClick={() => onSubmit(prompt.value, [])}
             >
               <div className="hidden md:block">{prompt.icon}</div>
               {prompt.value}
