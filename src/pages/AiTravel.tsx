@@ -135,10 +135,8 @@ export default function AiTravel() {
           onClose={() => setShowTripPlanner(false)}
         />
       )}
-      
+      <Header />
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black text-white">
-        <Header />
-        
         <div className="flex flex-1">
           {/* Mobile sidebar overlay */}
           <div className="lg:hidden fixed left-0 top-0 w-[280px] h-full z-50 transform -translate-x-full transition-transform duration-300">
