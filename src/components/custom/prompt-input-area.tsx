@@ -28,7 +28,7 @@ export const PromptInputArea = ({
   onSubmit,
 }: PromptInputAreaProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [input, setInput] = useState("Plan a 6-day adventure trip to Barcelona for 3 friends in October. Include hiking in Montserrat, a bike tour of the city, and a day for exploring Gothic Quarter. Budget-friendly options preferred.");
+  const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const uploadInputRef = useRef<HTMLInputElement>(null);
 
