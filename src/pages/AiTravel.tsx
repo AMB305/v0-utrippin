@@ -279,7 +279,8 @@ export default function AiTravel() {
   const renderCard = (card: CardData, key: string) => (
     <div 
       key={key}
-      className="relative flex-shrink-0 w-[480px] h-[174px] bg-card border border-border rounded-lg mr-12 p-5 shadow-lg hover:shadow-xl transition-all duration-300 group card-item hover:scale-[1.02] cursor-pointer"
+      className="relative flex-shrink-0 w-[480px] h-[174px] border border-border rounded-lg mr-12 p-5 shadow-lg hover:shadow-xl transition-all duration-300 group card-item hover:scale-[1.02] cursor-pointer"
+      style={{ backgroundColor: '#f5f7fa' }}
     >
       <div className="flex items-center gap-3 mb-4">
         <div className={`w-8 h-8 ${card.bgColor} rounded-lg flex items-center justify-center`}>
