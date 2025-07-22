@@ -185,23 +185,25 @@ const AiTravel = () => {
         {isMobile ? (
           <div className="flex flex-col h-screen bg-black">
             {!hasStartedChat ? (
-              // Welcome Screen - Exact TripGenie Style
+              // Welcome Screen - Clean with hamburger menu
               <div className="flex-1 flex flex-col bg-black">
-                {/* Header Bar - UTRIPPIN with buttons */}
-                <div className="flex items-center justify-between px-6 py-4 bg-white">
-                  <UtrippinLogo />
-                  <div className="flex items-center gap-4">
-                    <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
-                      Log In
-                    </Button>
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6">
-                      Register
-                    </Button>
-                  </div>
+                {/* Hamburger Menu - Top Left */}
+                <div className="absolute top-4 left-4 z-10">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-white hover:bg-gray-800"
+                    onClick={() => {
+                      // Add navigation logic here
+                      window.history.back();
+                    }}
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
                 </div>
 
                 {/* Main Content - Bot and Text centered and moved up */}
-                <div className="flex-1 flex flex-col items-center justify-start pt-6 px-6">
+                <div className="flex-1 flex flex-col items-center justify-start pt-16 px-6">
                   <BlurFade delay={0.1} inView>
                     <div className="flex items-center gap-1 mb-6 justify-start w-full -ml-4 flex-nowrap">
                       {/* Keila Bot with Float Animation */}
