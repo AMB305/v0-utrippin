@@ -333,9 +333,19 @@ export default function AiTravel() {
           }
 
           if (parsedResponse && parsedResponse.title && parsedResponse.content) {
-            // Handle JSON format response
+            // Handle JSON format response with improved display
             aiResponseContent = (
               <div className="flex flex-col gap-4">
+                {/* JSON Structure Debug Panel - removable via toggle */}
+                <details className="bg-muted/20 rounded-lg p-3 border border-border/30">
+                  <summary className="text-foreground/70 text-xs font-medium cursor-pointer hover:text-foreground/90 transition-colors">
+                    View JSON Response Structure
+                  </summary>
+                  <pre className="mt-2 text-xs text-foreground/60 bg-background/50 p-2 rounded border overflow-x-auto">
+                    {JSON.stringify(parsedResponse, null, 2)}
+                  </pre>
+                </details>
+
                 {/* Title */}
                 <div className="flex flex-col gap-1">
                   <h3 className="text-foreground text-xl font-bold">
@@ -360,6 +370,27 @@ export default function AiTravel() {
                       .replace(/$/, '</p>')
                   }}
                 />
+
+                {/* Additional JSON fields if present */}
+                {parsedResponse.highlights && Array.isArray(parsedResponse.highlights) && (
+                  <div className="mt-3 p-3 bg-secondary/10 rounded-lg">
+                    <h4 className="text-foreground/80 font-medium mb-2">✨ Highlights</h4>
+                    <ul className="list-disc list-inside space-y-1">
+                      {parsedResponse.highlights.map((highlight: string, index: number) => (
+                        <li key={index} className="text-foreground/70 text-sm">{highlight}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Budget information if present */}
+                {parsedResponse.budget && (
+                  <div className="mt-3 p-3 bg-primary/10 rounded-lg">
+                    <p className="text-primary font-medium text-sm">
+                      💰 Estimated Budget: ${typeof parsedResponse.budget === 'number' ? parsedResponse.budget.toLocaleString() : parsedResponse.budget}
+                    </p>
+                  </div>
+                )}
 
                 {/* Utrippin Link */}
                 {parsedResponse.utrippin_link && (
