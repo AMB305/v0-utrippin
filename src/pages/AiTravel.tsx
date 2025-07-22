@@ -158,7 +158,7 @@ const AiTravel = () => {
                       
                       {/* Greeting Text */}
                       <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent leading-tight">
-                        Hey! I&apos;m Keila, Your Ultimate Adventure Planner
+                        Hi there! I&apos;m Keila
                       </TextAnimate>
                     </div>
                   </BlurFade>
