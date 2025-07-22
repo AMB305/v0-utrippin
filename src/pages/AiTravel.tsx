@@ -124,6 +124,17 @@ const AiTravel = () => {
     }
   };
 
+  // Handler for new chat sessions from welcome screen
+  const handleNewChatFromWelcome = (question: string) => {
+    if (question.trim()) {
+      // Clear existing chat history before starting new session
+      clearMobileChat();
+      // Start new chat session
+      setHasStartedChat(true);
+      sendMobileChatMessage(question);
+    }
+  };
+
   const handleImageCapture = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -229,7 +240,7 @@ const AiTravel = () => {
                   {/* Mobile Quick Questions - Moved up significantly */}
                   <div className="px-2 -mt-4 w-full">
                     <BlurFade delay={0.7} inView>
-                      <MobileQuickQuestions onQuestionSelect={handleMobileSubmit} />
+                      <MobileQuickQuestions onQuestionSelect={handleNewChatFromWelcome} />
                     </BlurFade>
                   </div>
                 </div>
