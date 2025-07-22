@@ -142,6 +142,22 @@ const AiTravel = () => {
                     <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6">
                       Register
                     </Button>
+                    {/* Three dots menu for restarting chat */}
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      onClick={() => {
+                        setHasStartedChat(false);
+                        clearMobileChat();
+                      }}
+                      className="text-gray-600 hover:text-gray-900"
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <circle cx="3" cy="10" r="1.5" />
+                        <circle cx="10" cy="10" r="1.5" />
+                        <circle cx="17" cy="10" r="1.5" />
+                      </svg>
+                    </Button>
                   </div>
                 </div>
 
