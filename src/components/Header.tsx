@@ -145,7 +145,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white border-gray-200 z-50">
+                <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white border-gray-200 shadow-lg" style={{ zIndex: 9999 }}>
                   <div className="flex flex-col h-full text-gray-900">
                     {/* Mobile Search */}
                     <div className="mb-6">
