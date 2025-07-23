@@ -108,7 +108,7 @@ export const ChatContainer = ({ messages, containerRef }: ChatMessagesProps) => 
                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
               </div>
-              <span className="text-sm text-foreground/50">AI is thinking...</span>
+              <span className="text-sm text-foreground/50">Keila is thinking...</span>
             </div>
           </div>
         </div>

@@ -294,13 +294,14 @@ Respond in this JSON format:
       })
       .filter(Boolean);
 
+    console.log('AI Travel Chat - Parsed response:', JSON.stringify(parsedResponse, null, 2));
     console.log('AI Travel Chat - Sending AI response');
     return new Response(JSON.stringify({
       response: parsedResponse.response,
       showMap: parsedResponse.showMap,
       mapLocation: parsedResponse.mapLocation,
-      tripCards: parsedResponse.tripCards,
-      quickReplies: parsedResponse.quickReplies,
+      tripCards: parsedResponse.tripCards || [],
+      quickReplies: parsedResponse.quickReplies || [],
       recommendations: {
         flights: "✈️ Found perfect flight options",
         hotels: "🏨 Curated hotel recommendations"
