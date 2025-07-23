@@ -95,16 +95,16 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
       {/* Header */}
       <Card className="bg-gradient-to-r from-purple-900 to-blue-900 text-white border-0">
         <div className="p-4">
-          <h2 className="text-xl font-bold mb-2">{itinerary.title}</h2>
-          <p className="text-purple-100 text-sm leading-relaxed">{itinerary.summary}</p>
+          <h2 className="text-xl font-bold mb-2 text-white">{itinerary.title}</h2>
+          <p className="text-white text-sm leading-relaxed">{itinerary.summary}</p>
         </div>
       </Card>
 
       {/* Flight Booking CTA */}
-      <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0">
+      <Card className="bg-blue-600 text-white border-0">
         <div className="p-3">
           <Button 
-            className="w-full bg-white text-blue-600 hover:bg-gray-100 font-medium"
+            className="w-full bg-white text-blue-600 hover:bg-gray-100 font-medium border-0"
             onClick={() => window.open('#', '_blank')}
           >
             ✈️ Book Your Flight on Utrippin
@@ -221,7 +221,7 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                       {place.booking_url && place.type !== 'Transportation' && (
                         <Button 
                           size="sm" 
-                          className="w-full text-xs bg-purple-600 hover:bg-purple-700 text-white"
+                          className="w-full text-xs bg-blue-600 hover:bg-blue-700 text-white border-0"
                           onClick={() => window.open(place.booking_url, '_blank')}
                         >
                           {place.type.toLowerCase().includes('restaurant') || place.type.toLowerCase().includes('dining') 
@@ -246,19 +246,19 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
         <Card className="bg-green-50 border-green-200">
           <div className="p-4">
             <h3 className="font-semibold text-green-900 text-sm mb-3 flex items-center gap-2">
-              <Star className="h-4 w-4" />
+              <Star className="h-4 w-4 text-green-700" />
               Travel Tips
             </h3>
             <div className="space-y-2">
               {itinerary.actionable_suggestions.map((suggestion, index) => (
                 <div key={index} className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-green-600 rounded-full mt-2 flex-shrink-0" />
                   <p className="text-xs text-green-800 leading-relaxed">{suggestion}</p>
                 </div>
               ))}
             </div>
-            <Separator className="my-3" />
-            <p className="text-xs text-green-700 italic">
+            <Separator className="my-3 bg-green-200" />
+            <p className="text-xs text-green-800 italic font-medium">
               *All prices are estimates and subject to change.
             </p>
           </div>
@@ -279,7 +279,7 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => onFollowUpClick(question)}
-                  className="text-xs text-left h-auto py-2 px-3 border-blue-300 text-blue-700 hover:bg-blue-100 justify-start whitespace-normal"
+                  className="text-xs text-left h-auto py-2 px-3 border-blue-300 text-blue-800 hover:bg-blue-100 hover:text-blue-900 justify-start whitespace-normal bg-white"
                 >
                   {question}
                 </Button>
