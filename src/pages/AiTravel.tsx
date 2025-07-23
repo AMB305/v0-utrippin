@@ -271,6 +271,20 @@ const AiTravel = () => {
                         <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/deals"}>
                           🏷️ Deals
                         </Button>
+                        
+                        {/* Separator */}
+                        <div className="border-t border-gray-700 my-2"></div>
+                        
+                        {/* Authentication Options */}
+                        <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/auth"}>
+                          👤 Log In
+                        </Button>
+                        <Button className="justify-start bg-blue-600 hover:bg-blue-700 text-white" onClick={() => window.location.href = "/auth"}>
+                          ⭐ Join VIP
+                        </Button>
+                        <Button variant="outline" className="justify-start border-white/20 text-white hover:bg-white/10" onClick={() => window.location.href = "/auth"}>
+                          📝 Register
+                        </Button>
                       </div>
                     </SheetContent>
                   </Sheet>
