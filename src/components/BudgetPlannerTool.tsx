@@ -35,7 +35,7 @@ const BudgetPlannerTool = () => {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight">
             Plan Your Perfect
           </h2>
-          <div className="inline-flex items-center bg-gradient-to-r from-orange-400 to-yellow-500 text-black px-8 py-3 rounded-full text-xl font-medium mb-8">
+          <div className="text-white text-xl font-bold mb-8">
             Staycation or Vacation
           </div>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
@@ -50,7 +50,7 @@ const BudgetPlannerTool = () => {
               onClick={() => setTripType('staycation')}
               className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
                 tripType === 'staycation'
-                  ? 'bg-blue-600 text-white shadow-lg'
+                  ? 'border border-white text-white bg-gray-800/30'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -61,7 +61,7 @@ const BudgetPlannerTool = () => {
               onClick={() => setTripType('vacation')}
               className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
                 tripType === 'vacation'
-                  ? 'bg-blue-600 text-white shadow-lg'
+                  ? 'border border-white text-white bg-gray-800/30'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -88,7 +88,7 @@ const BudgetPlannerTool = () => {
               onChange={(e) => setBudget(Number(e.target.value))}
               className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
               style={{
-                background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${((budget - 100) / (100000 - 100)) * 100}%, #374151 ${((budget - 100) / (100000 - 100)) * 100}%, #374151 100%)`
+                background: `linear-gradient(to right, #ffffff 0%, #ffffff ${((budget - 100) / (100000 - 100)) * 100}%, #374151 ${((budget - 100) / (100000 - 100)) * 100}%, #374151 100%)`
               }}
             />
             <div className="flex justify-between text-sm text-gray-400 mt-2">
@@ -149,19 +149,19 @@ const BudgetPlannerTool = () => {
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #3B82F6;
+          background: #ffffff;
           cursor: pointer;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
         }
 
         .slider::-moz-range-thumb {
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #3B82F6;
+          background: #ffffff;
           cursor: pointer;
           border: none;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
         }
       `}</style>
     </section>
