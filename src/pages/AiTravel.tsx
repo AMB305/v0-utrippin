@@ -43,6 +43,7 @@ import { ChatCTAButtons } from "@/components/ChatCTAButtons";
 import { SaveTripDialog } from "@/components/SaveTripDialog";
 import UtrippinLogo from "@/components/UtrippinLogo";
 import Header from "@/components/Header";
+import HereLocationAutocomplete from "@/components/HereLocationAutocomplete";
 
 interface ChatMessage {
   id: string;
@@ -695,6 +696,41 @@ const AiTravel = () => {
                       <div className="text-blue-600 font-medium text-lg">
                         Perfect for a ${budget.toLocaleString()} {tripType}
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Destination Search with HERE API */}
+                <div className="mb-12">
+                  <div className="flex items-center gap-2 mb-6">
+                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm">📍</span>
+                    </div>
+                    <h3 className="text-2xl font-semibold text-gray-900">Where do you want to go?</h3>
+                  </div>
+                  <div className="bg-gray-50 rounded-2xl p-8">
+                    <HereLocationAutocomplete 
+                      label="Search destinations"
+                      placeholder="Search for cities, countries, or landmarks..."
+                      onSelect={(location) => {
+                        toast({
+                          title: "Destination Selected",
+                          description: `You selected: ${location.address.label}`,
+                        });
+                        // Auto-populate the main input with the destination
+                        setDesktopInput(`Plan a ${tripType} to ${location.address.label} with a budget of $${budget.toLocaleString()}`);
+                      }}
+                      className="mb-4"
+                    />
+                    <div className="text-center">
+                      <Button 
+                        onClick={() => handleDesktopSubmit(desktopInput)}
+                        disabled={!desktopInput.trim()}
+                        className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 rounded-xl font-medium"
+                      >
+                        <Sparkles className="h-5 w-5 mr-2" />
+                        Plan My Trip
+                      </Button>
                     </div>
                   </div>
                 </div>
