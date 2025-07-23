@@ -71,7 +71,7 @@ const EnhancedHeroSection = () => {
       {/* Centered content */}
       <div className="relative z-10 h-full flex items-center justify-center">
         <div className="text-center text-white px-4 max-w-4xl mx-auto">
-          <h1 className="your-world-heading-style text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-8 sm:mb-12 leading-tight tracking-wide text-center">
+          <h1 className="your-world-heading-style text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-8 sm:mb-12 leading-tight tracking-wide text-center">
             YOUR WORLD<br />
             WITHIN REACH
           </h1>
