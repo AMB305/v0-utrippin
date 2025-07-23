@@ -105,7 +105,8 @@ export default {
 			},
 			fontFamily: {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
-				display: ['Inter', 'system-ui', 'sans-serif']
+				display: ['Inter', 'system-ui', 'sans-serif'],
+				montserrat: ['Montserrat', 'sans-serif']
 			},
 			fontSize: {
 				'display-1': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.02em' }],
