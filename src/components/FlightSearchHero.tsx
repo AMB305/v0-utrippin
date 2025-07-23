@@ -1,59 +1,95 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './FlightSearchHero.css';
 
-const FlightSearchHero: React.FC = () => {
+interface FlightSearchHeroProps {
+  onSearch?: (searchData: any) => void;
+}
+
+function FlightSearchHero({ onSearch }: FlightSearchHeroProps) {
+  const [tripType, setTripType] = useState('one-way');
+  const [directFlightsOnly, setDirectFlightsOnly] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const searchData = {
+      origin: formData.get('from'),
+      destination: formData.get('to'),
+      departureDate: formData.get('depart'),
+      returnDate: formData.get('return'),
+      tripType,
+      directFlightsOnly
+    };
+    
+    if (onSearch) {
+      onSearch(searchData);
+    }
+  };
+
   return (
-    <section className="bg-blue-600 text-white py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold mb-8">
-            Find Your Perfect Flight
-          </h2>
-          <p className="text-xl mb-8">
-            Search and compare flights from hundreds of airlines
-          </p>
-          <div className="bg-white rounded-lg p-6 max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-4 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
-                <input 
-                  type="text" 
-                  placeholder="Departure city"
-                  className="w-full p-3 border border-gray-300 rounded-md text-gray-900"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
-                <input 
-                  type="text" 
-                  placeholder="Destination city"
-                  className="w-full p-3 border border-gray-300 rounded-md text-gray-900"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Departure</label>
-                <input 
-                  type="date" 
-                  className="w-full p-3 border border-gray-300 rounded-md text-gray-900"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Return</label>
-                <input 
-                  type="date" 
-                  className="w-full p-3 border border-gray-300 rounded-md text-gray-900"
-                />
-              </div>
-            </div>
-            <div className="mt-6 text-center">
-              <button className="bg-blue-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors">
-                Search Flights
-              </button>
-            </div>
-          </div>
-        </div>
+    <div className="booking-form">
+      {/* trip‑type tabs */}
+      <div className="trip-type-tabs">
+        <button 
+          type="button"
+          className={`trip-type-tab ${tripType === 'one-way' ? 'active' : ''}`}
+          onClick={() => setTripType('one-way')}
+        >
+          One-way
+        </button>
+        <button 
+          type="button"
+          className={`trip-type-tab ${tripType === 'round-trip' ? 'active' : ''}`}
+          onClick={() => setTripType('round-trip')}
+        >
+          Round-trip
+        </button>
+        <button 
+          type="button"
+          className={`trip-type-tab ${tripType === 'multi-city' ? 'active' : ''}`}
+          onClick={() => setTripType('multi-city')}
+        >
+          Multi-city
+        </button>
       </div>
-    </section>
+
+      <form onSubmit={handleSubmit}>
+        <label>From</label>
+        <input 
+          name="from" 
+          placeholder="Jakarta (JKTA)" 
+        />
+        
+        <label>To</label>
+        <input 
+          name="to" 
+          placeholder="Bali / Denpasar (DPS)" 
+        />
+        
+        <label>Departure date</label>
+        <input 
+          type="date" 
+          name="depart" 
+          defaultValue="2025-07-20" 
+        />
+        
+        <label>Return date</label>
+        <input 
+          type="date" 
+          name="return" 
+          disabled={tripType === 'one-way'}
+          placeholder="Select return date" 
+        />
+        
+        <button 
+          type="submit" 
+          className="submit-btn"
+        >
+          Search Flights
+        </button>
+      </form>
+    </div>
   );
-};
+}
 
 export default FlightSearchHero;
