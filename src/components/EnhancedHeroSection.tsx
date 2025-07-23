@@ -40,7 +40,7 @@ const EnhancedHeroSection = () => {
   };
 
   return (
-    <div className="hero-section-set relative h-[50vh] sm:h-[60vh] md:h-[70vh] min-h-[500px] sm:min-h-[600px] overflow-hidden hidden lg:block">
+    <div className="hero-section-set relative h-screen overflow-hidden hidden lg:block">
       {/* Rotating background videos */}
       <div className="absolute inset-0">
         {videoUrls.map((url, index) => (
@@ -70,15 +70,15 @@ const EnhancedHeroSection = () => {
       
       {/* Centered content */}
       <div className="relative z-10 h-full flex items-center justify-center">
-        <div className="text-center text-white px-4 max-w-4xl mx-auto">
-          <h1 className="your-world-heading-style text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white mb-8 sm:mb-12 leading-tight tracking-wide text-center">
-            Your World<br />
-            Within Reach
+        <div className="text-center text-white px-4 max-w-5xl mx-auto">
+          <h1 className="your-world-heading-style text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-light text-white mb-12 leading-tight tracking-widest text-center">
+            YOUR WORLD<br />
+            WITHIN REACH
           </h1>
           
           <button 
             onClick={handlePlanYourTrip}
-            className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-8 py-3 text-sm font-medium tracking-widest uppercase transition-all duration-300"
+            className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-12 py-4 text-lg font-light tracking-widest uppercase transition-all duration-300"
           >
             Book Flight Now
           </button>
