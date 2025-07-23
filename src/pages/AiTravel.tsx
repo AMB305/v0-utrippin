@@ -12,6 +12,8 @@ import { useChatAI } from "@/hooks/useChatAI";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useBehaviorTracking } from "@/hooks/useBehaviorTracking";
+import { RecommendationsPanel } from "@/components/recommendations/RecommendationsPanel";
 import { 
   Send, 
   Sparkles, 
@@ -99,6 +101,12 @@ const AiTravel = () => {
   const [budget, setBudget] = useState(3000);
   const isMobile = useIsMobile();
   const { toast } = useToast();
+  const { 
+    trackSearch, 
+    trackDestinationView, 
+    trackTripSave, 
+    trackClick 
+  } = useBehaviorTracking();
 
   const { data: trips, isLoading: tripsLoading } = useQuery({
     queryKey: ["trips"],
@@ -126,6 +134,7 @@ const AiTravel = () => {
 
   const handleMobileSubmit = (message: string) => {
     if (message.trim()) {
+      trackSearch(message);
       setHasStartedChat(true);
       sendMobileChatMessage(message);
       setMobileInput("");
@@ -731,6 +740,16 @@ const AiTravel = () => {
                         <Sparkles className="h-5 w-5 mr-2" />
                         Plan My Trip
                       </Button>
+                    </div>
+                    
+                    {/* AI Recommendations Panel */}
+                    <div className="mt-6">
+                      <RecommendationsPanel 
+                        onRecommendationSelect={(rec) => {
+                          trackClick('recommendation_select', { recommendation_id: rec.id });
+                          setDesktopInput(`Tell me more about ${rec.recommendation_data.title}`);
+                        }}
+                      />
                     </div>
                     
                     {/* Enhanced Map Preview */}

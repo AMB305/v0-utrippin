@@ -1989,6 +1989,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_behavior_tracking: {
+        Row: {
+          event_data: Json
+          event_type: string
+          id: string
+          ip_address: string | null
+          page_url: string | null
+          session_id: string
+          timestamp: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          event_data: Json
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          page_url?: string | null
+          session_id: string
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          event_data?: Json
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          page_url?: string | null
+          session_id?: string
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_feature_usage: {
         Row: {
           created_at: string
@@ -2037,6 +2073,39 @@ export type Database = {
           follower_id?: string
           following_id?: string
           id?: string
+        }
+        Relationships: []
+      }
+      user_recommendations: {
+        Row: {
+          confidence_score: number
+          expires_at: string
+          generated_at: string
+          id: string
+          is_active: boolean
+          recommendation_data: Json
+          recommendation_type: string
+          user_id: string | null
+        }
+        Insert: {
+          confidence_score?: number
+          expires_at?: string
+          generated_at?: string
+          id?: string
+          is_active?: boolean
+          recommendation_data: Json
+          recommendation_type: string
+          user_id?: string | null
+        }
+        Update: {
+          confidence_score?: number
+          expires_at?: string
+          generated_at?: string
+          id?: string
+          is_active?: boolean
+          recommendation_data?: Json
+          recommendation_type?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -2266,6 +2335,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      cleanup_expired_recommendations: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       find_enhanced_travel_buddies: {
         Args: {
           user_id: string
@@ -2367,6 +2440,16 @@ export type Database = {
         Args: { user_id: string }
         Returns: number
       }
+      get_user_behavior_patterns: {
+        Args: { p_user_id: string; p_days_back?: number }
+        Returns: {
+          search_patterns: Json
+          destination_interests: Json
+          activity_preferences: Json
+          budget_range: Json
+          trip_duration_preference: Json
+        }[]
+      }
       get_user_matches: {
         Args: { user_email: string } | { user_id: string }
         Returns: {
@@ -2417,6 +2500,18 @@ export type Database = {
       track_feature_usage: {
         Args: { user_id: string; feature_name: string }
         Returns: boolean
+      }
+      track_user_behavior: {
+        Args: {
+          p_user_id: string
+          p_session_id: string
+          p_event_type: string
+          p_event_data: Json
+          p_page_url?: string
+          p_ip_address?: string
+          p_user_agent?: string
+        }
+        Returns: string
       }
     }
     Enums: {
