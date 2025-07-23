@@ -61,7 +61,14 @@ export const ShareWithAgentDialog: React.FC<ShareWithAgentDialogProps> = ({
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(error.message || 'Failed to share trip');
+      }
+
+      if (!data?.success) {
+        throw new Error(data?.error || 'Unknown error occurred');
+      }
 
       toast({
         title: "Trip Shared Successfully!",
@@ -73,11 +80,14 @@ export const ShareWithAgentDialog: React.FC<ShareWithAgentDialogProps> = ({
       setPersonalMessage('');
       onOpenChange(false);
       
-    } catch (error) {
+      // Refresh the page to show updated sharing status
+      window.location.reload();
+      
+    } catch (error: any) {
       console.error('Error sharing trip:', error);
       toast({
         title: "Sharing Failed",
-        description: "Failed to share trip with agent. Please try again.",
+        description: error.message || "Failed to share trip with agent. Please try again.",
         variant: "destructive",
       });
     } finally {

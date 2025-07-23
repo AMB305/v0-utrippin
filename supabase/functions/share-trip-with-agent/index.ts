@@ -222,12 +222,18 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error('Failed to update trip');
     }
 
-    // Create share URL
-    const shareUrl = `${supabaseUrl.replace('https://', 'https://').replace('.supabase.co', '.lovable.app')}/trip/${tripData.share_id}?ref=agent`;
+    // Create share URL - ensure proper domain mapping
+    const baseUrl = supabaseUrl.includes('supabase.co') 
+      ? supabaseUrl.replace('.supabase.co', '.lovable.app')
+      : window?.location?.origin || supabaseUrl;
+    
+    const shareUrl = `${baseUrl}/trip/${tripData.share_id}?ref=agent`;
+
+    console.log('Sending emails with share URL:', shareUrl);
 
     // Send email to agent
     const agentEmailResult = await resend.emails.send({
-      from: 'UTrippin.ai <noreply@utrippin.ai>',
+      from: 'UTrippin.ai <noreply@resend.dev>',
       to: [agent_email],
       subject: `Travel Itinerary for ${tripData.trip_name} - Booking Request`,
       html: generateAgentEmailHTML(tripData, user.email!, shareUrl, user_note),
@@ -237,7 +243,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to user
     const userEmailResult = await resend.emails.send({
-      from: 'UTrippin.ai <noreply@utrippin.ai>',
+      from: 'UTrippin.ai <noreply@resend.dev>',
       to: [user.email!],
       subject: `Trip Shared: ${tripData.trip_name} sent to ${agent_email}`,
       html: generateUserConfirmationHTML(tripData, agent_email),
@@ -245,11 +251,25 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('User confirmation email sent:', userEmailResult);
 
+    // Verify both emails were sent successfully
+    if (agentEmailResult.error) {
+      console.error('Agent email failed:', agentEmailResult.error);
+      throw new Error('Failed to send email to travel agent');
+    }
+
+    if (userEmailResult.error) {
+      console.error('User email failed:', userEmailResult.error);
+      // Don't fail the entire operation if user email fails
+      console.warn('User confirmation email failed but continuing...');
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Trip shared successfully',
-        share_url: shareUrl 
+        share_url: shareUrl,
+        agent_email_id: agentEmailResult.data?.id,
+        user_email_id: userEmailResult.data?.id
       }),
       {
         status: 200,
@@ -259,9 +279,22 @@ const handler = async (req: Request): Promise<Response> => {
 
   } catch (error: any) {
     console.error('Error in share-trip-with-agent function:', error);
+    
+    // Provide specific error messages for common issues
+    let errorMessage = 'Internal server error';
+    if (error.message?.includes('Unauthorized')) {
+      errorMessage = 'Authentication failed';
+    } else if (error.message?.includes('Trip not found')) {
+      errorMessage = 'Trip not found or access denied';
+    } else if (error.message?.includes('email')) {
+      errorMessage = 'Email delivery failed';
+    }
+    
     return new Response(
       JSON.stringify({ 
-        error: error.message || 'Internal server error' 
+        success: false,
+        error: errorMessage,
+        details: error.message
       }),
       {
         status: 500,
