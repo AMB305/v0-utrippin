@@ -33,7 +33,6 @@ import {
   Languages
 } from "lucide-react";
 import { TripSummaryCard } from "@/components/TripSummaryCard";
-import { MapComponent } from "@/components/MapComponent";
 import { SEOHead } from "@/components/SEOHead";
 import { TextAnimate } from "@/components/magicui/text-animate";
 import { BlurFade } from "@/components/magicui/blur-fade";
@@ -44,6 +43,7 @@ import { SaveTripDialog } from "@/components/SaveTripDialog";
 import UtrippinLogo from "@/components/UtrippinLogo";
 import Header from "@/components/Header";
 import HereLocationAutocomplete from "@/components/HereLocationAutocomplete";
+import { EnhancedMapComponent } from "@/components/EnhancedMapComponent";
 
 interface ChatMessage {
   id: string;
@@ -731,6 +731,28 @@ const AiTravel = () => {
                         <Sparkles className="h-5 w-5 mr-2" />
                         Plan My Trip
                       </Button>
+                    </div>
+                    
+                    {/* Enhanced Map Preview */}
+                    <div className="mt-6">
+                      <h4 className="text-lg font-semibold text-gray-700 mb-3">Popular Destinations</h4>
+                      <EnhancedMapComponent 
+                        locations={[
+                          { id: '1', name: 'Paris, France', coordinates: [2.3522, 48.8566], type: 'destination', estimatedCost: 2500, duration: '5 days' },
+                          { id: '2', name: 'Tokyo, Japan', coordinates: [139.6917, 35.6895], type: 'destination', estimatedCost: 3200, duration: '7 days' },
+                          { id: '3', name: 'Bali, Indonesia', coordinates: [115.0920, -8.4095], type: 'destination', estimatedCost: 1800, duration: '6 days' },
+                          { id: '4', name: 'London, UK', coordinates: [-0.1276, 51.5074], type: 'destination', estimatedCost: 2800, duration: '4 days' }
+                        ]}
+                        showRoute={true}
+                        travelMode="driving"
+                        className="h-80"
+                        onLocationClick={(location) => {
+                          toast({
+                            title: "Destination Info",
+                            description: `${location.name} - Estimated cost: $${location.estimatedCost}`,
+                          });
+                        }}
+                      />
                     </div>
                   </div>
                 </div>

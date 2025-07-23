@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import { MapPin } from "lucide-react";
 import { TypingIndicator } from "./TypingIndicator";
-import { MapComponent } from "./MapComponent";
+import { EnhancedMapComponent } from "./EnhancedMapComponent";
 import { TripSummaryCard } from "./TripSummaryCard";
 import { QuickReplyButtons } from "./QuickReplyButtons";
 import { DetailedItineraryDisplay } from "./DetailedItineraryDisplay";
@@ -117,6 +117,33 @@ const dummyMessages: ChatMessage[] = [
   }
 ];
 
+// Utility function to get coordinates for locations
+const getLocationCoordinates = (location: string): [number, number] => {
+  const coordinates: Record<string, [number, number]> = {
+    'hanoi, vietnam': [105.8342, 21.0285],
+    'boracay, philippines': [121.9240, 11.9674],
+    'manila, philippines': [120.9842, 14.5995],
+    'cebu, philippines': [123.8854, 10.3157],
+    'palawan, philippines': [118.7384, 9.8349],
+    'bohol, philippines': [124.1139, 9.8349],
+    'davao, philippines': [125.6081, 7.1907],
+    'iloilo, philippines': [122.5621, 10.7202],
+    'bangkok, thailand': [100.5018, 13.7563],
+    'tokyo, japan': [139.6917, 35.6895],
+    'singapore': [103.8198, 1.3521],
+    'kuala lumpur, malaysia': [101.6869, 3.1390],
+    'ho chi minh city, vietnam': [106.6297, 10.8231],
+    'phnom penh, cambodia': [104.9160, 11.5564],
+    'yangon, myanmar': [96.1951, 16.8661],
+    'vientiane, laos': [102.6331, 17.9757],
+    'jakarta, indonesia': [106.8451, -6.2088],
+    'bali, indonesia': [115.0920, -8.4095],
+  };
+  
+  const key = location.toLowerCase();
+  return coordinates[key] || [120.9842, 14.5995]; // Default to Manila
+};
+
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
   onSendMessage, 
   messages: propMessages = [], 
@@ -176,7 +203,16 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                           {message.mapLocation || "Location"}
                         </span>
                       </div>
-                      <MapComponent location={message.mapLocation} />
+                      <EnhancedMapComponent 
+                        locations={[{
+                          id: '1',
+                          name: message.mapLocation || 'Location',
+                          coordinates: getLocationCoordinates(message.mapLocation || ''),
+                          type: 'destination'
+                        }]}
+                        showRoute={false}
+                        className="h-48"
+                      />
                     </div>
                   )}
                   
