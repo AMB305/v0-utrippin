@@ -162,6 +162,42 @@ export type Database = {
         }
         Relationships: []
       }
+      api_usage_tracking: {
+        Row: {
+          cost_per_call: number | null
+          created_at: string | null
+          endpoint: string
+          id: string
+          metadata: Json | null
+          month_year: string
+          provider: string
+          total_cost: number | null
+          usage_count: number
+        }
+        Insert: {
+          cost_per_call?: number | null
+          created_at?: string | null
+          endpoint: string
+          id?: string
+          metadata?: Json | null
+          month_year?: string
+          provider: string
+          total_cost?: number | null
+          usage_count?: number
+        }
+        Update: {
+          cost_per_call?: number | null
+          created_at?: string | null
+          endpoint?: string
+          id?: string
+          metadata?: Json | null
+          month_year?: string
+          provider?: string
+          total_cost?: number | null
+          usage_count?: number
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           commission_amount: number | null
@@ -879,6 +915,42 @@ export type Database = {
             referencedColumns: ["match_id"]
           },
         ]
+      }
+      monthly_api_limits: {
+        Row: {
+          cost_per_call: number | null
+          created_at: string | null
+          endpoint: string
+          id: string
+          is_active: boolean | null
+          monthly_limit: number
+          provider: string
+          reset_day: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          cost_per_call?: number | null
+          created_at?: string | null
+          endpoint: string
+          id?: string
+          is_active?: boolean | null
+          monthly_limit: number
+          provider: string
+          reset_day?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          cost_per_call?: number | null
+          created_at?: string | null
+          endpoint?: string
+          id?: string
+          is_active?: boolean | null
+          monthly_limit?: number
+          provider?: string
+          reset_day?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       premium_features: {
         Row: {
@@ -1860,6 +1932,39 @@ export type Database = {
           },
         ]
       }
+      usage_alerts: {
+        Row: {
+          alert_email: string
+          created_at: string | null
+          endpoint: string
+          id: string
+          is_active: boolean | null
+          last_alert_sent: string | null
+          provider: string
+          threshold_percentage: number
+        }
+        Insert: {
+          alert_email?: string
+          created_at?: string | null
+          endpoint: string
+          id?: string
+          is_active?: boolean | null
+          last_alert_sent?: string | null
+          provider: string
+          threshold_percentage?: number
+        }
+        Update: {
+          alert_email?: string
+          created_at?: string | null
+          endpoint?: string
+          id?: string
+          is_active?: boolean | null
+          last_alert_sent?: string | null
+          provider?: string
+          threshold_percentage?: number
+        }
+        Relationships: []
+      }
       user_activity_log: {
         Row: {
           activity_data: Json | null
@@ -2216,6 +2321,18 @@ export type Database = {
         Args: { user_uuid: string }
         Returns: number
       }
+      get_monthly_usage_summary: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          provider: string
+          endpoint: string
+          current_usage: number
+          monthly_limit: number
+          usage_percentage: number
+          remaining_calls: number
+          total_cost: number
+        }[]
+      }
       get_potential_travel_buddies: {
         Args:
           | { current_user_id: string; limit_count?: number }
@@ -2287,6 +2404,15 @@ export type Database = {
               is_liked: boolean
             }
         Returns: Json
+      }
+      track_api_call: {
+        Args: {
+          p_provider: string
+          p_endpoint: string
+          p_usage_count?: number
+          p_metadata?: Json
+        }
+        Returns: undefined
       }
       track_feature_usage: {
         Args: { user_id: string; feature_name: string }

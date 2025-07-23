@@ -5,10 +5,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
 import { userService } from '@/services/UserService';
 import { Link } from 'react-router-dom';
-import { User, Settings, LayoutDashboard, Briefcase, LogOut, Calendar } from 'lucide-react';
+import { User, Settings, LayoutDashboard, Briefcase, LogOut, Calendar, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfileDropdown = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAdmin } = useAuth();
+  const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
@@ -98,6 +100,19 @@ const UserProfileDropdown = () => {
             Settings
           </DropdownMenuItem>
         </Link>
+        
+        {isAdmin && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem 
+              className="cursor-pointer"
+              onClick={() => navigate('/admin/dashboard')}
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              Admin Dashboard
+            </DropdownMenuItem>
+          </>
+        )}
         
         <DropdownMenuSeparator />
         

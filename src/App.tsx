@@ -66,6 +66,7 @@ import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
 import HotelsMiami from "./pages/HotelsMiami";
 import UploadTrips from "./pages/admin/UploadTrips";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import ImageGeneration from "./pages/ImageGeneration";
 import Bookings from "./pages/Bookings";
 import Legal from "./pages/Legal";
@@ -154,6 +155,7 @@ const App = () => (
                   <Route path="/melanin" element={<Melanin />} />
                   <Route path="/seo-reports" element={<SEOReports />} />
                   <Route path="/admin/upload-trips" element={<UploadTrips />} />
+                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
                   <Route path="/image-generation" element={<ImageGeneration />} />
                   <Route path="/explore" element={<ExploreMerged />} />
                   <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
