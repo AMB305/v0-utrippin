@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +14,7 @@ import {
 import { EnhancedMapComponent } from '@/components/EnhancedMapComponent';
 import { StaticMapImage } from '@/components/StaticMapImage';
 import { useBehaviorTracking } from '@/hooks/useBehaviorTracking';
+import { useGooglePlacesImages } from '@/hooks/useGooglePlacesImages';
 
 interface Place {
   name: string;
@@ -72,7 +73,31 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
   onFollowUpClick
 }) => {
   const [savedPlaces, setSavedPlaces] = useState<Set<string>>(new Set());
+  const [placeImages, setPlaceImages] = useState<Record<string, string>>({});
   const { trackDestinationView, trackClick } = useBehaviorTracking();
+  const { getMultiplePlaceImages, loading: imagesLoading } = useGooglePlacesImages();
+
+  // Fetch images for places that don't have image_url
+  useEffect(() => {
+    const fetchPlaceImages = async () => {
+      const placesToFetch = itinerary.recommendations
+        .flatMap(category => category.places)
+        .filter(place => !place.image_url)
+        .map(place => ({ 
+          name: place.name, 
+          location: place.location || destination 
+        }));
+
+      if (placesToFetch.length > 0) {
+        console.log('Fetching images for places:', placesToFetch);
+        const images = await getMultiplePlaceImages(placesToFetch);
+        console.log('Received place images:', images);
+        setPlaceImages(images);
+      }
+    };
+
+    fetchPlaceImages();
+  }, [itinerary, destination, getMultiplePlaceImages]);
 
   const toggleSavePlace = (placeName: string) => {
     const newSaved = new Set(savedPlaces);
@@ -140,10 +165,10 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                 return (
                   <div key={placeIndex} className="border border-gray-200 rounded-lg bg-white overflow-hidden">
                     {/* Place Image */}
-                    {place.image_url && (
+                    {(place.image_url || placeImages[place.name]) && (
                       <div className="h-32 bg-gray-200 relative overflow-hidden">
                         <img 
-                          src={place.image_url} 
+                          src={place.image_url || placeImages[place.name]} 
                           alt={place.name}
                           className="w-full h-full object-cover"
                           onError={(e) => {
