@@ -114,8 +114,8 @@ const StartJourney: React.FC = () => {
                 style={{ backgroundImage: `url('${month.image}')` }}
               >
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-lg font-bold">{month.title}</h3>
+                <div className="absolute bottom-6 left-6 text-white">
+                  <h3 className="text-2xl font-bold">{month.title}</h3>
                 </div>
               </Link>
             ))}
@@ -134,9 +134,7 @@ const StartJourney: React.FC = () => {
               >
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
                 <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                  <p className="text-sm opacity-90 mb-1">{event.subtitle}</p>
-                  <p className="text-sm opacity-90">{event.date}</p>
+                  <h3 className="text-2xl font-bold">{event.title}</h3>
                 </div>
               </Link>
             ))}
