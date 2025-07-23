@@ -28,51 +28,21 @@ const Index = () => {
       />
 
       <div className="min-h-screen bg-white">
-        {/* Navigation */}
         <LuxuryNav />
-
-        {/* Hero Sections - Mobile vs Desktop */}
         <SwipeToTravelHero />
         <EnhancedHeroSection />
-
-        {/* Testimonials - The Smart Travel Deal Experts */}
         <TestimonialsSection />
-
-        {/* Start Journey */}
         <StartJourney />
-
-        {/* Explore Our Trips */}
         <ExploreOurTrips />
-
-        {/* Awards Section */}
         <AwardsSection />
-
-        {/* Main Content */}
-        <div className="">
-          {/* Deals Engine */}
-          <DealsEngine />
-
-          {/* Alternating Checkerboard Layout Sections */}
-          {/* Guide to Travel - Text LEFT, Image RIGHT */}
-          <GuideToTravel />
-
-          {/* The Melanin Compass - Image LEFT, Text RIGHT */}
-          <PursuitOfFeeling />
-
-          {/* What We Do Section - Text LEFT, Image RIGHT */}
-          <WhatWeDoSection />
-
-          {/* How We Work */}
-          <HowWeWork />
-
-          {/* Ready to Start */}
-          <ReadyToStart />
-        </div>
-
-        {/* Footer */}
+        <DealsEngine />
+        <GuideToTravel />
+        <PursuitOfFeeling />
+        <WhatWeDoSection />
+        <HowWeWork />
+        <ReadyToStart />
         <Footer />
-
-        {/* Floating Components */}
+        
         <ChatAssistant />
         <BackToTop />
       </div>
