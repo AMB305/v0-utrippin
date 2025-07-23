@@ -453,8 +453,8 @@ const AiTravel = () => {
           </div>
         ) : (
           // Desktop Layout
-          <div className="max-w-5xl mx-auto px-6 py-12 bg-white">
-            <h1 className="text-3xl font-bold mb-6 text-center text-gray-900">AI Travel Planner</h1>
+          <div className="max-w-5xl mx-auto px-6 py-12 bg-black">
+            <h1 className="text-3xl font-bold mb-6 text-center text-white">AI Travel Planner</h1>
 
             <Tabs defaultValue="chat" className="w-full">
               <TabsList className="justify-center mb-8">
@@ -474,18 +474,18 @@ const AiTravel = () => {
               
               <TabsContent value="chat" className="space-y-4">
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold text-gray-900">Plan Your Next Adventure</h2>
-                  <p className="text-md text-gray-600">
+                  <h2 className="text-2xl font-semibold text-white">Plan Your Next Adventure</h2>
+                  <p className="text-md text-gray-300">
                     Get personalized travel recommendations and itineraries powered by AI.
                   </p>
                 </div>
 
-                <Card className="bg-white border border-gray-200 text-gray-900">
+                <Card className="bg-gray-900 border border-gray-700 text-white">
                   <Card className="bg-transparent border-0 shadow-none">
                     <div className="p-4">
                       <Textarea
                         placeholder="Tell me where you want to go..."
-                        className="w-full bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 resize-none"
+                        className="w-full bg-gray-800 border-gray-600 text-white placeholder-gray-400 resize-none"
                       />
                       <div className="flex justify-end mt-2">
                         <Button className="bg-blue-600 hover:bg-blue-700 text-white">
@@ -500,21 +500,21 @@ const AiTravel = () => {
 
               <TabsContent value="trips" className="space-y-4">
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold text-gray-900">Your Saved Trips</h2>
-                  <p className="text-md text-gray-600">
+                  <h2 className="text-2xl font-semibold text-white">Your Saved Trips</h2>
+                  <p className="text-md text-gray-300">
                     View and manage your saved travel itineraries.
                   </p>
                 </div>
 
                 {tripsLoading ? (
-                  <p>Loading trips...</p>
+                  <p className="text-gray-300">Loading trips...</p>
                 ) : trips && trips.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {trips.map((trip) => (
-                      <Card key={trip.id} className="bg-white border border-gray-200 text-gray-900 p-4">
-                        <h3 className="text-lg font-semibold mb-2">{trip.title}</h3>
-                        <p className="text-gray-600 mb-2">{trip.destination}</p>
-                        <div className="flex justify-between items-center text-sm text-gray-500">
+                      <Card key={trip.id} className="bg-gray-900 border border-gray-700 text-white p-4">
+                        <h3 className="text-lg font-semibold mb-2 text-white">{trip.title}</h3>
+                        <p className="text-gray-300 mb-2">{trip.destination}</p>
+                        <div className="flex justify-between items-center text-sm text-gray-400">
                           <span>{trip.start_date} - {trip.end_date}</span>
                           <span>${trip.budget}</span>
                         </div>
@@ -522,21 +522,21 @@ const AiTravel = () => {
                     ))}
                   </div>
                 ) : (
-                  <p>No trips saved yet.</p>
+                  <p className="text-gray-300">No trips saved yet.</p>
                 )}
               </TabsContent>
 
               <TabsContent value="settings" className="space-y-4">
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold text-gray-900">Settings</h2>
-                  <p className="text-md text-gray-600">
+                  <h2 className="text-2xl font-semibold text-white">Settings</h2>
+                  <p className="text-md text-gray-300">
                     Customize your travel preferences and account settings.
                   </p>
                 </div>
 
-                <Card className="bg-white border border-gray-200 text-gray-900">
+                <Card className="bg-gray-900 border border-gray-700 text-white">
                   <div className="p-4">
-                    <p>Settings content here...</p>
+                    <p className="text-gray-300">Settings content here...</p>
                   </div>
                 </Card>
               </TabsContent>
