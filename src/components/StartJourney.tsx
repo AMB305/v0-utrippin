@@ -1,31 +1,36 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import familyImage from '@/assets/family-travel.jpg';
+import couplesImage from '@/assets/couples-travel.jpg';
+import groupsImage from '@/assets/groups-travel.jpg';
+import honeymoonImage from '@/assets/honeymoon-travel.jpg';
+import soloImage from '@/assets/solo-travel.jpg';
 
 const StartJourney: React.FC = () => {
   const travelerTypes = [
     {
       title: 'FAMILY',
-      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      image: familyImage,
       link: '/family-travel'
     },
     {
       title: 'COUPLES',
-      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      image: couplesImage,
       link: '/deals'
     },
     {
       title: 'GROUPS',
-      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      image: groupsImage,
       link: '/deals'
     },
     {
       title: 'HONEYMOON',
-      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      image: honeymoonImage,
       link: '/deals'
     },
     {
       title: 'SOLO',
-      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      image: soloImage,
       link: '/solo-travel'
     }
   ];
