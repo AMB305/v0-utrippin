@@ -104,7 +104,7 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
       <Card className="bg-blue-600 text-white border-0">
         <div className="p-3">
           <Button 
-            className="w-full bg-white text-blue-600 hover:bg-gray-100 font-medium border-0"
+            className="w-full bg-white text-blue-900 hover:bg-gray-50 hover:text-blue-950 font-medium border-0"
             onClick={() => window.open('#', '_blank')}
           >
             ✈️ Book Your Flight on Utrippin
