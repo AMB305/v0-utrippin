@@ -23,8 +23,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">9 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Wild Waterways of the Amazon</h3>
-                <p className="text-gray-300 mb-4">Jungle canopies, pink dolphins & riverboat sunsets</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>Wild Waterways of the Amazon</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Jungle canopies, pink dolphins & riverboat sunsets</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
@@ -41,8 +41,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">5 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Art Deco Days & Neon Nights</h3>
-                <p className="text-gray-300 mb-4">Beach mornings, Wynwood murals & Cuban cafecitos</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>Art Deco Days & Neon Nights</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Beach mornings, Wynwood murals & Cuban cafecitos</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
@@ -59,8 +59,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">7 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Cultural Expedition</h3>
-                <p className="text-gray-300 mb-4">Ancient temples, local markets & authentic cuisine</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>Cultural Expedition</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Ancient temples, local markets & authentic cuisine</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
@@ -77,8 +77,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">6 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Wildlife Safari Adventure</h3>
-                <p className="text-gray-300 mb-4">Majestic wildlife encounters in pristine natural habitats</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>Wildlife Safari Adventure</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Majestic wildlife encounters in pristine natural habitats</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
@@ -95,8 +95,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">4 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Ocean Whale Watching</h3>
-                <p className="text-gray-300 mb-4">Spectacular marine life & breathtaking ocean views</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>Ocean Whale Watching</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Spectacular marine life & breathtaking ocean views</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
@@ -113,8 +113,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">8 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Desert Caravan Experience</h3>
-                <p className="text-gray-300 mb-4">Endless dunes, starlit nights & nomadic traditions</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>Desert Caravan Experience</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Endless dunes, starlit nights & nomadic traditions</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
@@ -131,8 +131,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">12 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Antarctic Expedition</h3>
-                <p className="text-gray-300 mb-4">Pristine icebergs, penguins & polar wilderness</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>Antarctic Expedition</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Pristine icebergs, penguins & polar wilderness</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
@@ -149,8 +149,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">10 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">High Altitude Adventure</h3>
-                <p className="text-gray-300 mb-4">Peak climbing, alpine landscapes & mountain culture</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>High Altitude Adventure</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Peak climbing, alpine landscapes & mountain culture</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
@@ -167,8 +167,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">7 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Jungle Discovery Tour</h3>
-                <p className="text-gray-300 mb-4">Exotic wildlife, canopy walks & indigenous cultures</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>Jungle Discovery Tour</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Exotic wildlife, canopy walks & indigenous cultures</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
@@ -185,8 +185,8 @@ const ExploreOurTrips: React.FC = () => {
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">5 NIGHTS</div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Dragon Islands Explorer</h3>
-                <p className="text-gray-300 mb-4">Ancient reptiles, coral reefs & volcanic landscapes</p>
+                <h3 className="text-xl font-bold mb-2 !text-white" style={{ color: 'white !important' }}>Dragon Islands Explorer</h3>
+                <p className="text-gray-300 mb-4 !text-gray-300" style={{ color: '#d1d5db !important' }}>Ancient reptiles, coral reefs & volcanic landscapes</p>
                 <button className="border border-white text-white px-6 py-2 text-sm font-medium hover:bg-white hover:text-black transition-colors">
                   EXPLORE TRIP
                 </button>
