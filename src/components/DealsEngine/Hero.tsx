@@ -14,7 +14,7 @@ const DealsEngineHero = () => {
           UNBEATABLE PRICES AND HIDDEN GEMS
         </p>
         
-        <button className="bg-white text-black px-8 py-3 text-sm font-medium tracking-wider hover:bg-gray-100 transition-colors mb-16">
+        <button className="bg-black text-white border border-white px-8 py-3 text-sm font-medium tracking-wider hover:bg-white hover:text-black transition-colors mb-16">
           TRY THE DEALS ENGINE
         </button>
 
