@@ -238,17 +238,53 @@ const AiTravel = () => {
               <div className="flex-1 flex flex-col bg-black">
                 {/* Hamburger Menu - Top Left */}
                 <div className="absolute top-4 left-4 z-10">
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="text-white hover:bg-gray-800"
-                    onClick={() => {
-                      // Add navigation logic here
-                      window.history.back();
-                    }}
-                  >
-                    <Menu className="h-5 w-5" />
-                  </Button>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="text-white hover:bg-gray-800"
+                      >
+                        <Menu className="h-5 w-5" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="left" className="w-[300px] bg-black border-gray-800 text-white">
+                      <SheetHeader>
+                        <SheetTitle className="text-white">Navigation</SheetTitle>
+                      </SheetHeader>
+                      <div className="flex flex-col space-y-4 pt-4">
+                        <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/"}>
+                          🏠 Home
+                        </Button>
+                        <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/flights"}>
+                          ✈️ Flights
+                        </Button>
+                        <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/hotels"}>
+                          🏨 Hotels
+                        </Button>
+                        <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/cars"}>
+                          🚗 Cars
+                        </Button>
+                        <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/experiences"}>
+                          ✨ Experiences
+                        </Button>
+                        <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/deals"}>
+                          🏷️ Deals
+                        </Button>
+                        
+                        {/* Separator */}
+                        <div className="border-t border-gray-700 my-2"></div>
+                        
+                        {/* Authentication Options */}
+                        <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/auth"}>
+                          👤 Log In
+                        </Button>
+                        <Button className="justify-start bg-blue-600 hover:bg-blue-700 text-white" onClick={() => window.location.href = "/auth"}>
+                          ⭐ Join Utrippin
+                        </Button>
+                      </div>
+                    </SheetContent>
+                  </Sheet>
                 </div>
 
                 {/* Main Content - Bot and Text centered and moved up */}
