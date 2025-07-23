@@ -7,7 +7,7 @@ import FlightSearchHero from '@/components/FlightSearchHero';
 import WhatWeDoSection from '@/components/WhatWeDoSection';
 import GuideToTravel from '@/components/GuideToTravel';
 import PursuitOfFeeling from '@/components/PursuitOfFeeling';
-import HowWeWork from '@/components/HowWeWork';
+import BudgetPlannerTool from '@/components/BudgetPlannerTool';
 import DealsEngine from '@/components/DealsEngine';
 import AwardsSection from '@/components/AwardsSection';
 import ExploreOurTrips from '@/components/ExploreOurTrips';
@@ -63,8 +63,8 @@ const Index = () => {
           {/* What We Do Section - Text LEFT, Image RIGHT */}
           <WhatWeDoSection />
 
-          {/* How We Work */}
-          <HowWeWork />
+          {/* Budget Planner Tool */}
+          <BudgetPlannerTool />
 
           {/* Ready to Start */}
           <ReadyToStart />
