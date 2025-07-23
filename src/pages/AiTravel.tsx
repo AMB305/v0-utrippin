@@ -488,95 +488,128 @@ const AiTravel = () => {
             )}
           </div>
         ) : (
-          // Desktop Layout
-          <div className="max-w-5xl mx-auto px-6 py-12 bg-black">
-            <h1 className="text-3xl font-bold mb-6 text-center text-white">AI Travel Planner</h1>
+          // Desktop Layout - Original Design
+          <div className="min-h-screen bg-black text-white">
+            {/* Top Section - Keila Bot Interface */}
+            <div className="flex flex-col items-center justify-center min-h-screen px-6">
+              {/* Keila Bot */}
+              <div className="mb-8">
+                <img 
+                  src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
+                  alt="Keila Bot" 
+                  className="w-20 h-20 mx-auto animate-float hover:scale-110 transition-transform duration-300"
+                />
+              </div>
 
-            <Tabs defaultValue="chat" className="w-full">
-              <TabsList className="justify-center mb-8">
-                <TabsTrigger value="chat">
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Chat
-                </TabsTrigger>
-                <TabsTrigger value="trips">
-                  <Map className="mr-2 h-4 w-4" />
-                  Trips
-                </TabsTrigger>
-                <TabsTrigger value="settings">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="chat" className="space-y-4">
-                <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold text-white">Plan Your Next Adventure</h2>
-                  <p className="text-md text-gray-300">
-                    Get personalized travel recommendations and itineraries powered by AI.
+              {/* Main Text */}
+              <div className="text-center mb-8">
+                <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+                  Ready to explore the world?
+                </h1>
+                <p className="text-xl text-gray-300">
+                  Let's plan your dream trip! ✨
+                </p>
+              </div>
+
+              {/* Chat Input */}
+              <div className="w-full max-w-2xl mb-8">
+                <div className="relative">
+                  <Input
+                    placeholder="Ask me anything about your trip..."
+                    className="w-full bg-gray-900 border-gray-700 text-white placeholder-gray-400 px-6 py-4 text-lg rounded-2xl pr-16"
+                  />
+                  <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl">
+                    <Send className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Quick Action Buttons */}
+              <div className="flex flex-wrap justify-center gap-4 mb-8">
+                <Button variant="outline" className="border-green-500 text-green-400 hover:bg-green-500 hover:text-white">
+                  🗓️ Create a new trip
+                </Button>
+                <Button variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white">
+                  📍 Get inspired
+                </Button>
+                <Button variant="outline" className="border-purple-500 text-purple-400 hover:bg-purple-500 hover:text-white">
+                  ✨ Inspire me where to go
+                </Button>
+                <Button variant="outline" className="border-orange-500 text-orange-400 hover:bg-orange-500 hover:text-white">
+                  🚶 Solo trip
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button variant="outline" className="border-pink-500 text-pink-400 hover:bg-pink-500 hover:text-white">
+                  💑 Partner
+                </Button>
+                <Button variant="outline" className="border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-white">
+                  👨‍👩‍👧‍👦 Family
+                </Button>
+              </div>
+            </div>
+
+            {/* Bottom Section - Trip Planner */}
+            <div className="bg-white text-gray-900 py-16">
+              <div className="max-w-4xl mx-auto px-6">
+                <div className="text-center mb-12">
+                  <div className="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
+                    🧳 Trip Planner
+                  </div>
+                  <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                    Plan Your Perfect Adventure
+                  </h2>
+                  <p className="text-xl text-gray-600">
+                    Customize your journey with our intelligent trip planner. Set your preferences and discover amazing destinations.
                   </p>
                 </div>
 
-                <Card className="bg-gray-900 border border-gray-700 text-white">
-                  <Card className="bg-transparent border-0 shadow-none">
-                    <div className="p-4">
-                      <Textarea
-                        placeholder="Tell me where you want to go..."
-                        className="w-full bg-gray-800 border-gray-600 text-white placeholder-gray-400 resize-none"
-                      />
-                      <div className="flex justify-end mt-2">
-                        <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                          Send
-                          <Send className="ml-2 h-4 w-4" />
-                        </Button>
-                      </div>
+                {/* Trip Type Selection */}
+                <div className="mb-12">
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
+                    🎯 Trip Type
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Button variant="outline" className="h-20 text-lg border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50">
+                      🏝️ Staycation
+                    </Button>
+                    <Button variant="outline" className="h-20 text-lg border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50">
+                      ✈️ Vacation
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Budget Range */}
+                <div className="mb-12">
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
+                    💰 Budget Range
+                  </h3>
+                  <div className="bg-gray-50 rounded-xl p-8">
+                    <div className="text-center mb-6">
+                      <div className="text-3xl font-bold text-blue-600 mb-2">$3k</div>
+                      <div className="text-gray-600">Budget Range</div>
                     </div>
-                  </Card>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="trips" className="space-y-4">
-                <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold text-white">Your Saved Trips</h2>
-                  <p className="text-md text-gray-300">
-                    View and manage your saved travel itineraries.
-                  </p>
-                </div>
-
-                {tripsLoading ? (
-                  <p className="text-gray-300">Loading trips...</p>
-                ) : trips && trips.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {trips.map((trip) => (
-                      <Card key={trip.id} className="bg-gray-900 border border-gray-700 text-white p-4">
-                        <h3 className="text-lg font-semibold mb-2 text-white">{trip.title}</h3>
-                        <p className="text-gray-300 mb-2">{trip.destination}</p>
-                        <div className="flex justify-between items-center text-sm text-gray-400">
-                          <span>{trip.start_date} - {trip.end_date}</span>
-                          <span>${trip.budget}</span>
-                        </div>
-                      </Card>
-                    ))}
+                    <div className="relative mb-6">
+                      <input
+                        type="range"
+                        min="100"
+                        max="100000"
+                        defaultValue="3000"
+                        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-500 mb-4">
+                      <span>$100</span>
+                      <span>$1.0M</span>
+                    </div>
+                    <div className="text-center text-blue-600 font-medium">
+                      Perfect for a $3,000 staycation
+                    </div>
                   </div>
-                ) : (
-                  <p className="text-gray-300">No trips saved yet.</p>
-                )}
-              </TabsContent>
-
-              <TabsContent value="settings" className="space-y-4">
-                <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold text-white">Settings</h2>
-                  <p className="text-md text-gray-300">
-                    Customize your travel preferences and account settings.
-                  </p>
                 </div>
-
-                <Card className="bg-gray-900 border border-gray-700 text-white">
-                  <div className="p-4">
-                    <p className="text-gray-300">Settings content here...</p>
-                  </div>
-                </Card>
-              </TabsContent>
-            </Tabs>
+              </div>
+            </div>
           </div>
         )}
       </div>
