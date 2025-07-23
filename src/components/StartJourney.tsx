@@ -76,8 +76,8 @@ const StartJourney: React.FC = () => {
                 style={{ backgroundImage: `url('${type.image}')` }}
               >
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-2xl font-bold">{type.title}</h3>
+                <div className="absolute inset-0 flex items-center justify-center text-white">
+                  <h3 className="text-2xl font-bold !text-white !text-2xl text-center" style={{ color: 'white !important', fontSize: '1.5rem !important', fontWeight: 'bold !important' }}>{type.title}</h3>
                 </div>
               </Link>
             ))}
