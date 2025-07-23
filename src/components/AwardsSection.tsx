@@ -21,7 +21,7 @@ const AwardsSection = () => {
   ];
 
   return (
-    <section className="budget-travel-section py-16 px-4 bg-gray-50">
+    <section className="budget-travel-section py-8 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {awards.map((award, index) => (

@@ -2,7 +2,7 @@ import React from 'react';
 
 const DealsEngineHero = () => {
   return (
-    <section className="py-20 bg-black text-white">
+    <section className="py-10 bg-black text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="mb-4">
           <span className="text-gray-400 text-sm tracking-widest">MEET</span>

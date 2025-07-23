@@ -4,7 +4,7 @@ import guideImage from '@/assets/guide-image.jpg';
 
 const GuideToTravel = () => {
   return (
-    <section className="guide-to-travel-section py-12 px-4 bg-white">
+    <section className="guide-to-travel-section py-6 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 gap-0 items-stretch min-h-[400px]">
           {/* Text Content */}

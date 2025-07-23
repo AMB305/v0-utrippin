@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 
 const WhatWeDoSection = () => {
   return (
-    <section className="what-we-do-section py-20 px-4 bg-white">
+    <section className="what-we-do-section py-10 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
