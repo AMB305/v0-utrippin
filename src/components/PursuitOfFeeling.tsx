@@ -9,7 +9,7 @@ const PursuitOfFeeling = () => {
           {/* Image */}
           <div className="relative">
             <img
-              src="/lovable-uploads/2deeed69-c55f-4bf8-b371-4dc1f3665c2a.png"
+              src="/lovable-uploads/97268738-d558-43bb-85f7-04978567137d.png"
               alt="Two joyful women celebrating their journey"
               className="w-full h-96 lg:h-[500px] object-cover"
             />
