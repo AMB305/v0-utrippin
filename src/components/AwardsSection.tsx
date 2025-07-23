@@ -2,37 +2,32 @@ import React from 'react';
 
 const AwardsSection: React.FC = () => {
   return (
-    <section className="py-16 bg-gray-100">
+    <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center mb-12">Awards & Recognition</h2>
-        <div className="grid md:grid-cols-4 gap-8">
-          <div className="text-center">
-            <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-yellow-600 text-2xl">🏆</span>
+        <div className="grid md:grid-cols-4 gap-8 text-center">
+          <div>
+            <div className="text-xs text-gray-500 mb-2 uppercase tracking-wide">
+              "UTRIPPIN PRIDES ITSELF ON MEETING CUSTOMERS EVERY BUDGET NEED OR DESIRE"
             </div>
-            <h3 className="font-semibold mb-2">Best Travel App 2024</h3>
-            <p className="text-sm text-gray-600">Travel Weekly</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-1">Budget Traveller</h3>
           </div>
-          <div className="text-center">
-            <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-blue-600 text-2xl">⭐</span>
+          <div>
+            <div className="text-xs text-gray-500 mb-2 uppercase tracking-wide">
+              "TRAVEL EXPERT VOTED AS A TOP BUDGET TRAVEL MASTER IN 2024"
             </div>
-            <h3 className="font-semibold mb-2">Innovation Award</h3>
-            <p className="text-sm text-gray-600">Tech Travel Awards</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-1">Travel Report</h3>
           </div>
-          <div className="text-center">
-            <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-green-600 text-2xl">💎</span>
+          <div>
+            <div className="text-xs text-gray-500 mb-2 uppercase tracking-wide">
+              "A TOP 10 BUDGET OPERATOR IN TRAVEL + LEISURE WORLD'S BEST AWARDS 2024"
             </div>
-            <h3 className="font-semibold mb-2">Top Startup</h3>
-            <p className="text-sm text-gray-600">TechCrunch</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-1">TRAVEL+ LEISURE</h3>
           </div>
-          <div className="text-center">
-            <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-purple-600 text-2xl">🚀</span>
+          <div>
+            <div className="text-xs text-gray-500 mb-2 uppercase tracking-wide">
+              "VOTED AS ONE OF THE BEST BUDGET SPECIALISTS IN THE 2024 READERS' CHOICE AWARDS"
             </div>
-            <h3 className="font-semibold mb-2">Rising Star</h3>
-            <p className="text-sm text-gray-600">Forbes 30 Under 30</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-1">Budget Traveller</h3>
           </div>
         </div>
       </div>

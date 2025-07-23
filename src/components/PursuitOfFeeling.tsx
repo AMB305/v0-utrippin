@@ -2,20 +2,22 @@ import React from 'react';
 
 const PursuitOfFeeling: React.FC = () => {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="bg-purple-100 h-64 rounded-lg flex items-center justify-center">
-            <span className="text-purple-600">Pursuit of Feeling Image</span>
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="relative">
+            <div 
+              className="h-96 bg-cover bg-center rounded-lg"
+              style={{
+                backgroundImage: `url('/lovable-uploads/c7daa2f6-794c-4b40-b73c-3d3e65d2266d.png')`
+              }}
+            ></div>
           </div>
           <div>
-            <h2 className="text-3xl font-bold mb-6">The Pursuit of Feeling</h2>
-            <p className="text-lg text-gray-600 mb-6">
-              Travel is about more than destinations—it's about the emotions and memories you create. We help you find experiences that move you.
+            <h2 className="text-5xl font-bold mb-8 text-gray-900">THE MELANIN<br/>COMPASS</h2>
+            <p className="text-lg text-gray-600 leading-relaxed">
+              For us, travel is more than a destination; it's about the joy and power of exploring the world in our melanin. The Melanin Compass is dedicated to this experience.
             </p>
-            <button className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
-              Explore Feelings
-            </button>
           </div>
         </div>
       </div>

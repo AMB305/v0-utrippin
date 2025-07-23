@@ -2,31 +2,36 @@ import React from 'react';
 
 const WhatWeDoSection: React.FC = () => {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-3xl font-bold mb-6">What We Do</h2>
-            <p className="text-lg text-gray-600 mb-6">
-              We help travelers find the best deals and experiences around the world through AI-powered recommendations and curated travel packages.
-            </p>
-            <ul className="space-y-4">
-              <li className="flex items-start">
-                <span className="text-green-500 mr-2">✓</span>
-                <span>AI-powered travel planning</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-green-500 mr-2">✓</span>
-                <span>Best price guarantees</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-green-500 mr-2">✓</span>
-                <span>24/7 customer support</span>
-              </li>
-            </ul>
+            <h2 className="text-5xl font-bold mb-6 text-gray-900">WHAT WE DO AND<br/>WHY WE DO IT</h2>
+            <p className="text-sm text-gray-500 mb-8 uppercase tracking-wide">EMPOWERING ACCESSIBLE TRAVEL FOR ALL</p>
+            
+            <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
+              <p>
+                At Utrippin, we believe that travel should be accessible to everyone, regardless of their budget or background. We built this platform specifically for the underserved community, breaking down barriers that have traditionally kept people from exploring the world.
+              </p>
+              <p>
+                Our mission is simple yet powerful: to show everyone that they can travel, no matter their financial situation. Through innovative AI-powered deal discovery, community support, and expert guidance, we're democratizing travel one trip at a time.
+              </p>
+              <p>
+                We understand that travel isn't just about luxury - it's about connection, growth, and the transformative power of experiencing different cultures and perspectives. That's why we're committed to making these experiences accessible to all.
+              </p>
+            </div>
+            
+            <button className="mt-8 bg-black text-white px-8 py-3 text-sm font-medium tracking-wider hover:bg-gray-800 transition-colors">
+              LEARN MORE ABOUT US
+            </button>
           </div>
-          <div className="bg-blue-100 h-64 rounded-lg flex items-center justify-center">
-            <span className="text-blue-600">What We Do Image</span>
+          <div className="relative">
+            <div 
+              className="h-96 bg-cover bg-center"
+              style={{
+                backgroundImage: `url('/lovable-uploads/877d1de4-ac1f-4e83-b4e7-daa282840b44.png')`
+              }}
+            ></div>
           </div>
         </div>
       </div>

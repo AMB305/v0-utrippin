@@ -2,30 +2,42 @@ import React from 'react';
 
 const HowWeWork: React.FC = () => {
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl font-bold mb-12">How We Work</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-blue-50 p-6 rounded-lg">
-            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold">1</span>
+    <section className="py-20 bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 className="text-5xl font-bold mb-6 text-gray-900">HOW WE WORK</h2>
+        <p className="text-xl text-gray-600 mb-16 max-w-4xl mx-auto">
+          Three simple steps to unlock extraordinary travel experiences without breaking the bank.
+        </p>
+        
+        <div className="grid md:grid-cols-3 gap-12 mb-20">
+          <div className="text-center">
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <span className="text-blue-600 text-2xl font-bold">$</span>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Tell Us Your Dreams</h3>
-            <p className="text-gray-600">Share your travel preferences and budget with our AI assistant</p>
+            <h3 className="text-2xl font-bold mb-4 text-gray-900">Tell us your budget</h3>
+            <p className="text-gray-600 leading-relaxed">
+              Share your travel dreams and budget constraints. We work with any amount.
+            </p>
           </div>
-          <div className="bg-green-50 p-6 rounded-lg">
-            <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold">2</span>
+          
+          <div className="text-center">
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <span className="text-blue-600 text-2xl font-bold">🔍</span>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Get Personalized Deals</h3>
-            <p className="text-gray-600">Receive curated recommendations tailored to your needs</p>
+            <h3 className="text-2xl font-bold mb-4 text-gray-900">We find the deals</h3>
+            <p className="text-gray-600 leading-relaxed">
+              Our AI scours millions of options to find the perfect deals that match your preferences.
+            </p>
           </div>
-          <div className="bg-purple-50 p-6 rounded-lg">
-            <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold">3</span>
+          
+          <div className="text-center">
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <span className="text-blue-600 text-2xl font-bold">✈️</span>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Book & Travel</h3>
-            <p className="text-gray-600">Secure your trip and embark on your adventure</p>
+            <h3 className="text-2xl font-bold mb-4 text-gray-900">You travel more for less</h3>
+            <p className="text-gray-600 leading-relaxed">
+              Book with confidence knowing you're getting the best value for your money.
+            </p>
           </div>
         </div>
       </div>
