@@ -248,8 +248,8 @@ const AiTravel = () => {
       
       {isMobile ? (
         // Mobile Layout - Keep existing mobile design
-        <div className="min-h-screen bg-black text-white">
-          <div className="flex flex-col h-screen bg-black">
+        <div className="min-h-dvh bg-black text-white">
+          <div className="flex flex-col h-dvh bg-black">
             {!hasStartedChat ? (
               // Welcome Screen - Clean with hamburger menu
               <div className="flex-1 flex flex-col bg-black">
@@ -390,7 +390,7 @@ const AiTravel = () => {
               </div>
             ) : (
               // Chat Interface
-              <div className="flex flex-col h-screen bg-black">
+              <div className="flex flex-col h-dvh bg-black">
                 {/* Chat Header with Keila branding */}
                 <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between bg-black flex-shrink-0">
                   <div className="flex items-center gap-3">
