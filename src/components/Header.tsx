@@ -140,24 +140,13 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
 
               {/* Mobile Menu Trigger */}
               <div className="relative">
-                <button 
-                  className="p-2 border-2 border-red-500 bg-red-100 text-red-800 rounded"
-                  onClick={() => {
-                    alert('Hamburger menu clicked!');
-                    console.log('Hamburger clicked, current state:', mobileMenuOpen);
-                    setMobileMenuOpen(!mobileMenuOpen);
-                  }}
-                  style={{ 
-                    zIndex: 9999, 
-                    position: 'relative',
-                    minWidth: '60px',
-                    minHeight: '40px',
-                    display: 'block'
-                  }}
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="lg:hidden flex-shrink-0"
                 >
                   <Menu className="w-5 h-5" />
-                  TEST
-                </button>
+                </Button>
                 
                 {/* Mobile Menu Overlay */}
                 {mobileMenuOpen && (
