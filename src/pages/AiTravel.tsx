@@ -90,9 +90,12 @@ interface Trip {
 
 const AiTravel = () => {
   const [mobileInput, setMobileInput] = useState("");
+  const [desktopInput, setDesktopInput] = useState("");
   const [hasStartedChat, setHasStartedChat] = useState(false);
   const [showSaveTripDialog, setShowSaveTripDialog] = useState(false);
   const [lastChatResponse, setLastChatResponse] = useState<any>(null);
+  const [tripType, setTripType] = useState("staycation");
+  const [budget, setBudget] = useState(3000);
   const isMobile = useIsMobile();
   const { toast } = useToast();
 
@@ -125,6 +128,18 @@ const AiTravel = () => {
       setHasStartedChat(true);
       sendMobileChatMessage(message);
       setMobileInput("");
+    }
+  };
+
+  const handleDesktopSubmit = (message: string) => {
+    if (message.trim()) {
+      // For desktop, we can navigate to results or show results inline
+      // For now, let's show a toast and clear input
+      toast({
+        title: "Travel Request Submitted",
+        description: `Searching for: "${message}" with ${tripType} budget: $${budget.toLocaleString()}`,
+      });
+      setDesktopInput("");
     }
   };
 
@@ -518,15 +533,26 @@ const AiTravel = () => {
 
               {/* Chat Input */}
               <div className="w-full max-w-2xl mb-8">
-                <div className="relative">
-                  <Input
-                    placeholder="Ask me anything about your trip..."
-                    className="w-full bg-gray-900 border-gray-700 text-white placeholder-gray-400 px-6 py-4 text-lg rounded-2xl pr-16"
-                  />
-                  <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl">
-                    <Send className="h-5 w-5" />
-                  </Button>
-                </div>
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  handleDesktopSubmit(desktopInput);
+                }}>
+                  <div className="relative">
+                    <Input
+                      value={desktopInput}
+                      onChange={(e) => setDesktopInput(e.target.value)}
+                      placeholder="Ask me anything about your trip..."
+                      className="w-full bg-gray-900 border-gray-700 text-white placeholder-gray-400 px-6 py-4 text-lg rounded-2xl pr-16"
+                    />
+                    <Button 
+                      type="submit"
+                      disabled={!desktopInput.trim()}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl"
+                    >
+                      <Send className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </form>
               </div>
 
               {/* Quick Action Buttons */}
@@ -572,44 +598,103 @@ const AiTravel = () => {
 
                 {/* Trip Type Selection */}
                 <div className="mb-12">
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
-                    🎯 Trip Type
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Button variant="outline" className="h-20 text-lg border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50">
-                      🏝️ Staycation
-                    </Button>
-                    <Button variant="outline" className="h-20 text-lg border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50">
-                      ✈️ Vacation
-                    </Button>
+                  <div className="flex items-center gap-2 mb-6">
+                    <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm">🎯</span>
+                    </div>
+                    <h3 className="text-2xl font-semibold text-gray-900">Trip Type</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="relative">
+                      <button 
+                        onClick={() => setTripType("staycation")}
+                        className={`w-full h-16 px-6 text-left border-2 rounded-xl flex items-center gap-3 transition-colors ${
+                          tripType === "staycation" 
+                            ? "border-blue-600 bg-blue-50 hover:bg-blue-100" 
+                            : "border-gray-300 bg-white hover:border-blue-500 hover:bg-blue-50"
+                        }`}
+                      >
+                        <span className="text-2xl">🏝️</span>
+                        <span className={`text-lg font-medium ${
+                          tripType === "staycation" ? "text-blue-600" : "text-gray-700"
+                        }`}>Staycation</span>
+                      </button>
+                    </div>
+                    <div className="relative">
+                      <button 
+                        onClick={() => setTripType("vacation")}
+                        className={`w-full h-16 px-6 text-left border-2 rounded-xl flex items-center gap-3 transition-colors ${
+                          tripType === "vacation" 
+                            ? "border-blue-600 bg-blue-50 hover:bg-blue-100" 
+                            : "border-gray-300 bg-white hover:border-blue-500 hover:bg-blue-50"
+                        }`}
+                      >
+                        <span className="text-2xl">✈️</span>
+                        <span className={`text-lg font-medium ${
+                          tripType === "vacation" ? "text-blue-600" : "text-gray-700"
+                        }`}>Vacation</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 {/* Budget Range */}
                 <div className="mb-12">
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
-                    💰 Budget Range
-                  </h3>
-                  <div className="bg-gray-50 rounded-xl p-8">
+                  <div className="flex items-center gap-2 mb-6">
+                    <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm">💰</span>
+                    </div>
+                    <h3 className="text-2xl font-semibold text-gray-900">Budget Range</h3>
+                  </div>
+                  <div className="bg-gray-50 rounded-2xl p-8">
                     <div className="text-center mb-6">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">$3k</div>
-                      <div className="text-gray-600">Budget Range</div>
+                      <div className="text-sm text-gray-600 mb-1">Budget Range</div>
+                      <div className="text-4xl font-bold text-gray-900 mb-4">${budget >= 1000 ? `${(budget/1000).toFixed(0)}k` : `$${budget}`}</div>
                     </div>
                     <div className="relative mb-6">
                       <input
                         type="range"
                         min="100"
                         max="100000"
-                        defaultValue="3000"
-                        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+                        value={budget}
+                        onChange={(e) => setBudget(parseInt(e.target.value))}
+                        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer slider"
+                        style={{
+                          background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${((budget-100)/(100000-100))*100}%, #E5E7EB ${((budget-100)/(100000-100))*100}%, #E5E7EB 100%)`
+                        }}
                       />
+                      <style dangerouslySetInnerHTML={{
+                        __html: `
+                          .slider::-webkit-slider-thumb {
+                            appearance: none;
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            background: #3B82F6;
+                            cursor: pointer;
+                            border: 3px solid white;
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                          }
+                          .slider::-moz-range-thumb {
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            background: #3B82F6;
+                            cursor: pointer;
+                            border: 3px solid white;
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                          }
+                        `
+                      }} />
                     </div>
-                    <div className="flex justify-between text-sm text-gray-500 mb-4">
+                    <div className="flex justify-between text-sm text-gray-500 mb-6">
                       <span>$100</span>
                       <span>$1.0M</span>
                     </div>
-                    <div className="text-center text-blue-600 font-medium">
-                      Perfect for a $3,000 staycation
+                    <div className="text-center">
+                      <div className="text-blue-600 font-medium text-lg">
+                        Perfect for a ${budget.toLocaleString()} {tripType}
+                      </div>
                     </div>
                   </div>
                 </div>
