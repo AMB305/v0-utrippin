@@ -145,11 +145,11 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background border-border">
-                  <div className="flex flex-col h-full text-foreground">
+                <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white border-gray-200 z-50">
+                  <div className="flex flex-col h-full text-gray-900">
                     {/* Mobile Search */}
                     <div className="mb-6">
-                      <h3 className="text-sm font-medium text-foreground mb-3">Quick Flight Search</h3>
+                      <h3 className="text-sm font-medium text-gray-900 mb-3">Quick Flight Search</h3>
                       <form onSubmit={handleMobileSearch}>
                         <div className="space-y-3">
                           <AirportAutocomplete
@@ -160,11 +160,11 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                               setMobileSearchValue(value);
                               setMobileSearchIata(iataCode);
                             }}
-                            className="bg-white border-border text-foreground"
+                            className="bg-white border-gray-300 text-gray-900"
                           />
                           <button 
                             type="submit" 
-                            className="w-full bg-primary hover:bg-primary-hover text-primary-foreground py-2 px-4 rounded-md text-sm font-medium transition-colors"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors"
                           >
                             {mobileSearchIata ? 'Search Flights' : 'Search Destinations'}
                           </button>
