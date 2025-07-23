@@ -96,7 +96,7 @@ const StartJourney: React.FC = () => {
               >
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
                 <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-2xl font-bold">{destination.title}</h3>
+                  <h3 className="text-2xl font-bold !text-white !text-2xl" style={{ color: 'white !important', fontSize: '1.5rem !important', fontWeight: 'bold !important' }}>{destination.title}</h3>
                 </div>
               </Link>
             ))}
@@ -115,7 +115,7 @@ const StartJourney: React.FC = () => {
               >
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
                 <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-2xl font-bold">{month.title}</h3>
+                  <h3 className="text-2xl font-bold !text-white !text-2xl" style={{ color: 'white !important', fontSize: '1.5rem !important', fontWeight: 'bold !important' }}>{month.title}</h3>
                 </div>
               </Link>
             ))}
@@ -134,7 +134,7 @@ const StartJourney: React.FC = () => {
               >
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
                 <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-2xl font-bold">{event.title}</h3>
+                  <h3 className="text-2xl font-bold !text-white !text-2xl" style={{ color: 'white !important', fontSize: '1.5rem !important', fontWeight: 'bold !important' }}>{event.title}</h3>
                 </div>
               </Link>
             ))}
