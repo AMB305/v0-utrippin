@@ -5,13 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { 
   MapPin, 
-  Clock, 
   Star, 
-  Camera, 
   Heart,
-  ExternalLink,
-  ChevronDown,
-  ChevronUp,
   Utensils,
   Building,
   Calendar
@@ -74,19 +69,8 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
   destination,
   onFollowUpClick
 }) => {
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['Suggested']))
   const [savedPlaces, setSavedPlaces] = useState<Set<string>>(new Set());
   const { trackDestinationView, trackClick } = useBehaviorTracking();
-
-  const toggleCategory = (categoryName: string) => {
-    const newExpanded = new Set(expandedCategories);
-    if (newExpanded.has(categoryName)) {
-      newExpanded.delete(categoryName);
-    } else {
-      newExpanded.add(categoryName);
-    }
-    setExpandedCategories(newExpanded);
-  };
 
   const toggleSavePlace = (placeName: string) => {
     const newSaved = new Set(savedPlaces);
@@ -127,115 +111,98 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
       )}
 
       {/* Recommendations by Category */}
-      {itinerary.recommendations.map((category, categoryIndex) => {
-        const isExpanded = expandedCategories.has(category.category_name);
-        
-        return (
-          <Card key={categoryIndex} className="bg-gray-50 border border-gray-200">
-            <div className="p-4">
-              <Button
-                variant="ghost"
-                onClick={() => toggleCategory(category.category_name)}
-                className="w-full flex items-center justify-between p-0 h-auto text-left"
-              >
-                <h3 className="font-semibold text-gray-900 text-sm">
-                  {category.category_name}
-                </h3>
-                {isExpanded ? (
-                  <ChevronUp className="h-4 w-4 text-gray-500" />
-                ) : (
-                  <ChevronDown className="h-4 w-4 text-gray-500" />
-                )}
-              </Button>
-
-              {isExpanded && (
-                <div className="mt-3 space-y-3">
-                  {category.places.map((place, placeIndex) => {
-                    const IconComponent = getTypeIcon(place.type);
-                    const isSaved = savedPlaces.has(place.name);
-                    
-                    return (
-                      <div key={placeIndex} className="border border-gray-200 rounded-lg bg-white overflow-hidden">
-                        {/* Place Image */}
-                        {place.image_url && (
-                          <div className="h-32 bg-gray-200 relative overflow-hidden">
-                            <img 
-                              src={place.image_url} 
-                              alt={place.name}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                // Hide image on error
-                                (e.target as HTMLElement).style.display = 'none';
-                              }}
+      {itinerary.recommendations.map((category, categoryIndex) => (
+        <Card key={categoryIndex} className="bg-gray-50 border border-gray-200">
+          <div className="p-4">
+            <h3 className="font-semibold text-gray-900 text-sm mb-3">
+              {category.category_name}
+            </h3>
+            
+            <div className="space-y-3">
+              {category.places.map((place, placeIndex) => {
+                const IconComponent = getTypeIcon(place.type);
+                const isSaved = savedPlaces.has(place.name);
+                
+                return (
+                  <div key={placeIndex} className="border border-gray-200 rounded-lg bg-white overflow-hidden">
+                    {/* Place Image */}
+                    {place.image_url && (
+                      <div className="h-32 bg-gray-200 relative overflow-hidden">
+                        <img 
+                          src={place.image_url} 
+                          alt={place.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Hide image on error
+                            (e.target as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                        <div className="absolute top-2 right-2 flex gap-1">
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            className="h-7 w-7 p-0 bg-white/80 hover:bg-white/90"
+                            onClick={() => toggleSavePlace(place.name)}
+                          >
+                            <Heart 
+                              className={`h-3 w-3 ${isSaved ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
                             />
-                            <div className="absolute top-2 right-2 flex gap-1">
-                              <Button
-                                size="sm"
-                                variant="secondary"
-                                className="h-7 w-7 p-0 bg-white/80 hover:bg-white/90"
-                                onClick={() => toggleSavePlace(place.name)}
-                              >
-                                <Heart 
-                                  className={`h-3 w-3 ${isSaved ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
-                                />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="secondary"
-                                className="h-7 w-7 p-0 bg-white/80 hover:bg-white/90"
-                                onClick={() => handleViewOnMap(place.name)}
-                              >
-                                <MapPin className="h-3 w-3 text-gray-600" />
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* Place Content */}
-                        <div className="p-3">
-                          <div className="flex items-start justify-between gap-2 mb-2">
-                            <div className="flex items-center gap-2 flex-1 min-w-0">
-                              <IconComponent className="h-4 w-4 text-gray-600 flex-shrink-0" />
-                              <h4 className="font-medium text-gray-900 text-sm leading-tight truncate">
-                                {place.name}
-                              </h4>
-                            </div>
-                            <Badge 
-                              variant="outline" 
-                              className={`text-xs ${getTypeColor(place.type)} flex-shrink-0`}
-                            >
-                              {place.type}
-                            </Badge>
-                          </div>
-                          
-                          <p className="text-xs text-gray-600 leading-relaxed mb-2">
-                            {place.description}
-                          </p>
-                          
-                          {/* Rating and Price */}
-                          <div className="flex items-center justify-between text-xs">
-                            {place.rating && (
-                              <div className="flex items-center gap-1">
-                                <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                <span className="text-gray-600">{place.rating}</span>
-                              </div>
-                            )}
-                            {place.price_range && (
-                              <span className="text-green-600 font-medium">
-                                {place.price_range}
-                              </span>
-                            )}
-                          </div>
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            className="h-7 w-7 p-0 bg-white/80 hover:bg-white/90"
+                            onClick={() => handleViewOnMap(place.name)}
+                          >
+                            <MapPin className="h-3 w-3 text-gray-600" />
+                          </Button>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              )}
+                    )}
+                    
+                    {/* Place Content */}
+                    <div className="p-3">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <IconComponent className="h-4 w-4 text-gray-600 flex-shrink-0" />
+                          <h4 className="font-medium text-gray-900 text-sm leading-tight truncate">
+                            {place.name}
+                          </h4>
+                        </div>
+                        <Badge 
+                          variant="outline" 
+                          className={`text-xs ${getTypeColor(place.type)} flex-shrink-0`}
+                        >
+                          {place.type}
+                        </Badge>
+                      </div>
+                      
+                      <p className="text-xs text-gray-600 leading-relaxed mb-2">
+                        {place.description}
+                      </p>
+                      
+                      {/* Rating and Price */}
+                      <div className="flex items-center justify-between text-xs">
+                        {place.rating && (
+                          <div className="flex items-center gap-1">
+                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                            <span className="text-gray-600">{place.rating}</span>
+                          </div>
+                        )}
+                        {place.price_range && (
+                          <span className="text-green-600 font-medium">
+                            {place.price_range}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </Card>
-        );
-      })}
+          </div>
+        </Card>
+      ))}
 
       {/* Actionable Suggestions */}
       {itinerary.actionable_suggestions && itinerary.actionable_suggestions.length > 0 && (
