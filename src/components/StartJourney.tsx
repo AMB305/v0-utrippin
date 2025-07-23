@@ -1,7 +1,35 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const StartJourney: React.FC = () => {
-  console.log('🚀 StartJourney component is rendering');
+  const travelerTypes = [
+    {
+      title: 'FAMILY',
+      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      link: '/family-travel'
+    },
+    {
+      title: 'COUPLES',
+      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      link: '/deals'
+    },
+    {
+      title: 'GROUPS',
+      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      link: '/deals'
+    },
+    {
+      title: 'HONEYMOON',
+      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      link: '/deals'
+    },
+    {
+      title: 'SOLO',
+      image: '/lovable-uploads/c339dff8-df47-4af7-a6be-7f7f7f6794cc.png',
+      link: '/solo-travel'
+    }
+  ];
+
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,56 +45,30 @@ const StartJourney: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-5 gap-4 mb-8">
-          <div className="relative h-96 bg-cover bg-center group cursor-pointer" style={{
-            backgroundImage: `url('/lovable-uploads/26e4a5e7-485e-4f4f-94f8-ad79a11f9a2e.png')`
-          }}>
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="text-2xl font-bold">FAMILY</h3>
-            </div>
-          </div>
-          
-          <div className="relative h-96 bg-cover bg-center group cursor-pointer" style={{
-            backgroundImage: `url('/lovable-uploads/26e4a5e7-485e-4f4f-94f8-ad79a11f9a2e.png')`
-          }}>
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="text-2xl font-bold">COUPLES</h3>
-            </div>
-          </div>
-          
-          <div className="relative h-96 bg-cover bg-center group cursor-pointer" style={{
-            backgroundImage: `url('/lovable-uploads/26e4a5e7-485e-4f4f-94f8-ad79a11f9a2e.png')`
-          }}>
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="text-2xl font-bold">GROUPS</h3>
-            </div>
-          </div>
-          
-          <div className="relative h-96 bg-cover bg-center group cursor-pointer" style={{
-            backgroundImage: `url('/lovable-uploads/26e4a5e7-485e-4f4f-94f8-ad79a11f9a2e.png')`
-          }}>
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="text-2xl font-bold">HONEYMOON</h3>
-            </div>
-          </div>
-          
-          <div className="relative h-96 bg-cover bg-center group cursor-pointer" style={{
-            backgroundImage: `url('/lovable-uploads/26e4a5e7-485e-4f4f-94f8-ad79a11f9a2e.png')`
-          }}>
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="text-2xl font-bold">SOLO</h3>
-            </div>
-          </div>
+          {travelerTypes.map((type, index) => (
+            <Link 
+              key={index}
+              to={type.link}
+              className="relative h-96 bg-cover bg-center group cursor-pointer block"
+              style={{
+                backgroundImage: `url('${type.image}')`
+              }}
+            >
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
+              <div className="absolute bottom-6 left-6 text-white">
+                <h3 className="text-2xl font-bold">{type.title}</h3>
+              </div>
+            </Link>
+          ))}
         </div>
 
         <div className="text-center">
-          <button className="bg-black text-white px-8 py-3 text-sm font-medium tracking-wider hover:bg-gray-800 transition-colors">
+          <Link 
+            to="/deals"
+            className="bg-black text-white px-8 py-3 text-sm font-medium tracking-wider hover:bg-gray-800 transition-colors inline-block"
+          >
             VIEW MORE
-          </button>
+          </Link>
         </div>
       </div>
     </section>
