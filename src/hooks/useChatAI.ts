@@ -1,5 +1,21 @@
+
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+
+interface DetailedItinerary {
+  title: string;
+  summary: string;
+  recommendations: Array<{
+    category_name: string;
+    places: Array<{
+      name: string;
+      description: string;
+      type: string;
+    }>;
+  }>;
+  actionable_suggestions: string[];
+  follow_up_questions: string[];
+}
 
 interface ChatMessage {
   id: string;
@@ -33,6 +49,7 @@ interface ChatMessage {
     text: string;
     action: string;
   }>;
+  detailedItinerary?: DetailedItinerary;
 }
 
 interface Trip {
@@ -51,102 +68,6 @@ export const useChatAI = (trips: Trip[]) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const getMockResponse = (message: string): Partial<ChatMessage> => {
-    const lowerMessage = message.toLowerCase();
-    
-    // Hanoi flight/hotel search
-    if (lowerMessage.includes('hanoi') || lowerMessage.includes('flight') || lowerMessage.includes('hotel')) {
-      return {
-        response: "I'll help you search for flights and hotels for your weekend trip to Hanoi. Let me check what's available for July 19-20.",
-        tripCards: [
-          {
-            type: 'flight',
-            title: '✈️ Flight results',
-            description: 'Flights HAN → HAN\nHanoi, Vietnam → Hanoi, Vietnam\nRound-trip • 19 Jul - 20 Jul • 1 adult • Economy\n\n⚠️ Error\nUnknown error. Please try again.',
-            price: 'Error',
-            rating: 0
-          },
-          {
-            type: 'hotel',
-            title: '🏨 Hotel results',
-            description: 'Stays in Hanoi\n19 Jul - 20 Jul • 1 room • 1 adult\n3622 matching stays\n\nFree Airport Service Deals w Singita Classy Boutique Hotel & Travel\n8.5 • 1,799 reviews • 4-star\nClean and comfortable hotel with friendly service and great location.',
-            price: '604,997 ₫ per night',
-            rating: 4.0
-          }
-        ],
-        showMap: true,
-        mapLocation: "Hanoi, Vietnam",
-        quickReplies: [
-          "filter for non-stop flights to Hanoi",
-          "filter for flights departing in the morning to Hanoi", 
-          "filter for flights returning in the evening from Hanoi",
-          "Search for flights from HAN to HCM on Jul 19, returning on Jul 20, instead",
-          "Search for hotels in Hanoi from Jul 19 to Jul 20"
-        ]
-      };
-    }
-    
-    // Filter responses
-    if (lowerMessage.includes('filter')) {
-      return {
-        response: "I'll apply those filters to your search results. Let me update the available options.",
-        tripCards: [
-          {
-            type: 'flight',
-            title: 'Updated Flight Results',
-            description: 'Filtered results based on your preferences. Found 12 matching flights.',
-            price: 'From $450',
-            rating: 4.2
-          }
-        ],
-        quickReplies: [
-          "Show more flight options",
-          "Add hotel search to these results",
-          "Change departure time"
-        ]
-      };
-    }
-    
-    // Europe travel
-    if (lowerMessage.includes('europe')) {
-      return {
-        response: "Europe in spring is absolutely magical! I recommend visiting Paris, Rome, and Barcelona for a perfect cultural mix.",
-        tripCards: [
-          {
-            type: 'flight',
-            title: 'Multi-city Europe Trip',
-            description: 'Round-trip flights to 3 European cities with flexible dates.',
-            price: 'From $890',
-            duration: '2 weeks'
-          },
-          {
-            type: 'hotel',
-            title: 'Boutique Hotels Package',
-            description: 'Handpicked boutique hotels in city centers with breakfast included.',
-            price: '$120/night avg',
-            rating: 4.6
-          }
-        ],
-        quickReplies: [
-          "Show detailed itinerary",
-          "Add more cities",
-          "Budget travel options"
-        ]
-      };
-    }
-    
-    // Default response
-    return {
-      response: "I'd be happy to help you plan your trip! Tell me more about your destination preferences, budget, and travel dates.",
-      quickReplies: [
-        "Show me popular destinations",
-        "I need help with flights",
-        "Find hotels for my trip",
-        "Plan a weekend getaway"
-      ]
-    };
-  };
-
   const sendMessage = async (message: string) => {
     const messageId = Date.now().toString();
     
@@ -160,7 +81,7 @@ export const useChatAI = (trips: Trip[]) => {
     setLoading(true);
 
     try {
-      // Call the real AI travel chat edge function
+      // Call the AI travel chat edge function
       const { data, error } = await supabase.functions.invoke('ai-travel-chat', {
         body: { message, trips }
       });
@@ -170,20 +91,11 @@ export const useChatAI = (trips: Trip[]) => {
 
       if (error) {
         console.error('AI chat error:', error);
-        // Fallback to mock response on error
-        const mockResponse = getMockResponse(message);
-        setMessages(prev => prev.map(msg => 
-          msg.id === messageId 
-            ? {
-                ...msg,
-                loading: false,
-                ...mockResponse
-              }
-            : msg
-        ));
-      } else if (data && data.response) {
+        throw error;
+      }
+
+      if (data && data.response) {
         // Update message with AI response
-        console.log('Updating message with response:', data.response);
         setMessages(prev => prev.map(msg => 
           msg.id === messageId 
             ? {
@@ -196,34 +108,29 @@ export const useChatAI = (trips: Trip[]) => {
                 quickReplies: data.quickReplies || [],
                 recommendations: data.recommendations,
                 trips: data.trips || [],
-                callsToAction: data.callsToAction || []
+                callsToAction: data.callsToAction || [],
+                detailedItinerary: data.detailedItinerary
               }
             : msg
         ));
       } else {
-        console.error('No response data received:', data);
-        // Fallback to mock response
-        const mockResponse = getMockResponse(message);
-        setMessages(prev => prev.map(msg => 
-          msg.id === messageId 
-            ? {
-                ...msg,
-                loading: false,
-                ...mockResponse
-              }
-            : msg
-        ));
+        throw new Error('No response data received');
       }
     } catch (error) {
       console.error('Error calling AI chat:', error);
-      // Fallback to mock response on error
-      const mockResponse = getMockResponse(message);
+      
+      // Fallback response
       setMessages(prev => prev.map(msg => 
         msg.id === messageId 
           ? {
               ...msg,
               loading: false,
-              ...mockResponse
+              response: "I'm having trouble processing your request right now. Please try again in a moment.",
+              quickReplies: [
+                "Try again",
+                "Search for popular destinations",
+                "Get help"
+              ]
             }
           : msg
       ));

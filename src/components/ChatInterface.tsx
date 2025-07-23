@@ -5,6 +5,22 @@ import { TypingIndicator } from "./TypingIndicator";
 import { MapComponent } from "./MapComponent";
 import { TripSummaryCard } from "./TripSummaryCard";
 import { QuickReplyButtons } from "./QuickReplyButtons";
+import { DetailedItineraryDisplay } from "./DetailedItineraryDisplay";
+
+interface DetailedItinerary {
+  title: string;
+  summary: string;
+  recommendations: Array<{
+    category_name: string;
+    places: Array<{
+      name: string;
+      description: string;
+      type: string;
+    }>;
+  }>;
+  actionable_suggestions: string[];
+  follow_up_questions: string[];
+}
 
 interface ChatMessage {
   id: string;
@@ -22,6 +38,7 @@ interface ChatMessage {
     duration?: string;
   }>;
   quickReplies?: string[];
+  detailedItinerary?: DetailedItinerary;
 }
 
 interface ChatInterfaceProps {
@@ -109,7 +126,6 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Show dummy messages only when there are no real messages AND no loading state
-  // Once someone starts interacting, switch to real messages
   const messages = (propMessages.length > 0 || loading) ? propMessages : dummyMessages;
 
   const scrollToBottom = () => {
@@ -142,8 +158,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 <TypingIndicator />
               ) : (
                 <div className="space-y-4">
-                  {message.response && (
-                    <p className="text-sm leading-relaxed text-slate-200">{message.response}</p>
+                  {/* Detailed Itinerary Display */}
+                  {message.detailedItinerary ? (
+                    <DetailedItineraryDisplay itinerary={message.detailedItinerary} />
+                  ) : (
+                    message.response && (
+                      <p className="text-sm leading-relaxed text-slate-200">{message.response}</p>
+                    )
                   )}
                   
                   {/* Map Integration */}

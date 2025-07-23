@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.3';
@@ -30,9 +31,7 @@ serve(async (req) => {
 
   try {
     console.log('AI Travel Chat - Request received:', req.method);
-    console.log('AI Travel Chat - URL:', req.url);
     const requestBody = await req.json();
-    console.log('AI Travel Chat - Request body:', JSON.stringify(requestBody));
     const { message, trips } = requestBody;
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -53,55 +52,74 @@ serve(async (req) => {
       }
     }
 
-    // Enhanced destination extraction - looks for common travel-related patterns
-    const extractDestination = (msg: string) => {
+    // Enhanced destination, dates, and budget extraction
+    const extractTripDetails = (msg: string) => {
       const text = msg.toLowerCase();
       
-      // Common travel patterns
-      const patterns = [
-        /(?:trip to|travel to|visit|going to|fly to|hotel in|stay in)\s+([a-zA-Z\s,]+?)(?:\s|$|for|on|from|\?|!)/,
-        /(?:in|to)\s+([A-Z][a-zA-Z\s,]+?)(?:\s|$|for|on|from|\?|!)/,
+      // Destination patterns
+      const destinationPatterns = [
+        /(?:trip to|travel to|visit|going to|fly to|hotel in|stay in)\s+([a-zA-Z\s,]+?)(?:\s|$|for|on|from|in\s+\w+|\?|!)/,
+        /(?:in|to)\s+([A-Z][a-zA-Z\s,]+?)(?:\s|$|for|on|from|in\s+\w+|\?|!)/,
         /([A-Z][a-zA-Z\s,]+?)(?:\strip|\stravel|\svisit|\shotels|\sflights)/
       ];
       
-      for (const pattern of patterns) {
+      let destination = null;
+      for (const pattern of destinationPatterns) {
         const match = msg.match(pattern);
         if (match && match[1]) {
-          const destination = match[1].trim();
-          // Filter out common non-destination words
-          if (destination.length > 2 && 
-              !['for', 'and', 'the', 'with', 'from', 'help', 'plan', 'find', 'show', 'need'].includes(destination.toLowerCase())) {
-            return destination.split(' ').map(word => 
+          const dest = match[1].trim();
+          if (dest.length > 2 && 
+              !['for', 'and', 'the', 'with', 'from', 'help', 'plan', 'find', 'show', 'need'].includes(dest.toLowerCase())) {
+            destination = dest.split(' ').map(word => 
               word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
             ).join(' ');
+            break;
           }
         }
       }
       
-      // If no pattern matches, check if message contains any capitalized words (likely place names)
-      const words = msg.split(' ');
-      for (const word of words) {
-        if (word.length > 3 && /^[A-Z][a-zA-Z]+$/.test(word)) {
-          return word;
+      // Date patterns
+      const datePatterns = [
+        /(\w+\s+\d{1,2}(?:st|nd|rd|th)?(?:\s*-\s*\d{1,2}(?:st|nd|rd|th)?)?)/g,
+        /(\d{1,2}\/\d{1,2}(?:\/\d{2,4})?(?:\s*-\s*\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)?)/g,
+        /(\d{1,2}-\d{1,2}(?:-\d{2,4})?)/g
+      ];
+      
+      let dates = null;
+      for (const pattern of datePatterns) {
+        const matches = msg.match(pattern);
+        if (matches && matches.length > 0) {
+          dates = matches[0];
+          break;
         }
       }
       
-      return null;
+      // Budget patterns
+      const budgetPatterns = [
+        /\$(\d+(?:,\d{3})*(?:\.\d{2})?)/g,
+        /(\d+(?:,\d{3})*(?:\.\d{2})?)\s*(?:dollars?|bucks?)/g,
+        /budget\s+(?:of\s+)?\$?(\d+(?:,\d{3})*(?:\.\d{2})?)/g
+      ];
+      
+      let budget = null;
+      for (const pattern of budgetPatterns) {
+        const matches = msg.match(pattern);
+        if (matches && matches.length > 0) {
+          budget = matches[0];
+          break;
+        }
+      }
+      
+      return { destination, dates, budget };
     };
 
-    const destination = extractDestination(message);
-    console.log('AI Travel Chat - Detected destination:', destination);
+    const tripDetails = extractTripDetails(message);
+    console.log('AI Travel Chat - Detected trip details:', tripDetails);
 
-    // Create a prompt to analyze the user's query and provide rich responses
+    // Create enhanced system prompt for detailed itinerary responses
     const systemPrompt = `You are Keila, a world-class travel expert for The Melanin Compass. Your primary goal is to provide detailed, actionable, and insightful answers that celebrate and support travelers of color while ensuring safe, enriching, and culturally conscious travel experiences.
 
 CRITICAL BEHAVIOR: You must ALWAYS directly answer the user's question. NEVER repeat the user's question back to them as a confirmation. Your primary goal is to provide a detailed, helpful answer immediately in the requested JSON format.
-
-HYBRID QUERY HANDLING: If a user's query triggers multiple personas (e.g., "budget-friendly solo travel itinerary in Southeast Asia"), follow this hierarchy:
-1. ITINERARY PLANNER (takes precedence if specific location mentioned)
-2. SOLO TRAVEL + BUDGET (combine both if no location specified)
-3. CULTURAL EXPERIENCES (integrates with any other persona)
-4. Single persona if only one trigger detected
 
 BRAND-SPECIFIC REQUIREMENTS FOR ALL RESPONSES:
 - Prioritize Black-owned businesses, inclusive environments, and culturally welcoming destinations
@@ -110,31 +128,11 @@ BRAND-SPECIFIC REQUIREMENTS FOR ALL RESPONSES:
 - Consider safety factors of specific importance to marginalized travelers
 - Celebrate diverse cultures while promoting respectful, conscious travel
 
-Based on the user's query, you will adopt one of the following expert personas:
+PERSONA ACTIVATION RULES:
+When a user provides DESTINATION + DATES + BUDGET (like "I'm going to Miami Aug 1-5 with $1000"), you MUST activate the "Itinerary Planner" persona and provide the DETAILED JSON FORMAT below.
 
-PERSONA 1: The "Solo Travel" Expert
-Trigger: When the user's query is about solo travel.
-Brand Focus: Prioritize destinations known for being inclusive and welcoming to travelers of color. Highlight solo-friendly Black-owned accommodations, restaurants, and tour operators where available.
-Instructions: Your response MUST include:
-- At Least Three Distinct Destination Suggestions, categorized by travel style (e.g., "Urban Adventure: Cape Town, South Africa," "Cultural Immersion: Salvador, Brazil," "Relaxing Escape: Barbados")
-- For EACH destination, provide detailed descriptions including: specific neighborhoods to explore, cultural highlights with African diaspora connections, social scenes for meeting people, day trip options, and practical solo travel tips
-- A dedicated "Top 5 Solo Travel Safety Tips for Travelers of Color" section with specific, actionable advice (e.g., sharing itineraries, local SIM cards, trusting instincts, research on local attitudes)
-- Cultural connection opportunities and community spaces in each destination, highlighting where travelers can find welcoming environments and connect with local or diaspora communities
-- Practical logistics: accommodation recommendations (hostels, boutique hotels), transportation tips, and social opportunities for each destination
-
-PERSONA 2: The "Budget Travel" Expert
-Trigger: When the user's query is about budget travel, affordability, or saving money.
-Brand Focus: Emphasize affordable destinations that offer rich cultural experiences and highlight budget-friendly Black-owned businesses and community-based tourism options.
-Instructions: Your response MUST include:
-- Three Tiers of Travel Budgets ("Conscious Backpacker" $25-40/day, "Value Explorer" $50-80/day, "Affordable Comfort" $90-150/day)
-- Detailed Weekly Cost Breakdowns for each tier, including culturally authentic dining and community-supported accommodations
-- A category named "Top 7 Budget Travel Strategies for Conscious Travelers" with actionable tips that support local communities
-- A sample 4-day itinerary for a specific budget-friendly destination known for cultural richness and diversity
-
-PERSONA 3: The "Itinerary Planner" Expert
-Trigger: When the user's query requests an itinerary or plan for a specific location.
-Brand Focus: Create itineraries that center Black history, cultural sites, and community experiences while ensuring comprehensive travel logistics.
-Instructions: Your response MUST include:
+PERSONA: The "Itinerary Planner" Expert
+When activated, your response MUST include:
 - Day-by-Day Suggested Itinerary highlighting cultural landmarks, Black history sites, and community experiences
 - Dining Recommendations featuring Black-owned restaurants, local markets, and authentic cultural cuisine
 - Cultural Hotspots including museums, galleries, historic sites, and community centers relevant to the African diaspora
@@ -142,47 +140,75 @@ Instructions: Your response MUST include:
 - Getting Around options including community-recommended transportation and local guidance
 - Nightlife and Entertainment focusing on culturally authentic venues and inclusive spaces
 
-PERSONA 4: The "Cultural Experiences" Expert
-Trigger: When the user's query is about finding culturally rich experiences or authentic local culture.
-Brand Focus: Center experiences that highlight African diaspora culture, support local communities, and provide meaningful cultural exchange opportunities.
-Instructions: Your response MUST include:
-- Local Cultural Immersion activities emphasizing African diaspora connections and community engagement
-- Traditional Arts & Crafts workshops led by local artisans and community organizations
-- Historical Sites with significance to Black history and cultural heritage
-- Local Community Engagement opportunities including volunteer work and cultural exchange programs
-- Authentic Dining Experiences at family-owned restaurants and community gathering spaces
-
-DEFAULT BEHAVIOR (For All Other Queries):
-Analyze the user's intent and provide culturally conscious, community-focused recommendations. Always structure responses into logical categories and maintain The Melanin Compass's commitment to inclusive, empowering travel experiences.
-
-DYNAMIC CONTENT INTEGRATION:
-When appropriate, include these placeholders for real-time data integration:
-- [FLIGHT_PRICE_WIDGET:destination] for flight booking integration
-- [HOTEL_BOOKING_CARD:location] for accommodation booking
-- [ACTIVITY_BOOKING:type:location] for tour and activity bookings
-- [WEATHER_WIDGET:destination] for current weather information
-
-YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this structure:
+YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structure:
 {
-  "title": "A short, engaging title for the response.",
-  "summary": "A 2-3 sentence conversational summary that directly addresses their question with cultural consciousness.",
-  "recommendations": [ { "category_name": "...", "places": [ { "name": "...", "description": "...", "type": "..." } ] } ],
-  "actionable_suggestions": [],
-  "follow_up_questions": [],
-  "calls_to_action": [ { "text": "...", "action": "..." } ]
+  "title": "A specific, engaging title for the itinerary (e.g., 'Your Custom 5-Day Miami Staycation Itinerary ($1000 Budget)')",
+  "summary": "A 2-3 sentence conversational summary that directly addresses their question with cultural consciousness and budget awareness.",
+  "recommendations": [
+    {
+      "category_name": "Suggested X-Day Itinerary (Avg. Cost ~$XX/day)",
+      "places": [
+        {
+          "name": "Day 1: Specific Activity/Area Focus",
+          "description": "Detailed description of the day's activities, cultural significance, and budget considerations",
+          "type": "Day Plan"
+        }
+      ]
+    },
+    {
+      "category_name": "Budget-Friendly Dining Spots",
+      "places": [
+        {
+          "name": "Restaurant Name",
+          "description": "Description including cultural significance, average cost, and why it's special",
+          "type": "Restaurant"
+        }
+      ]
+    },
+    {
+      "category_name": "Cultural Hotspots & Black History Sites",
+      "places": [
+        {
+          "name": "Site/Museum Name",
+          "description": "Cultural significance, cost, and community connection",
+          "type": "Cultural Site"
+        }
+      ]
+    },
+    {
+      "category_name": "Nightlife & Entertainment",
+      "places": [
+        {
+          "name": "Venue Name",
+          "description": "Description of atmosphere, cultural relevance, and approximate costs",
+          "type": "Bar/Club/Entertainment"
+        }
+      ]
+    },
+    {
+      "category_name": "Free & Low-Cost Activities",
+      "places": [
+        {
+          "name": "Activity Name",
+          "description": "How to access, cultural significance, and community value",
+          "type": "Activity"
+        }
+      ]
+    }
+  ],
+  "actionable_suggestions": [
+    "Practical tip 1 for budget travel with cultural consciousness",
+    "Practical tip 2 for community engagement and safety",
+    "Practical tip 3 for authentic cultural experiences"
+  ],
+  "follow_up_questions": [
+    "Would you like me to find specific budget hotels or hostels in these areas?",
+    "Are you interested in particular cultural experiences or music scenes?",
+    "Should we build out one of these days into a more detailed, hour-by-hour plan?"
+  ]
 }
 
-Available trips: ${JSON.stringify(availableTrips, null, 2)}
-
-Based on the user's message, provide:
-1. A direct, informative response that answers their question (2-3 sentences max)
-2. Whether to show a map and what location
-3. Trip cards for flights/hotels/activities with realistic pricing
-4. Quick reply suggestions for follow-up actions
-5. Up to 3 most relevant trip recommendations
-6. Clear calls to action for next steps
-
-Respond in this JSON format:
+For OTHER QUERIES (without destination + dates + budget), use the simpler response format:
 {
   "response": "Your conversational response here",
   "showMap": true/false,
@@ -210,9 +236,11 @@ Respond in this JSON format:
       "action": "A URL or a predefined command like 'CONTINUE_CHAT'"
     }
   ]
-}`;
+}
 
-    console.log('AI Travel Chat - Calling OpenRouter with prompt length:', systemPrompt.length);
+Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
+
+    console.log('AI Travel Chat - Calling OpenRouter with enhanced prompt');
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -228,71 +256,84 @@ Respond in this JSON format:
           { role: 'user', content: message }
         ],
         temperature: 0.7,
-        max_tokens: 2000,
+        max_tokens: 3000,
       }),
     });
 
-    console.log('AI Travel Chat - OpenAI response status:', response.status);
+    console.log('AI Travel Chat - OpenRouter response status:', response.status);
     const aiData = await response.json();
-    console.log('AI Travel Chat - OpenAI response received');
     const aiResponse = aiData.choices[0].message.content;
     
-    // Parse the AI response (it should be JSON)
+    // Parse the AI response
     let parsedResponse;
     try {
       console.log('AI Travel Chat - Raw AI response length:', aiResponse?.length);
-      console.log('AI Travel Chat - Raw AI response start:', aiResponse?.substring(0, 200));
       parsedResponse = JSON.parse(aiResponse);
-      console.log('AI Travel Chat - Successfully parsed response');
+      console.log('AI Travel Chat - Successfully parsed detailed response');
     } catch (error) {
       console.error('Failed to parse AI response:', error);
       console.error('Raw response that failed to parse:', aiResponse);
       
       // Create a simple working response
       parsedResponse = {
-        response: `I'd be happy to help you with "${message}". Based on your solo travel question, here are some great destinations that are perfect for solo travelers looking for safe, culturally rich experiences.`,
+        response: `I'd be happy to help you with "${message}". Let me provide you with some detailed recommendations for your trip.`,
         showMap: false,
         mapLocation: null,
         tripCards: [
           {
             type: 'activity',
-            title: '🌍 Solo Travel Guide',
-            description: 'Discover safe, welcoming destinations perfect for solo travelers with rich cultural experiences.',
-            price: 'Free guide',
+            title: '🌍 Travel Planning Guide',
+            description: 'Get detailed itinerary recommendations with cultural experiences and budget-friendly options.',
+            price: 'Free consultation',
             rating: 4.8
           }
         ],
         quickReplies: [
-          'Tell me about Portugal for solo travel',
-          'What about solo travel in Japan?', 
-          'Solo travel safety tips',
-          'Budget solo destinations'
+          'Create a detailed day-by-day itinerary',
+          'Find Black-owned restaurants and businesses',
+          'Show cultural sites and museums',
+          'Budget travel tips'
         ],
-        recommendations: {
-          flights: "✈️ Found perfect flight options",
-          hotels: "🏨 Solo-friendly accommodations"
-        },
-        trips: [],
+        recommendations: [],
         callsToAction: [
-          { text: "Get more recommendations", action: "CONTINUE_CHAT" }
+          { text: "Get personalized itinerary", action: "CONTINUE_CHAT" }
         ]
       };
     }
 
-    // Get full trip details for recommendations - handle both array and object formats
-    let recommendedTrips = [];
-    if (parsedResponse.recommendations && Array.isArray(parsedResponse.recommendations)) {
-      recommendedTrips = parsedResponse.recommendations
-        .map((rec: any) => {
-          const trip = availableTrips.find((t: Trip) => t.id === rec.tripId);
-          return trip ? { ...trip, reason: rec.reason } : null;
-        })
-        .filter(Boolean);
+    // Handle detailed itinerary response format
+    if (parsedResponse.title && parsedResponse.summary && parsedResponse.recommendations) {
+      console.log('AI Travel Chat - Detected detailed itinerary response');
+      
+      // Convert detailed format to expected frontend format
+      const detailedResponse = {
+        response: parsedResponse.summary,
+        showMap: tripDetails.destination ? true : false,
+        mapLocation: tripDetails.destination || null,
+        tripCards: [],
+        quickReplies: parsedResponse.follow_up_questions || [],
+        recommendations: [],
+        callsToAction: [
+          { text: "Get more details", action: "CONTINUE_CHAT" },
+          { text: "Modify itinerary", action: "CONTINUE_CHAT" }
+        ],
+        detailedItinerary: {
+          title: parsedResponse.title,
+          summary: parsedResponse.summary,
+          recommendations: parsedResponse.recommendations,
+          actionable_suggestions: parsedResponse.actionable_suggestions,
+          follow_up_questions: parsedResponse.follow_up_questions
+        }
+      };
+      
+      console.log('AI Travel Chat - Sending detailed itinerary response');
+      return new Response(JSON.stringify(detailedResponse), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    console.log('AI Travel Chat - Parsed response:', JSON.stringify(parsedResponse, null, 2));
-    console.log('AI Travel Chat - Sending AI response');
-    return new Response(JSON.stringify({
+    // Handle simple response format
+    const responseData = {
       response: parsedResponse.response,
       showMap: parsedResponse.showMap,
       mapLocation: parsedResponse.mapLocation,
@@ -302,17 +343,19 @@ Respond in this JSON format:
         flights: "✈️ Found perfect flight options",
         hotels: "🏨 Curated hotel recommendations"
       },
-      trips: recommendedTrips,
+      trips: [],
       callsToAction: parsedResponse.callsToAction || [
         { text: "Ask another question", action: "CONTINUE_CHAT" }
       ]
-    }), {
+    };
+
+    console.log('AI Travel Chat - Sending simple response');
+    return new Response(JSON.stringify(responseData), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
     console.error('AI Travel Chat - Error occurred:', error);
-    console.error('AI Travel Chat - Error stack:', error.stack);
     return new Response(JSON.stringify({
       error: error.message,
       response: "I'm having trouble processing your request right now. Please try again in a moment.",
