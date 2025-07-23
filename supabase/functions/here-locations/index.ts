@@ -1,9 +1,13 @@
 import { serve } from "https://deno.land/std@0.192.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -12,6 +16,8 @@ serve(async (req) => {
   }
 
   try {
+    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+    
     let query = "";
     
     // Support both GET with query params and POST with JSON body
@@ -40,6 +46,19 @@ serve(async (req) => {
     }
 
     console.log(`Searching HERE locations for: ${query}`);
+
+    // Track API usage BEFORE making the call
+    try {
+      await supabase.rpc('track_api_call', {
+        p_provider: 'here',
+        p_endpoint: 'autocomplete',
+        p_usage_count: 1,
+        p_metadata: { query: query.substring(0, 100), action: 'autosuggest' }
+      })
+    } catch (trackError) {
+      console.error('Error tracking API usage:', trackError)
+      // Continue with the request even if tracking fails
+    }
 
     // Call HERE Geocoding and Search API
     const hereUrl = `https://autosuggest.search.hereapi.com/v1/autosuggest?at=40.7128,-74.0060&q=${encodeURIComponent(query)}&apiKey=${hereApiKey}`;
