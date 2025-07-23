@@ -14,7 +14,7 @@ import {
 import { EnhancedMapComponent } from '@/components/EnhancedMapComponent';
 import { StaticMapImage } from '@/components/StaticMapImage';
 import { useBehaviorTracking } from '@/hooks/useBehaviorTracking';
-import { useGooglePlacesImages } from '@/hooks/useGooglePlacesImages';
+import { useGooglePlacesDetails } from '@/hooks/useGooglePlacesDetails';
 
 interface Place {
   name: string;
@@ -73,31 +73,31 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
   onFollowUpClick
 }) => {
   const [savedPlaces, setSavedPlaces] = useState<Set<string>>(new Set());
-  const [placeImages, setPlaceImages] = useState<Record<string, string>>({});
+  const [placeDetails, setPlaceDetails] = useState<Record<string, any>>({});
   const { trackDestinationView, trackClick } = useBehaviorTracking();
-  const { getMultiplePlaceImages, loading: imagesLoading } = useGooglePlacesImages();
+  const { getMultiplePlaceDetails } = useGooglePlacesDetails();
 
-  // Fetch images for places that don't have image_url
+  // Fetch details for places that don't have complete information
   useEffect(() => {
-    const fetchPlaceImages = async () => {
+    const fetchPlaceDetails = async () => {
       const placesToFetch = itinerary.recommendations
         .flatMap(category => category.places)
-        .filter(place => !place.image_url)
+        .filter(place => !place.image_url || !place.booking_url)
         .map(place => ({ 
           name: place.name, 
           location: place.location || destination 
         }));
 
       if (placesToFetch.length > 0) {
-        console.log('Fetching images for places:', placesToFetch);
-        const images = await getMultiplePlaceImages(placesToFetch);
-        console.log('Received place images:', images);
-        setPlaceImages(images);
+        console.log('Fetching details for places:', placesToFetch);
+        const details = await getMultiplePlaceDetails(placesToFetch);
+        console.log('Received place details:', details);
+        setPlaceDetails(details);
       }
     };
 
-    fetchPlaceImages();
-  }, [itinerary, destination, getMultiplePlaceImages]);
+    fetchPlaceDetails();
+  }, [itinerary, destination, getMultiplePlaceDetails]);
 
   const toggleSavePlace = (placeName: string) => {
     const newSaved = new Set(savedPlaces);
@@ -165,10 +165,10 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                 return (
                   <div key={placeIndex} className="border border-gray-200 rounded-lg bg-white overflow-hidden">
                     {/* Place Image */}
-                    {(place.image_url || placeImages[place.name]) && (
+                    {(place.image_url || placeDetails[place.name]?.imageUrl) && (
                       <div className="h-32 bg-gray-200 relative overflow-hidden">
                         <img 
-                          src={place.image_url || placeImages[place.name]} 
+                          src={place.image_url || placeDetails[place.name]?.imageUrl} 
                           alt={place.name}
                           className="w-full h-full object-cover"
                           onError={(e) => {
@@ -243,18 +243,25 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                       </div>
 
                       {/* Booking Button */}
-                      {place.booking_url && place.type !== 'Transportation' && (
+                      {(place.booking_url || placeDetails[place.name]?.websiteUrl || placeDetails[place.name]?.googleMapsUrl) && place.type !== 'Transportation' && (
                         <Button 
                           size="sm" 
                           className="w-full text-xs bg-blue-600 hover:bg-blue-700 text-white border-0"
-                          onClick={() => window.open(place.booking_url, '_blank')}
+                          onClick={() => {
+                            const url = place.booking_url || 
+                                         placeDetails[place.name]?.websiteUrl || 
+                                         placeDetails[place.name]?.googleMapsUrl;
+                            if (url) window.open(url, '_blank');
+                          }}
                         >
-                          {place.type.toLowerCase().includes('restaurant') || place.type.toLowerCase().includes('dining') 
-                            ? 'Book Table on Utrippin'
-                            : place.type.toLowerCase().includes('hotel')
-                            ? 'Book Hotel on Utrippin'
-                            : 'Book Tour on Utrippin'
-                          }
+                          {place.booking_url ? 
+                            (place.type.toLowerCase().includes('restaurant') || place.type.toLowerCase().includes('dining') 
+                              ? 'Book Table on Utrippin'
+                              : place.type.toLowerCase().includes('hotel')
+                              ? 'Book Hotel on Utrippin'
+                              : 'Book Tour on Utrippin')
+                            : placeDetails[place.name]?.websiteUrl ? 'Visit Website' : 
+                            'View on Google Maps'}
                         </Button>
                       )}
                     </div>

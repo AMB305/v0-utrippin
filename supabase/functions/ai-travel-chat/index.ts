@@ -130,6 +130,15 @@ serve(async (req) => {
       console.log('AI Travel Chat - Retrieved session context:', sessionContext);
     }
 
+    // Check if this is a follow-up question click (should trigger immediate action)
+    const isFollowUpQuestion = sessionContext && 
+      (sessionContext.destination || sessionContext.dates || sessionContext.budget) &&
+      message.toLowerCase().includes('would you like') || 
+      message.toLowerCase().includes('are you interested') ||
+      message.toLowerCase().includes('nightlife') ||
+      message.toLowerCase().includes('water sports') ||
+      message.toLowerCase().includes('boat tours');
+
     // Create enhanced system prompt for detailed itinerary responses with session context
     let contextPrompt = '';
     if (sessionContext && (sessionContext.destination || sessionContext.dates || sessionContext.budget)) {
@@ -140,7 +149,10 @@ Previous conversation context for this session:
 - Budget: ${sessionContext.budget || 'Not specified'}
 - Trip Type: ${sessionContext.trip_type || 'Not specified'}
 
-Since this is a follow-up question in an ongoing conversation, use this context to provide a relevant answer. DO NOT ask for the destination again if it's already known from the context above.`;
+${isFollowUpQuestion ? 
+  'This is a follow-up question from a suggestion button. Provide an immediate, natural confirmation (like "Perfect! Here are some great nightlife spots in [destination]...") followed immediately by specific recommendations in the simple response format.' :
+  'Since this is a follow-up question in an ongoing conversation, use this context to provide a relevant answer. DO NOT ask for the destination again if it\'s already known from the context above.'
+}`;
     }
 
     const systemPrompt = `You are Keila, an AI travel planning assistant. Your primary goal is to provide detailed, actionable, and insightful travel recommendations.
@@ -178,7 +190,7 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
           "rating": 4.5,
           "price_range": "$" | "$$" | "$$$" | "$$$$",
           "estimated_cost": "~$25/person" | "~$129/ticket" | "$25-$40 entrees",
-          "booking_url": "affiliate link when applicable"
+          "booking_url": "VERIFIED_LINK_ONLY" (CRITICAL: NEVER generate URLs - only use verified links from Google Places API. If no verified website available, use Google Maps link format: "https://www.google.com/maps/place/[Place+Name]/[coordinates]")
         }
       ]
     },
@@ -208,7 +220,7 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
           "rating": 4.7,
           "price_range": "$$$",
           "estimated_cost": "$50-$80 per person",
-          "booking_url": "affiliate link when applicable"
+           "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
         }
       ]
     },
@@ -224,7 +236,7 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
           "rating": 4.4,
           "price_range": "$",
           "estimated_cost": "$12-$20 per person",
-          "booking_url": "affiliate link when applicable"
+          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
         }
       ]
     },
@@ -240,7 +252,7 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
           "rating": 4.3,
           "price_range": "$$",
           "estimated_cost": "$15-$25 per person",
-          "booking_url": "affiliate link when applicable"
+          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
         }
       ]
     },
@@ -256,7 +268,7 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
           "rating": 4.5,
           "price_range": "$" | "$$",
           "estimated_cost": "~$15/child, ~$20/adult",
-          "booking_url": "affiliate link when applicable"
+          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
         }
       ]
     },
@@ -272,7 +284,7 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
           "rating": 4.4,
           "price_range": "$$",
           "estimated_cost": "~$25/adult ticket",
-          "booking_url": "affiliate link when applicable"
+          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
         }
       ]
     },
@@ -288,7 +300,7 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
           "rating": 4.2,
           "price_range": "$$",
           "estimated_cost": "Varies by store",
-          "booking_url": "affiliate link when applicable"
+          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
         }
       ]
     },
