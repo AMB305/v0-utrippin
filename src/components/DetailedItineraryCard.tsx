@@ -23,6 +23,8 @@ interface Place {
   location?: string;
   rating?: number;
   price_range?: string;
+  estimated_cost?: string;
+  booking_url?: string;
 }
 
 interface Recommendation {
@@ -95,6 +97,18 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
         <div className="p-4">
           <h2 className="text-xl font-bold mb-2">{itinerary.title}</h2>
           <p className="text-purple-100 text-sm leading-relaxed">{itinerary.summary}</p>
+        </div>
+      </Card>
+
+      {/* Flight Booking CTA */}
+      <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0">
+        <div className="p-3">
+          <Button 
+            className="w-full bg-white text-blue-600 hover:bg-gray-100 font-medium"
+            onClick={() => window.open('#', '_blank')}
+          >
+            ✈️ Book Your Flight on Utrippin
+          </Button>
         </div>
       </Card>
 
@@ -182,19 +196,42 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                       </p>
                       
                       {/* Rating and Price */}
-                      <div className="flex items-center justify-between text-xs">
-                        {place.rating && (
+                      <div className="flex items-center justify-between text-xs mb-2">
+                        {place.rating && place.rating > 0 && (
                           <div className="flex items-center gap-1">
                             <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                             <span className="text-gray-600">{place.rating}</span>
                           </div>
                         )}
-                        {place.price_range && (
-                          <span className="text-green-600 font-medium">
-                            {place.price_range}
-                          </span>
-                        )}
+                        <div className="flex flex-col items-end">
+                          {place.price_range && (
+                            <span className="text-green-600 font-medium">
+                              {place.price_range}
+                            </span>
+                          )}
+                          {place.estimated_cost && (
+                            <span className="text-gray-500 text-xs">
+                              {place.estimated_cost}
+                            </span>
+                          )}
+                        </div>
                       </div>
+
+                      {/* Booking Button */}
+                      {place.booking_url && place.type !== 'Transportation' && (
+                        <Button 
+                          size="sm" 
+                          className="w-full text-xs bg-purple-600 hover:bg-purple-700 text-white"
+                          onClick={() => window.open(place.booking_url, '_blank')}
+                        >
+                          {place.type.toLowerCase().includes('restaurant') || place.type.toLowerCase().includes('dining') 
+                            ? 'Book Table on Utrippin'
+                            : place.type.toLowerCase().includes('hotel')
+                            ? 'Book Hotel on Utrippin'
+                            : 'Book Tour on Utrippin'
+                          }
+                        </Button>
+                      )}
                     </div>
                   </div>
                 );
@@ -220,6 +257,10 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                 </div>
               ))}
             </div>
+            <Separator className="my-3" />
+            <p className="text-xs text-green-700 italic">
+              *All prices are estimates and subject to change.
+            </p>
           </div>
         </Card>
       )}
