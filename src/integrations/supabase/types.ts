@@ -380,6 +380,48 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_sessions: {
+        Row: {
+          budget: string | null
+          context: Json | null
+          created_at: string | null
+          dates: string | null
+          destination: string | null
+          id: string
+          last_activity_at: string | null
+          session_id: string
+          trip_type: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          budget?: string | null
+          context?: Json | null
+          created_at?: string | null
+          dates?: string | null
+          destination?: string | null
+          id?: string
+          last_activity_at?: string | null
+          session_id: string
+          trip_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          budget?: string | null
+          context?: Json | null
+          created_at?: string | null
+          dates?: string | null
+          destination?: string | null
+          id?: string
+          last_activity_at?: string | null
+          session_id?: string
+          trip_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       destination_activities: {
         Row: {
           category: string
@@ -2336,6 +2378,10 @@ export type Database = {
         Returns: undefined
       }
       cleanup_expired_recommendations: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_old_chat_sessions: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }

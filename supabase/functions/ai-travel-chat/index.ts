@@ -32,7 +32,7 @@ serve(async (req) => {
   try {
     console.log('AI Travel Chat - Request received:', req.method);
     const requestBody = await req.json();
-    const { message, trips } = requestBody;
+    const { message, trips, sessionId } = requestBody;
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     
@@ -116,10 +116,36 @@ serve(async (req) => {
     const tripDetails = extractTripDetails(message);
     console.log('AI Travel Chat - Detected trip details:', tripDetails);
 
-    // Create enhanced system prompt for detailed itinerary responses
+    // Session context management
+    let sessionContext = null;
+    if (sessionId) {
+      // Try to retrieve existing session context
+      const { data: existingSession } = await supabase
+        .from('chat_sessions')
+        .select('*')
+        .eq('session_id', sessionId)
+        .single();
+
+      sessionContext = existingSession;
+      console.log('AI Travel Chat - Retrieved session context:', sessionContext);
+    }
+
+    // Create enhanced system prompt for detailed itinerary responses with session context
+    let contextPrompt = '';
+    if (sessionContext && (sessionContext.destination || sessionContext.dates || sessionContext.budget)) {
+      contextPrompt = `\n\nIMPORTANT CONVERSATION CONTEXT:
+Previous conversation context for this session:
+- Destination: ${sessionContext.destination || 'Not specified'}
+- Dates: ${sessionContext.dates || 'Not specified'}  
+- Budget: ${sessionContext.budget || 'Not specified'}
+- Trip Type: ${sessionContext.trip_type || 'Not specified'}
+
+Since this is a follow-up question in an ongoing conversation, use this context to provide a relevant answer. DO NOT ask for the destination again if it's already known from the context above.`;
+    }
+
     const systemPrompt = `You are Keila, an AI travel planning assistant. Your primary goal is to provide detailed, actionable, and insightful travel recommendations.
 
-CRITICAL BEHAVIOR: You must ALWAYS directly answer the user's question. NEVER repeat the user's question back to them as a confirmation. Your primary goal is to provide a detailed, helpful answer immediately in the requested JSON format.
+CRITICAL BEHAVIOR: You must ALWAYS directly answer the user's question. NEVER repeat the user's question back to them as a confirmation. Your primary goal is to provide a detailed, helpful answer immediately in the requested JSON format.${contextPrompt}
 
 PERSONA ACTIVATION RULES:
 When a user provides ANY DESTINATION (with or without dates/budget), you MUST activate the "Itinerary Planner" persona and provide the DETAILED JSON FORMAT below. This ensures users get comprehensive, rich itineraries immediately.
@@ -390,6 +416,36 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
     // Handle detailed itinerary response format
     if (parsedResponse.title && parsedResponse.summary && parsedResponse.recommendations) {
       console.log('AI Travel Chat - Detected detailed itinerary response');
+      
+      // Store or update session context when we have a detailed itinerary
+      if (sessionId && (tripDetails.destination || tripDetails.dates || tripDetails.budget)) {
+        console.log('AI Travel Chat - Storing session context for future use');
+        
+        const sessionData = {
+          session_id: sessionId,
+          destination: tripDetails.destination || sessionContext?.destination,
+          dates: tripDetails.dates || sessionContext?.dates,
+          budget: tripDetails.budget || sessionContext?.budget,
+          context: {
+            last_itinerary: parsedResponse,
+            conversation_history: [message]
+          },
+          last_activity_at: new Date().toISOString()
+        };
+
+        if (sessionContext) {
+          // Update existing session
+          await supabase
+            .from('chat_sessions')
+            .update(sessionData)
+            .eq('session_id', sessionId);
+        } else {
+          // Create new session
+          await supabase
+            .from('chat_sessions')
+            .insert(sessionData);
+        }
+      }
       
       // Enhanced detailed response with Google Places integration
       const detailedResponse = {

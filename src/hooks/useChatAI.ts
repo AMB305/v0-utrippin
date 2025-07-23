@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -69,9 +68,15 @@ interface Trip {
   event_date: string;
 }
 
+// Generate a unique session ID for this chat session
+const generateSessionId = () => {
+  return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+};
+
 export const useChatAI = (trips: Trip[]) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
+  const [sessionId] = useState(() => generateSessionId());
 
   const sendMessage = async (message: string) => {
     const messageId = Date.now().toString();
@@ -86,9 +91,13 @@ export const useChatAI = (trips: Trip[]) => {
     setLoading(true);
 
     try {
-      // Call the AI travel chat edge function
+      // Call the AI travel chat edge function with session ID
       const { data, error } = await supabase.functions.invoke('ai-travel-chat', {
-        body: { message, trips }
+        body: { 
+          message, 
+          trips,
+          sessionId // Include session ID for context management
+        }
       });
 
       console.log('AI chat response data:', data);
@@ -147,12 +156,14 @@ export const useChatAI = (trips: Trip[]) => {
 
   const clearChat = () => {
     setMessages([]);
+    // When clearing chat, we maintain the same session ID but could reset context in the future
   };
 
-  return {
-    messages,
-    sendMessage,
-    clearChat,
-    loading
+  return { 
+    messages, 
+    sendMessage, 
+    clearChat, 
+    loading,
+    sessionId // Expose session ID for debugging/tracking if needed
   };
 };
