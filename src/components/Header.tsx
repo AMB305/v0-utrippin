@@ -141,14 +141,42 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               {/* Mobile Menu Trigger - Now on first line */}
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="lg:hidden flex-shrink-0">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="lg:hidden flex-shrink-0"
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  >
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white border-gray-200 shadow-lg" style={{ zIndex: 9999 }}>
-                  <div className="flex flex-col h-full text-gray-900">
+                <SheetContent 
+                  side="right" 
+                  className="w-[300px] sm:w-[400px] !bg-white !border-gray-200 shadow-xl animate-slide-in-right"
+                  style={{ 
+                    zIndex: 9999,
+                    position: 'fixed',
+                    top: 0,
+                    right: 0,
+                    height: '100vh',
+                    backgroundColor: 'white !important'
+                  }}
+                >
+                  <div className="flex flex-col h-full text-gray-900 bg-white">
+                    {/* Close button */}
+                    <div className="flex justify-end p-4 border-b border-gray-200">
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-5 h-5" />
+                      </Button>
+                    </div>
+
                     {/* Mobile Search */}
-                    <div className="mb-6">
+                    <div className="mb-6 p-4">
                       <h3 className="text-sm font-medium text-gray-900 mb-3">Quick Flight Search</h3>
                       <form onSubmit={handleMobileSearch}>
                         <div className="space-y-3">
@@ -173,7 +201,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     </div>
 
                     {/* Navigation */}
-                    <nav className="flex-1 space-y-2">
+                    <nav className="flex-1 space-y-2 px-4">
                       <Link to="/hotels" onClick={closeMobileMenu}>
                         <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                           <Briefcase className="w-5 h-5 mr-3" />
@@ -228,7 +256,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                         </Button>
                       </Link>
                       
-                      <div className="border-t border-border pt-4 mt-4">
+                      <div className="border-t border-gray-200 pt-4 mt-4">
                         <Link to="/ai-travel" onClick={closeMobileMenu}>
                           <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                             <Bot className="w-5 h-5 mr-3" />
@@ -257,27 +285,27 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     </nav>
 
                     {/* Mobile User Section */}
-                    <div className="border-t border-border pt-4 mt-4">
+                    <div className="border-t border-gray-200 pt-4 mt-4 px-4 pb-4">
                       {user ? (
                         <div className="space-y-2">
-                          <div className="px-4 py-2 text-sm text-muted-foreground">
+                          <div className="px-4 py-2 text-sm text-gray-600">
                             Signed in as: {user.email}
                           </div>
                           <Link to="/profile" onClick={closeMobileMenu}>
-                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                               <User className="w-5 h-5 mr-3" />
                               Profile
                             </Button>
                           </Link>
                           <Link to="/settings" onClick={closeMobileMenu}>
-                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                               <Settings className="w-5 h-5 mr-3" />
                               Settings
                             </Button>
                           </Link>
                           <Button 
                             variant="ghost" 
-                            className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent"
+                            className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100"
                             onClick={handleSignOut}
                           >
                             <LogOut className="w-5 h-5 mr-3" />
@@ -287,12 +315,12 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                       ) : (
                         <div className="space-y-2">
                           <Link to="/auth" onClick={closeMobileMenu}>
-                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-foreground hover:text-foreground hover:bg-accent">
+                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
                               Sign In
                             </Button>
                           </Link>
                           <Link to="/auth" onClick={closeMobileMenu}>
-                            <Button className="w-full text-base py-3 bg-primary hover:bg-primary-hover text-primary-foreground">
+                            <Button className="w-full text-base py-3 bg-blue-600 hover:bg-blue-700 text-white">
                               JOIN VIP
                             </Button>
                           </Link>
