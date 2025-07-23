@@ -19,13 +19,11 @@ export interface Recommendation {
 
 interface UseRecommendationsOptions {
   type?: 'destination' | 'activity' | 'budget' | 'duration';
-  autoRefresh?: boolean;
-  refreshInterval?: number;
 }
 
 export const useRecommendations = (options: UseRecommendationsOptions = {}) => {
   const { user } = useAuth();
-  const { type = 'destination', autoRefresh = false, refreshInterval = 300000 } = options; // 5 min default
+  const { type = 'destination' } = options;
   
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(false);
@@ -107,16 +105,7 @@ export const useRecommendations = (options: UseRecommendationsOptions = {}) => {
     }
   }, [user, type]);
 
-  // Auto-refresh interval
-  useEffect(() => {
-    if (!autoRefresh || !user) return;
-
-    const interval = setInterval(() => {
-      fetchRecommendations();
-    }, refreshInterval);
-
-    return () => clearInterval(interval);
-  }, [autoRefresh, refreshInterval, user]);
+  // Removed auto-refresh to control costs
 
   // Check for expired recommendations and clean them up
   useEffect(() => {

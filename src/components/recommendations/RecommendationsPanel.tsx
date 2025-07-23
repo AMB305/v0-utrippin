@@ -19,7 +19,7 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'destination' | 'activity' | 'budget'>('destination');
   
-  const destinationRecs = useRecommendations({ type: 'destination', autoRefresh: true });
+  const destinationRecs = useRecommendations({ type: 'destination' });
   const activityRecs = useRecommendations({ type: 'activity' });
   const budgetRecs = useRecommendations({ type: 'budget' });
 
