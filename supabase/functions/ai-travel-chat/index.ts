@@ -222,7 +222,7 @@ Respond in this JSON format:
         'X-Title': 'Utrippin AI Travel Chat'
       },
       body: JSON.stringify({
-        model: 'anthropic/claude-3.5-sonnet',
+        model: 'anthropic/claude-3-5-sonnet',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
@@ -240,9 +240,12 @@ Respond in this JSON format:
     // Parse the AI response (it should be JSON)
     let parsedResponse;
     try {
+      console.log('AI Travel Chat - Raw AI response:', aiResponse);
       parsedResponse = JSON.parse(aiResponse);
+      console.log('AI Travel Chat - Successfully parsed response');
     } catch (error) {
       console.error('Failed to parse AI response:', error);
+      console.error('Raw response that failed to parse:', aiResponse);
       // Fallback response
       parsedResponse = {
         response: `I'd be happy to help you with "${message}". Let me show you some travel options.`,
@@ -282,7 +285,10 @@ Respond in this JSON format:
         recommendations: availableTrips.slice(0, 2).map((trip: Trip) => ({
           tripId: trip.id,
           reason: "Perfect match for your travel style!"
-        }))
+        })),
+        callsToAction: [
+          { text: "Ask another question", action: "CONTINUE_CHAT" }
+        ]
       };
     }
 

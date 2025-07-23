@@ -14,7 +14,7 @@ export const KeilaThinking: React.FC = () => {
             <div className="absolute inset-0 bg-blue-400/20 rounded-full animate-ping"></div>
           </div>
           <div className="flex items-center gap-1">
-            <span className="text-sm text-gray-300">Keila is planning</span>
+            <span className="text-sm text-gray-300">Keila is thinking</span>
             <div className="flex gap-1">
               <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
               <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
