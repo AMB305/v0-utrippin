@@ -14,6 +14,85 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_follow_ups: {
+        Row: {
+          agent_email: string
+          created_at: string
+          follow_up_type: string
+          id: string
+          scheduled_for: string
+          sent_at: string | null
+          trip_id: string
+        }
+        Insert: {
+          agent_email: string
+          created_at?: string
+          follow_up_type: string
+          id?: string
+          scheduled_for: string
+          sent_at?: string | null
+          trip_id: string
+        }
+        Update: {
+          agent_email?: string
+          created_at?: string
+          follow_up_type?: string
+          id?: string
+          scheduled_for?: string
+          sent_at?: string | null
+          trip_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_follow_ups_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "saved_trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_interactions: {
+        Row: {
+          agent_email: string
+          created_at: string
+          id: string
+          interaction_data: Json | null
+          interaction_type: string
+          ip_address: unknown | null
+          trip_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          agent_email: string
+          created_at?: string
+          id?: string
+          interaction_data?: Json | null
+          interaction_type: string
+          ip_address?: unknown | null
+          trip_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          agent_email?: string
+          created_at?: string
+          id?: string
+          interaction_data?: Json | null
+          interaction_type?: string
+          ip_address?: unknown | null
+          trip_id?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_interactions_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "saved_trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_trips: {
         Row: {
           ai_summary: string | null
@@ -894,9 +973,12 @@ export type Database = {
       saved_trips: {
         Row: {
           agent_email: string | null
+          agent_emails: string[] | null
           agent_message: string | null
+          agent_template_type: string | null
           created_at: string
           destination: string | null
+          follow_up_sent_at: string | null
           id: string
           image_url: string | null
           is_favorite: boolean | null
@@ -911,9 +993,12 @@ export type Database = {
         }
         Insert: {
           agent_email?: string | null
+          agent_emails?: string[] | null
           agent_message?: string | null
+          agent_template_type?: string | null
           created_at?: string
           destination?: string | null
+          follow_up_sent_at?: string | null
           id?: string
           image_url?: string | null
           is_favorite?: boolean | null
@@ -928,9 +1013,12 @@ export type Database = {
         }
         Update: {
           agent_email?: string | null
+          agent_emails?: string[] | null
           agent_message?: string | null
+          agent_template_type?: string | null
           created_at?: string
           destination?: string | null
+          follow_up_sent_at?: string | null
           id?: string
           image_url?: string | null
           is_favorite?: boolean | null

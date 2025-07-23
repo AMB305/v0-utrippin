@@ -4,7 +4,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Send, User, Mail, MessageSquare } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Send, User, Mail, MessageSquare, Plus, X, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -23,8 +25,10 @@ export const ShareWithAgentDialog: React.FC<ShareWithAgentDialogProps> = ({
   tripName,
   destination
 }) => {
-  const [agentEmail, setAgentEmail] = useState('');
+  const [agentEmails, setAgentEmails] = useState<string[]>(['']);
+  const [currentEmail, setCurrentEmail] = useState('');
   const [personalMessage, setPersonalMessage] = useState('');
+  const [templateType, setTemplateType] = useState('standard');
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -32,20 +36,45 @@ export const ShareWithAgentDialog: React.FC<ShareWithAgentDialogProps> = ({
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleShare = async () => {
-    if (!agentEmail.trim()) {
-      toast({
-        title: "Email Required",
-        description: "Please enter the travel agent's email address",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!validateEmail(agentEmail)) {
+  const addAgentEmail = () => {
+    if (currentEmail.trim() && validateEmail(currentEmail.trim())) {
+      if (!agentEmails.includes(currentEmail.trim())) {
+        setAgentEmails([...agentEmails.filter(email => email !== ''), currentEmail.trim()]);
+        setCurrentEmail('');
+      } else {
+        toast({
+          title: "Email Already Added",
+          description: "This email is already in the list",
+          variant: "destructive",
+        });
+      }
+    } else {
       toast({
         title: "Invalid Email",
         description: "Please enter a valid email address",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const removeAgentEmail = (emailToRemove: string) => {
+    setAgentEmails(agentEmails.filter(email => email !== emailToRemove));
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addAgentEmail();
+    }
+  };
+
+  const handleShare = async () => {
+    const validEmails = agentEmails.filter(email => email.trim() && validateEmail(email.trim()));
+    
+    if (validEmails.length === 0) {
+      toast({
+        title: "No Valid Emails",
+        description: "Please add at least one valid travel agent email address",
         variant: "destructive",
       });
       return;
@@ -56,8 +85,9 @@ export const ShareWithAgentDialog: React.FC<ShareWithAgentDialogProps> = ({
       const { data, error } = await supabase.functions.invoke('share-trip-with-agent', {
         body: {
           trip_id: tripId,
-          agent_email: agentEmail.trim(),
-          user_note: personalMessage.trim() || null
+          agent_emails: validEmails,
+          user_note: personalMessage.trim() || null,
+          template_type: templateType
         }
       });
 
@@ -72,12 +102,14 @@ export const ShareWithAgentDialog: React.FC<ShareWithAgentDialogProps> = ({
 
       toast({
         title: "Trip Shared Successfully!",
-        description: `Your trip has been sent to ${agentEmail}. You'll receive a confirmation copy.`,
+        description: `Your trip has been sent to ${validEmails.length} travel agent${validEmails.length > 1 ? 's' : ''}. You'll receive confirmation copies.`,
       });
 
       // Reset form and close dialog
-      setAgentEmail('');
+      setAgentEmails(['']);
+      setCurrentEmail('');
       setPersonalMessage('');
+      setTemplateType('standard');
       onOpenChange(false);
       
       // Refresh the page to show updated sharing status
@@ -109,25 +141,80 @@ export const ShareWithAgentDialog: React.FC<ShareWithAgentDialogProps> = ({
           <div className="text-center">
             <h3 className="font-semibold text-lg mb-2">{tripName}</h3>
             <p className="text-gray-400 text-sm">
-              Send your complete itinerary to a travel agent for professional booking assistance
+              Send your complete itinerary to multiple travel agents for professional booking assistance
             </p>
           </div>
 
           <div className="space-y-4">
+            {/* Template Type Selection */}
             <div className="space-y-2">
-              <Label htmlFor="agent-email" className="text-gray-300 flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                Travel Agent's Email
+              <Label htmlFor="template-type" className="text-gray-300 flex items-center gap-2">
+                <User className="w-4 h-4" />
+                Email Template Type
               </Label>
-              <Input
-                id="agent-email"
-                type="email"
-                placeholder="agent@travelagency.com"
-                value={agentEmail}
-                onChange={(e) => setAgentEmail(e.target.value)}
-                className="bg-gray-900 border-gray-700 text-white focus:border-orange-500"
-                disabled={loading}
-              />
+              <Select value={templateType} onValueChange={setTemplateType}>
+                <SelectTrigger className="bg-gray-900 border-gray-700 text-white">
+                  <SelectValue placeholder="Select template type" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-900 border-gray-700">
+                  <SelectItem value="standard">Standard Professional</SelectItem>
+                  <SelectItem value="luxury">Luxury Travel Specialist</SelectItem>
+                  <SelectItem value="budget">Budget Travel Expert</SelectItem>
+                  <SelectItem value="corporate">Corporate Travel Manager</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Agent Emails Management */}
+            <div className="space-y-2">
+              <Label htmlFor="agent-emails" className="text-gray-300 flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                Travel Agent Emails ({agentEmails.filter(email => email.trim()).length} added)
+              </Label>
+              
+              {/* Display Added Emails */}
+              {agentEmails.filter(email => email.trim()).length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {agentEmails.filter(email => email.trim()).map((email, index) => (
+                    <Badge key={index} variant="secondary" className="bg-orange-900/20 text-orange-300 border-orange-700">
+                      {email}
+                      <button
+                        onClick={() => removeAgentEmail(email)}
+                        className="ml-2 hover:text-orange-100"
+                        disabled={loading}
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
+
+              {/* Add New Email */}
+              <div className="flex gap-2">
+                <Input
+                  id="agent-emails"
+                  type="email"
+                  placeholder="agent@travelagency.com"
+                  value={currentEmail}
+                  onChange={(e) => setCurrentEmail(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="bg-gray-900 border-gray-700 text-white focus:border-orange-500 flex-1"
+                  disabled={loading}
+                />
+                <Button
+                  onClick={addAgentEmail}
+                  disabled={loading || !currentEmail.trim()}
+                  variant="outline"
+                  size="sm"
+                  className="border-orange-600 text-orange-400 hover:bg-orange-600 hover:text-white"
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-gray-500">
+                Press Enter or click + to add multiple agent emails
+              </p>
             </div>
 
             <div className="space-y-2">
@@ -156,14 +243,15 @@ export const ShareWithAgentDialog: React.FC<ShareWithAgentDialogProps> = ({
               <li>• Complete trip itinerary and recommendations</li>
               <li>• Your contact information for follow-up</li>
               <li>• Public link to view full trip details</li>
-              <li>• Your personal message to the agent</li>
+              <li>• Your personal message to the agent(s)</li>
+              <li>• Tracking data for response analytics</li>
             </ul>
           </div>
 
           <div className="flex gap-3">
             <Button
               onClick={handleShare}
-              disabled={loading}
+              disabled={loading || agentEmails.filter(email => email.trim()).length === 0}
               className="flex-1 bg-orange-600 hover:bg-orange-700 text-white"
             >
               {loading ? (
@@ -171,7 +259,7 @@ export const ShareWithAgentDialog: React.FC<ShareWithAgentDialogProps> = ({
               ) : (
                 <>
                   <Send className="w-4 h-4 mr-2" />
-                  Send to Agent
+                  Send to {agentEmails.filter(email => email.trim()).length || 0} Agent{agentEmails.filter(email => email.trim()).length !== 1 ? 's' : ''}
                 </>
               )}
             </Button>

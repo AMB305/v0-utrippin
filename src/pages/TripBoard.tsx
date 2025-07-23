@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { ShareTripDialog } from '@/components/ShareTripDialog';
 import { ShareWithAgentDialog } from '@/components/ShareWithAgentDialog';
+import { AgentAnalytics } from '@/components/AgentAnalytics';
 
 interface TripData {
   response?: string;
@@ -36,8 +37,9 @@ interface SavedTrip {
   image_url?: string;
   is_favorite: boolean;
   shared_with_agent_at?: string;
-  agent_email?: string;
+  agent_emails?: string[];
   agent_message?: string;
+  agent_template_type?: string;
 }
 
 export const TripBoard: React.FC = () => {
@@ -205,11 +207,16 @@ export const TripBoard: React.FC = () => {
               <div className="bg-orange-900/20 border border-orange-700/30 rounded-lg p-4">
                 <div className="flex items-center gap-2 text-orange-400">
                   <Share className="w-4 h-4" />
-                  <span className="font-medium">Shared with Travel Agent</span>
+                  <span className="font-medium">Shared with Travel Agents</span>
                 </div>
                 <p className="text-orange-300 text-sm mt-1">
-                  Sent to {trip.agent_email} on {formatDate(trip.shared_with_agent_at)}
+                  Sent to {trip.agent_emails?.length || 1} agent{(trip.agent_emails?.length || 1) > 1 ? 's' : ''} on {formatDate(trip.shared_with_agent_at)}
                 </p>
+                {trip.agent_emails && trip.agent_emails.length > 0 && (
+                  <p className="text-orange-300 text-xs mt-1">
+                    {trip.agent_emails.slice(0, 2).join(', ')}{trip.agent_emails.length > 2 ? ` and ${trip.agent_emails.length - 2} others` : ''}
+                  </p>
+                )}
               </div>
             )}
 
@@ -286,6 +293,10 @@ export const TripBoard: React.FC = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Agent Analytics */}
+            {trip.shared_with_agent_at && (
+              <AgentAnalytics tripId={trip.id} />
+            )}
             {/* Map Placeholder */}
             {trip.trip_data?.mapLocation && (
               <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">

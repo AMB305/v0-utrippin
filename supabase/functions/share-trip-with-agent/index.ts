@@ -9,8 +9,9 @@ const corsHeaders = {
 
 interface ShareRequest {
   trip_id: string;
-  agent_email: string;
+  agent_emails: string[];
   user_note?: string;
+  template_type?: string;
 }
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -19,7 +20,31 @@ const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-const generateAgentEmailHTML = (tripData: any, userEmail: string, shareUrl: string, userNote?: string) => {
+const generateAgentEmailHTML = (tripData: any, userEmail: string, shareUrl: string, userNote?: string, templateType: string = 'standard') => {
+  const templateConfig = {
+    standard: {
+      gradient: 'linear-gradient(135deg, #ea580c, #f97316)',
+      title: 'UTrippin.ai',
+      subtitle: 'Travel Booking Request'
+    },
+    luxury: {
+      gradient: 'linear-gradient(135deg, #7c2d12, #ea580c)',
+      title: 'UTrippin.ai Luxury',
+      subtitle: 'Premium Travel Concierge Request'
+    },
+    budget: {
+      gradient: 'linear-gradient(135deg, #166534, #22c55e)',
+      title: 'UTrippin.ai Budget',
+      subtitle: 'Smart Travel Booking Request'
+    },
+    corporate: {
+      gradient: 'linear-gradient(135deg, #1e3a8a, #3b82f6)',
+      title: 'UTrippin.ai Corporate',
+      subtitle: 'Business Travel Request'
+    }
+  };
+
+  const config = templateConfig[templateType as keyof typeof templateConfig] || templateConfig.standard;
   return `
 <!DOCTYPE html>
 <html>
@@ -35,9 +60,9 @@ const generateAgentEmailHTML = (tripData: any, userEmail: string, shareUrl: stri
         <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
           <!-- Header -->
           <tr>
-            <td style="background: linear-gradient(135deg, #ea580c, #f97316); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">UTrippin.ai</h1>
-              <p style="color: #fed7aa; margin: 10px 0 0 0; font-size: 16px;">Travel Booking Request</p>
+            <td style="background: ${config.gradient}; padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">${config.title}</h1>
+              <p style="color: #fed7aa; margin: 10px 0 0 0; font-size: 16px;">${config.subtitle}</p>
             </td>
           </tr>
           
@@ -67,7 +92,7 @@ const generateAgentEmailHTML = (tripData: any, userEmail: string, shareUrl: stri
               ` : ''}
               
               <div style="text-align: center; margin: 40px 0;">
-                <a href="${shareUrl}" style="display: inline-block; background: linear-gradient(135deg, #ea580c, #f97316); color: #ffffff; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-weight: bold; font-size: 18px;">
+                <a href="${shareUrl}&email=${encodeURIComponent(userEmail)}" style="display: inline-block; background: ${config.gradient}; color: #ffffff; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-weight: bold; font-size: 18px;">
                   📋 View Complete Itinerary
                 </a>
               </div>
@@ -103,7 +128,10 @@ const generateAgentEmailHTML = (tripData: any, userEmail: string, shareUrl: stri
 </html>`;
 };
 
-const generateUserConfirmationHTML = (tripData: any, agentEmail: string) => {
+const generateUserConfirmationHTML = (tripData: any, agentEmails: string[]) => {
+  const agentList = agentEmails.length > 3 
+    ? `${agentEmails.slice(0, 3).join(', ')} and ${agentEmails.length - 3} others`
+    : agentEmails.join(', ');
   return `
 <!DOCTYPE html>
 <html>
@@ -133,7 +161,8 @@ const generateUserConfirmationHTML = (tripData: any, agentEmail: string) => {
               <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin-bottom: 30px; border-left: 4px solid #10b981;">
                 <h3 style="color: #065f46; margin: 0 0 15px 0; font-size: 18px;">Sharing Details</h3>
                 <p style="margin: 5px 0; color: #065f46;"><strong>Trip:</strong> ${tripData.trip_name}</p>
-                <p style="margin: 5px 0; color: #065f46;"><strong>Sent to:</strong> ${agentEmail}</p>
+                <p style="margin: 5px 0; color: #065f46;"><strong>Sent to:</strong> ${agentList}</p>
+                <p style="margin: 5px 0; color: #065f46;"><strong>Total agents:</strong> ${agentEmails.length}</p>
                 <p style="margin: 5px 0; color: #065f46;"><strong>Shared on:</strong> ${new Date().toLocaleDateString()}</p>
               </div>
               
@@ -189,10 +218,10 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error('Unauthorized');
     }
 
-    const { trip_id, agent_email, user_note }: ShareRequest = await req.json();
+    const { trip_id, agent_emails, user_note, template_type = 'standard' }: ShareRequest = await req.json();
 
-    if (!trip_id || !agent_email) {
-      throw new Error('Missing required fields');
+    if (!trip_id || !agent_emails || !Array.isArray(agent_emails) || agent_emails.length === 0) {
+      throw new Error('Missing required fields: trip_id, agent_emails array');
     }
 
     // Fetch trip data and verify ownership
@@ -213,8 +242,9 @@ const handler = async (req: Request): Promise<Response> => {
       .update({
         is_public: true,
         shared_with_agent_at: new Date().toISOString(),
-        agent_email: agent_email,
-        agent_message: user_note
+        agent_emails: agent_emails,
+        agent_message: user_note,
+        agent_template_type: template_type
       })
       .eq('id', trip_id);
 
@@ -231,36 +261,72 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('Sending emails with share URL:', shareUrl);
 
-    // Send email to agent
-    const agentEmailResult = await resend.emails.send({
-      from: 'UTrippin.ai <noreply@resend.dev>',
-      to: [agent_email],
-      subject: `Travel Itinerary for ${tripData.trip_name} - Booking Request`,
-      html: generateAgentEmailHTML(tripData, user.email!, shareUrl, user_note),
-    });
+    // Send emails to all agents and track interactions
+    const emailResults = [];
+    for (const agentEmail of agent_emails) {
+      try {
+        // Track email sending
+        await supabase
+          .from('agent_interactions')
+          .insert({
+            trip_id: trip_id,
+            agent_email: agentEmail,
+            interaction_type: 'email_sent',
+            interaction_data: { 
+              template_type, 
+              user_note: user_note || null,
+              share_url: shareUrl 
+            }
+          });
 
-    console.log('Agent email sent:', agentEmailResult);
+        // Send email to agent
+        const agentEmailResult = await resend.emails.send({
+          from: 'UTrippin.ai <noreply@resend.dev>',
+          to: [agentEmail],
+          subject: `Travel Itinerary for ${tripData.trip_name} - Booking Request`,
+          html: generateAgentEmailHTML(tripData, user.email!, shareUrl, user_note, template_type),
+        });
+
+        emailResults.push({ email: agentEmail, result: agentEmailResult });
+        console.log(`Agent email sent to ${agentEmail}:`, agentEmailResult);
+
+      } catch (error) {
+        console.error(`Failed to send email to ${agentEmail}:`, error);
+        emailResults.push({ email: agentEmail, error: error });
+      }
+    }
 
     // Send confirmation email to user
     const userEmailResult = await resend.emails.send({
       from: 'UTrippin.ai <noreply@resend.dev>',
       to: [user.email!],
-      subject: `Trip Shared: ${tripData.trip_name} sent to ${agent_email}`,
-      html: generateUserConfirmationHTML(tripData, agent_email),
+      subject: `Trip Shared: ${tripData.trip_name} sent to ${agent_emails.length} agent${agent_emails.length > 1 ? 's' : ''}`,
+      html: generateUserConfirmationHTML(tripData, agent_emails),
     });
 
     console.log('User confirmation email sent:', userEmailResult);
 
-    // Verify both emails were sent successfully
-    if (agentEmailResult.error) {
-      console.error('Agent email failed:', agentEmailResult.error);
-      throw new Error('Failed to send email to travel agent');
+    // Check for any email failures
+    const failedEmails = emailResults.filter(result => result.error);
+    const successfulEmails = emailResults.filter(result => !result.error);
+
+    if (failedEmails.length > 0) {
+      console.warn(`${failedEmails.length} emails failed to send:`, failedEmails);
     }
 
-    if (userEmailResult.error) {
-      console.error('User email failed:', userEmailResult.error);
-      // Don't fail the entire operation if user email fails
-      console.warn('User confirmation email failed but continuing...');
+    // Schedule follow-up emails for 3 days later
+    for (const agentEmail of agent_emails) {
+      const followUpDate = new Date();
+      followUpDate.setDate(followUpDate.getDate() + 3);
+      
+      await supabase
+        .from('agent_follow_ups')
+        .insert({
+          trip_id: trip_id,
+          agent_email: agentEmail,
+          follow_up_type: 'reminder',
+          scheduled_for: followUpDate.toISOString()
+        });
     }
 
     return new Response(
@@ -268,8 +334,14 @@ const handler = async (req: Request): Promise<Response> => {
         success: true, 
         message: 'Trip shared successfully',
         share_url: shareUrl,
-        agent_email_id: agentEmailResult.data?.id,
-        user_email_id: userEmailResult.data?.id
+        agents_contacted: agent_emails.length,
+        successful_emails: successfulEmails.length,
+        failed_emails: failedEmails.length,
+        email_results: emailResults.map(r => ({ 
+          email: r.email, 
+          success: !r.error,
+          id: r.result?.data?.id 
+        }))
       }),
       {
         status: 200,
