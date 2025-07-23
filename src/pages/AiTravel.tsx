@@ -46,6 +46,7 @@ import UtrippinLogo from "@/components/UtrippinLogo";
 import Header from "@/components/Header";
 import HereLocationAutocomplete from "@/components/HereLocationAutocomplete";
 import { EnhancedMapComponent } from "@/components/EnhancedMapComponent";
+import { DetailedItineraryCard } from "@/components/DetailedItineraryCard";
 
 interface ChatMessage {
   id: string;
@@ -79,6 +80,25 @@ interface ChatMessage {
     text: string;
     action: string;
   }>;
+  isDetailedItinerary?: boolean;
+  detailedItinerary?: {
+    title: string;
+    summary: string;
+    recommendations: Array<{
+      category_name: string;
+      places: Array<{
+        name: string;
+        description: string;
+        type: string;
+        image_url?: string;
+        location?: string;
+        rating?: number;
+        price_range?: string;
+      }>;
+    }>;
+    actionable_suggestions: string[];
+    follow_up_questions: string[];
+  };
 }
 
 interface Trip {
@@ -442,21 +462,31 @@ const AiTravel = () => {
 
                         {/* AI Response */}
                         {message.response && !message.loading && (
-                          <div className="flex justify-start">
-                            <div className="bg-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
-                              <p className="text-sm leading-relaxed text-gray-200">{message.response}</p>
-                              {/* CTA Buttons */}
-                              {message.callsToAction && (
-                                <ChatCTAButtons 
-                                  ctas={message.callsToAction} 
-                                  onContinueChat={() => {
-                                    // Focus the input when "Continue Chat" is clicked
-                                    const input = document.querySelector('input[placeholder="Ask me anything..."]') as HTMLInputElement;
-                                    input?.focus();
-                                  }}
-                                />
-                              )}
-                            </div>
+                          <div className="flex justify-start w-full">
+                            {message.isDetailedItinerary && message.detailedItinerary ? (
+                              /* Rich Detailed Itinerary Card */
+                              <DetailedItineraryCard 
+                                itinerary={message.detailedItinerary}
+                                destination={message.mapLocation}
+                                onFollowUpClick={(question) => handleMobileSubmit(question)}
+                              />
+                            ) : (
+                              /* Simple Response */
+                              <div className="bg-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
+                                <p className="text-sm leading-relaxed text-gray-200">{message.response}</p>
+                                {/* CTA Buttons */}
+                                {message.callsToAction && (
+                                  <ChatCTAButtons 
+                                    ctas={message.callsToAction} 
+                                    onContinueChat={() => {
+                                      // Focus the input when "Continue Chat" is clicked
+                                      const input = document.querySelector('input[placeholder="Ask me anything..."]') as HTMLInputElement;
+                                      input?.focus();
+                                    }}
+                                  />
+                                )}
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>

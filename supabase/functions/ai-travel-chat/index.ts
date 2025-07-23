@@ -129,12 +129,12 @@ BRAND-SPECIFIC REQUIREMENTS FOR ALL RESPONSES:
 - Celebrate diverse cultures while promoting respectful, conscious travel
 
 PERSONA ACTIVATION RULES:
-When a user provides DESTINATION + DATES + BUDGET (like "I'm going to Miami Aug 1-5 with $1000"), you MUST activate the "Itinerary Planner" persona and provide the DETAILED JSON FORMAT below.
+When a user provides ANY DESTINATION (with or without dates/budget), you MUST activate the "Itinerary Planner" persona and provide the DETAILED JSON FORMAT below. This ensures users get comprehensive, rich itineraries immediately.
 
 PERSONA: The "Itinerary Planner" Expert
 When activated, your response MUST include:
 - Day-by-Day Suggested Itinerary highlighting cultural landmarks, Black history sites, and community experiences
-- Dining Recommendations featuring Black-owned restaurants, local markets, and authentic cultural cuisine
+- Dining Recommendations featuring Black-owned restaurants, local markets, and authentic cultural cuisine  
 - Cultural Hotspots including museums, galleries, historic sites, and community centers relevant to the African diaspora
 - Safety Tips specific to that location with cultural sensitivity considerations
 - Getting Around options including community-recommended transportation and local guidance
@@ -151,7 +151,11 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
         {
           "name": "Day 1: Specific Activity/Area Focus",
           "description": "Detailed description of the day's activities, cultural significance, and budget considerations",
-          "type": "Day Plan"
+          "type": "Day Plan",
+          "image_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=PHOTO_REF&key=API_KEY",
+          "location": "Specific Area/Neighborhood",
+          "rating": 4.5,
+          "price_range": "$50-100"
         }
       ]
     },
@@ -161,7 +165,11 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
         {
           "name": "Restaurant Name",
           "description": "Description including cultural significance, average cost, and why it's special",
-          "type": "Restaurant"
+          "type": "Restaurant",
+          "image_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=PHOTO_REF&key=API_KEY",
+          "location": "Neighborhood/Area",
+          "rating": 4.3,
+          "price_range": "$15-25"
         }
       ]
     },
@@ -171,7 +179,11 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
         {
           "name": "Site/Museum Name",
           "description": "Cultural significance, cost, and community connection",
-          "type": "Cultural Site"
+          "type": "Cultural Site",
+          "image_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=PHOTO_REF&key=API_KEY",
+          "location": "District/Area",
+          "rating": 4.7,
+          "price_range": "Free-$15"
         }
       ]
     },
@@ -179,9 +191,13 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
       "category_name": "Nightlife & Entertainment",
       "places": [
         {
-          "name": "Venue Name",
+          "name": "Venue Name", 
           "description": "Description of atmosphere, cultural relevance, and approximate costs",
-          "type": "Bar/Club/Entertainment"
+          "type": "Bar/Club/Entertainment",
+          "image_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=PHOTO_REF&key=API_KEY",
+          "location": "Entertainment District",
+          "rating": 4.4,
+          "price_range": "$8-15 drinks"
         }
       ]
     },
@@ -190,8 +206,12 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
       "places": [
         {
           "name": "Activity Name",
-          "description": "How to access, cultural significance, and community value",
-          "type": "Activity"
+          "description": "How to access, cultural significance, and community value", 
+          "type": "Activity",
+          "image_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=PHOTO_REF&key=API_KEY",
+          "location": "Area/Park",
+          "rating": 4.6,
+          "price_range": "Free"
         }
       ]
     }
@@ -305,7 +325,7 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
     if (parsedResponse.title && parsedResponse.summary && parsedResponse.recommendations) {
       console.log('AI Travel Chat - Detected detailed itinerary response');
       
-      // Convert detailed format to expected frontend format
+      // Enhanced detailed response with Google Places integration
       const detailedResponse = {
         response: parsedResponse.summary,
         showMap: tripDetails.destination ? true : false,
@@ -313,17 +333,15 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
         tripCards: [],
         quickReplies: parsedResponse.follow_up_questions || [],
         recommendations: [],
-        callsToAction: [
-          { text: "Get more details", action: "CONTINUE_CHAT" },
-          { text: "Modify itinerary", action: "CONTINUE_CHAT" }
-        ],
+        callsToAction: [],
         detailedItinerary: {
           title: parsedResponse.title,
           summary: parsedResponse.summary,
           recommendations: parsedResponse.recommendations,
           actionable_suggestions: parsedResponse.actionable_suggestions,
           follow_up_questions: parsedResponse.follow_up_questions
-        }
+        },
+        isDetailedItinerary: true // Flag to trigger detailed UI
       };
       
       console.log('AI Travel Chat - Sending detailed itinerary response');

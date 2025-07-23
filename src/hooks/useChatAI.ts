@@ -11,6 +11,10 @@ interface DetailedItinerary {
       name: string;
       description: string;
       type: string;
+      image_url?: string;
+      location?: string;
+      rating?: number;
+      price_range?: string;
     }>;
   }>;
   actionable_suggestions: string[];
@@ -50,6 +54,7 @@ interface ChatMessage {
     action: string;
   }>;
   detailedItinerary?: DetailedItinerary;
+  isDetailedItinerary?: boolean;
 }
 
 interface Trip {
@@ -109,7 +114,8 @@ export const useChatAI = (trips: Trip[]) => {
                 recommendations: data.recommendations,
                 trips: data.trips || [],
                 callsToAction: data.callsToAction || [],
-                detailedItinerary: data.detailedItinerary
+                detailedItinerary: data.detailedItinerary,
+                isDetailedItinerary: data.isDetailedItinerary
               }
             : msg
         ));
