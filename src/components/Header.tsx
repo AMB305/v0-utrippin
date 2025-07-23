@@ -138,46 +138,18 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 </div>
               )}
 
-              {/* Mobile Menu Trigger - Now on first line */}
+              {/* Mobile Menu Trigger */}
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="lg:hidden flex-shrink-0"
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  >
+                  <Button variant="ghost" size="icon" className="lg:hidden flex-shrink-0">
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent 
-                  side="right" 
-                  className="w-[300px] sm:w-[400px] !bg-white !border-gray-200 shadow-xl animate-slide-in-right"
-                  style={{ 
-                    zIndex: 9999,
-                    position: 'fixed',
-                    top: 0,
-                    right: 0,
-                    height: '100vh',
-                    backgroundColor: 'white !important'
-                  }}
-                >
-                  <div className="flex flex-col h-full text-gray-900 bg-white">
-                    {/* Close button */}
-                    <div className="flex justify-end p-4 border-b border-gray-200">
-                      <Button 
-                        variant="ghost" 
-                        size="icon"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="text-gray-500 hover:text-gray-700"
-                      >
-                        <X className="w-5 h-5" />
-                      </Button>
-                    </div>
-
+                <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                  <div className="flex flex-col h-full">
                     {/* Mobile Search */}
-                    <div className="mb-6 p-4">
-                      <h3 className="text-sm font-medium text-gray-900 mb-3">Quick Flight Search</h3>
+                    <div className="mb-6">
+                      <h3 className="text-sm font-medium mb-3">Quick Flight Search</h3>
                       <form onSubmit={handleMobileSearch}>
                         <div className="space-y-3">
                           <AirportAutocomplete
@@ -188,11 +160,10 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                               setMobileSearchValue(value);
                               setMobileSearchIata(iataCode);
                             }}
-                            className="bg-white border-gray-300 text-gray-900"
                           />
                           <button 
                             type="submit" 
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors"
+                            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 px-4 rounded-md text-sm font-medium transition-colors"
                           >
                             {mobileSearchIata ? 'Search Flights' : 'Search Destinations'}
                           </button>
@@ -201,82 +172,82 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     </div>
 
                     {/* Navigation */}
-                    <nav className="flex-1 space-y-2 px-4">
+                    <nav className="flex-1 space-y-2">
                       <Link to="/hotels" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                           <Briefcase className="w-5 h-5 mr-3" />
                           Hotels
                         </Button>
                       </Link>
                       <Link to="/flights" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                           <Plane className="w-5 h-5 mr-3" />
                           Flights
                         </Button>
                       </Link>
                       <Link to="/cars" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                           <Car className="w-5 h-5 mr-3" />
                           Cars
                         </Button>
                       </Link>
                       <Link to="/packages" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                           <Package className="w-5 h-5 mr-3" />
                           Packages
                         </Button>
                       </Link>
                       <Link to="/experiences" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                           <Sparkles className="w-5 h-5 mr-3" />
                           Experiences
                         </Button>
                       </Link>
                       <Link to="/cruises" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                           <Ship className="w-5 h-5 mr-3" />
                           Cruises
                         </Button>
                       </Link>
                       <Link to="/ai-recommendations" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                           <Bot className="w-5 h-5 mr-3" />
                           AI Recommendations
                         </Button>
                       </Link>
                       <Link to="/deals" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                           <Tag className="w-5 h-5 mr-3" />
                           Deals
                         </Button>
                       </Link>
                       <Link to="/blog" onClick={closeMobileMenu}>
-                        <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                        <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                           Blog
                         </Button>
                       </Link>
                       
-                      <div className="border-t border-gray-200 pt-4 mt-4">
+                      <div className="border-t pt-4 mt-4">
                         <Link to="/ai-travel" onClick={closeMobileMenu}>
-                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                             <Bot className="w-5 h-5 mr-3" />
                             AI Travel
                           </Button>
                         </Link>
                         <Link to="/travel-buddies" onClick={closeMobileMenu}>
-                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                             <Users className="w-5 h-5 mr-3" />
                             Travel Buddies
                           </Button>
                         </Link>
                         <Link to="/dashboard" onClick={closeMobileMenu}>
-                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                             <LayoutDashboard className="w-5 h-5 mr-3" />
                             Dashboard
                           </Button>
                         </Link>
                         <Link to="/trips" onClick={closeMobileMenu}>
-                          <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                          <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                             <Briefcase className="w-5 h-5 mr-3" />
                             My Trips
                           </Button>
@@ -285,27 +256,27 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                     </nav>
 
                     {/* Mobile User Section */}
-                    <div className="border-t border-gray-200 pt-4 mt-4 px-4 pb-4">
+                    <div className="border-t pt-4 mt-4">
                       {user ? (
                         <div className="space-y-2">
-                          <div className="px-4 py-2 text-sm text-gray-600">
+                          <div className="px-4 py-2 text-sm text-muted-foreground">
                             Signed in as: {user.email}
                           </div>
                           <Link to="/profile" onClick={closeMobileMenu}>
-                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                            <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                               <User className="w-5 h-5 mr-3" />
                               Profile
                             </Button>
                           </Link>
                           <Link to="/settings" onClick={closeMobileMenu}>
-                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                            <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                               <Settings className="w-5 h-5 mr-3" />
                               Settings
                             </Button>
                           </Link>
                           <Button 
                             variant="ghost" 
-                            className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100"
+                            className="w-full justify-start text-base py-3 hover:bg-accent"
                             onClick={handleSignOut}
                           >
                             <LogOut className="w-5 h-5 mr-3" />
@@ -315,12 +286,12 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                       ) : (
                         <div className="space-y-2">
                           <Link to="/auth" onClick={closeMobileMenu}>
-                            <Button variant="ghost" className="w-full justify-start text-base py-3 text-gray-700 hover:text-black hover:bg-gray-100">
+                            <Button variant="ghost" className="w-full justify-start text-base py-3 hover:bg-accent">
                               Sign In
                             </Button>
                           </Link>
                           <Link to="/auth" onClick={closeMobileMenu}>
-                            <Button className="w-full text-base py-3 bg-blue-600 hover:bg-blue-700 text-white">
+                            <Button className="w-full text-base py-3">
                               JOIN VIP
                             </Button>
                           </Link>
