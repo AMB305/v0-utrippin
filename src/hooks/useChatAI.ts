@@ -165,6 +165,9 @@ export const useChatAI = (trips: Trip[]) => {
         body: { message, trips }
       });
 
+      console.log('AI chat response data:', data);
+      console.log('AI chat response error:', error);
+
       if (error) {
         console.error('AI chat error:', error);
         // Fallback to mock response on error
@@ -178,8 +181,9 @@ export const useChatAI = (trips: Trip[]) => {
               }
             : msg
         ));
-      } else {
+      } else if (data && data.response) {
         // Update message with AI response
+        console.log('Updating message with response:', data.response);
         setMessages(prev => prev.map(msg => 
           msg.id === messageId 
             ? {
@@ -188,11 +192,24 @@ export const useChatAI = (trips: Trip[]) => {
                 response: data.response,
                 showMap: data.showMap,
                 mapLocation: data.mapLocation,
-                tripCards: data.tripCards,
-                quickReplies: data.quickReplies,
+                tripCards: data.tripCards || [],
+                quickReplies: data.quickReplies || [],
                 recommendations: data.recommendations,
-                trips: data.trips,
-                callsToAction: data.callsToAction
+                trips: data.trips || [],
+                callsToAction: data.callsToAction || []
+              }
+            : msg
+        ));
+      } else {
+        console.error('No response data received:', data);
+        // Fallback to mock response
+        const mockResponse = getMockResponse(message);
+        setMessages(prev => prev.map(msg => 
+          msg.id === messageId 
+            ? {
+                ...msg,
+                loading: false,
+                ...mockResponse
               }
             : msg
         ));

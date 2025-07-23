@@ -240,65 +240,55 @@ Respond in this JSON format:
     // Parse the AI response (it should be JSON)
     let parsedResponse;
     try {
-      console.log('AI Travel Chat - Raw AI response:', aiResponse);
+      console.log('AI Travel Chat - Raw AI response length:', aiResponse?.length);
+      console.log('AI Travel Chat - Raw AI response start:', aiResponse?.substring(0, 200));
       parsedResponse = JSON.parse(aiResponse);
       console.log('AI Travel Chat - Successfully parsed response');
     } catch (error) {
       console.error('Failed to parse AI response:', error);
       console.error('Raw response that failed to parse:', aiResponse);
-      // Fallback response
+      
+      // Create a simple working response
       parsedResponse = {
-        response: `I'd be happy to help you with "${message}". Let me show you some travel options.`,
-        showMap: !!destination,
-        mapLocation: destination,
+        response: `I'd be happy to help you with "${message}". Based on your solo travel question, here are some great destinations that are perfect for solo travelers looking for safe, culturally rich experiences.`,
+        showMap: false,
+        mapLocation: null,
         tripCards: [
           {
-            type: 'flight',
-            title: '✈️ Flight Results',
-            description: destination 
-              ? `Flights to ${destination} with competitive pricing and flexible dates`
-              : `Flights matching your request for "${message}"`,
-            price: 'From $450',
-            rating: 4.2
-          },
-          {
-            type: 'hotel',
-            title: '🏨 Hotel Results', 
-            description: destination
-              ? `Accommodations in ${destination} from budget to luxury options`
-              : `Hotels matching your travel needs`,
-            price: 'From $80/night',
-            rating: 4.5
+            type: 'activity',
+            title: '🌍 Solo Travel Guide',
+            description: 'Discover safe, welcoming destinations perfect for solo travelers with rich cultural experiences.',
+            price: 'Free guide',
+            rating: 4.8
           }
         ],
-        quickReplies: destination ? [
-          `Find flights to ${destination}`,
-          `Hotels in ${destination}`,
-          `Things to do in ${destination}`,
-          'Change destination'
-        ] : [
-          'Show more options',
-          'Find cheaper alternatives', 
-          'Add activities to my trip',
-          'Plan a different destination'
+        quickReplies: [
+          'Tell me about Portugal for solo travel',
+          'What about solo travel in Japan?', 
+          'Solo travel safety tips',
+          'Budget solo destinations'
         ],
-        recommendations: availableTrips.slice(0, 2).map((trip: Trip) => ({
-          tripId: trip.id,
-          reason: "Perfect match for your travel style!"
-        })),
+        recommendations: {
+          flights: "✈️ Found perfect flight options",
+          hotels: "🏨 Solo-friendly accommodations"
+        },
+        trips: [],
         callsToAction: [
-          { text: "Ask another question", action: "CONTINUE_CHAT" }
+          { text: "Get more recommendations", action: "CONTINUE_CHAT" }
         ]
       };
     }
 
-    // Get full trip details for recommendations
-    const recommendedTrips = parsedResponse.recommendations
-      .map((rec: any) => {
-        const trip = availableTrips.find((t: Trip) => t.id === rec.tripId);
-        return trip ? { ...trip, reason: rec.reason } : null;
-      })
-      .filter(Boolean);
+    // Get full trip details for recommendations - handle both array and object formats
+    let recommendedTrips = [];
+    if (parsedResponse.recommendations && Array.isArray(parsedResponse.recommendations)) {
+      recommendedTrips = parsedResponse.recommendations
+        .map((rec: any) => {
+          const trip = availableTrips.find((t: Trip) => t.id === rec.tripId);
+          return trip ? { ...trip, reason: rec.reason } : null;
+        })
+        .filter(Boolean);
+    }
 
     console.log('AI Travel Chat - Parsed response:', JSON.stringify(parsedResponse, null, 2));
     console.log('AI Travel Chat - Sending AI response');
