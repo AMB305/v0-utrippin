@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const UtrippinLogo = () => {
-  const [animatedLetters, setAnimatedLetters] = useState<boolean[]>(new Array(8).fill(false));
+  const logoRef = useRef<HTMLDivElement>(null);
 
   // Gradient colors from bright blue to dark blue/near-black
   const gradientColors = [
@@ -16,37 +16,28 @@ const UtrippinLogo = () => {
   ];
 
   useEffect(() => {
-    // Trigger the letter lift animation on component mount
-    const letters = ['U', 'T', 'R', 'I', 'P', 'P', 'I', 'N'];
-    
-    letters.forEach((_, index) => {
-      setTimeout(() => {
-        setAnimatedLetters(prev => {
-          const newState = [...prev];
-          newState[index] = true;
-          return newState;
-        });
-      }, index * 100); // 100ms delay between each letter
-    });
+    // Add animation class to trigger the animation on mount
+    if (logoRef.current) {
+      logoRef.current.classList.add('animate-on-load');
+    }
   }, []);
 
   return (
-    <div className="flex items-center">
-      {['U', 'T', 'R', 'I', 'P', 'P', 'I', 'N'].map((letter, index) => (
-        <div 
-          key={index} 
-          className={`w-8 h-8 text-white flex items-center justify-center text-sm font-bold transition-transform duration-300 ease-out ${
-            animatedLetters[index] ? 'animate-letter-lift' : ''
-          }`}
-          style={{
-            backgroundColor: gradientColors[index],
-            animationDelay: `${index * 100}ms`,
-            animationFillMode: 'both'
-          }}
-        >
-          {letter}
-        </div>
-      ))}
+    <>
+      <div ref={logoRef} className="flex items-center logo-container">
+        {['U', 'T', 'R', 'I', 'P', 'P', 'I', 'N'].map((letter, index) => (
+          <div 
+            key={index} 
+            className="logo-letter w-8 h-8 text-white flex items-center justify-center text-sm font-bold"
+            style={{
+              backgroundColor: gradientColors[index],
+              animationDelay: `${index * 150}ms`,
+            }}
+          >
+            {letter}
+          </div>
+        ))}
+      </div>
       
       <style>{`
         @keyframes letter-lift {
@@ -54,18 +45,19 @@ const UtrippinLogo = () => {
             transform: translateY(0);
           }
           50% {
-            transform: translateY(-8px);
+            transform: translateY(-12px);
           }
           100% {
             transform: translateY(0);
           }
         }
         
-        .animate-letter-lift {
-          animation: letter-lift 0.6s ease-out;
+        .animate-on-load .logo-letter {
+          animation: letter-lift 0.8s ease-out;
+          animation-fill-mode: both;
         }
       `}</style>
-    </div>
+    </>
   );
 };
 
