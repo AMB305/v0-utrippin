@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { MapPin, Calendar, ExternalLink } from 'lucide-react';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { MapPin, Calendar, ExternalLink, User, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -14,6 +14,8 @@ interface PublicTripData {
 
 const PublicTripView: React.FC = () => {
   const { shareId } = useParams<{ shareId: string }>();
+  const [searchParams] = useSearchParams();
+  const isAgentView = searchParams.get('ref') === 'agent';
   const [trip, setTrip] = useState<PublicTripData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -77,6 +79,26 @@ const PublicTripView: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Agent Context Header */}
+      {isAgentView && (
+        <div className="bg-orange-900/20 border-b border-orange-700/30">
+          <div className="max-w-6xl mx-auto px-4 py-6">
+            <div className="flex items-center gap-3 mb-3">
+              <User className="w-6 h-6 text-orange-400" />
+              <h2 className="text-xl font-semibold text-orange-300">Booking Request from Client</h2>
+            </div>
+            <p className="text-orange-200 mb-4">
+              A client has shared their travel itinerary with you for professional booking assistance. 
+              Please review the complete trip details below and contact them directly to discuss arrangements.
+            </p>
+            <div className="flex items-center gap-2 text-orange-300">
+              <Mail className="w-4 h-4" />
+              <span className="text-sm">Contact client directly to discuss booking options</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="border-b border-gray-800">
         <div className="max-w-6xl mx-auto px-4 py-6">
@@ -93,7 +115,7 @@ const PublicTripView: React.FC = () => {
               </div>
             </div>
             <div className="mt-4 text-sm text-gray-500">
-              Public trip shared via Utrippin.ai
+              {isAgentView ? 'Professional booking request via UTrippin.ai' : 'Public trip shared via UTrippin.ai'}
             </div>
           </div>
         </div>
@@ -150,18 +172,36 @@ const PublicTripView: React.FC = () => {
           )}
 
           {/* CTA Section */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-center">
-            <h3 className="text-xl font-bold mb-2">Plan Your Own Amazing Trip</h3>
-            <p className="text-blue-100 mb-4">
-              Create personalized itineraries like this one with our AI travel assistant
-            </p>
-            <Button 
-              onClick={() => window.open('/', '_blank')}
-              className="bg-white text-blue-600 hover:bg-gray-100"
-            >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Try Utrippin.ai
-            </Button>
+          <div className={`rounded-xl p-6 text-center ${
+            isAgentView 
+              ? 'bg-gradient-to-r from-orange-600 to-red-600' 
+              : 'bg-gradient-to-r from-blue-600 to-purple-600'
+          }`}>
+            {isAgentView ? (
+              <>
+                <h3 className="text-xl font-bold mb-2">Ready to Assist This Client?</h3>
+                <p className="text-orange-100 mb-4">
+                  This client is looking for professional travel booking assistance. Contact them directly to provide quotes and help with reservations.
+                </p>
+                <div className="text-orange-200 text-sm">
+                  Professional travel agent services powered by UTrippin.ai
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="text-xl font-bold mb-2">Plan Your Own Amazing Trip</h3>
+                <p className="text-blue-100 mb-4">
+                  Create personalized itineraries like this one with our AI travel assistant
+                </p>
+                <Button 
+                  onClick={() => window.open('/', '_blank')}
+                  className="bg-white text-blue-600 hover:bg-gray-100"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Try UTrippin.ai
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

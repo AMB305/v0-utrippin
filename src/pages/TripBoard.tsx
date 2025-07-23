@@ -5,6 +5,7 @@ import { ArrowLeft, MapPin, Calendar, Share, Heart, Edit3 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { ShareTripDialog } from '@/components/ShareTripDialog';
+import { ShareWithAgentDialog } from '@/components/ShareWithAgentDialog';
 
 interface TripData {
   response?: string;
@@ -34,6 +35,9 @@ interface SavedTrip {
   created_at: string;
   image_url?: string;
   is_favorite: boolean;
+  shared_with_agent_at?: string;
+  agent_email?: string;
+  agent_message?: string;
 }
 
 export const TripBoard: React.FC = () => {
@@ -43,6 +47,7 @@ export const TripBoard: React.FC = () => {
   const [trip, setTrip] = useState<SavedTrip | null>(null);
   const [loading, setLoading] = useState(true);
   const [showShareDialog, setShowShareDialog] = useState(false);
+  const [agentDialogOpen, setAgentDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -176,12 +181,7 @@ export const TripBoard: React.FC = () => {
                 variant="outline" 
                 size="sm" 
                 className="border-orange-500 text-orange-400 hover:bg-orange-500/10 hover:text-orange-300"
-                onClick={() => {
-                  toast({
-                    title: "Connect with Travel Agent",
-                    description: "Feature coming soon! Get personalized assistance with your trip.",
-                  });
-                }}
+                onClick={() => setAgentDialogOpen(true)}
               >
                 <Share className="w-4 h-4 mr-1" />
                 Share with Travel Agent
@@ -200,6 +200,19 @@ export const TripBoard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Sharing Status */}
+            {trip.shared_with_agent_at && (
+              <div className="bg-orange-900/20 border border-orange-700/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 text-orange-400">
+                  <Share className="w-4 h-4" />
+                  <span className="font-medium">Shared with Travel Agent</span>
+                </div>
+                <p className="text-orange-300 text-sm mt-1">
+                  Sent to {trip.agent_email} on {formatDate(trip.shared_with_agent_at)}
+                </p>
+              </div>
+            )}
+
             {/* Trip Summary */}
             <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
               <h2 className="text-xl font-semibold mb-4">Trip Overview</h2>
@@ -328,6 +341,17 @@ export const TripBoard: React.FC = () => {
           onOpenChange={setShowShareDialog}
           tripId={trip.id}
           tripName={trip.trip_name}
+        />
+      )}
+
+      {/* Share with Agent Dialog */}
+      {trip && (
+        <ShareWithAgentDialog
+          open={agentDialogOpen}
+          onOpenChange={setAgentDialogOpen}
+          tripId={trip.id}
+          tripName={trip.trip_name}
+          destination={trip.destination}
         />
       )}
     </div>

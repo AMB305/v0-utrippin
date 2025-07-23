@@ -893,6 +893,8 @@ export type Database = {
       }
       saved_trips: {
         Row: {
+          agent_email: string | null
+          agent_message: string | null
           created_at: string
           destination: string | null
           id: string
@@ -900,6 +902,7 @@ export type Database = {
           is_favorite: boolean | null
           is_public: boolean | null
           share_id: string | null
+          shared_with_agent_at: string | null
           summary: string | null
           trip_data: Json
           trip_name: string
@@ -907,6 +910,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          agent_email?: string | null
+          agent_message?: string | null
           created_at?: string
           destination?: string | null
           id?: string
@@ -914,6 +919,7 @@ export type Database = {
           is_favorite?: boolean | null
           is_public?: boolean | null
           share_id?: string | null
+          shared_with_agent_at?: string | null
           summary?: string | null
           trip_data: Json
           trip_name: string
@@ -921,6 +927,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          agent_email?: string | null
+          agent_message?: string | null
           created_at?: string
           destination?: string | null
           id?: string
@@ -928,6 +936,7 @@ export type Database = {
           is_favorite?: boolean | null
           is_public?: boolean | null
           share_id?: string | null
+          shared_with_agent_at?: string | null
           summary?: string | null
           trip_data?: Json
           trip_name?: string
