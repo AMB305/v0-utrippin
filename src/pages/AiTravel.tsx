@@ -42,6 +42,7 @@ import { KeilaThinking } from "@/components/KeilaThinking";
 import { ChatCTAButtons } from "@/components/ChatCTAButtons";
 import { SaveTripDialog } from "@/components/SaveTripDialog";
 import UtrippinLogo from "@/components/UtrippinLogo";
+import Header from "@/components/Header";
 
 interface ChatMessage {
   id: string;
@@ -230,8 +231,9 @@ const AiTravel = () => {
         canonical="https://utrippin.ai/ai-travel"
       />
       
-      <div className="min-h-screen bg-black text-white">
-        {isMobile ? (
+      {isMobile ? (
+        // Mobile Layout - Keep existing mobile design
+        <div className="min-h-screen bg-black text-white">
           <div className="flex flex-col h-screen bg-black">
             {!hasStartedChat ? (
               // Welcome Screen - Clean with hamburger menu
@@ -487,8 +489,11 @@ const AiTravel = () => {
               </div>
             )}
           </div>
-        ) : (
-          // Desktop Layout - Original Design
+        </div>
+      ) : (
+        // Desktop Layout - With Header and Original Design
+        <>
+          <Header activeTab="ai" />
           <div className="min-h-screen bg-black text-white">
             {/* Top Section - Keila Bot Interface */}
             <div className="flex flex-col items-center justify-center min-h-screen px-6">
@@ -611,8 +616,8 @@ const AiTravel = () => {
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </>
+      )}
 
       {/* Save Trip Dialog */}
       <SaveTripDialog
