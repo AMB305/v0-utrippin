@@ -280,10 +280,7 @@ const AiTravel = () => {
                           👤 Log In
                         </Button>
                         <Button className="justify-start bg-blue-600 hover:bg-blue-700 text-white" onClick={() => window.location.href = "/auth"}>
-                          ⭐ Join VIP
-                        </Button>
-                        <Button variant="outline" className="justify-start border-white/20 text-white hover:bg-white/10" onClick={() => window.location.href = "/auth"}>
-                          📝 Register
+                          ⭐ Join Utrippin
                         </Button>
                       </div>
                     </SheetContent>
