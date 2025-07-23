@@ -13,7 +13,7 @@ import AwardsSection from '@/components/AwardsSection';
 import ExploreOurTrips from '@/components/ExploreOurTrips';
 import StartJourney from '@/components/StartJourney';
 import TestimonialsSection from '@/components/TestimonialsSection';
-import ReadyToStart from '@/components/ReadyToStart';
+
 import Footer from '@/components/Footer';
 import { ChatAssistant } from '@/components/ChatAssistant';
 import { BackToTop } from '@/components/BackToTop';
@@ -66,8 +66,6 @@ const Index = () => {
           {/* Budget Planner Tool */}
           <BudgetPlannerTool />
 
-          {/* Ready to Start */}
-          <ReadyToStart />
         </div>
 
         {/* Footer */}
