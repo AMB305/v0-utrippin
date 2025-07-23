@@ -46,8 +46,8 @@ const WhatWeDoSection = () => {
           {/* Image */}
           <div className="relative">
             <img
-              src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop"
-              alt="Diverse group of travelers exploring together"
+              src="/lovable-uploads/3c32a066-45c8-4ffa-b44d-20fdfe5f290d.png"
+              alt="Happy family traveling together"
               className="w-full h-96 lg:h-[500px] object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-l from-black/20 to-transparent"></div>
