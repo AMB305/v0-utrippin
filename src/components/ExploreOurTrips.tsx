@@ -15,9 +15,11 @@ const ExploreOurTrips: React.FC = () => {
           <div className="flex-1 flex gap-6 overflow-x-auto">
             <div className="flex-shrink-0 w-80 bg-gray-700 rounded-lg overflow-hidden">
               <div className="relative">
-                <div className="bg-gray-600 h-64 flex items-center justify-center">
-                  <span className="text-gray-400">Wild Waterways of the Amazon</span>
-                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1466721591366-2d5fba72006d?w=400&h=300&fit=crop" 
+                  alt="Wild Waterways of the Amazon" 
+                  className="w-full h-64 object-cover"
+                />
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">9 NIGHTS</div>
               </div>
               <div className="p-6">
@@ -31,9 +33,11 @@ const ExploreOurTrips: React.FC = () => {
             
             <div className="flex-shrink-0 w-80 bg-gray-700 rounded-lg overflow-hidden">
               <div className="relative">
-                <div className="bg-gray-600 h-64 flex items-center justify-center">
-                  <span className="text-gray-400">Art Deco Days & Neon Nights</span>
-                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1493962853295-0fd70327578a?w=400&h=300&fit=crop" 
+                  alt="Art Deco Days & Neon Nights" 
+                  className="w-full h-64 object-cover"
+                />
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">5 NIGHTS</div>
               </div>
               <div className="p-6">
@@ -47,9 +51,11 @@ const ExploreOurTrips: React.FC = () => {
 
             <div className="flex-shrink-0 w-80 bg-gray-700 rounded-lg overflow-hidden">
               <div className="relative">
-                <div className="bg-gray-600 h-64 flex items-center justify-center">
-                  <span className="text-gray-400">Cultural Expedition</span>
-                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1485833077593-4278bba3f11f?w=400&h=300&fit=crop" 
+                  alt="Cultural Expedition" 
+                  className="w-full h-64 object-cover"
+                />
                 <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm">7 NIGHTS</div>
               </div>
               <div className="p-6">
