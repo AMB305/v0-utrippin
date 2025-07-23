@@ -42,6 +42,7 @@ import { MobileQuickQuestions } from "@/components/MobileQuickQuestions";
 import { KeilaThinking } from "@/components/KeilaThinking";
 import { ChatCTAButtons } from "@/components/ChatCTAButtons";
 import { SaveTripDialog } from "@/components/SaveTripDialog";
+import { AuthRequiredDialog } from "@/components/AuthRequiredDialog";
 import UtrippinLogo from "@/components/UtrippinLogo";
 import Header from "@/components/Header";
 import HereLocationAutocomplete from "@/components/HereLocationAutocomplete";
@@ -116,6 +117,7 @@ const AiTravel = () => {
   const [desktopInput, setDesktopInput] = useState("");
   const [hasStartedChat, setHasStartedChat] = useState(false);
   const [showSaveTripDialog, setShowSaveTripDialog] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [lastChatResponse, setLastChatResponse] = useState<any>(null);
   const [tripType, setTripType] = useState("staycation");
   const [budget, setBudget] = useState(3000);
@@ -201,7 +203,7 @@ const AiTravel = () => {
     }
   }, [mobileChatMessages]);
 
-  const handleSaveTrip = () => {
+  const handleSaveTrip = async () => {
     if (!lastChatResponse) {
       toast({
         title: "No trip to save",
@@ -210,6 +212,19 @@ const AiTravel = () => {
       });
       return;
     }
+
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      setShowAuthDialog(true);
+    } else {
+      setShowSaveTripDialog(true);
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    // After successful authentication, show the save trip dialog
     setShowSaveTripDialog(true);
   };
 
@@ -810,6 +825,15 @@ const AiTravel = () => {
           </div>
         </>
       )}
+
+      {/* Authentication Required Dialog */}
+      <AuthRequiredDialog
+        open={showAuthDialog}
+        onOpenChange={setShowAuthDialog}
+        onAuthSuccess={handleAuthSuccess}
+        title="Save Your Trip"
+        description="Create an account or sign in to save your trip plans and access them anytime, anywhere."
+      />
 
       {/* Save Trip Dialog */}
       <SaveTripDialog
