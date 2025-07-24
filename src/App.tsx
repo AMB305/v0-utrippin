@@ -20,6 +20,7 @@ import TravelBuddy from "./pages/TravelBuddy";
 import TravelBuddyTest from "./pages/TravelBuddyTest";
 import TravelBuddies from "./pages/TravelBuddies";
 import TravelBuddiesEnhanced from "./pages/TravelBuddiesEnhanced";
+import TravelBuddiesNew from "./pages/TravelBuddiesNew";
 import Premium from "./pages/Premium";
 import AIRecommendations from "./pages/AIRecommendations";
 import Trips from "./pages/Trips";
@@ -106,7 +107,7 @@ const App = () => (
                   <Route path="/profile-setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
                   <Route path="/travel-buddy" element={<ProtectedRoute><TravelBuddy /></ProtectedRoute>} />
                   <Route path="/travel-buddy-test" element={<TravelBuddyTest />} />
-                  <Route path="/travel-buddies" element={<TravelBuddiesEnhanced />} />
+                  <Route path="/travel-buddies" element={<TravelBuddiesNew />} />
                   <Route path="/premium" element={<Premium />} />
                   <Route path="/ai-recommendations" element={<ProtectedRoute><AIRecommendations /></ProtectedRoute>} />
                   <Route path="/trips" element={<Trips />} />
