@@ -117,6 +117,11 @@ const TravelBuddiesNew = () => {
     setActiveView('chat');
   };
 
+  const handleNavigation = (view: string) => {
+    const validView = view as 'discover' | 'matches' | 'chat' | 'profile';
+    setActiveView(validView);
+  };
+
   // Desktop header component
   const DesktopHeader = () => (
     <div className="flex items-center justify-between mb-8">
@@ -175,6 +180,9 @@ const TravelBuddiesNew = () => {
             bio: currentBuddy.bio,
             tags: [...currentBuddy.interests, currentBuddy.travel_style]
           }}
+          variant="mobile"
+          activeView={activeView}
+          onNavigate={handleNavigation}
           onLike={handleLike}
           onDislike={handlePass}
           onChat={() => handleMessage(currentBuddy)}
@@ -362,7 +370,7 @@ const TravelBuddiesNew = () => {
 
       {/* Mobile Layout */}
       <div className="md:hidden h-screen flex flex-col bg-backgroundDark">
-        <MobileHeader />
+        {activeView !== 'discover' && <MobileHeader />}
         
         <div className="flex-1 overflow-hidden">
           {activeView === 'discover' && <DiscoveryView />}
@@ -371,7 +379,7 @@ const TravelBuddiesNew = () => {
           {activeView === 'profile' && <ProfileView />}
         </div>
 
-        <BottomNav />
+        {activeView !== 'discover' && <BottomNav />}
       </div>
 
       {/* Sign up wall */}

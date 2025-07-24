@@ -1,5 +1,5 @@
 import React from "react";
-import { Heart, X, MessageCircle, MapPin } from "lucide-react";
+import { Heart, X, MessageCircle, MapPin, Settings, Filter, Flame, Users, User } from "lucide-react";
 
 interface TravelBuddyCardProps {
   user: {
@@ -12,12 +12,131 @@ interface TravelBuddyCardProps {
     bio: string;
     tags: string[];
   };
+  variant?: 'mobile' | 'desktop';
   onLike: () => void;
   onDislike: () => void;
   onChat: () => void;
+  onNavigate?: (view: string) => void;
+  activeView?: string;
 }
 
-export default function TravelBuddyCard({ user, onLike, onDislike, onChat }: TravelBuddyCardProps) {
+export default function TravelBuddyCard({ user, variant = 'desktop', onLike, onDislike, onChat, onNavigate, activeView }: TravelBuddyCardProps) {
+  if (variant === 'mobile') {
+    return (
+      <div className="relative w-full h-screen bg-backgroundDark">
+        {/* Top header with Utrippin logo */}
+        <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-black/50 to-transparent">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-tinderOrange to-uttippPurple flex items-center justify-center">
+              <span className="text-white font-bold text-sm">U</span>
+            </div>
+            <span className="text-white font-bold text-lg">utrippin</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Settings className="w-6 h-6 text-white" />
+            <Filter className="w-6 h-6 text-white" />
+          </div>
+        </div>
+
+        {/* Full screen photo */}
+        <img
+          src={user.photo}
+          alt={user.name}
+          className="w-full h-full object-cover"
+        />
+
+        {/* Match badge */}
+        <span className="absolute top-20 right-4 px-3 py-1 bg-gradient-to-r from-tinderOrange to-uttippPurple text-white text-sm font-bold rounded-full shadow z-10">
+          {user.match}% Match
+        </span>
+
+        {/* Bottom gradient overlay */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6">
+          {/* User info */}
+          <div className="mb-4">
+            <h2 className="text-white text-3xl font-bold mb-2">
+              {user.name}, {user.age}
+            </h2>
+            <p className="text-gray-300 text-lg mb-3">{user.bio}</p>
+            <div className="flex items-center gap-1 text-gray-300 mb-4">
+              <MapPin className="w-4 h-4" />
+              {user.location}
+            </div>
+            
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {user.tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm text-white"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex justify-center gap-6">
+            <button
+              onClick={onDislike}
+              className="p-4 bg-white/10 backdrop-blur-sm rounded-full hover:scale-110 transform transition border border-white/20"
+            >
+              <X className="w-6 h-6 text-white" />
+            </button>
+            <button
+              onClick={onLike}
+              className="p-5 bg-gradient-to-r from-tinderOrange to-uttippPurple rounded-full hover:scale-110 transform transition shadow-lg"
+            >
+              <Heart className="w-7 h-7 text-white" fill="currentColor" />
+            </button>
+            <button
+              onClick={onChat}
+              className="p-4 bg-white/10 backdrop-blur-sm rounded-full hover:scale-110 transform transition border border-white/20"
+            >
+              <MessageCircle className="w-6 h-6 text-white" />
+            </button>
+          </div>
+        </div>
+
+        {/* Bottom navigation */}
+        <div className="absolute bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md">
+          <div className="flex">
+            <button
+              onClick={() => onNavigate?.('discover')}
+              className={`flex-1 p-4 flex flex-col items-center gap-1 ${activeView === 'discover' ? 'text-tinderOrange' : 'text-gray-400'}`}
+            >
+              <Flame className="w-6 h-6" />
+              <span className="text-xs">Discover</span>
+            </button>
+            <button
+              onClick={() => onNavigate?.('matches')}
+              className={`flex-1 p-4 flex flex-col items-center gap-1 ${activeView === 'matches' ? 'text-tinderOrange' : 'text-gray-400'}`}
+            >
+              <Heart className="w-6 h-6" />
+              <span className="text-xs">Matches</span>
+            </button>
+            <button
+              onClick={() => onNavigate?.('chat')}
+              className={`flex-1 p-4 flex flex-col items-center gap-1 ${activeView === 'chat' ? 'text-tinderOrange' : 'text-gray-400'}`}
+            >
+              <MessageCircle className="w-6 h-6" />
+              <span className="text-xs">Chat</span>
+            </button>
+            <button
+              onClick={() => onNavigate?.('profile')}
+              className={`flex-1 p-4 flex flex-col items-center gap-1 ${activeView === 'profile' ? 'text-tinderOrange' : 'text-gray-400'}`}
+            >
+              <User className="w-6 h-6" />
+              <span className="text-xs">Profile</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop version (unchanged)
   return (
     <div className="relative bg-white rounded-2xl shadow-2xl-soft overflow-hidden mx-4 lg:mx-0 max-w-sm w-full">
       
