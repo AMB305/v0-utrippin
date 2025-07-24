@@ -21,7 +21,7 @@ import {
 
 const navigationItems = [
   { title: "Discover", url: "/travel-buddies", icon: Heart },
-  { title: "GAFFL AI", url: "/ai-travel", icon: Bot },
+  { title: "Keila AI", url: "/ai-travel", icon: Bot },
   { title: "Stays", url: "/hotels", icon: Building },
   { title: "Flights", url: "/flights", icon: Plane },
   { title: "My Trips", url: "/my-trips", icon: Briefcase },
