@@ -9,6 +9,7 @@ export const ChatAssistant = () => {
 
   // Convert AI messages to display format
   const displayMessages = React.useMemo(() => {
+    console.log('ChatAssistant: Converting AI messages to display format', aiMessages);
     const converted = [];
     
     // Add initial greeting if no messages
@@ -21,7 +22,9 @@ export const ChatAssistant = () => {
     }
 
     // Convert AI messages to display format
-    aiMessages.forEach((msg) => {
+    aiMessages.forEach((msg, index) => {
+      console.log(`ChatAssistant: Processing message ${index}:`, msg);
+      
       // Add user message
       converted.push({
         id: `user-${msg.id}`,
@@ -31,21 +34,26 @@ export const ChatAssistant = () => {
 
       // Add AI response or loading state
       if (msg.loading) {
+        console.log('ChatAssistant: Adding loading message');
         converted.push({
           id: `loading-${msg.id}`,
-          text: "Keila is typing...",
+          text: "Keila is thinking...",
           isUser: false,
           isLoading: true
         });
       } else if (msg.response) {
+        console.log('ChatAssistant: Adding AI response:', msg.response);
         converted.push({
           id: `ai-${msg.id}`,
           text: msg.response,
           isUser: false
         });
+      } else {
+        console.log('ChatAssistant: Message has no response yet');
       }
     });
 
+    console.log('ChatAssistant: Final converted messages:', converted);
     return converted;
   }, [aiMessages]);
 
