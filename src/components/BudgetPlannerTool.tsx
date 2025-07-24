@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 const BudgetPlannerTool = () => {
   const [tripType, setTripType] = useState<'staycation' | 'vacation'>('staycation');
-  const [budget, setBudget] = useState(3000);
+  const [budget, setBudget] = useState(100);
   const [groupSize, setGroupSize] = useState(1);
 
   const formatBudget = (amount: number) => {
