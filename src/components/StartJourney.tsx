@@ -67,20 +67,40 @@ const StartJourney: React.FC = () => {
     switch (activeTab) {
       case 'BY TRAVELLER':
         return (
-          <div className="grid grid-cols-5 gap-4 mb-8">
-            {travelerTypes.map((type, index) => (
-              <Link 
-                key={index}
-                to={type.link}
-                className="relative h-96 bg-cover bg-center group cursor-pointer block"
-                style={{ backgroundImage: `url('${type.image}')` }}
-              >
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
-                <div className="absolute inset-0 flex items-center justify-center text-white">
-                  <h3 className="text-2xl font-bold !text-white !text-2xl text-center" style={{ color: 'white !important', fontSize: '1.5rem !important', fontWeight: 'bold !important' }}>{type.title}</h3>
-                </div>
-              </Link>
-            ))}
+          <div className="mb-8">
+            {/* Mobile Layout - Stacked full-width cards */}
+            <div className="block md:hidden space-y-4">
+              {travelerTypes.slice(0, 4).map((type, index) => (
+                <Link 
+                  key={index}
+                  to={type.link}
+                  className="relative h-64 bg-cover bg-center group cursor-pointer block rounded-lg overflow-hidden"
+                  style={{ backgroundImage: `url('${type.image}')` }}
+                >
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors"></div>
+                  <div className="absolute inset-0 flex items-center justify-center text-white">
+                    <h3 className="text-4xl font-bold text-white text-center tracking-widest">{type.title}</h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            
+            {/* Desktop Layout - Grid */}
+            <div className="hidden md:grid grid-cols-5 gap-4">
+              {travelerTypes.map((type, index) => (
+                <Link 
+                  key={index}
+                  to={type.link}
+                  className="relative h-96 bg-cover bg-center group cursor-pointer block"
+                  style={{ backgroundImage: `url('${type.image}')` }}
+                >
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors"></div>
+                  <div className="absolute inset-0 flex items-center justify-center text-white">
+                    <h3 className="text-2xl font-bold !text-white !text-2xl text-center" style={{ color: 'white !important', fontSize: '1.5rem !important', fontWeight: 'bold !important' }}>{type.title}</h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         );
 
