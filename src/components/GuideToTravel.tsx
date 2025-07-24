@@ -6,17 +6,27 @@ const GuideToTravel = () => {
   return (
     <section className="guide-to-travel-section py-6 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 gap-0 items-stretch min-h-[400px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Image */}
+          <div className="relative">
+            <img
+              src="/lovable-uploads/1e144bc6-1e6e-44e3-8706-44a264517b6f.png"
+              alt="Happy family with luggage in hotel room"
+              className="w-full h-96 lg:h-[500px] object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+          </div>
+
           {/* Text Content */}
-          <div className="flex flex-col justify-center px-8 lg:px-12 py-8">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-900 leading-tight mb-4">
+          <div className="space-y-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 leading-tight">
               OUR GUIDE TO BUDGET TRAVEL
             </h2>
-            <p className="text-xs text-gray-600 font-medium tracking-wide uppercase mb-6">
+            <p className="text-xs text-gray-600 font-medium tracking-wide uppercase">
               THE SMART TRAVEL DEAL EXPERTS
             </p>
             
-            <div className="space-y-4 text-gray-700 text-sm leading-relaxed mb-8">
+            <div className="space-y-4 text-gray-700 font-light leading-relaxed">
               <p>
                 Budget travel is personal. It means something different for each 
                 and every one of us. For some, budget travel is finding peaceful solitude 
@@ -33,19 +43,10 @@ const GuideToTravel = () => {
             </div>
 
             <Button 
-              className="bg-black text-white hover:bg-gray-800 px-6 py-2 text-xs font-medium tracking-wide uppercase w-fit"
+              className="bg-black text-white hover:bg-gray-800 px-8 py-3 text-sm font-medium tracking-wide uppercase"
             >
               CONTINUE READING
             </Button>
-          </div>
-
-          {/* Image */}
-          <div className="relative">
-            <img
-              src="/lovable-uploads/1e144bc6-1e6e-44e3-8706-44a264517b6f.png"
-              alt="Happy family with luggage in hotel room"
-              className="w-full h-full object-cover"
-            />
           </div>
         </div>
       </div>
