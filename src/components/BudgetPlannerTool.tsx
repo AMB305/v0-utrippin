@@ -28,54 +28,54 @@ const BudgetPlannerTool = () => {
   };
 
   return (
-    <section className="py-10 bg-gradient-to-b from-gray-900 to-black text-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-md mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight text-white">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Plan Your Perfect
           </h2>
-          <div className="text-white text-xl font-bold mb-8">
+          <p className="text-lg text-gray-600 mb-1">
             Staycation or Vacation
-          </div>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          </p>
+          <p className="text-sm text-gray-500">
             Set your budget and group size to discover amazing destinations
           </p>
         </div>
 
         {/* Trip Type Toggle */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-gray-800/50 p-2 rounded-2xl flex">
+        <div className="mb-6">
+          <div className="bg-gray-100 p-1 rounded-full flex">
             <button
               onClick={() => setTripType('staycation')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 tripType === 'staycation'
-                  ? 'border border-white text-white bg-gray-800/30'
-                  : 'text-gray-400 hover:text-white'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600'
               }`}
             >
-              <Home size={20} />
+              <Home size={16} />
               Staycation
             </button>
             <button
               onClick={() => setTripType('vacation')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 tripType === 'vacation'
-                  ? 'border border-white text-white bg-gray-800/30'
-                  : 'text-gray-400 hover:text-white'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600'
               }`}
             >
-              <Plane size={20} />
+              <Plane size={16} />
               Vacation
             </button>
           </div>
         </div>
 
         {/* Budget Range */}
-        <div className="mb-12">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-light">Budget Range</h3>
-            <span className="text-3xl font-bold">{formatBudget(budget)}</span>
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-medium text-gray-900">Budget Range</h3>
+            <span className="text-2xl font-bold text-gray-900">{formatBudget(budget)}</span>
           </div>
           
           <div className="relative">
@@ -86,45 +86,45 @@ const BudgetPlannerTool = () => {
               step="100"
               value={budget}
               onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
               style={{
-                background: `linear-gradient(to right, #ffffff 0%, #ffffff ${((budget - 100) / (100000 - 100)) * 100}%, #374151 ${((budget - 100) / (100000 - 100)) * 100}%, #374151 100%)`
+                background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((budget - 100) / (100000 - 100)) * 100}%, #e5e7eb ${((budget - 100) / (100000 - 100)) * 100}%, #e5e7eb 100%)`
               }}
             />
-            <div className="flex justify-between text-sm text-gray-400 mt-2">
+            <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>$100</span>
-              <span>$1.0M</span>
+              <span>$100K+</span>
             </div>
           </div>
           
-          <p className="text-center text-orange-400 mt-2 font-medium">
+          <p className="text-center text-blue-600 mt-2 text-sm font-medium">
             {getBudgetDescription(budget)}
           </p>
         </div>
 
         {/* Group Size */}
-        <div className="mb-12">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="text-gray-400">👥</span>
-            <h3 className="text-2xl font-light">Group Size</h3>
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-gray-600">👥</span>
+            <h3 className="text-lg font-medium text-gray-900">Group Size</h3>
           </div>
           
-          <div className="flex items-center justify-center gap-6">
+          <div className="flex items-center justify-center gap-4">
             <button
               onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
-              className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-xl flex items-center justify-center transition-colors"
+              className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
               disabled={groupSize <= 1}
             >
-              <Minus size={20} />
+              <Minus size={16} />
             </button>
             
-            <span className="text-4xl font-bold w-16 text-center">{groupSize}</span>
+            <span className="text-3xl font-bold text-gray-900 w-12 text-center">{groupSize}</span>
             
             <button
               onClick={() => setGroupSize(groupSize + 1)}
-              className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-xl flex items-center justify-center transition-colors"
+              className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
             >
-              <Plus size={20} />
+              <Plus size={16} />
             </button>
           </div>
         </div>
@@ -133,7 +133,7 @@ const BudgetPlannerTool = () => {
         <div className="text-center">
           <Button
             onClick={handleGenerateItinerary}
-            className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-base font-medium rounded-lg transition-all duration-200"
           >
             Generate Perfect Itinerary
           </Button>
@@ -146,19 +146,19 @@ const BudgetPlannerTool = () => {
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #ffffff;
+          background: #3b82f6;
           cursor: pointer;
-          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+          box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
         }
 
         .slider::-moz-range-thumb {
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #ffffff;
+          background: #3b82f6;
           cursor: pointer;
           border: none;
-          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+          box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
         }
       `}</style>
     </section>
