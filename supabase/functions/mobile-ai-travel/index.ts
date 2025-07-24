@@ -103,7 +103,7 @@ async function generateWithOpenRouter(mode: string, budget: number, groupSize: n
       'X-Title': 'Utrippin Mobile AI Travel',
     },
     body: JSON.stringify({
-      model: 'anthropic/claude-3.5-sonnet',
+      model: 'nousresearch/nous-hermes-2-mixtral-8x7b-dpo',
       messages: [
         {
           role: 'system',

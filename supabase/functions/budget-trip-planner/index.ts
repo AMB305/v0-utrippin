@@ -99,7 +99,7 @@ async function generateTripsWithOpenRouter(budget: number, groupSize: number, tr
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'anthropic/claude-3.5-sonnet',
+      model: 'nousresearch/nous-hermes-2-mixtral-8x7b-dpo',
       messages: [
         {
           role: 'system',

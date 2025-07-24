@@ -46,7 +46,7 @@ const callOpenRouter = async (messages: Array<{role: string, content: string}>) 
       'X-Title': 'Utrippin AI Trip Planner',
     },
     body: JSON.stringify({
-      model: 'anthropic/claude-3.5-sonnet',
+      model: 'nousresearch/nous-hermes-2-mixtral-8x7b-dpo',
       messages: messages,
       max_tokens: 4000,
       temperature: 0.7,

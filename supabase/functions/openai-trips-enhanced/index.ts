@@ -65,7 +65,7 @@ Make the descriptions vivid, emotional, and irresistible. Include sensory detail
       'X-Title': 'Utrippin AI Travel Planner'
     },
     body: JSON.stringify({
-      model: 'openai/gpt-4o-mini',
+      model: 'nousresearch/nous-hermes-2-mixtral-8x7b-dpo',
       messages: [
         {
           role: 'system',
