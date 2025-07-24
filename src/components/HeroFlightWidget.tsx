@@ -14,8 +14,11 @@ export default function HeroFlightWidget() {
   const [checkOutDate, setCheckOutDate] = useState("");
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [cabinClass, setCabinClass] = useState("Economy");
   const [showPassengerDropdown, setShowPassengerDropdown] = useState(false);
+  const [showCabinDropdown, setShowCabinDropdown] = useState(false);
   const passengerRef = useRef<HTMLDivElement>(null);
+  const cabinRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
@@ -35,10 +38,13 @@ export default function HeroFlightWidget() {
     setCheckInDate(today.toISOString().split('T')[0]);
     setCheckOutDate(returnDate.toISOString().split('T')[0]);
 
-    // Close passenger dropdown when clicking outside
+    // Close dropdowns when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
       if (passengerRef.current && !passengerRef.current.contains(event.target as Node)) {
         setShowPassengerDropdown(false);
+      }
+      if (cabinRef.current && !cabinRef.current.contains(event.target as Node)) {
+        setShowCabinDropdown(false);
       }
     };
 
@@ -100,8 +106,9 @@ export default function HeroFlightWidget() {
           Discover Your World
         </h1>
 
-        {/* Trip Type Selection - Above the pill, connected to top */}
-        <div className="flex justify-start w-full max-w-6xl mb-0">
+        {/* Trip Type and Cabin Class Selection - Above the pill, connected to top */}
+        <div className="flex justify-start w-full max-w-6xl mb-0 space-x-4">
+          {/* Trip Type Selection */}
           <div className="flex bg-white rounded-t-xl shadow-lg overflow-hidden">
             {[
               { value: 'one-way', label: 'One way' },
@@ -121,6 +128,43 @@ export default function HeroFlightWidget() {
                 </span>
               </label>
             ))}
+          </div>
+
+          {/* Cabin Class Selection */}
+          <div className="relative" ref={cabinRef}>
+            <div 
+              className="flex items-center gap-2 px-6 py-3 bg-white rounded-t-xl shadow-lg cursor-pointer hover:bg-gray-50"
+              onClick={() => setShowCabinDropdown(!showCabinDropdown)}
+            >
+              <span className="text-sm font-medium text-gray-700">{cabinClass}</span>
+              <ChevronDown className="w-4 h-4 text-gray-400" />
+            </div>
+            
+            {/* Cabin Class Dropdown */}
+            {showCabinDropdown && (
+              <div className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-xl z-[9999] mt-2 p-2 w-[180px]">
+                {[
+                  'Economy',
+                  'Premium Economy', 
+                  'Business',
+                  'First Class'
+                ].map((cabin) => (
+                  <button
+                    key={cabin}
+                    type="button"
+                    onClick={() => {
+                      setCabinClass(cabin);
+                      setShowCabinDropdown(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-50 ${
+                      cabinClass === cabin ? 'bg-teal-50 text-teal-700 font-medium' : 'text-gray-700'
+                    }`}
+                  >
+                    {cabin}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
