@@ -391,98 +391,76 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
       };
     }
 
-    // Handle detailed itinerary response format (new structured format)
+    // Strict schema validation - no fallbacks allowed
     if (parsedResponse.destination && parsedResponse.overview && parsedResponse.days) {
       console.log('AI Travel Chat - Detected structured itinerary response');
       
-      // Store or update session context when we have a detailed itinerary
+      // Validate complete schema
+      const requiredFields = ['destination', 'dates', 'travelers', 'overview', 'themes', 'images', 'transportation', 'flights', 'hotels', 'days', 'culture_tips', 'sources', 'buttons'];
+      const missingFields = requiredFields.filter(field => !parsedResponse[field]);
+      
+      if (missingFields.length > 0) {
+        console.error('AI Travel Chat - Schema validation failed. Missing fields:', missingFields);
+        return new Response(JSON.stringify({
+          error: "Keila failed to return a complete itinerary. Please try again.",
+          missingFields: missingFields
+        }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
+      // Store session context
       if (sessionId && (tripDetails.destination || tripDetails.dates || tripDetails.budget)) {
-        console.log('AI Travel Chat - Storing session context for future use');
-        
         const sessionData = {
           session_id: sessionId,
           destination: tripDetails.destination || sessionContext?.destination,
           dates: tripDetails.dates || sessionContext?.dates,
           budget: tripDetails.budget || sessionContext?.budget,
-          context: {
-            last_itinerary: parsedResponse,
-            conversation_history: [message]
-          },
+          context: { last_itinerary: parsedResponse },
           last_activity_at: new Date().toISOString()
         };
 
         if (sessionContext) {
-          // Update existing session
-          await supabase
-            .from('chat_sessions')
-            .update(sessionData)
-            .eq('session_id', sessionId);
+          await supabase.from('chat_sessions').update(sessionData).eq('session_id', sessionId);
         } else {
-          // Create new session
-          await supabase
-            .from('chat_sessions')
-            .insert(sessionData);
+          await supabase.from('chat_sessions').insert(sessionData);
         }
       }
       
-      // Enhanced detailed response with new structured format
-      const detailedResponse = {
+      const structuredResponse = {
         response: parsedResponse.overview.summary,
-        showMap: tripDetails.destination ? true : false,
-        mapLocation: parsedResponse.destination || null,
-        tripCards: [],
-        quickReplies: parsedResponse.buttons || [],
-        recommendations: [],
-        callsToAction: parsedResponse.buttons?.map((button: string) => ({
-          text: button,
-          action: "CONTINUE_CHAT"
-        })) || [],
-        structuredItinerary: parsedResponse, // Pass the entire structured response
-        isStructuredItinerary: true // Flag to trigger new structured UI
+        structuredItinerary: parsedResponse,
+        isStructuredItinerary: true
       };
       
-      console.log('AI Travel Chat - Sending detailed itinerary response');
-      return new Response(JSON.stringify(detailedResponse), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      return new Response(JSON.stringify(structuredResponse), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
-    // Handle simple response format
-    const responseData = {
-      response: parsedResponse.response,
-      showMap: parsedResponse.showMap,
-      mapLocation: parsedResponse.mapLocation,
-      tripCards: parsedResponse.tripCards || [],
-      quickReplies: parsedResponse.quickReplies || [],
-      recommendations: {
-        flights: "✈️ Found perfect flight options",
-        hotels: "🏨 Curated hotel recommendations"
-      },
-      trips: [],
-      callsToAction: parsedResponse.callsToAction || [
-        { text: "Ask another question", action: "CONTINUE_CHAT" }
-      ]
-    };
+    // For non-itinerary responses (greetings, clarifications)
+    if (parsedResponse.response) {
+      return new Response(JSON.stringify({
+        response: parsedResponse.response,
+        quickReplies: parsedResponse.quickReplies || []
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
 
-    console.log('AI Travel Chat - Sending simple response');
-    return new Response(JSON.stringify(responseData), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    // If we get here, the AI failed to provide valid response
+    console.error('AI Travel Chat - Invalid response structure');
+    return new Response(JSON.stringify({
+      error: "Keila failed to provide a valid response format. Please try again."
+    }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
-
   } catch (error) {
     console.error('AI Travel Chat - Error occurred:', error);
     return new Response(JSON.stringify({
-      error: error.message,
-      response: "I'm having trouble processing your request right now. Please try again in a moment.",
-      showMap: false,
-      mapLocation: null,
-      tripCards: [],
-      quickReplies: ["Try again", "Search for popular destinations", "Get help"],
-      recommendations: {
-        flights: "✈️ Flight search temporarily unavailable",
-        hotels: "🏨 Hotel search temporarily unavailable"
-      },
-      trips: []
+      error: "I'm having trouble processing your request right now. Please try again.",
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
