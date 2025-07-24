@@ -3,6 +3,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ExpediaWidget from "@/components/ExpediaWidget";
+import HeroFlightWidget from "@/components/HeroFlightWidget";
 import { useNavigate } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { generateBreadcrumbSchema, generateTravelServiceSchema } from "@/utils/structuredData";
@@ -77,12 +78,13 @@ export default function Flights() {
       />
       <Header />
       
-      {/* Clean white background matching Figma */}
+      {/* Hero Section with Flight Widget */}
+      <HeroFlightWidget />
+      
+      {/* Clean white background for content below */}
       <div className="bg-white min-h-screen">
         {/* Main Content Container */}
         <div className="container mx-auto px-6 py-8">
-          {/* Flight Search Widget */}
-          <ExpediaWidget />
           
           {/* Popular Destinations Section */}
           <div className="mt-16">
