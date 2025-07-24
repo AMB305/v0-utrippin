@@ -114,10 +114,10 @@ export default function HeroFlightWidget() {
               ))}
             </div>
 
-            {/* Main Form Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+            {/* Single Row Layout */}
+            <div className="flex flex-col lg:flex-row gap-4 items-end">
               {/* From Field */}
-              <div className="lg:col-span-3">
+              <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-600 mb-2">From</label>
                 <div className="relative">
                   <Plane className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
@@ -141,7 +141,7 @@ export default function HeroFlightWidget() {
               </div>
 
               {/* To Field */}
-              <div className="lg:col-span-3">
+              <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-600 mb-2">To</label>
                 <div className="relative">
                   <Plane className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
@@ -165,7 +165,7 @@ export default function HeroFlightWidget() {
               </div>
 
               {/* Departure Date */}
-              <div className="lg:col-span-2">
+              <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-600 mb-2">Departure</label>
                 <div className="relative">
                   <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
@@ -180,7 +180,7 @@ export default function HeroFlightWidget() {
               </div>
 
               {/* Return Date */}
-              <div className="lg:col-span-2">
+              <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-600 mb-2">Return</label>
                 <div className="relative">
                   <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
@@ -199,10 +199,10 @@ export default function HeroFlightWidget() {
               </div>
 
               {/* Passengers */}
-              <div className="lg:col-span-2">
+              <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-600 mb-2">Passengers</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="relative">
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
                     <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
                     <select
                       value={adults}
@@ -210,11 +210,11 @@ export default function HeroFlightWidget() {
                       className="pl-10 pr-3 py-4 w-full border border-gray-300 rounded-xl text-sm bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none appearance-none cursor-pointer"
                     >
                       {[1, 2, 3, 4, 5, 6].map(num => (
-                        <option key={num} value={num}>{num} Adult{num !== 1 ? 's' : ''}</option>
+                        <option key={num} value={num}>{num} Ad</option>
                       ))}
                     </select>
                   </div>
-                  <div className="relative">
+                  <div className="relative flex-1">
                     <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
                     <select
                       value={children}
@@ -222,22 +222,22 @@ export default function HeroFlightWidget() {
                       className="pl-10 pr-3 py-4 w-full border border-gray-300 rounded-xl text-sm bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none appearance-none cursor-pointer"
                     >
                       {[0, 1, 2, 3, 4].map(num => (
-                        <option key={num} value={num}>{num} Child{num !== 1 ? 'ren' : ''}</option>
+                        <option key={num} value={num}>{num} Ch</option>
                       ))}
                     </select>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Search Button */}
-              <div className="lg:col-span-1">
-                <button 
-                  type="submit"
-                  className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold px-8 py-4 rounded-xl text-lg transition-colors duration-200 shadow-lg"
-                >
-                  Search
-                </button>
-              </div>
+            {/* Search Button Row */}
+            <div className="mt-6">
+              <button 
+                type="submit"
+                className="bg-teal-500 hover:bg-teal-600 text-white font-bold px-12 py-4 rounded-xl text-lg transition-colors duration-200 shadow-lg"
+              >
+                Search
+              </button>
             </div>
           </form>
         </div>
