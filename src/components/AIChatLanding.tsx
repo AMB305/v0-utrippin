@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Sparkles, MapPin, Clock, Users } from 'lucide-react';
+import FeaturedTripCards from './FeaturedTripCards';
 
 interface AIChatLandingProps {
   onSignIn: () => void;
@@ -78,6 +79,9 @@ export default function AIChatLanding({ onSignIn }: AIChatLandingProps) {
       <Button className="bg-primary hover:bg-primary/90 px-6 py-2 text-primary-foreground rounded-full text-lg shadow-lg mb-10">
         Let's Go ➝
       </Button>
+
+      {/* Featured Trip Cards */}
+      <FeaturedTripCards />
 
       {/* Locked Input Placeholder */}
       <div className="bg-card p-6 rounded-xl max-w-xl w-full text-center border">
