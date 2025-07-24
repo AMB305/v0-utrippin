@@ -14,10 +14,20 @@ export const SimpleChatInput: React.FC<SimpleChatInputProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('=== SimpleChatInput handleSubmit START ===');
+    console.log('SimpleChatInput: Form submitted with message:', message);
+    console.log('SimpleChatInput: message.trim():', message.trim());
+    console.log('SimpleChatInput: onSendMessage function exists:', !!onSendMessage);
+    
     if (message.trim()) {
+      console.log('SimpleChatInput: About to call onSendMessage with:', message.trim());
       onSendMessage(message.trim());
+      console.log('SimpleChatInput: onSendMessage called, clearing message');
       setMessage("");
+    } else {
+      console.log('SimpleChatInput: Message is empty, not sending');
     }
+    console.log('=== SimpleChatInput handleSubmit END ===');
   };
 
   return (
