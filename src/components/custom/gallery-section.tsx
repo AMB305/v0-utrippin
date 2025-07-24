@@ -15,7 +15,7 @@ export const GallerySection = () => {
     <div>
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-semibold">📷 Trip Photos</h2>
-        <label className="bg-zinc-700 text-white px-3 py-1 rounded cursor-pointer">
+        <label className="bg-zinc-700 text-white /* main text color: white */ px-3 py-1 rounded cursor-pointer">
           Upload
           <input
             type="file"
