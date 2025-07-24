@@ -1554,6 +1554,39 @@ export type Database = {
           },
         ]
       }
+      travel_chat: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          pinned: boolean | null
+          reactions: Json | null
+          receiver_id: string
+          sender_id: string
+          sent_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          pinned?: boolean | null
+          reactions?: Json | null
+          receiver_id: string
+          sender_id: string
+          sent_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          pinned?: boolean | null
+          reactions?: Json | null
+          receiver_id?: string
+          sender_id?: string
+          sent_at?: string
+        }
+        Relationships: []
+      }
       travel_matches: {
         Row: {
           created_at: string | null
