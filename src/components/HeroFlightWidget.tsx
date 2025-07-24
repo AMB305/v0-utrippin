@@ -103,7 +103,32 @@ export default function HeroFlightWidget() {
         <div className="bg-white rounded-full shadow-2xl w-full max-w-6xl relative">
           <form onSubmit={handleFlightSubmit}>
             <div className="flex items-center">
-              {/* Trip Type Toggle - Hidden for cleaner look, defaulting to round-trip */}
+              {/* Trip Type Toggle - Above From field */}
+              <div className="px-6 py-2">
+                <div className="flex gap-3 mb-2">
+                  {[
+                    { value: 'one-way', label: 'One way' },
+                    { value: 'round-trip', label: 'Round trip' }
+                  ].map((type) => (
+                    <label key={type.value} className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="tripType"
+                        value={type.value}
+                        checked={tripType === type.value}
+                        onChange={(e) => setTripType(e.target.value)}
+                        className="w-3 h-3 text-teal-500 focus:ring-teal-400"
+                      />
+                      <span className="text-xs font-medium text-gray-600">
+                        {type.label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Main form row */}
+              <div className="flex items-center w-full">
               
               {/* From Field */}
               <div className="flex items-center px-6 py-4 border-r border-gray-200">
@@ -243,6 +268,7 @@ export default function HeroFlightWidget() {
               >
                 SEARCH
               </button>
+              </div>
             </div>
           </form>
         </div>
