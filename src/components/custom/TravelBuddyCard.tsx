@@ -1,5 +1,5 @@
 import React from "react";
-import { Heart, X, MessageCircle, MapPin, Settings, Filter, Flame, Users, User } from "lucide-react";
+import { Heart, X, MessageCircle, MapPin, Settings, Filter, Flame, Users, User, Star, RotateCcw, Zap, Sparkles } from "lucide-react";
 
 interface TravelBuddyCardProps {
   user: {
@@ -75,61 +75,77 @@ export default function TravelBuddyCard({ user, variant = 'desktop', onLike, onD
               ))}
             </div>
           </div>
-
-          {/* Action buttons */}
-          <div className="flex justify-center gap-6">
-            <button
-              onClick={onDislike}
-              className="p-4 bg-white/10 backdrop-blur-sm rounded-full hover:scale-110 transform transition border border-white/20"
-            >
-              <X className="w-6 h-6 text-white" />
-            </button>
-            <button
-              onClick={onLike}
-              className="p-5 bg-gradient-to-r from-tinderOrange to-uttippPurple rounded-full hover:scale-110 transform transition shadow-lg"
-            >
-              <Heart className="w-7 h-7 text-white" fill="currentColor" />
-            </button>
-            <button
-              onClick={onChat}
-              className="p-4 bg-white/10 backdrop-blur-sm rounded-full hover:scale-110 transform transition border border-white/20"
-            >
-              <MessageCircle className="w-6 h-6 text-white" />
-            </button>
-          </div>
         </div>
 
-        {/* Bottom navigation */}
-        <div className="absolute bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md">
-          <div className="flex">
+        {/* Bottom section with action buttons and navigation */}
+        <div className="absolute bottom-0 left-0 right-0 bg-black">
+          {/* Action buttons row */}
+          <div className="flex justify-center gap-4 py-4 px-6">
+            <button className="w-14 h-14 rounded-full border-2 border-gray-600 bg-black flex items-center justify-center hover:scale-110 transform transition">
+              <RotateCcw className="w-6 h-6 text-yellow-500" />
+            </button>
+            <button 
+              onClick={onDislike}
+              className="w-14 h-14 rounded-full border-2 border-gray-600 bg-black flex items-center justify-center hover:scale-110 transform transition"
+            >
+              <X className="w-6 h-6 text-red-500" />
+            </button>
+            <button className="w-14 h-14 rounded-full border-2 border-gray-600 bg-black flex items-center justify-center hover:scale-110 transform transition">
+              <Star className="w-6 h-6 text-blue-400" />
+            </button>
+            <button 
+              onClick={onLike}
+              className="w-14 h-14 rounded-full border-2 border-gray-600 bg-black flex items-center justify-center hover:scale-110 transform transition"
+            >
+              <Heart className="w-6 h-6 text-green-500" fill="currentColor" />
+            </button>
+            <button className="w-14 h-14 rounded-full border-2 border-gray-600 bg-black flex items-center justify-center hover:scale-110 transform transition">
+              <Zap className="w-6 h-6 text-purple-500" />
+            </button>
+          </div>
+
+          {/* Navigation tabs row */}
+          <div className="flex border-t border-gray-800">
             <button
               onClick={() => onNavigate?.('discover')}
-              className={`flex-1 p-4 flex flex-col items-center gap-1 ${activeView === 'discover' ? 'text-tinderOrange' : 'text-gray-400'}`}
+              className={`flex-1 p-3 flex flex-col items-center gap-1 ${activeView === 'discover' ? 'text-tinderOrange' : 'text-gray-400'}`}
             >
               <Flame className="w-6 h-6" />
-              <span className="text-xs">Discover</span>
             </button>
             <button
               onClick={() => onNavigate?.('matches')}
-              className={`flex-1 p-4 flex flex-col items-center gap-1 ${activeView === 'matches' ? 'text-tinderOrange' : 'text-gray-400'}`}
+              className={`flex-1 p-3 flex flex-col items-center gap-1 ${activeView === 'matches' ? 'text-tinderOrange' : 'text-gray-400'}`}
             >
-              <Heart className="w-6 h-6" />
-              <span className="text-xs">Matches</span>
+              <div className="w-6 h-6 grid grid-cols-2 gap-0.5">
+                <div className="bg-current rounded-sm"></div>
+                <div className="bg-current rounded-sm"></div>
+                <div className="bg-current rounded-sm"></div>
+                <div className="bg-current rounded-sm"></div>
+              </div>
+            </button>
+            <button
+              onClick={() => onNavigate?.('explore')}
+              className={`flex-1 p-3 flex flex-col items-center gap-1 ${activeView === 'explore' ? 'text-tinderOrange' : 'text-gray-400'}`}
+            >
+              <Sparkles className="w-6 h-6" />
             </button>
             <button
               onClick={() => onNavigate?.('chat')}
-              className={`flex-1 p-4 flex flex-col items-center gap-1 ${activeView === 'chat' ? 'text-tinderOrange' : 'text-gray-400'}`}
+              className={`flex-1 p-3 flex flex-col items-center gap-1 ${activeView === 'chat' ? 'text-tinderOrange' : 'text-gray-400'}`}
             >
               <MessageCircle className="w-6 h-6" />
-              <span className="text-xs">Chat</span>
             </button>
             <button
               onClick={() => onNavigate?.('profile')}
-              className={`flex-1 p-4 flex flex-col items-center gap-1 ${activeView === 'profile' ? 'text-tinderOrange' : 'text-gray-400'}`}
+              className={`flex-1 p-3 flex flex-col items-center gap-1 ${activeView === 'profile' ? 'text-tinderOrange' : 'text-gray-400'}`}
             >
               <User className="w-6 h-6" />
-              <span className="text-xs">Profile</span>
             </button>
+          </div>
+
+          {/* Home indicator */}
+          <div className="flex justify-center pb-2">
+            <div className="w-32 h-1 bg-white rounded-full"></div>
           </div>
         </div>
       </div>
