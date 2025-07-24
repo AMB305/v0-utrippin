@@ -50,6 +50,10 @@ export const ChatAssistant = () => {
   }, [aiMessages]);
 
   const handleSendMessage = async (message: string) => {
+    console.log('ChatAssistant: handleSendMessage called with:', message);
+    console.log('ChatAssistant: sendMessage function:', sendMessage);
+    console.log('ChatAssistant: loading state:', loading);
+    console.log('ChatAssistant: current messages:', aiMessages);
     await sendMessage(message);
   };
 
