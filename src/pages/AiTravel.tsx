@@ -471,11 +471,21 @@ const AiTravel = () => {
                       </h1>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white"
-                    onClick={handleSaveTrip}
-                  >
-                    Save Trip
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="border border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                      onClick={() => window.location.href = '/'}
+                    >
+                      🏠 Home
+                    </Button>
+                    <Button variant="outline" size="sm" className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white"
+                      onClick={handleSaveTrip}
+                    >
+                      Save Trip
+                    </Button>
+                  </div>
                 </div>
 
                 {/* Chat Messages - with proper flex to ensure input stays visible */}
@@ -585,6 +595,16 @@ const AiTravel = () => {
           <div className="w-2/5 bg-slate-800 border-r border-slate-700 flex flex-col">
             {/* Header */}
             <div className="p-6 border-b border-slate-700">
+              <div className="flex items-center justify-between mb-4">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="border border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
+                  onClick={() => window.location.href = '/'}
+                >
+                  🏠 Back to Home
+                </Button>
+              </div>
               <div className="flex items-center gap-3">
                 <img 
                   src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
