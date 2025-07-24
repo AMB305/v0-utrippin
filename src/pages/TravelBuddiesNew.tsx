@@ -12,6 +12,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { ChatContainer } from "@/components/custom/chat-container";
 import SignUpWall from "@/components/SignUpWall";
 import TravelBuddyCard from "@/components/custom/TravelBuddyCard";
+import TravelBuddyMap from "@/components/custom/TravelBuddyMap";
+import TravelBuddyGrid from "@/components/custom/TravelBuddyGrid";
 
 // Travel buddy profile interface
 interface TravelBuddy {
@@ -83,6 +85,7 @@ const TravelBuddiesNew = () => {
   const [currentBuddyIndex, setCurrentBuddyIndex] = useState(0);
   const [showSignupWall, setShowSignupWall] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedBuddyId, setSelectedBuddyId] = useState<string | null>(null);
   const [filters, setFilters] = useState({
     looking_for: 'all',
     age_range: [18, 65],
@@ -96,6 +99,21 @@ const TravelBuddiesNew = () => {
     { id: 'group-2', name: 'European Backpackers', members: 6, lastMessage: 'Train passes booked!' },
     { id: 'group-3', name: 'Japan Culture Trip', members: 3, lastMessage: 'Found a great ryokan!' }
   ];
+
+  // Mock desktop buddies data
+  const mockDesktopBuddies = mockTravelBuddies.map((buddy, index) => ({
+    id: buddy.id,
+    name: buddy.name,
+    avatarUrl: buddy.photo_url,
+    location: buddy.location,
+    coords: { 
+      lat: 37.7749 + (index * 0.1), 
+      lng: -122.4194 + (index * 0.1) 
+    },
+    isOnline: index % 2 === 0,
+    isVerified: buddy.compatibility && buddy.compatibility > 85,
+    connectStatus: undefined as 'none' | 'pending' | 'connected' | undefined
+  }));
 
   const currentBuddy = mockTravelBuddies[currentBuddyIndex];
 
@@ -140,25 +158,133 @@ const TravelBuddiesNew = () => {
     setActiveView('chat');
   };
 
+  const handleConnect = (buddyId: string) => {
+    if (!user) {
+      setShowSignupWall(true);
+      return;
+    }
+    // TODO: Implement connect logic
+    console.log('Connecting to buddy:', buddyId);
+  };
+
+  const handleMapPinClick = (buddyId: string) => {
+    setSelectedBuddyId(buddyId);
+    // Scroll to the buddy card
+    const buddyElement = document.getElementById(`buddy-${buddyId}`);
+    if (buddyElement) {
+      buddyElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Desktop header component
   const DesktopHeader = () => (
-    <div className="flex items-center justify-between mb-8">
+    <div className="flex items-center justify-between mb-8 px-6 py-4 bg-white shadow-sm">
       <div className="flex items-center gap-4">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 flex items-center justify-center">
-          <span className="text-white font-bold text-lg">T</span>
+        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-600 to-red-500 flex items-center justify-center">
+          <span className="text-white font-bold text-lg">U</span>
         </div>
-        <h1 className="text-2xl font-bold text-white">Travel Buddies</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Travel Buddies</h1>
       </div>
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={() => setActiveView('profile')}>
-          <Settings className="w-4 h-4" />
-        </Button>
+      <div className="flex items-center gap-6">
+        <nav className="flex items-center gap-6 text-sm font-medium">
+          <button className="text-red-600 border-b-3 border-red-600 pb-2">Travel Buddies</button>
+          <button className="text-gray-600 hover:text-gray-900">Messages</button>
+          <button className="text-gray-600 hover:text-gray-900">Likes</button>
+          <button className="text-gray-600 hover:text-gray-900">Views</button>
+          <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">Get Unlimited</button>
+        </nav>
         {user && (
           <Avatar className="w-8 h-8">
             <AvatarImage src={user.user_metadata?.avatar_url} />
             <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
         )}
+      </div>
+    </div>
+  );
+
+  // Desktop main view
+  const DesktopMainView = () => (
+    <div className="flex h-screen bg-gray-50">
+      <div className="flex-1 flex flex-col">
+        <DesktopHeader />
+        
+        {/* Filters Bar */}
+        <div className="px-6 py-4 bg-white border-b border-gray-200">
+          <div className="flex items-center gap-4">
+            <Button variant="outline" size="sm">Online now</Button>
+            <Button variant="outline" size="sm">Verified</Button>
+            <Button variant="outline" size="sm">Nearby</Button>
+            <Button variant="outline" size="sm">Interests</Button>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 flex">
+          {/* Left Column - Map */}
+          <div className="w-2/5 p-6">
+            <div className="h-full bg-white rounded-xl shadow-sm">
+              <TravelBuddyMap 
+                buddies={mockDesktopBuddies}
+                onPinClick={handleMapPinClick}
+              />
+            </div>
+          </div>
+          
+          {/* Right Column - Buddy Grid */}
+          <div className="w-3/5 p-6 pl-3">
+            <div className="h-full overflow-y-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {mockDesktopBuddies.map((buddy) => (
+                  <div 
+                    key={buddy.id}
+                    id={`buddy-${buddy.id}`}
+                    className={`bg-white rounded-2xl p-4 shadow-soft grid grid-rows-[auto,1fr,auto] gap-2 hover-lift ${
+                      selectedBuddyId === buddy.id ? 'ring-2 ring-red-600' : ''
+                    }`}
+                  >
+                    <div className="relative mx-auto">
+                      <img 
+                        src={buddy.avatarUrl} 
+                        alt={buddy.name}
+                        className="w-24 h-24 rounded-full object-cover"
+                      />
+                      {buddy.isOnline && (
+                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-3 border-white"></div>
+                      )}
+                      {buddy.isVerified && (
+                        <Badge className="absolute -top-2 -right-2 bg-blue-600 text-white px-2 py-1 text-xs">
+                          <Check className="w-3 h-3 mr-1" />
+                          Verified
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    <div className="text-center">
+                      <h3 className="text-xl font-semibold mb-1">{buddy.name}</h3>
+                      <p className="text-sm text-gray-600 flex items-center justify-center gap-1">
+                        <MapPin className="w-4 h-4" />
+                        {buddy.location}
+                      </p>
+                      {buddy.isOnline && (
+                        <Badge className="mt-2 bg-green-100 text-green-800">
+                          Online now
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    <Button 
+                      className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg"
+                      onClick={() => handleConnect(buddy.id)}
+                    >
+                      Connect
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -409,13 +535,13 @@ const TravelBuddiesNew = () => {
   );
 
   return (
-    <div className="min-h-screen bg-backgroundDark">
-      {/* Desktop Layout - Show only the TravelBuddyCard */}
+    <div className="min-h-screen">
+      {/* Desktop Layout - 2-column with map and cards */}
       <div className="hidden md:block">
-        <DiscoveryView />
+        <DesktopMainView />
       </div>
 
-      {/* Mobile Layout */}
+      {/* Mobile Layout - Keep existing mobile functionality */}
       <div className="md:hidden h-screen flex flex-col bg-backgroundDark">
         {activeView !== 'discover' && <MobileHeader />}
         
