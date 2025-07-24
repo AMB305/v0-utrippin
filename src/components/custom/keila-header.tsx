@@ -10,7 +10,7 @@ export const KeilaHeader = () => {
             alt="Keila Bot" 
             className="w-8 h-8 animate-pulse"
           />
-          Meet Keila!
+          Hi there! I'm Keila
         </div>
         <div className="text-sm text-zinc-400 /* muted timestamp or helper text */">Plan. Share. Go.</div>
       </div>
