@@ -23,40 +23,42 @@ const SmartTravelExperts = () => {
   ];
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section className="py-16 bg-white">
+      <div className="max-w-5xl mx-auto px-4 text-center">
         {/* Header */}
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 tracking-tight">
+        <h2 className="text-4xl font-bold text-black mb-8 tracking-tight">
           THE SMART TRAVEL DEAL EXPERTS
         </h2>
         
         {/* Description */}
-        <div className="max-w-4xl mx-auto mb-12">
-          <p className="text-lg text-gray-700 leading-relaxed mb-6">
+        <div className="max-w-4xl mx-auto mb-8 text-gray-700 leading-relaxed space-y-4">
+          <p>
             The world is vast, full of wonders. But information engulfs us. See this, do that, don't miss this. It seems the more choice there is, the more 
             overwhelmed we feel. What's more, you're never asked <em className="italic">how you want to feel</em>. In fact, you're rarely asked anything. That's not us. We are 
             people. People who value human connection and thrive on connecting you to our vast world. A company of people renowned for planning 
             remarkable and budget-friendly travel experiences.
           </p>
           
-          <p className="text-lg text-gray-600 mb-8">
+          <p className="text-gray-600">
             So let's begin. Let's do something remarkable.
           </p>
-          
-          <Button className="bg-black hover:bg-gray-800 text-white px-8 py-3 text-sm font-medium tracking-wider">
+        </div>
+        
+        <div className="mb-12">
+          <Button className="bg-black hover:bg-gray-900 text-white px-8 py-3 text-sm font-medium tracking-wider">
             GET IN TOUCH
           </Button>
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="text-teal-500 text-6xl mb-4 font-serif">"</div>
-              <p className="text-sm font-bold text-gray-900 uppercase leading-tight mb-4">
+            <div key={index} className="text-left">
+              <div className="text-teal-500 text-5xl mb-3 font-serif leading-none">"</div>
+              <p className="text-sm font-bold text-black uppercase leading-tight mb-3">
                 {testimonial.text}
               </p>
-              <p className="text-sm text-teal-600 italic">
+              <p className="text-sm text-teal-500 italic">
                 {testimonial.author}
               </p>
             </div>
@@ -64,15 +66,17 @@ const SmartTravelExperts = () => {
         </div>
 
         {/* Trustpilot Rating */}
-        <div className="flex justify-center items-center gap-2">
-          <div className="flex gap-1">
+        <div className="flex justify-center items-center">
+          <div className="flex gap-1 mb-2">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-8 h-8 bg-gray-600 flex items-center justify-center">
-                <Star className="w-5 h-5 text-white fill-white" />
+              <div key={i} className="w-6 h-6 bg-gray-600 flex items-center justify-center">
+                <Star className="w-4 h-4 text-white fill-white" />
               </div>
             ))}
           </div>
-          <span className="text-gray-600 ml-2">★ Trustpilot</span>
+        </div>
+        <div className="text-gray-600 text-sm">
+          ★ Trustpilot
         </div>
       </div>
     </section>
