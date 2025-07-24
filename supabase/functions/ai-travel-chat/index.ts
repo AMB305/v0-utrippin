@@ -191,6 +191,10 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
 {
   "title": "X-day itinerary for [destination]",
   "summary": "A brief overview like 'Here is a X-day itinerary for your trip to [destination], packed with iconic sights, cultural hotspots, and fun activities!'",
+  "dates": { "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" },
+  "traveler_count": 2,
+  "rooms": 1,
+  "images": ["https://example.com/hero.jpg", "https://example.com/img1.jpg", "https://example.com/img2.jpg", "https://example.com/img3.jpg", "https://example.com/img4.jpg"],
   "recommendations": [
     {
       "category_name": "Day 1",
@@ -360,7 +364,38 @@ YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structu
     "What specific cuisine would you like to try?",
     "Are you interested in nightlife recommendations?",
     "Would you like more details about any particular day?"
-  ]
+  ],
+  "culture_adapter": {
+    "tipping_etiquette": "Detailed tipping customs and expectations",
+    "dining_customs": "Local dining etiquette and meal traditions",
+    "public_behavior": "Social norms and cultural expectations in public",
+    "language_tips": "Useful phrases and communication advice",
+    "beach_etiquette": "Beach and coastal behavior guidelines (if applicable)"
+  },
+  "insights": {
+    "transportation": "Local transportation options and tips",
+    "freeThings": "Free activities and attractions available",
+    "walkability": "Walking conditions and pedestrian-friendly areas",
+    "kidsActivities": "Family-friendly activities and attractions",
+    "malls": "Shopping centers and retail districts",
+    "safety": "Safety tips and precautions for travelers",
+    "bestLocalFoods": "Must-try local dishes and specialties",
+    "bestLocalActivities": "Unique local experiences and activities",
+    "nightlife": "Evening entertainment and nightlife options",
+    "gyms": "Fitness facilities and wellness options"
+  },
+  "cost_breakdown": {
+    "daily_estimates": [
+      {
+        "day": 1,
+        "transport": "$25",
+        "food": "$40/person",
+        "activities": "Free",
+        "accommodation": "$120/night"
+      }
+    ],
+    "total_estimated": "$500-800 per person"
+  }
 }
 
 For OTHER QUERIES (without destination + dates + budget), use the simpler response format:

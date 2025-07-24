@@ -4,6 +4,10 @@ import { supabase } from '@/integrations/supabase/client';
 interface DetailedItinerary {
   title: string;
   summary: string;
+  dates?: { start: string; end: string };
+  traveler_count?: number;
+  rooms?: number;
+  images?: string[];
   recommendations: Array<{
     category_name: string;
     places: Array<{
@@ -14,10 +18,41 @@ interface DetailedItinerary {
       location?: string;
       rating?: number;
       price_range?: string;
+      estimated_cost?: string;
+      booking_url?: string;
     }>;
   }>;
   actionable_suggestions: string[];
   follow_up_questions: string[];
+  culture_adapter?: {
+    tipping_etiquette?: string;
+    dining_customs?: string;
+    public_behavior?: string;
+    language_tips?: string;
+    beach_etiquette?: string;
+  };
+  insights?: {
+    transportation?: string;
+    freeThings?: string;
+    walkability?: string;
+    kidsActivities?: string;
+    malls?: string;
+    safety?: string;
+    bestLocalFoods?: string;
+    bestLocalActivities?: string;
+    nightlife?: string;
+    gyms?: string;
+  };
+  cost_breakdown?: {
+    daily_estimates?: Array<{
+      day: number;
+      transport?: string;
+      food?: string;
+      activities?: string;
+      accommodation?: string;
+    }>;
+    total_estimated?: string;
+  };
 }
 
 interface ChatMessage {
