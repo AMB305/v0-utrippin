@@ -24,9 +24,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
+    
+    // Get initial session first
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!mounted) return;
+      
+      console.log('Initial session check:', session?.user?.email || 'No user');
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      const user = session?.user;
+      if (user) {
+        // Google users don't need email verification
+        const isGoogleUser = user.app_metadata?.provider === 'google';
+        const emailConfirmed = !!user.email_confirmed_at;
+        setIsEmailVerified(isGoogleUser || emailConfirmed);
+        
+        setTimeout(() => {
+          if (mounted) checkAdminStatus(user.id);
+        }, 0);
+      } else {
+        setIsAdmin(false);
+        setIsEmailVerified(false);
+      }
+      
+      setLoading(false);
+    });
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        if (!mounted) return;
+        
+        console.log('Auth state changed:', event, session?.user?.email || 'No user');
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -39,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setIsEmailVerified(isGoogleUser || emailConfirmed);
           
           setTimeout(() => {
-            checkAdminStatus(user.id);
+            if (mounted) checkAdminStatus(user.id);
           }, 0);
         } else {
           setIsAdmin(false);
@@ -50,25 +81,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      const user = session?.user;
-      if (user) {
-        // Google users don't need email verification
-        const isGoogleUser = user.app_metadata?.provider === 'google';
-        const emailConfirmed = !!user.email_confirmed_at;
-        setIsEmailVerified(isGoogleUser || emailConfirmed);
-        
-        checkAdminStatus(user.id);
-      }
-      
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const checkAdminStatus = async (userId: string) => {
