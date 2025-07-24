@@ -100,7 +100,7 @@ export default function HeroFlightWidget() {
         </h1>
 
         {/* Flight Widget */}
-        <div className="bg-white rounded-full shadow-2xl w-full max-w-6xl overflow-hidden">
+        <div className="bg-white rounded-full shadow-2xl w-full max-w-6xl relative">
           <form onSubmit={handleFlightSubmit}>
             <div className="flex items-center">
               {/* Trip Type Toggle - Hidden for cleaner look, defaulting to round-trip */}
@@ -176,7 +176,10 @@ export default function HeroFlightWidget() {
                 <Users className="text-teal-500 w-5 h-5 mr-3 flex-shrink-0" />
                 <div 
                   className="flex items-center cursor-pointer text-gray-700 font-medium"
-                  onClick={() => setShowPassengerDropdown(!showPassengerDropdown)}
+                  onClick={() => {
+                    console.log('Passenger dropdown clicked');
+                    setShowPassengerDropdown(!showPassengerDropdown);
+                  }}
                 >
                   <span>
                     {adults + children < 10 ? `0${adults + children}` : adults + children} {adults + children === 1 ? 'Adult' : 'Adults'}
@@ -186,7 +189,7 @@ export default function HeroFlightWidget() {
                 
                 {/* Passenger Dropdown */}
                 {showPassengerDropdown && (
-                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 mt-2 p-4 min-w-[200px]">
+                  <div className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-xl z-[9999] mt-2 p-4 w-[220px]">
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">
                         <span className="text-gray-700 font-medium">Adults</span>
