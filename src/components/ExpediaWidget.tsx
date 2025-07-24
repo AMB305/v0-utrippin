@@ -75,8 +75,8 @@ export default function ExpediaWidget() {
   };
 
   const renderFlightForm = () => (
-    <div className="bg-white rounded-2xl shadow-lg p-8 max-w-7xl mx-auto border border-gray-100">
-      {/* Trip Type Selection */}
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-8">
+      {/* Trip Type Radio Buttons */}
       <div className="flex gap-8 mb-8">
         {[
           { value: 'one-way', label: 'One way' },
@@ -90,7 +90,7 @@ export default function ExpediaWidget() {
               value={type.value}
               checked={tripType === type.value}
               onChange={(e) => setTripType(e.target.value)}
-              className="w-5 h-5 text-blue-600 focus:ring-blue-500 focus:ring-2"
+              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
             />
             <span className="text-base font-medium text-gray-700">
               {type.label}
@@ -100,92 +100,81 @@ export default function ExpediaWidget() {
       </div>
 
       <form onSubmit={handleFlightSubmit}>
-        {/* Main Search Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end mb-6">
-          {/* From Airport */}
-          <div className="lg:col-span-3">
-            <label className="block text-sm font-semibold text-gray-900 mb-3">From</label>
+        {/* Flight Search Fields */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
+          {/* From */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
             <div className="relative">
-              <Plane className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
               {isMobile ? (
                 <InlineAirportDropdown
                   placeholder="Departure"
                   value={fromAirport}
                   onChange={setFromAirport}
-                  inputClassName="pl-12 pr-4 py-4 w-full border-2 border-gray-200 rounded-xl text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none hover:border-gray-300 transition-colors"
+                  inputClassName="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                 />
               ) : (
                 <SimpleAirportAutocomplete
                   placeholder="Departure"
                   value={fromAirport}
                   onChange={setFromAirport}
-                  className="pl-12 pr-4 py-4 w-full border-2 border-gray-200 rounded-xl text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none hover:border-gray-300 transition-colors"
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                 />
               )}
             </div>
           </div>
 
-          {/* Swap Button */}
-          <div className="flex justify-center lg:col-span-1">
-            <button
-              type="button"
-              onClick={swapAirports}
-              className="p-3 rounded-full border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 bg-white"
-            >
-              <ArrowLeftRight className="w-5 h-5 text-gray-600" />
-            </button>
-          </div>
-
-          {/* To Airport */}
-          <div className="lg:col-span-3">
-            <label className="block text-sm font-semibold text-gray-900 mb-3">To</label>
+          {/* To */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
             <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
               {isMobile ? (
                 <InlineAirportDropdown
                   placeholder="Destination"
                   value={toAirport}
                   onChange={setToAirport}
-                  inputClassName="pl-12 pr-4 py-4 w-full border-2 border-gray-200 rounded-xl text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none hover:border-gray-300 transition-colors"
+                  inputClassName="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                 />
               ) : (
                 <SimpleAirportAutocomplete
                   placeholder="Destination"
                   value={toAirport}
                   onChange={setToAirport}
-                  className="pl-12 pr-4 py-4 w-full border-2 border-gray-200 rounded-xl text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none hover:border-gray-300 transition-colors"
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                 />
               )}
             </div>
           </div>
 
           {/* Departure Date */}
-          <div className="lg:col-span-2">
-            <label className="block text-sm font-semibold text-gray-900 mb-3">Departure</label>
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Departure</label>
             <div className="relative">
-              <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
               <input
                 type="date"
                 value={checkInDate}
                 onChange={(e) => setCheckInDate(e.target.value)}
-                className="pl-12 pr-4 py-4 w-full border-2 border-gray-200 rounded-xl text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none hover:border-gray-300 transition-colors"
+                className="pl-10 pr-3 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                 required
               />
             </div>
           </div>
 
           {/* Return Date */}
-          <div className="lg:col-span-2">
-            <label className="block text-sm font-semibold text-gray-900 mb-3">Return</label>
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Return</label>
             <div className="relative">
-              <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
               <input
                 type="date"
                 value={checkOutDate}
                 onChange={(e) => setCheckOutDate(e.target.value)}
                 disabled={tripType === 'one-way'}
-                className={`pl-12 pr-4 py-4 w-full border-2 border-gray-200 rounded-xl text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none hover:border-gray-300 transition-colors ${
-                  tripType === 'one-way' ? 'opacity-50 cursor-not-allowed bg-gray-50' : ''
+                className={`pl-10 pr-3 py-3 w-full border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none ${
+                  tripType === 'one-way' ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
                 }`}
                 required={tripType === 'round-trip'}
               />
@@ -194,67 +183,54 @@ export default function ExpediaWidget() {
 
           {/* Search Button */}
           <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-transparent mb-2">Search</label>
             <button 
               type="submit"
-              className="w-full py-4 bg-blue-600 text-white font-semibold rounded-xl text-base hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
+              className="w-full py-3 bg-blue-600 text-white font-medium rounded-lg text-sm hover:bg-blue-700 transition-colors duration-200"
             >
               Search flights
             </button>
           </div>
         </div>
 
-        {/* Second Row - Passenger and Class Selection */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        {/* Second Row - Passengers and Class */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
           {/* Passengers */}
-          <div className="lg:col-span-3">
-            <label className="block text-sm font-semibold text-gray-900 mb-3">Passengers</label>
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Passengers</label>
             <div className="relative">
-              <Users className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
               <select
                 value={passengers}
                 onChange={(e) => setPassengers(Number(e.target.value))}
-                className="pl-12 pr-8 py-4 w-full border-2 border-gray-200 rounded-xl text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none hover:border-gray-300 transition-colors appearance-none cursor-pointer"
+                className="pl-10 pr-8 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
               >
-                {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                {[1, 2, 3, 4, 5, 6].map(num => (
                   <option key={num} value={num}>{num} {num === 1 ? 'Passenger' : 'Passengers'}</option>
                 ))}
               </select>
-              <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
             </div>
           </div>
 
-          {/* Cabin Class */}
-          <div className="lg:col-span-3">
-            <label className="block text-sm font-semibold text-gray-900 mb-3">Class</label>
-            <div className="relative">
-              <select
-                value={cabinClass}
-                onChange={(e) => setCabinClass(e.target.value)}
-                className="pl-4 pr-8 py-4 w-full border-2 border-gray-200 rounded-xl text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none hover:border-gray-300 transition-colors appearance-none cursor-pointer"
-              >
-                <option value="Economy">Economy</option>
-                <option value="Premium Economy">Premium Economy</option>
-                <option value="Business">Business</option>
-                <option value="First">First Class</option>
-              </select>
-              <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
+          {/* Class */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
+            <select
+              value={cabinClass}
+              onChange={(e) => setCabinClass(e.target.value)}
+              className="px-3 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
+            >
+              <option value="Economy">Economy</option>
+              <option value="Premium Economy">Premium Economy</option>
+              <option value="Business">Business</option>
+              <option value="First">First Class</option>
+            </select>
           </div>
+
+          {/* Empty columns for spacing */}
+          <div className="lg:col-span-3"></div>
         </div>
       </form>
-      
-      {/* Expedia Branding */}
-      <div className="text-center text-xs text-gray-500 mt-6 pt-4 border-t border-gray-100">
-        Powered by <span className="font-semibold text-blue-600">Expedia</span> — Official Partner
-      </div>
     </div>
   );
 
