@@ -1,60 +1,60 @@
 import React from 'react';
-import { Sparkles, MapPin, CalendarDays } from 'lucide-react';
+import { MapPin, Plane, Hotel, Calendar, Star } from 'lucide-react';
 
 const featuredTrips = [
   {
-    title: 'Cancun Getaway',
+    title: 'Cancun Adventure',
     location: 'Cancun, Mexico',
-    date: 'Aug 1–4',
-    highlights: ['Beaches', 'Clubs', 'Snorkeling'],
-    emoji: '🌴'
+    dates: 'Aug 1–4',
+    highlights: ['Beaches', 'Nightlife', 'All-Inclusive Resorts'],
+    rating: 4.8,
   },
   {
-    title: 'Cultural Tokyo',
-    location: 'Tokyo, Japan',
-    date: 'Sep 10–15',
-    highlights: ['Parks', 'Karaoke', 'Sushi Night'],
-    emoji: '🎌'
+    title: 'Barcelona Explorer',
+    location: 'Barcelona, Spain',
+    dates: 'Oct 10–16',
+    highlights: ['Gothic Quarter', 'Montserrat Hike', 'Bike Tours'],
+    rating: 4.9,
   },
   {
-    title: 'Family Fun in Orlando',
-    location: 'Orlando, FL',
-    date: 'Oct 20–25',
-    highlights: ['Theme Parks', 'Walkability', 'Kid-Friendly'],
-    emoji: '🎢'
-  },
-  {
-    title: 'Paris by Night',
-    location: 'Paris, France',
-    date: 'Nov 5–10',
-    highlights: ['Romance', 'Wine', 'Night Walks'],
-    emoji: '🗼'
+    title: 'Family Trip to Orlando',
+    location: 'Orlando, Florida',
+    dates: 'Sept 5–9',
+    highlights: ['Disney World', 'Universal Studios', 'Water Parks'],
+    rating: 4.7,
   },
 ];
 
 export default function FeaturedTripCards() {
   return (
-    <div className="bg-background text-foreground py-12 px-4">
-      <h2 className="text-2xl font-bold text-center mb-8">
-        <Sparkles className="inline mr-2 text-primary" /> Featured Trip Ideas
-      </h2>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto px-4 py-10">
+      <h2 className="text-foreground text-2xl font-bold mb-6">🌟 Featured Trips You Might Love</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {featuredTrips.map((trip, idx) => (
-          <div key={idx} className="bg-card rounded-xl p-6 shadow-md border hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
-            <div className="text-3xl mb-3">{trip.emoji}</div>
-            <h3 className="text-xl font-semibold mb-2">{trip.title}</h3>
-            <div className="flex items-center text-muted-foreground text-sm mb-1">
-              <MapPin className="w-4 h-4 mr-1" /> {trip.location}
+          <div
+            key={idx}
+            className="bg-card rounded-xl p-6 shadow-md border hover:shadow-xl transition duration-300 hover:scale-[1.02]"
+          >
+            <div className="flex items-center gap-2 text-primary text-sm font-medium mb-1">
+              <MapPin size={16} /> {trip.location}
             </div>
-            <div className="flex items-center text-muted-foreground text-sm mb-3">
-              <CalendarDays className="w-4 h-4 mr-1" /> {trip.date}
+            <h3 className="text-xl text-foreground font-semibold mb-2">{trip.title}</h3>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+              <Calendar size={16} /> {trip.dates}
             </div>
-            <ul className="text-sm text-foreground list-disc list-inside">
-              {trip.highlights.map((h, i) => (
-                <li key={i}>{h}</li>
+            <ul className="text-sm text-foreground mb-4 list-disc list-inside">
+              {trip.highlights.map((point, i) => (
+                <li key={i}>{point}</li>
               ))}
             </ul>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1 text-secondary text-sm">
+                <Star size={14} /> {trip.rating.toFixed(1)}
+              </span>
+              <button className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm px-4 py-2 rounded-lg font-medium transition-colors">
+                Book Now
+              </button>
+            </div>
           </div>
         ))}
       </div>
