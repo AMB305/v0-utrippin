@@ -83,10 +83,8 @@ export default function HeroFlightWidget() {
 
       {/* Main Content */}
       <div className="relative z-10 flex flex-col justify-center items-center text-center h-full px-6">
-        <h2 className="text-white text-lg tracking-wide uppercase mb-2">Atmosphere of Los Angeles Country</h2>
         <h1 className="text-white text-4xl md:text-6xl font-bold mb-8">
-          Discover <br /> 
-          <span className="text-teal-400">Adventure & Action in Travel</span>
+          Discover Your World
         </h1>
 
         {/* Flight Widget */}
