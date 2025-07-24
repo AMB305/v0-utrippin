@@ -84,6 +84,23 @@ const SwipeToTravelHero = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       <div className="absolute inset-0 bg-black/30" />
 
+      {/* Centered content */}
+      <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="text-center text-white px-4 max-w-4xl mx-auto">
+          <h1 className="font-montserrat font-medium mb-8 leading-tight tracking-wide text-center" style={{ color: 'white', background: 'none', WebkitTextFillColor: 'white', backgroundClip: 'unset', fontSize: '16pt' }}>
+            YOUR WORLD<br />
+            WITHIN REACH
+          </h1>
+          
+          <button 
+            onClick={handleFlightsClick}
+            className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-6 py-2 text-xs font-medium tracking-widest uppercase transition-all duration-300"
+          >
+            Book Flight Now
+          </button>
+        </div>
+      </div>
+
       {/* Sticky Compact Action Rail */}
       <div className="fixed top-1/2 right-2 transform -translate-y-1/2 z-10">
         <div className="flex flex-col gap-2.5">
