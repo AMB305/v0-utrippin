@@ -87,10 +87,10 @@ export const ChatContainer = ({
     if (!newMessage.trim()) return;
 
     const userText = newMessage.trim();
-    setNewMessage('');
+    setNewMessage(''); // Clear input immediately
 
     try {
-      // 1️⃣ Insert user message
+      // 1️⃣ Insert user message and immediately refresh to show it
       const { error: userError } = await supabase.from('travel_chat').insert({
         sender_id: userId,
         receiver_id: buddyId,
@@ -99,8 +99,13 @@ export const ChatContainer = ({
 
       if (userError) {
         console.error('Error sending user message:', userError);
+        // Restore the message to input if it failed
+        setNewMessage(userText);
         return;
       }
+
+      // Immediately reload messages to show user message
+      await loadMessages();
 
       // 2️⃣ Show "Keila is thinking..." 
       setIsLoading(true);
@@ -143,11 +148,13 @@ export const ChatContainer = ({
 
       // 5️⃣ Hide loading and refresh messages
       setIsLoading(false);
-      loadMessages(); // Reload to show both messages
+      await loadMessages(); // Reload to show AI response
 
     } catch (error) {
       console.error('Error in sendMessage:', error);
       setIsLoading(false);
+      // Restore the message to input if something went wrong
+      setNewMessage(userText);
     }
   }
 
