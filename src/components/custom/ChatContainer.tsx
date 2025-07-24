@@ -67,11 +67,16 @@ export const ChatContainer = ({
   }, [messages]);
 
   async function loadMessages() {
+    console.log('🔄 Loading messages for userId:', userId, 'buddyId:', buddyId);
+    
     const { data, error } = await supabase
       .from('travel_chat')
       .select('*')
       .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
       .order('sent_at', { ascending: true });
+
+    console.log('📨 Raw messages from DB:', data);
+    console.log('❌ Load messages error:', error);
 
     if (!error && data) {
       const filtered = data.filter(
@@ -79,7 +84,10 @@ export const ChatContainer = ({
           (m.sender_id === userId && m.receiver_id === buddyId) ||
           (m.receiver_id === userId && m.sender_id === buddyId)
       );
+      console.log('✅ Filtered messages:', filtered);
       setMessages(filtered);
+    } else if (error) {
+      console.error('Error loading messages:', error);
     }
   }
 
@@ -87,36 +95,46 @@ export const ChatContainer = ({
     if (!newMessage.trim()) return;
 
     const userText = newMessage.trim();
+    console.log('📤 Sending message:', userText);
+    console.log('👤 User ID:', userId);
+    console.log('🤖 Buddy ID:', buddyId);
+    
     setNewMessage(''); // Clear input immediately
 
     try {
-      // 1️⃣ Insert user message and immediately refresh to show it
-      const { error: userError } = await supabase.from('travel_chat').insert({
+      // 1️⃣ Insert user message
+      console.log('💾 Attempting to insert user message...');
+      const { data: insertData, error: userError } = await supabase.from('travel_chat').insert({
         sender_id: userId,
         receiver_id: buddyId,
         message: userText
-      });
+      }).select();
+
+      console.log('💾 Insert result:', { insertData, userError });
 
       if (userError) {
-        console.error('Error sending user message:', userError);
-        // Restore the message to input if it failed
+        console.error('❌ Error sending user message:', userError);
         setNewMessage(userText);
         return;
       }
 
       // Immediately reload messages to show user message
+      console.log('🔄 Loading messages after user insert...');
       await loadMessages();
 
       // 2️⃣ Show "Keila is thinking..." 
       setIsLoading(true);
 
       // 3️⃣ Call the AI endpoint
+      console.log('🤖 Calling AI endpoint...');
       const response = await supabase.functions.invoke('ai-travel-chat', {
         body: { 
           message: userText,
           sessionId: `${userId}-${buddyId}` 
         }
       });
+
+      console.log('🤖 AI response:', response);
 
       let aiReply = "I'm sorry, I'm having trouble responding right now. Please try again later!";
       
@@ -135,12 +153,16 @@ export const ChatContainer = ({
         console.error('AI response error:', response.error);
       }
 
+      console.log('🤖 AI reply to insert:', aiReply);
+
       // 4️⃣ Insert Keila's reply back into Supabase
-      const { error: aiError } = await supabase.from('travel_chat').insert({
+      const { data: aiInsertData, error: aiError } = await supabase.from('travel_chat').insert({
         sender_id: buddyId, // Keila's response
         receiver_id: userId,
         message: aiReply
-      });
+      }).select();
+
+      console.log('🤖 AI insert result:', { aiInsertData, aiError });
 
       if (aiError) {
         console.error('Error sending AI reply:', aiError);
@@ -148,12 +170,12 @@ export const ChatContainer = ({
 
       // 5️⃣ Hide loading and refresh messages
       setIsLoading(false);
-      await loadMessages(); // Reload to show AI response
+      console.log('🔄 Final message reload...');
+      await loadMessages();
 
     } catch (error) {
-      console.error('Error in sendMessage:', error);
+      console.error('💥 Unexpected error in sendMessage:', error);
       setIsLoading(false);
-      // Restore the message to input if something went wrong
       setNewMessage(userText);
     }
   }
