@@ -34,24 +34,26 @@ export default function AIChatLanding({ onSignIn }: AIChatLandingProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/10 text-foreground relative overflow-hidden">
-      {/* Animated Background Elements */}
+      {/* Animated Starfield Background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-primary/30 rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-1 h-1 bg-secondary/40 rounded-full animate-ping"></div>
-        <div className="absolute bottom-40 left-1/4 w-1.5 h-1.5 bg-primary/20 rounded-full animate-pulse animation-delay-1000"></div>
-        <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-secondary/30 rounded-full animate-ping animation-delay-2000"></div>
-        <Sparkles className="absolute top-16 right-16 w-4 h-4 text-primary/20 animate-pulse animation-delay-500" />
-        <Sparkles className="absolute bottom-20 left-16 w-3 h-3 text-secondary/30 animate-ping animation-delay-1500" />
+        <div className="absolute top-20 left-10 w-2 h-2 bg-primary/30 rounded-full animate-star-float"></div>
+        <div className="absolute top-40 right-20 w-1 h-1 bg-secondary/40 rounded-full animate-star-twinkle"></div>
+        <div className="absolute bottom-40 left-1/4 w-1.5 h-1.5 bg-primary/20 rounded-full animate-star-float stagger-1"></div>
+        <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-secondary/30 rounded-full animate-star-twinkle stagger-2"></div>
+        <div className="absolute top-60 left-1/3 w-1 h-1 bg-primary/25 rounded-full animate-star-float stagger-3"></div>
+        <div className="absolute bottom-60 right-1/4 w-2 h-2 bg-secondary/35 rounded-full animate-star-twinkle stagger-4"></div>
+        <Sparkles className="absolute top-16 right-16 w-4 h-4 text-primary/20 animate-star-sparkle stagger-1" />
+        <Sparkles className="absolute bottom-20 left-16 w-3 h-3 text-secondary/30 animate-star-sparkle stagger-2" />
       </div>
 
       {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center justify-center px-4 py-10 min-h-screen">
       {/* Greeting Header */}
       <div className="text-center mb-10 animate-fade-in">
-        <div className="text-sm text-primary font-semibold flex items-center justify-center gap-2">
+        <div className="text-sm text-primary font-semibold flex items-center justify-center gap-2 keila-avatar">
           Hi there! I'm Keila 
-          <span className="inline-block animate-bounce animation-delay-300">👋</span>
-          <Sparkles className="w-3 h-3 text-primary animate-pulse animation-delay-700" />
+          <span className="inline-block keila-eyes">👋</span>
+          <Sparkles className="w-3 h-3 text-primary animate-star-sparkle" />
         </div>
         <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mt-2">
           Ready to explore the world?
