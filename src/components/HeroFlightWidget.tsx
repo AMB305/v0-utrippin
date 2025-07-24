@@ -91,10 +91,13 @@ export default function HeroFlightWidget() {
 
   return (
     <div className="relative h-screen w-full bg-black">
-      {/* Background Image */}
-      <img
-        src={heroImage}
-        alt="Los Angeles landscape"
+      {/* Background Video */}
+      <video
+        src="https://utrippin.s3.us-east-2.amazonaws.com/the-plane-takes-off-at-sunset-the-plane-takes-off-2023-11-27-04-55-30-utc.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
         className="absolute inset-0 h-full w-full object-cover"
       />
       {/* Overlay */}
