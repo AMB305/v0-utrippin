@@ -53,10 +53,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, label: "Facebook", href: "https://facebook.com/utrippin" },
-    { icon: Instagram, label: "Instagram", href: "https://instagram.com/utrippin" },
-    { icon: Twitter, label: "Twitter", href: "https://twitter.com/utrippin" },
-    { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/company/utrippin" }
+    { icon: Facebook, label: "Facebook", href: "https://facebook.com/goutrippin" },
+    { icon: Instagram, label: "Instagram", href: "https://instagram.com/goutrippin" },
+    { icon: Twitter, label: "Twitter", href: "https://twitter.com/goutrippin" },
+    { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/company/goutrippin" }
   ];
 
   return (
