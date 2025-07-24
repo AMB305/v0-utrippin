@@ -175,13 +175,28 @@ const TravelBuddiesNew = () => {
   // Mobile Layout - Tinder-style interface
   if (isMobile) {
     const currentTrip = mockTrips[currentBuddyIndex];
-    if (!currentTrip) return null;
+    if (!currentTrip) {
+      // Reset to first profile if we've gone through all
+      setCurrentBuddyIndex(0);
+      return null;
+    }
 
     return (
       <div className="min-h-screen bg-black text-white relative overflow-hidden">
+        {/* Hamburger Menu */}
+        <div className="absolute top-4 left-4 z-20">
+          <button className="w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <div className="w-5 h-5">
+              <div className="w-full h-0.5 bg-white mb-1"></div>
+              <div className="w-full h-0.5 bg-white mb-1"></div>
+              <div className="w-full h-0.5 bg-white"></div>
+            </div>
+          </button>
+        </div>
+
         {/* Header */}
         <div className="flex items-center justify-between p-4 z-10 relative">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ml-12">
             <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-lg">U</span>
             </div>
@@ -201,7 +216,7 @@ const TravelBuddiesNew = () => {
         {/* Match Percentage */}
         <div className="absolute top-16 right-4 z-10">
           <div className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            92% Match
+            {Math.floor(Math.random() * 20) + 80}% Match
           </div>
         </div>
 
@@ -215,18 +230,27 @@ const TravelBuddiesNew = () => {
           >
             {/* Profile Info */}
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-              <h2 className="text-4xl font-bold mb-2">{currentTrip.author.name}, 25</h2>
+              <h2 className="text-4xl font-bold mb-2">{currentTrip.author.name}, {Math.floor(Math.random() * 15) + 22}</h2>
               <p className="text-gray-200 mb-3 leading-relaxed">
-                Adventure seeker looking for travel companions to explore Southeast Asia. Love hiking, street food, and meeting locals.
+                {currentTrip.description}
               </p>
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="w-4 h-4" />
-                <span className="text-gray-300">San Francisco, CA</span>
+                <span className="text-gray-300">{currentTrip.location}</span>
+              </div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-gray-300 text-sm">{currentTrip.dates}</span>
               </div>
               <div className="flex gap-2 flex-wrap">
-                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">Hiking</span>
-                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">Photography</span>
-                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">Food</span>
+                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">Travel</span>
+                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">Adventure</span>
+                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">Explorer</span>
+                {currentTrip.author.verified && (
+                  <span className="bg-green-500/30 backdrop-blur-sm px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <Star className="w-3 h-3" />
+                    Verified
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -236,34 +260,51 @@ const TravelBuddiesNew = () => {
         <div className="absolute bottom-20 left-0 right-0 flex justify-center items-center gap-4 px-8">
           <button 
             onClick={handleSwipeLeft}
-            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600 hover:bg-gray-700/80 transition-colors"
           >
             <ArrowLeft className="w-6 h-6 text-yellow-500" />
           </button>
           <button 
             onClick={handleSwipeLeft}
-            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600 hover:bg-gray-700/80 transition-colors"
           >
             <X className="w-6 h-6 text-red-500" />
           </button>
           <button 
             onClick={handleSwipeRight}
-            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600 hover:bg-gray-700/80 transition-colors"
           >
             <Star className="w-6 h-6 text-blue-400" />
           </button>
           <button 
-            onClick={handleSwipeRight}
-            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+            onClick={() => {
+              handleConnect(currentTrip.id);
+              handleSwipeRight();
+            }}
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600 hover:bg-gray-700/80 transition-colors"
           >
             <Heart className="w-6 h-6 text-green-500" />
           </button>
           <button 
             onClick={handleSwipeRight}
-            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600 hover:bg-gray-700/80 transition-colors"
           >
             <Zap className="w-6 h-6 text-purple-500" />
           </button>
+        </div>
+
+        {/* Profile Counter */}
+        <div className="absolute bottom-36 left-1/2 transform -translate-x-1/2 z-10">
+          <div className="flex gap-1">
+            {mockTrips.map((_, index) => (
+              <div 
+                key={index}
+                className={`w-2 h-2 rounded-full ${
+                  index === currentBuddyIndex ? 'bg-white' : 'bg-white/30'
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Bottom Navigation */}
