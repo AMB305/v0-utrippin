@@ -88,153 +88,110 @@ export default function HeroFlightWidget() {
         </h1>
 
         {/* Flight Widget */}
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl px-8 py-6 w-full max-w-7xl shadow-2xl">
+        <div className="bg-white rounded-full shadow-2xl w-full max-w-6xl overflow-hidden">
           <form onSubmit={handleFlightSubmit}>
-            {/* Trip Type Toggle */}
-            <div className="flex gap-6 mb-6">
-              {[
-                { value: 'one-way', label: 'One way' },
-                { value: 'round-trip', label: 'Round trip' }
-              ].map((type) => (
-                <label key={type.value} className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="tripType"
-                    value={type.value}
-                    checked={tripType === type.value}
-                    onChange={(e) => setTripType(e.target.value)}
-                    className="w-4 h-4 text-teal-500 focus:ring-teal-400"
-                  />
-                  <span className="text-base font-medium text-gray-700">
-                    {type.label}
-                  </span>
-                </label>
-              ))}
-            </div>
-
-            {/* Single Row Layout */}
-            <div className="flex flex-col lg:flex-row gap-4 items-end">
+            <div className="flex items-center">
+              {/* Trip Type Toggle - Hidden for cleaner look, defaulting to round-trip */}
+              
               {/* From Field */}
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-2">From</label>
-                <div className="relative">
-                  <Plane className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-                  <MapPin className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              <div className="flex items-center px-6 py-4 border-r border-gray-200">
+                <MapPin className="text-teal-500 w-5 h-5 mr-3 flex-shrink-0" />
+                <div className="min-w-0">
                   {isMobile ? (
                     <InlineAirportDropdown
-                      placeholder="Departure"
+                      placeholder="USA"
                       value={fromAirport}
                       onChange={setFromAirport}
-                      inputClassName="pl-12 pr-12 py-4 w-full border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                      inputClassName="border-0 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-0 text-base font-medium w-full"
                     />
                   ) : (
                     <SimpleAirportAutocomplete
-                      placeholder="Departure"
+                      placeholder="USA"
                       value={fromAirport}
                       onChange={setFromAirport}
-                      className="pl-12 pr-12 py-4 w-full border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                      className="border-0 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-0 text-base font-medium w-full"
                     />
                   )}
                 </div>
               </div>
 
               {/* To Field */}
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-2">To</label>
-                <div className="relative">
-                  <Plane className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-                  <MapPin className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              <div className="flex items-center px-6 py-4 border-r border-gray-200">
+                <MapPin className="text-teal-500 w-5 h-5 mr-3 flex-shrink-0" />
+                <div className="min-w-0">
                   {isMobile ? (
                     <InlineAirportDropdown
-                      placeholder="Destination"
+                      placeholder="Los Angeles"
                       value={toAirport}
                       onChange={setToAirport}
-                      inputClassName="pl-12 pr-12 py-4 w-full border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                      inputClassName="border-0 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-0 text-base font-medium w-full"
                     />
                   ) : (
                     <SimpleAirportAutocomplete
-                      placeholder="Destination"
+                      placeholder="Los Angeles"
                       value={toAirport}
                       onChange={setToAirport}
-                      className="pl-12 pr-12 py-4 w-full border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                      className="border-0 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-0 text-base font-medium w-full"
                     />
                   )}
                 </div>
               </div>
 
-              {/* Departure Date */}
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-2">Departure</label>
-                <div className="relative">
-                  <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              {/* Date Range */}
+              <div className="flex items-center px-6 py-4 border-r border-gray-200">
+                <Calendar className="text-teal-500 w-5 h-5 mr-3 flex-shrink-0" />
+                <div className="flex items-center space-x-2">
                   <input
                     type="date"
                     value={checkInDate}
                     onChange={(e) => setCheckInDate(e.target.value)}
-                    className="pl-12 pr-4 py-4 w-full border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                    className="border-0 bg-transparent text-gray-700 focus:outline-none focus:ring-0 text-base font-medium"
+                    required
+                  />
+                  <span className="text-gray-400">-</span>
+                  <input
+                    type="date"
+                    value={checkOutDate}
+                    onChange={(e) => setCheckOutDate(e.target.value)}
+                    className="border-0 bg-transparent text-gray-700 focus:outline-none focus:ring-0 text-base font-medium"
                     required
                   />
                 </div>
               </div>
 
-              {/* Return Date */}
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-2">Return</label>
-                <div className="relative">
-                  <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-                  <input
-                    type="date"
-                    value={checkOutDate}
-                    onChange={(e) => setCheckOutDate(e.target.value)}
-                    disabled={tripType === 'one-way'}
-                    className={`pl-12 pr-4 py-4 w-full border border-gray-300 rounded-xl text-base focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none ${
-                      tripType === 'one-way' ? 'bg-gray-100 cursor-not-allowed text-gray-400' : 'bg-white'
-                    }`}
-                    placeholder={tripType === 'one-way' ? 'One way' : ''}
-                    required={tripType === 'round-trip'}
-                  />
-                </div>
-              </div>
-
               {/* Passengers */}
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-2">Passengers</label>
-                <div className="flex gap-2">
-                  <div className="relative flex-1">
-                    <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
-                    <select
-                      value={adults}
-                      onChange={(e) => setAdults(Number(e.target.value))}
-                      className="pl-10 pr-3 py-4 w-full border border-gray-300 rounded-xl text-sm bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none appearance-none cursor-pointer"
-                    >
-                      {[1, 2, 3, 4, 5, 6].map(num => (
-                        <option key={num} value={num}>{num} Ad</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="relative flex-1">
-                    <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
-                    <select
-                      value={children}
-                      onChange={(e) => setChildren(Number(e.target.value))}
-                      className="pl-10 pr-3 py-4 w-full border border-gray-300 rounded-xl text-sm bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none appearance-none cursor-pointer"
-                    >
-                      {[0, 1, 2, 3, 4].map(num => (
-                        <option key={num} value={num}>{num} Ch</option>
-                      ))}
-                    </select>
-                  </div>
+              <div className="flex items-center px-6 py-4 border-r border-gray-200">
+                <Users className="text-teal-500 w-5 h-5 mr-3 flex-shrink-0" />
+                <div className="text-gray-700 font-medium">
+                  {adults + children === 1 ? `0${adults + children} Adult` : `0${adults + children} Adults`}
+                  {/* Hidden selects for functionality */}
+                  <select
+                    value={adults}
+                    onChange={(e) => setAdults(Number(e.target.value))}
+                    className="sr-only"
+                  >
+                    {[1, 2, 3, 4, 5, 6].map(num => (
+                      <option key={num} value={num}>{num}</option>
+                    ))}
+                  </select>
+                  <select
+                    value={children}
+                    onChange={(e) => setChildren(Number(e.target.value))}
+                    className="sr-only"
+                  >
+                    {[0, 1, 2, 3, 4].map(num => (
+                      <option key={num} value={num}>{num}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
-            </div>
 
-            {/* Search Button Row */}
-            <div className="mt-6">
+              {/* Search Button */}
               <button 
                 type="submit"
-                className="bg-teal-500 hover:bg-teal-600 text-white font-bold px-12 py-4 rounded-xl text-lg transition-colors duration-200 shadow-lg"
+                className="bg-teal-500 hover:bg-teal-600 text-white font-bold px-8 py-4 text-base transition-colors duration-200 rounded-r-full"
               >
-                Search
+                SEARCH
               </button>
             </div>
           </form>
