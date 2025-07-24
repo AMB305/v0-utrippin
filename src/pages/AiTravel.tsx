@@ -159,6 +159,14 @@ const AiTravel = () => {
 
   // Enhanced message sending for desktop with budget information
   const sendEnhancedMessage = (message: string, includeBudget: boolean = true) => {
+    console.log('=== sendEnhancedMessage START ===');
+    console.log('AiTravel: sendEnhancedMessage called with message:', message);
+    console.log('AiTravel: includeBudget:', includeBudget);
+    console.log('AiTravel: isDesktop:', isDesktop);
+    console.log('AiTravel: budget:', budget);
+    console.log('AiTravel: tripType:', tripType);
+    console.log('AiTravel: sendMobileChatMessage function exists:', !!sendMobileChatMessage);
+    
     let enhancedMessage = message;
     
     if (includeBudget && isDesktop) {
@@ -168,10 +176,16 @@ const AiTravel = () => {
       
       // Enhance the message to include budget context and ensure itinerary generation
       enhancedMessage = `${message}. This is for a ${tripTypeText} with a total budget of approximately ${budgetText}. Please provide a complete day-by-day itinerary with detailed recommendations that fit within this budget.`;
+      console.log('AiTravel: Enhanced message:', enhancedMessage);
+    } else {
+      console.log('AiTravel: Using original message (no enhancement)');
     }
     
     // Send the message (enhanced or original)
+    console.log('AiTravel: About to call sendMobileChatMessage with:', enhancedMessage);
     sendMobileChatMessage(enhancedMessage);
+    console.log('AiTravel: sendMobileChatMessage completed');
+    console.log('=== sendEnhancedMessage END ===');
   };
 
   const handleMobileSubmit = (message: string) => {
