@@ -25,9 +25,11 @@ export default function DesktopTravelPlanner() {
       <main className="max-w-4xl mx-auto">
         <div className="text-center">
           <div className="mb-6">
-            <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-lg">
-              +
-            </div>
+            <img 
+              src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
+              alt="Keila Bot" 
+              className="mx-auto mb-3 w-14 h-14 animate-pulse"
+            />
             <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-yellow-400">
               Ready to explore the world?
             </h1>
