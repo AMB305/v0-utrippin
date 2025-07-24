@@ -48,7 +48,7 @@ export const keilaSchema = z.object({
     afternoon: z.array(z.string()),
     evening: z.array(z.string())
   })),
-  culture_tips: z.record(z.string()),
+  culture_tips: z.record(z.string(), z.string()),
   sources: z.array(z.string()),
   buttons: z.array(z.string())
 });

@@ -78,7 +78,7 @@ export const buddyRequestSchema = z.object({
 export const bookingSchema = z.object({
   total_price: z.number().min(0, 'Price cannot be negative').max(100000, 'Price too high'),
   type: z.enum(['flight', 'hotel', 'car', 'package']),
-  details: z.record(z.any()).optional(),
+  details: z.record(z.string(), z.any()).optional(),
   payment_method: z.string().max(50, 'Payment method too long').optional()
 });
 

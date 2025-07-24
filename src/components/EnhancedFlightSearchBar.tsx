@@ -117,7 +117,7 @@ export default function EnhancedFlightSearchBar({
       if (!validationResult.success) {
         toast({
           title: "Invalid search data",
-          description: validationResult.error.errors[0]?.message || "Please check your search criteria.",
+          description: validationResult.error.issues[0]?.message || "Please check your search criteria.",
           variant: "destructive",
         });
         return;
