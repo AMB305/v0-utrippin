@@ -63,6 +63,7 @@ export default function HeroFlightWidget() {
     };
     
     const totalPassengers = adults + children;
+    // GA4 tracking
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'click', {
         event_category: 'Hero Flights Search',
@@ -99,37 +100,34 @@ export default function HeroFlightWidget() {
           Discover Your World
         </h1>
 
+        {/* Trip Type Selection - Above the pill, connected to top */}
+        <div className="flex justify-start w-full max-w-6xl mb-0">
+          <div className="flex bg-white rounded-t-xl shadow-lg overflow-hidden">
+            {[
+              { value: 'one-way', label: 'One way' },
+              { value: 'round-trip', label: 'Round trip' }
+            ].map((type) => (
+              <label key={type.value} className="flex items-center gap-2 px-6 py-3 cursor-pointer border-r border-gray-200 last:border-r-0 hover:bg-gray-50">
+                <input
+                  type="radio"
+                  name="tripType"
+                  value={type.value}
+                  checked={tripType === type.value}
+                  onChange={(e) => setTripType(e.target.value)}
+                  className="w-4 h-4 text-teal-500 focus:ring-teal-400"
+                />
+                <span className="text-sm font-medium text-gray-700">
+                  {type.label}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
         {/* Flight Widget */}
-        <div className="bg-white rounded-full shadow-2xl w-full max-w-6xl relative">
+        <div className="bg-white rounded-b-full rounded-tr-full shadow-2xl w-full max-w-6xl relative">
           <form onSubmit={handleFlightSubmit}>
             <div className="flex items-center">
-              {/* Trip Type Toggle - Above From field */}
-              <div className="px-6 py-2">
-                <div className="flex gap-3 mb-2">
-                  {[
-                    { value: 'one-way', label: 'One way' },
-                    { value: 'round-trip', label: 'Round trip' }
-                  ].map((type) => (
-                    <label key={type.value} className="flex items-center gap-1 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="tripType"
-                        value={type.value}
-                        checked={tripType === type.value}
-                        onChange={(e) => setTripType(e.target.value)}
-                        className="w-3 h-3 text-teal-500 focus:ring-teal-400"
-                      />
-                      <span className="text-xs font-medium text-gray-600">
-                        {type.label}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Main form row */}
-              <div className="flex items-center w-full">
-              
               {/* From Field */}
               <div className="flex items-center px-6 py-4 border-r border-gray-200">
                 <MapPin className="text-teal-500 w-5 h-5 mr-3 flex-shrink-0" />
@@ -185,14 +183,18 @@ export default function HeroFlightWidget() {
                     className="border-0 bg-transparent text-gray-700 focus:outline-none focus:ring-0 text-base font-medium"
                     required
                   />
-                  <span className="text-gray-400">-</span>
-                  <input
-                    type="date"
-                    value={checkOutDate}
-                    onChange={(e) => setCheckOutDate(e.target.value)}
-                    className="border-0 bg-transparent text-gray-700 focus:outline-none focus:ring-0 text-base font-medium"
-                    required
-                  />
+                  {tripType === 'round-trip' && (
+                    <>
+                      <span className="text-gray-400">-</span>
+                      <input
+                        type="date"
+                        value={checkOutDate}
+                        onChange={(e) => setCheckOutDate(e.target.value)}
+                        className="border-0 bg-transparent text-gray-700 focus:outline-none focus:ring-0 text-base font-medium"
+                        required
+                      />
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -268,7 +270,6 @@ export default function HeroFlightWidget() {
               >
                 SEARCH
               </button>
-              </div>
             </div>
           </form>
         </div>
