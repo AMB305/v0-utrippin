@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { 
   Search, MapPin, Heart, Filter, Share2, Settings, X, Star, 
-  Zap, ArrowLeft, MessageCircle, User
+  Zap, ArrowLeft, MessageCircle, User, Menu, Bot, Building, 
+  Plane, Briefcase, Crown
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import SignUpWall from "@/components/SignUpWall";
@@ -123,6 +125,8 @@ const TravelBuddiesNew = () => {
   const [searchQuery, setSearchQuery] = useState('U.S. Virgin Islands');
   const [currentBuddyIndex, setCurrentBuddyIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const touchEndRef = useRef<{ x: number; y: number } | null>(null);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -151,13 +155,72 @@ const TravelBuddiesNew = () => {
   const handleSwipeLeft = () => {
     if (currentBuddyIndex < mockTrips.length - 1) {
       setCurrentBuddyIndex(currentBuddyIndex + 1);
+    } else {
+      setCurrentBuddyIndex(0); // Loop back to start
     }
   };
 
   const handleSwipeRight = () => {
     if (currentBuddyIndex < mockTrips.length - 1) {
       setCurrentBuddyIndex(currentBuddyIndex + 1);
+    } else {
+      setCurrentBuddyIndex(0); // Loop back to start
     }
+  };
+
+  const handleSwipeUp = () => {
+    // Skip current profile without liking
+    if (currentBuddyIndex < mockTrips.length - 1) {
+      setCurrentBuddyIndex(currentBuddyIndex + 1);
+    } else {
+      setCurrentBuddyIndex(0); // Loop back to start
+    }
+  };
+
+  const handleSwipeBack = () => {
+    if (currentBuddyIndex > 0) {
+      setCurrentBuddyIndex(currentBuddyIndex - 1);
+    } else {
+      setCurrentBuddyIndex(mockTrips.length - 1); // Go to last profile
+    }
+  };
+
+  // Touch handlers for swipe gestures
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY
+    };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    
+    touchEndRef.current = {
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY
+    };
+
+    const deltaX = touchEndRef.current.x - touchStartRef.current.x;
+    const deltaY = touchEndRef.current.y - touchStartRef.current.y;
+    const threshold = 50;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Horizontal swipe
+      if (deltaX > threshold) {
+        handleSwipeBack(); // Swipe right to go back
+      } else if (deltaX < -threshold) {
+        handleSwipeLeft(); // Swipe left to pass
+      }
+    } else {
+      // Vertical swipe
+      if (deltaY < -threshold) {
+        handleSwipeUp(); // Swipe up to dismiss
+      }
+    }
+
+    touchStartRef.current = null;
+    touchEndRef.current = null;
   };
 
   const handleConnect = (tripId: string) => {
@@ -185,13 +248,44 @@ const TravelBuddiesNew = () => {
       <div className="min-h-screen bg-black text-white relative overflow-hidden">
         {/* Hamburger Menu */}
         <div className="absolute top-4 left-4 z-20">
-          <button className="w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center">
-            <div className="w-5 h-5">
-              <div className="w-full h-0.5 bg-white mb-1"></div>
-              <div className="w-full h-0.5 bg-white mb-1"></div>
-              <div className="w-full h-0.5 bg-white"></div>
-            </div>
-          </button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center">
+                <Menu className="w-5 h-5 text-white" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[300px] bg-black border-gray-800 text-white">
+              <SheetHeader>
+                <SheetTitle className="text-white">Navigation</SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col space-y-4 pt-4">
+                <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/travel-buddies"}>
+                  <Heart className="w-4 h-4 mr-2" />
+                  Discover
+                </Button>
+                <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/ai-travel"}>
+                  <Bot className="w-4 h-4 mr-2" />
+                  Keila AI
+                </Button>
+                <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/hotels"}>
+                  <Building className="w-4 h-4 mr-2" />
+                  Stays
+                </Button>
+                <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/flights"}>
+                  <Plane className="w-4 h-4 mr-2" />
+                  Flights
+                </Button>
+                <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/my-trips"}>
+                  <Briefcase className="w-4 h-4 mr-2" />
+                  My Trips
+                </Button>
+                <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/premium"}>
+                  <Crown className="w-4 h-4 mr-2" />
+                  Get Unlimited
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
 
         {/* Header */}
@@ -220,8 +314,12 @@ const TravelBuddiesNew = () => {
           </div>
         </div>
 
-        {/* Profile Card */}
-        <div className="absolute inset-4 top-20 bottom-32 rounded-2xl overflow-hidden">
+        {/* Profile Card with Touch Handlers */}
+        <div 
+          className="absolute inset-4 top-20 bottom-32 rounded-2xl overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div 
             className="w-full h-full bg-cover bg-center relative"
             style={{
