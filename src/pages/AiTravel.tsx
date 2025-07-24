@@ -156,33 +156,55 @@ const AiTravel = () => {
     loading: mobileChatLoading,
   } = useChatAI([]);
 
+  // Enhanced message sending for desktop with budget information
+  const sendEnhancedMessage = (message: string, includeBudget: boolean = true) => {
+    let enhancedMessage = message;
+    
+    if (includeBudget && !isDesktop) {
+      // For mobile, send as-is
+      sendMobileChatMessage(message);
+      return;
+    }
+    
+    if (includeBudget && isDesktop) {
+      // For desktop, always include budget context in the message to trigger detailed itinerary
+      const budgetText = budget >= 1000 ? `$${(budget/1000).toFixed(0)}k` : `$${budget}`;
+      const tripTypeText = tripType === "staycation" ? "staycation" : "vacation";
+      
+      // Enhance the message to include budget context and ensure itinerary generation
+      enhancedMessage = `${message}. This is for a ${tripTypeText} with a total budget of approximately ${budgetText}. Please provide a complete day-by-day itinerary with detailed recommendations that fit within this budget.`;
+    }
+    
+    sendMobileChatMessage(enhancedMessage);
+  };
+
   const handleMobileSubmit = (message: string) => {
     if (message.trim()) {
       trackSearch(message);
       setHasStartedChat(true);
-      sendMobileChatMessage(message);
+      sendEnhancedMessage(message, false); // Mobile doesn't need budget enhancement
       setMobileInput("");
     }
   };
 
   const handleDesktopSubmit = (message: string) => {
     if (message.trim()) {
-      // For desktop, start a new chat session
+      // For desktop, always start a chat session with budget-aware enhanced messaging
       trackSearch(message);
       setHasStartedChat(true);
-      sendMobileChatMessage(message);
-      setMobileInput(message);
+      sendEnhancedMessage(message, true); // Desktop gets budget enhancement
+      setMobileInput("");
     }
   };
 
-  // Handler for new chat sessions from welcome screen
+  // Handler for new chat sessions from welcome screen and suggested prompts
   const handleNewChatFromWelcome = (question: string) => {
     if (question.trim()) {
       // Clear existing chat history before starting new session
       clearMobileChat();
-      // Start new chat session
+      // Start new chat session with appropriate enhancement
       setHasStartedChat(true);
-      sendMobileChatMessage(question);
+      sendEnhancedMessage(question, isDesktop);
     }
   };
 
@@ -616,7 +638,7 @@ const AiTravel = () => {
                         className="block w-full text-left border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
                         onClick={() => {
                           setHasStartedChat(true);
-                          sendMobileChatMessage(prompt);
+                          sendEnhancedMessage(prompt, true); // Desktop gets budget enhancement
                         }}
                       >
                         {prompt}
@@ -662,12 +684,12 @@ const AiTravel = () => {
                   onKeyPress={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
-                      handleMobileSubmit(mobileInput);
+                      sendEnhancedMessage(mobileInput, true); // Desktop gets budget enhancement
                     }
                   }}
                 />
                 <Button
-                  onClick={() => handleMobileSubmit(mobileInput)}
+                  onClick={() => sendEnhancedMessage(mobileInput, true)} // Desktop gets budget enhancement
                   disabled={!mobileInput.trim() || mobileChatLoading}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
@@ -727,60 +749,85 @@ const AiTravel = () => {
                   </div>
                 </div>
               ) : (
-                // Dynamic Content Area
+                // Dynamic Content Area - Always show detailed itineraries
                 <div className="space-y-6">
                   {mobileChatMessages.map((message) => (
                     <div key={`canvas-${message.id}`}>
-                      {/* Render Rich Components Based on Message Type */}
-                      {message.isDetailedItinerary && message.detailedItinerary && (
-                        <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                      {/* Always render detailed itinerary cards for desktop Canvas */}
+                      {message.isDetailedItinerary && message.detailedItinerary ? (
+                        <div className="w-full">
                           <DetailedItineraryCard 
                             itinerary={message.detailedItinerary}
                             destination={message.mapLocation}
-                            onFollowUpClick={(question) => handleMobileSubmit(question)}
+                            onFollowUpClick={(question) => sendEnhancedMessage(question, true)}
                           />
                         </div>
-                      )}
-
-                      {/* Trip Cards */}
-                      {message.tripCards && message.tripCards.length > 0 && (
+                      ) : message.response && !message.loading ? (
+                        // Fallback for non-itinerary responses - still show structured content
                         <div className="space-y-4">
-                          <h3 className="text-lg font-semibold text-white">Recommendations</h3>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {message.tripCards.map((card, idx) => (
-                              <Card key={idx} className="bg-slate-800 border-slate-700">
-                                <div className="p-4">
-                                  <div className="flex items-center gap-2 mb-2">
-                                    {card.type === 'hotel' && <Hotel className="w-4 h-4 text-blue-400" />}
-                                    {card.type === 'flight' && <Plane className="w-4 h-4 text-green-400" />}
-                                    {card.type === 'activity' && <Star className="w-4 h-4 text-yellow-400" />}
-                                    <h4 className="font-semibold text-white">{card.title}</h4>
-                                  </div>
-                                  <p className="text-sm text-slate-300 mb-3">{card.description}</p>
-                                  <div className="flex items-center justify-between">
-                                    {card.price && (
-                                      <span className="text-lg font-bold text-green-400">{card.price}</span>
-                                    )}
-                                    {card.rating && (
-                                      <div className="flex items-center gap-1">
-                                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                        <span className="text-sm text-slate-300">{card.rating}</span>
+                          <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                            <h3 className="text-lg font-semibold text-white mb-4">Travel Recommendations</h3>
+                            <p className="text-slate-300 mb-4">{message.response}</p>
+                            
+                            {/* Show any trip cards */}
+                            {message.tripCards && message.tripCards.length > 0 && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                {message.tripCards.map((card, idx) => (
+                                  <Card key={idx} className="bg-slate-700 border-slate-600">
+                                    <div className="p-4">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        {card.type === 'hotel' && <Hotel className="w-4 h-4 text-blue-400" />}
+                                        {card.type === 'flight' && <Plane className="w-4 h-4 text-green-400" />}
+                                        {card.type === 'activity' && <Star className="w-4 h-4 text-yellow-400" />}
+                                        <h4 className="font-semibold text-white">{card.title}</h4>
                                       </div>
-                                    )}
-                                  </div>
-                                  <Button 
-                                    size="sm" 
-                                    className="w-full mt-3 bg-blue-600 hover:bg-blue-700"
-                                  >
-                                    Book on Utrippin
-                                    <ExternalLink className="w-3 h-3 ml-1" />
-                                  </Button>
+                                      <p className="text-sm text-slate-300 mb-3">{card.description}</p>
+                                      <div className="flex items-center justify-between">
+                                        {card.price && (
+                                          <span className="text-lg font-bold text-green-400">{card.price}</span>
+                                        )}
+                                        {card.rating && (
+                                          <div className="flex items-center gap-1">
+                                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                            <span className="text-sm text-slate-300">{card.rating}</span>
+                                          </div>
+                                        )}
+                                      </div>
+                                      <Button 
+                                        size="sm" 
+                                        className="w-full mt-3 bg-blue-600 hover:bg-blue-700"
+                                      >
+                                        Book on Utrippin
+                                        <ExternalLink className="w-3 h-3 ml-1" />
+                                      </Button>
+                                    </div>
+                                  </Card>
+                                ))}
+                              </div>
+                            )}
+                            
+                            {/* Follow-up questions */}
+                            {message.quickReplies && message.quickReplies.length > 0 && (
+                              <div className="mt-4">
+                                <h4 className="text-sm font-semibold text-white mb-2">Continue Planning:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {message.quickReplies.map((reply, idx) => (
+                                    <Button
+                                      key={idx}
+                                      variant="outline"
+                                      size="sm"
+                                      className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
+                                      onClick={() => sendEnhancedMessage(reply, true)}
+                                    >
+                                      {reply}
+                                    </Button>
+                                  ))}
                                 </div>
-                              </Card>
-                            ))}
+                              </div>
+                            )}
                           </div>
                         </div>
-                      )}
+                      ) : null}
 
                       {/* Map Display */}
                       {message.showMap && message.mapLocation && (
