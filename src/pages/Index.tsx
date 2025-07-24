@@ -4,7 +4,7 @@ import { SEOHead } from '@/components/SEOHead';
 import LuxuryNav from '@/components/LuxuryNav';
 import EnhancedHeroSection from '@/components/EnhancedHeroSection';
 import SwipeToTravelHero from '@/components/SwipeToTravelHero';
-import FlightSearchHero from '@/components/FlightSearchHero';
+import SmartTravelExperts from '@/components/SmartTravelExperts';
 import WhatWeDoSection from '@/components/WhatWeDoSection';
 import GuideToTravel from '@/components/GuideToTravel';
 import PursuitOfFeeling from '@/components/PursuitOfFeeling';
@@ -39,7 +39,7 @@ const Index = () => {
       <LuxuryNav />
       <EnhancedHeroSection />
       <SwipeToTravelHero />
-      <FlightSearchHero />
+      <SmartTravelExperts />
       <WhatWeDoSection />
       <GuideToTravel />
       <PursuitOfFeeling />
