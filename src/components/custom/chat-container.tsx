@@ -1,12 +1,7 @@
 import { cn } from '@/lib/utils';
 import { ReactNode, useState, useEffect, Fragment, useRef } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
 import { Heart, Pin, Share2, Smile, Send, Users } from 'lucide-react';
-
-// Initialize Supabase client (you might want to move this to a separate file)
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 export interface Message {
   id: string;
@@ -90,7 +85,6 @@ export const ChatContainer = ({
 
   // Real-time message subscription
   useEffect(() => {
-    if (!supabaseUrl || !supabaseKey) return;
 
     const channel = supabase
       .channel('travel-chat')
@@ -124,7 +118,7 @@ export const ChatContainer = ({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [userId, buddyId, groupId, supabaseUrl, supabaseKey]);
+  }, [userId, buddyId, groupId]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -159,15 +153,13 @@ export const ChatContainer = ({
     setMessages(prev => [...prev, optimisticMessage]);
     setNewMessage('');
 
-    // Send to Supabase if available
-    if (supabaseUrl && supabaseKey) {
-      try {
-        await supabase
-          .from('travel_chat')
-          .insert([messageData]);
-      } catch (error) {
-        console.error('Error sending message:', error);
-      }
+    // Send to Supabase
+    try {
+      await supabase
+        .from('travel_chat')
+        .insert([messageData]);
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
 
     // Simulate bot response for demo
@@ -201,22 +193,20 @@ export const ChatContainer = ({
       return msg;
     }));
 
-    // Update in database if available
-    if (supabaseUrl && supabaseKey) {
-      try {
-        const message = messages.find(m => m.id === messageId);
-        if (message) {
-          const reactions = { ...message.reactions };
-          reactions[emoji] = (reactions[emoji] || 0) + 1;
-          
-          await supabase
-            .from('travel_chat')
-            .update({ reactions })
-            .eq('id', messageId);
-        }
-      } catch (error) {
-        console.error('Error updating reaction:', error);
+    // Update in database
+    try {
+      const message = messages.find(m => m.id === messageId);
+      if (message) {
+        const reactions = { ...message.reactions };
+        reactions[emoji] = (reactions[emoji] || 0) + 1;
+        
+        await supabase
+          .from('travel_chat')
+          .update({ reactions })
+          .eq('id', messageId);
       }
+    } catch (error) {
+      console.error('Error updating reaction:', error);
     }
 
     setShowEmojiPickerFor(null);
@@ -229,16 +219,14 @@ export const ChatContainer = ({
       msg.id === messageId ? { ...msg, pinned: !msg.pinned } : msg
     ));
 
-    if (supabaseUrl && supabaseKey) {
-      try {
-        const message = messages.find(m => m.id === messageId);
-        await supabase
-          .from('travel_chat')
-          .update({ pinned: !message?.pinned })
-          .eq('id', messageId);
-      } catch (error) {
-        console.error('Error updating pin status:', error);
-      }
+    try {
+      const message = messages.find(m => m.id === messageId);
+      await supabase
+        .from('travel_chat')
+        .update({ pinned: !message?.pinned })
+        .eq('id', messageId);
+    } catch (error) {
+      console.error('Error updating pin status:', error);
     }
   };
 
