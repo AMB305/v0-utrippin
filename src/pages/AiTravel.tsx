@@ -688,18 +688,33 @@ const AiTravel = () => {
               <div className="flex gap-2">
                 <Input
                   value={mobileInput}
-                  onChange={(e) => setMobileInput(e.target.value)}
+                  onChange={(e) => {
+                    console.log('AiTravel: Input onChange - new value:', e.target.value);
+                    console.log('AiTravel: Input onChange - previous mobileInput:', mobileInput);
+                    setMobileInput(e.target.value);
+                  }}
                   placeholder="Ask me about your travel plans..."
                   className="flex-1 bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                   onKeyPress={(e) => {
+                    console.log('AiTravel: onKeyPress - key:', e.key);
+                    console.log('AiTravel: onKeyPress - mobileInput value:', mobileInput);
+                    console.log('AiTravel: onKeyPress - input element value:', (e.target as HTMLInputElement).value);
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
+                      console.log('AiTravel: Enter pressed, calling sendEnhancedMessage with:', mobileInput);
                       sendEnhancedMessage(mobileInput, true); // Desktop gets budget enhancement
                     }
                   }}
                 />
                 <Button
-                  onClick={() => sendEnhancedMessage(mobileInput, true)} // Desktop gets budget enhancement
+                  onClick={() => {
+                    console.log('AiTravel: Send button clicked');
+                    console.log('AiTravel: mobileInput value:', mobileInput);
+                    console.log('AiTravel: mobileInput.trim():', mobileInput.trim());
+                    console.log('AiTravel: mobileChatLoading:', mobileChatLoading);
+                    console.log('AiTravel: button disabled?', !mobileInput.trim() || mobileChatLoading);
+                    sendEnhancedMessage(mobileInput, true); // Desktop gets budget enhancement
+                  }}
                   disabled={!mobileInput.trim() || mobileChatLoading}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
