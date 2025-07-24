@@ -159,14 +159,6 @@ const AiTravel = () => {
 
   // Enhanced message sending for desktop with budget information
   const sendEnhancedMessage = (message: string, includeBudget: boolean = true) => {
-    console.log('=== sendEnhancedMessage START ===');
-    console.log('AiTravel: sendEnhancedMessage called with message:', message);
-    console.log('AiTravel: includeBudget:', includeBudget);
-    console.log('AiTravel: isDesktop:', isDesktop);
-    console.log('AiTravel: budget:', budget);
-    console.log('AiTravel: tripType:', tripType);
-    console.log('AiTravel: sendMobileChatMessage function exists:', !!sendMobileChatMessage);
-    
     let enhancedMessage = message;
     
     if (includeBudget && isDesktop) {
@@ -176,16 +168,10 @@ const AiTravel = () => {
       
       // Enhance the message to include budget context and ensure itinerary generation
       enhancedMessage = `${message}. This is for a ${tripTypeText} with a total budget of approximately ${budgetText}. Please provide a complete day-by-day itinerary with detailed recommendations that fit within this budget.`;
-      console.log('AiTravel: Enhanced message:', enhancedMessage);
-    } else {
-      console.log('AiTravel: Using original message (no enhancement)');
     }
     
     // Send the message (enhanced or original)
-    console.log('AiTravel: About to call sendMobileChatMessage with:', enhancedMessage);
     sendMobileChatMessage(enhancedMessage);
-    console.log('AiTravel: sendMobileChatMessage completed');
-    console.log('=== sendEnhancedMessage END ===');
   };
 
   const handleMobileSubmit = (message: string) => {
@@ -688,33 +674,18 @@ const AiTravel = () => {
               <div className="flex gap-2">
                 <Input
                   value={mobileInput}
-                  onChange={(e) => {
-                    console.log('AiTravel: Input onChange - new value:', e.target.value);
-                    console.log('AiTravel: Input onChange - previous mobileInput:', mobileInput);
-                    setMobileInput(e.target.value);
-                  }}
+                  onChange={(e) => setMobileInput(e.target.value)}
                   placeholder="Ask me about your travel plans..."
                   className="flex-1 bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                   onKeyPress={(e) => {
-                    console.log('AiTravel: onKeyPress - key:', e.key);
-                    console.log('AiTravel: onKeyPress - mobileInput value:', mobileInput);
-                    console.log('AiTravel: onKeyPress - input element value:', (e.target as HTMLInputElement).value);
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
-                      console.log('AiTravel: Enter pressed, calling sendEnhancedMessage with:', mobileInput);
                       sendEnhancedMessage(mobileInput, true); // Desktop gets budget enhancement
                     }
                   }}
                 />
                 <Button
-                  onClick={() => {
-                    console.log('AiTravel: Send button clicked');
-                    console.log('AiTravel: mobileInput value:', mobileInput);
-                    console.log('AiTravel: mobileInput.trim():', mobileInput.trim());
-                    console.log('AiTravel: mobileChatLoading:', mobileChatLoading);
-                    console.log('AiTravel: button disabled?', !mobileInput.trim() || mobileChatLoading);
-                    sendEnhancedMessage(mobileInput, true); // Desktop gets budget enhancement
-                  }}
+                  onClick={() => sendEnhancedMessage(mobileInput, true)} // Desktop gets budget enhancement
                   disabled={!mobileInput.trim() || mobileChatLoading}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
