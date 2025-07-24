@@ -32,7 +32,7 @@ const BudgetPlannerTool = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight text-white">
             Plan Your Perfect
           </h2>
           <div className="text-white text-xl font-bold mb-8">
@@ -136,7 +136,7 @@ const BudgetPlannerTool = () => {
         <div className="text-center">
           <Button
             onClick={handleGenerateItinerary}
-            className="bg-white text-black hover:bg-gray-100 px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300"
           >
             Generate Perfect Itinerary
           </Button>

@@ -4,15 +4,41 @@ import UtrippinLogo from "@/components/UtrippinLogo";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Footer = () => {
   const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleNewsletterSignup = (e: React.FormEvent) => {
+  const handleNewsletterSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement newsletter signup
-    console.log('Newsletter signup:', email);
-    setEmail('');
+    
+    if (!email || !email.includes('@')) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('newsletter-signup', {
+        body: { email }
+      });
+
+      if (error) {
+        console.error('Newsletter signup error:', error);
+        toast.error('Failed to subscribe. Please try again.');
+      } else {
+        toast.success('Successfully subscribed to our newsletter!');
+        setEmail('');
+      }
+    } catch (error) {
+      console.error('Newsletter signup error:', error);
+      toast.error('Failed to subscribe. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const navigationLinks = [
@@ -58,9 +84,10 @@ const Footer = () => {
               />
               <Button
                 type="submit"
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 font-medium tracking-wider uppercase rounded-none"
+                disabled={isSubmitting}
+                className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white px-6 py-3 font-medium tracking-wider uppercase rounded-none"
               >
-                Sign-Up
+                {isSubmitting ? 'Subscribing...' : 'Sign-Up'}
               </Button>
             </form>
             
