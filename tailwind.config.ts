@@ -83,7 +83,11 @@ export default {
 					navy: 'hsl(var(--travel-navy))',
 					gray: 'hsl(var(--travel-gray))',
 					light: 'hsl(var(--travel-light))'
-				}
+				},
+				tinderOrange: '#FF5864',
+				uttippPurple: '#8A2BE2',
+				sunsetYellow: '#FFB400',
+				backgroundDark: '#121212'
 			},
 			backgroundImage: {
 				'gradient-hero': 'var(--gradient-hero)',
@@ -96,7 +100,8 @@ export default {
 				'soft': 'var(--shadow-soft)',
 				'medium': 'var(--shadow-medium)',
 				'large': 'var(--shadow-large)',
-				'glow': 'var(--shadow-glow)'
+				'glow': 'var(--shadow-glow)',
+				'2xl-soft': '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)'
 			},
 			transitionTimingFunction: {
 				'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',

@@ -11,6 +11,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { ChatContainer } from "@/components/custom/ChatContainer";
 import SignUpWall from "@/components/SignUpWall";
+import TravelBuddyCard from "@/components/custom/TravelBuddyCard";
 
 // Travel buddy profile interface
 interface TravelBuddy {
@@ -161,120 +162,24 @@ const TravelBuddiesNew = () => {
 
   // Discovery view with swipeable cards
   const DiscoveryView = () => (
-    <div className="flex flex-col h-full">
-      {/* Search and filters */}
-      <div className="p-4 space-y-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-          <Input
-            placeholder="Search by destination..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-gray-800 border-gray-700 text-white placeholder-gray-400"
-          />
-        </div>
-        
-        <div className="flex gap-2 overflow-x-auto no-scrollbar">
-          <Badge variant="secondary" className="bg-orange-500 text-white whitespace-nowrap">
-            All
-          </Badge>
-          <Badge variant="outline" className="border-gray-700 text-gray-300 whitespace-nowrap">
-            Looking for Buddy
-          </Badge>
-          <Badge variant="outline" className="border-gray-700 text-gray-300 whitespace-nowrap">
-            Join Group
-          </Badge>
-          <Badge variant="outline" className="border-gray-700 text-gray-300 whitespace-nowrap">
-            Solo Traveler
-          </Badge>
-        </div>
-      </div>
-
-      {/* Main card stack */}
-      <div className="flex-1 flex items-center justify-center p-4">
-        {currentBuddy && (
-          <Card className="w-full max-w-sm bg-gray-800 border-gray-700 relative overflow-hidden">
-            <div className="relative h-80">
-              <img
-                src={currentBuddy.photo_url}
-                alt={currentBuddy.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-4 right-4">
-                <Badge className="bg-orange-500 text-white">
-                  {currentBuddy.compatibility}% Match
-                </Badge>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                <h3 className="text-white text-xl font-bold">
-                  {currentBuddy.name}, {currentBuddy.age}
-                </h3>
-                <div className="flex items-center gap-1 text-gray-300 text-sm">
-                  <MapPin className="w-3 h-3" />
-                  {currentBuddy.location}
-                </div>
-              </div>
-            </div>
-            
-            <CardContent className="p-4 text-white">
-              <p className="text-sm text-gray-300 mb-3">{currentBuddy.bio}</p>
-              
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400">Travel Style:</span>
-                  <Badge variant="outline" className="border-orange-500 text-orange-400">
-                    {currentBuddy.travel_style}
-                  </Badge>
-                </div>
-                
-                <div className="flex flex-wrap gap-1">
-                  {currentBuddy.interests.map((interest) => (
-                    <Badge key={interest} variant="secondary" className="text-xs">
-                      {interest}
-                    </Badge>
-                  ))}
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400">Next trips:</span>
-                  <span className="text-xs text-white">
-                    {currentBuddy.upcoming_trips.join(', ')}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      {/* Action buttons */}
-      <div className="flex justify-center gap-8 p-6">
-        <Button
-          variant="outline"
-          size="lg"
-          className="rounded-full w-14 h-14 border-gray-600 hover:border-red-500 hover:bg-red-500/10"
-          onClick={handlePass}
-        >
-          <X className="w-6 h-6 text-gray-400 hover:text-red-500" />
-        </Button>
-        
-        <Button
-          size="lg"
-          className="rounded-full w-16 h-16 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600"
-          onClick={handleLike}
-        >
-          <Heart className="w-6 h-6 text-white" />
-        </Button>
-        
-        <Button
-          variant="outline"
-          size="lg"
-          className="rounded-full w-14 h-14 border-gray-600 hover:border-blue-500 hover:bg-blue-500/10"
-          onClick={() => handleMessage(currentBuddy)}
-        >
-          <MessageCircle className="w-6 h-6 text-gray-400 hover:text-blue-500" />
-        </Button>
-      </div>
+    <div className="min-h-screen bg-backgroundDark flex items-center justify-center p-4">
+      {currentBuddy && (
+        <TravelBuddyCard
+          user={{
+            id: currentBuddy.id,
+            name: currentBuddy.name,
+            age: currentBuddy.age,
+            photo: currentBuddy.photo_url,
+            match: currentBuddy.compatibility || 0,
+            location: currentBuddy.location,
+            bio: currentBuddy.bio,
+            tags: [...currentBuddy.interests, currentBuddy.travel_style]
+          }}
+          onLike={handleLike}
+          onDislike={handlePass}
+          onChat={() => handleMessage(currentBuddy)}
+        />
+      )}
     </div>
   );
 
@@ -449,112 +354,14 @@ const TravelBuddiesNew = () => {
   );
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Desktop Layout */}
+    <div className="min-h-screen bg-backgroundDark">
+      {/* Desktop Layout - Show only the TravelBuddyCard */}
       <div className="hidden md:block">
-        <div className="container mx-auto px-6 py-8">
-          <DesktopHeader />
-          
-          <div className="grid grid-cols-12 gap-6 h-[calc(100vh-200px)]">
-            {/* Left sidebar - Navigation */}
-            <div className="col-span-3">
-              <Card className="bg-gray-900 border-gray-800 h-full">
-                <CardContent className="p-4">
-                  <div className="space-y-2">
-                    <Button
-                      variant={activeView === 'discover' ? 'default' : 'ghost'}
-                      className="w-full justify-start"
-                      onClick={() => setActiveView('discover')}
-                    >
-                      <Search className="w-4 h-4 mr-2" />
-                      Discover
-                    </Button>
-                    <Button
-                      variant={activeView === 'matches' ? 'default' : 'ghost'}
-                      className="w-full justify-start"
-                      onClick={() => setActiveView('matches')}
-                    >
-                      <Heart className="w-4 h-4 mr-2" />
-                      Matches
-                    </Button>
-                    <Button
-                      variant={activeView === 'chat' ? 'default' : 'ghost'}
-                      className="w-full justify-start"
-                      onClick={() => setActiveView('chat')}
-                    >
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Chat
-                    </Button>
-                    <Button
-                      variant={activeView === 'profile' ? 'default' : 'ghost'}
-                      className="w-full justify-start"
-                      onClick={() => setActiveView('profile')}
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Profile
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Main content */}
-            <div className="col-span-6">
-              <Card className="bg-gray-900 border-gray-800 h-full">
-                <CardContent className="p-0 h-full">
-                  {activeView === 'discover' && <DiscoveryView />}
-                  {activeView === 'matches' && <MatchesView />}
-                  {activeView === 'chat' && (
-                    user && selectedBuddy ? (
-                      <ChatContainer
-                        userId={user.id}
-                        buddyId={selectedBuddy.id}
-                        variant="desktop"
-                        enableReactions={true}
-                        enablePinning={true}
-                        enableSharing={true}
-                      />
-                    ) : (
-                      <div className="h-full flex items-center justify-center">
-                        <div className="text-center text-gray-400">
-                          <p>{!user ? 'Please sign in to start chatting' : 'Select a travel buddy to start chatting'}</p>
-                        </div>
-                      </div>
-                    )
-                  )}
-                  {activeView === 'profile' && <ProfileView />}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Right sidebar - Activity feed */}
-            <div className="col-span-3">
-              <Card className="bg-gray-900 border-gray-800 h-full">
-                <CardContent className="p-4">
-                  <h3 className="text-white font-semibold mb-4">Recent Activity</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                      <span className="text-sm text-gray-300">New match with Alex</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm text-gray-300">Maria joined your trip</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm text-gray-300">New message from James</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
+        <DiscoveryView />
       </div>
 
       {/* Mobile Layout */}
-      <div className="md:hidden h-screen flex flex-col">
+      <div className="md:hidden h-screen flex flex-col bg-backgroundDark">
         <MobileHeader />
         
         <div className="flex-1 overflow-hidden">
