@@ -80,11 +80,11 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
   };
 
   return (
-    <div className="bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50 shadow-sm">
+    <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       {/* Top Navigation Line - Logo, Search, User Actions, Mobile Menu */}
-      <div className="border-b border-border/50">
+      <div className="border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-12">
+          <div className="flex items-center justify-between h-14">
             {/* Left: Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex items-center flex-shrink-0">
@@ -93,7 +93,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
             </div>
 
             {/* Center: Search Bar */}
-            <div className="hidden lg:block flex-1 max-w-md mx-6">
+            <div className="hidden lg:block flex-1 max-w-lg mx-8">
               <form onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
@@ -103,11 +103,11 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 }
               }}>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <Input 
                     name="search"
                     placeholder="Search destinations, hotels, flights..." 
-                    className="pl-10 bg-gray-50 border-gray-200 h-9 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="pl-12 pr-4 py-3 bg-gray-50 border-gray-200 h-12 rounded-full text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white shadow-sm"
                   />
                 </div>
               </form>
@@ -298,9 +298,9 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
       </div>
 
       {/* Main Navigation Line - Desktop Only */}
-      <div className="hidden lg:block">
+      <div className="hidden lg:block bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between py-3">
+          <div className="flex items-center justify-between py-2">
             {/* Main Navigation - Desktop */}
             <nav className="flex items-center gap-6">
               {bookingTabs.slice(0, 5).map((tab) => (
@@ -311,10 +311,10 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 >
                   <Button 
                     variant="ghost" 
-                    className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
+                    className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 ${
                       currentActiveTab === tab.key
-                        ? 'text-black bg-gray-100 shadow-sm'
-                        : 'text-gray-700 hover:text-black hover:bg-gray-50'
+                        ? 'text-blue-600 bg-blue-50 border border-blue-200'
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                     }`}
                   >
                     {tab.icon}
@@ -327,10 +327,10 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               <Link to="/ai-travel">
                 <Button 
                   variant="ghost" 
-                  className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
+                  className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 ${
                     currentActiveTab === 'ai'
-                      ? 'text-black bg-gray-100 shadow-sm'
-                      : 'text-gray-700 hover:text-black hover:bg-gray-50'
+                      ? 'text-blue-600 bg-blue-50 border border-blue-200'
+                      : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                   }`}
                 >
                   <Bot className="w-4 h-4" />
@@ -341,7 +341,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               <Link to="/travel-buddies">
                 <Button 
                   variant="ghost" 
-                  className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50"
+                  className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
                 >
                   <Users className="w-4 h-4" />
                   Travel Buddies
@@ -351,7 +351,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               {/* More Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50">
+                  <Button variant="ghost" className="flex items-center gap-1 text-sm font-semibold px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
                     More
                     <ChevronDown className="w-4 h-4" />
                   </Button>

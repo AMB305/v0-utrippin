@@ -1,22 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Plane, MapPin, Calendar } from 'lucide-react';
+import { Plane, MapPin, Calendar, Users, ArrowLeftRight } from 'lucide-react';
 import SimpleAirportAutocomplete from './SimpleAirportAutocomplete';
 import InlineAirportDropdown from './InlineAirportDropdown';
 import { DuffelAirport } from '@/lib/duffel';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-// Import custom icons
-import hotelIcon from '@/assets/hotel-icon.png';
-import flightIcon from '@/assets/flight-icon.png';
-import carIcon from '@/assets/car-icon.png';
-import packageIcon from '@/assets/package-icon.png';
 
 export default function ExpediaWidget() {
-  const [activeTab, setActiveTab] = useState("Flights");
+  const [tripType, setTripType] = useState("round-trip");
   const [fromAirport, setFromAirport] = useState<DuffelAirport | null>(null);
   const [toAirport, setToAirport] = useState<DuffelAirport | null>(null);
-  const [destination, setDestination] = useState("");
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
+  const [passengers, setPassengers] = useState(1);
+  const [cabinClass, setCabinClass] = useState("Economy");
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
@@ -24,18 +20,18 @@ export default function ExpediaWidget() {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'widget_view', {
         event_category: 'expedia_widget',
-        event_label: activeTab
+        event_label: 'flights'
       });
     }
 
     // Auto-fill default dates
     const today = new Date();
-    const checkout = new Date(today);
-    checkout.setDate(today.getDate() + 3);
+    const returnDate = new Date(today);
+    returnDate.setDate(today.getDate() + 7);
     
     setCheckInDate(today.toISOString().split('T')[0]);
-    setCheckOutDate(checkout.toISOString().split('T')[0]);
-  }, [activeTab]);
+    setCheckOutDate(returnDate.toISOString().split('T')[0]);
+  }, []);
 
   const handleFlightSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -68,225 +64,198 @@ export default function ExpediaWidget() {
     window.open(finalUrl, '_blank');
   };
 
-  const handleHotelSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    if (!destination) {
-      alert('Please enter a destination');
-      return;
-    }
 
-    const expediaUrl = `https://www.expedia.com/Hotel-Search?destination=${encodeURIComponent(destination)}&startDate=${checkInDate}&endDate=${checkOutDate}&rooms=1&adults=1&affiliate_id=101486313`;
-    const finalUrl = `https://www.dpbolvw.net/click-101486313-15754452?url=${encodeURIComponent(expediaUrl)}`;
-    window.open(finalUrl, '_blank');
-  };
-
-  const handleGenericSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const finalUrl = `https://www.dpbolvw.net/click-101486313-15754452`;
-    window.open(finalUrl, '_blank');
+  const swapAirports = () => {
+    setFromAirport(toAirport);
+    setToAirport(fromAirport);
   };
 
   const renderFlightForm = () => (
-    <form onSubmit={handleFlightSubmit} className="space-y-6">
-      {/* From Field */}
-      <div className="relative">
-        <Plane className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-        {isMobile ? (
-          <InlineAirportDropdown
-            placeholder="Departure city or airport"
-            value={fromAirport}
-            onChange={setFromAirport}
-            inputClassName="pl-12 pr-4 py-5 w-full border border-gray-200 rounded-xl text-base bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-          />
-        ) : (
-          <SimpleAirportAutocomplete
-            placeholder="Departure city or airport"
-            value={fromAirport}
-            onChange={setFromAirport}
-            className="pl-12 pr-4 py-5 w-full border border-gray-200 rounded-xl text-base bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-          />
-        )}
+    <div className="bg-white rounded-2xl shadow-xl p-6 max-w-6xl mx-auto">
+      {/* Trip Type Selection */}
+      <div className="flex gap-6 mb-6">
+        {['round-trip', 'one-way', 'multi-destination'].map((type) => (
+          <label key={type} className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="tripType"
+              value={type}
+              checked={tripType === type}
+              onChange={(e) => setTripType(e.target.value)}
+              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+            />
+            <span className="text-sm font-medium text-gray-700 capitalize">
+              {type.replace('-', ' ')}
+            </span>
+          </label>
+        ))}
       </div>
 
-      {/* To Field */}
-      <div className="relative">
-        <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-        {isMobile ? (
-          <InlineAirportDropdown
-            placeholder="Destination city or airport"
-            value={toAirport}
-            onChange={setToAirport}
-            inputClassName="pl-12 pr-4 py-5 w-full border border-gray-200 rounded-xl text-base bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-          />
-        ) : (
-          <SimpleAirportAutocomplete
-            placeholder="Destination city or airport"
-            value={toAirport}
-            onChange={setToAirport}
-            className="pl-12 pr-4 py-5 w-full border border-gray-200 rounded-xl text-base bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-          />
-        )}
-      </div>
+      <form onSubmit={handleFlightSubmit}>
+        {/* Main Search Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 items-end mb-6">
+          {/* From Airport */}
+          <div className="lg:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
+            <div className="relative">
+              <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              {isMobile ? (
+                <InlineAirportDropdown
+                  placeholder="Departure airport"
+                  value={fromAirport}
+                  onChange={setFromAirport}
+                  inputClassName="pl-10 pr-4 py-4 w-full border border-gray-300 rounded-lg text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                />
+              ) : (
+                <SimpleAirportAutocomplete
+                  placeholder="Departure airport"
+                  value={fromAirport}
+                  onChange={setFromAirport}
+                  className="pl-10 pr-4 py-4 w-full border border-gray-300 rounded-lg text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                />
+              )}
+            </div>
+          </div>
 
-      {/* Dates */}
-      <div className="flex gap-3">
-        <div className="relative w-1/2">
-          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
-          <input
-            type="date"
-            value={checkInDate}
-            onChange={(e) => setCheckInDate(e.target.value)}
-            className="pl-10 pr-3 py-5 w-full border border-gray-200 rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-            required
-          />
+          {/* Swap Button */}
+          <div className="flex justify-center lg:col-span-1">
+            <button
+              type="button"
+              onClick={swapAirports}
+              className="p-2 rounded-full border border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            >
+              <ArrowLeftRight className="w-5 h-5 text-gray-600" />
+            </button>
+          </div>
+
+          {/* To Airport */}
+          <div className="lg:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              {isMobile ? (
+                <InlineAirportDropdown
+                  placeholder="Destination airport"
+                  value={toAirport}
+                  onChange={setToAirport}
+                  inputClassName="pl-10 pr-4 py-4 w-full border border-gray-300 rounded-lg text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                />
+              ) : (
+                <SimpleAirportAutocomplete
+                  placeholder="Destination airport"
+                  value={toAirport}
+                  onChange={setToAirport}
+                  className="pl-10 pr-4 py-4 w-full border border-gray-300 rounded-lg text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Search Button */}
+          <div className="lg:col-span-1">
+            <button 
+              type="submit"
+              className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg"
+            >
+              Find Your Flight
+            </button>
+          </div>
         </div>
-        <div className="relative w-1/2">
-          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
-          <input
-            type="date"
-            value={checkOutDate}
-            onChange={(e) => setCheckOutDate(e.target.value)}
-            className="pl-10 pr-3 py-5 w-full border border-gray-200 rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-            required
-          />
-        </div>
-      </div>
 
-      {/* Search Button */}
-      <button 
-        type="submit"
-        className="w-full py-5 bg-[#1664ff] text-white font-semibold rounded-full text-lg hover:bg-blue-700 transition mt-8"
-      >
-        Search
-      </button>
+        {/* Date and Passenger Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+          {/* Departure Date */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Departure</label>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
+              <input
+                type="date"
+                value={checkInDate}
+                onChange={(e) => setCheckInDate(e.target.value)}
+                className="pl-10 pr-3 py-4 w-full border border-gray-300 rounded-lg text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Return Date */}
+          {tripType === 'round-trip' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Return</label>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
+                <input
+                  type="date"
+                  value={checkOutDate}
+                  onChange={(e) => setCheckOutDate(e.target.value)}
+                  className="pl-10 pr-3 py-4 w-full border border-gray-300 rounded-lg text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                  required
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Passengers */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Passengers</label>
+            <div className="relative">
+              <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
+              <select
+                value={passengers}
+                onChange={(e) => setPassengers(Number(e.target.value))}
+                className="pl-10 pr-3 py-4 w-full border border-gray-300 rounded-lg text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none appearance-none"
+              >
+                {[1, 2, 3, 4, 5, 6].map(num => (
+                  <option key={num} value={num}>{num} {num === 1 ? 'Adult' : 'Adults'}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Cabin Class */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Cabin</label>
+            <select
+              value={cabinClass}
+              onChange={(e) => setCabinClass(e.target.value)}
+              className="px-3 py-4 w-full border border-gray-300 rounded-lg text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none appearance-none"
+            >
+              <option value="Economy">Economy</option>
+              <option value="Premium Economy">Premium Economy</option>
+              <option value="Business">Business</option>
+              <option value="First">First</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Bundle Options */}
+        <div className="border-t border-gray-200 pt-4">
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" className="w-4 h-4 text-green-600 focus:ring-green-500 rounded" />
+              <span className="text-sm text-green-600 font-medium">+ Add hotel</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" className="w-4 h-4 text-green-600 focus:ring-green-500 rounded" />
+              <span className="text-sm text-green-600 font-medium">+ Add car</span>
+            </label>
+          </div>
+        </div>
+      </form>
       
       {/* Expedia Branding */}
       <div className="text-center text-xs text-gray-500 mt-4 pt-3 border-t border-gray-100">
         Powered by <span className="font-semibold">Expedia</span> — Official Utrippin Affiliate Partner
       </div>
-    </form>
+    </div>
   );
 
-  const renderHotelForm = () => (
-    <form onSubmit={handleHotelSubmit} className="space-y-6">
-      {/* Destination Field */}
-      <div className="relative">
-        <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-        <input
-          type="text"
-          placeholder="Where to?"
-          value={destination}
-          onChange={(e) => setDestination(e.target.value)}
-          className="pl-12 pr-4 py-5 w-full border border-gray-200 rounded-xl text-base bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-          required
-        />
-      </div>
 
-      {/* Dates */}
-      <div className="flex gap-3">
-        <div className="relative w-1/2">
-          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
-          <input
-            type="date"
-            value={checkInDate}
-            onChange={(e) => setCheckInDate(e.target.value)}
-            className="pl-10 pr-3 py-5 w-full border border-gray-200 rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-            required
-          />
-        </div>
-        <div className="relative w-1/2">
-          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
-          <input
-            type="date"
-            value={checkOutDate}
-            onChange={(e) => setCheckOutDate(e.target.value)}
-            className="pl-10 pr-3 py-5 w-full border border-gray-200 rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-            required
-          />
-        </div>
-      </div>
-
-      {/* Search Button */}
-      <button 
-        type="submit"
-        className="w-full py-5 bg-[#1664ff] text-white font-semibold rounded-full text-lg hover:bg-blue-700 transition mt-8"
-      >
-        Search
-      </button>
-      
-      {/* Expedia Branding */}
-      <div className="text-center text-xs text-gray-500 mt-4 pt-3 border-t border-gray-100">
-        Powered by <span className="font-semibold">Expedia</span> — Official Utrippin Affiliate Partner
-      </div>
-    </form>
-  );
-
-  const renderGenericForm = () => (
-    <form onSubmit={handleGenericSubmit} className="space-y-6">
-      {/* Destination Field */}
-      <div className="relative">
-        <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-        <input
-          type="text"
-          placeholder="Search destination"
-          className="pl-12 pr-4 py-5 w-full border border-gray-200 rounded-xl text-base bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-          required
-        />
-      </div>
-
-      {/* Dates */}
-      <div className="flex gap-3">
-        <div className="relative w-1/2">
-          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
-          <input
-            type="date"
-            value={checkInDate}
-            onChange={(e) => setCheckInDate(e.target.value)}
-            className="pl-10 pr-3 py-5 w-full border border-gray-200 rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-            required
-          />
-        </div>
-        <div className="relative w-1/2">
-          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
-          <input
-            type="date"
-            value={checkOutDate}
-            onChange={(e) => setCheckOutDate(e.target.value)}
-            className="pl-10 pr-3 py-5 w-full border border-gray-200 rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:bg-white"
-            required
-          />
-        </div>
-      </div>
-
-      {/* Search Button */}
-      <button 
-        type="submit"
-        className="w-full py-5 bg-[#1664ff] text-white font-semibold rounded-full text-lg hover:bg-blue-700 transition mt-8"
-      >
-        Search {activeTab}
-      </button>
-      
-      {/* Expedia Branding */}
-      <div className="text-center text-xs text-gray-500 mt-4 pt-3 border-t border-gray-100">
-        Powered by <span className="font-semibold">Expedia</span> — Official Utrippin Affiliate Partner
-      </div>
-    </form>
-  );
-
-  const forms = {
-    Flights: renderFlightForm(),
-    Stays: renderHotelForm(),
-    Packages: renderGenericForm(),
-    Cars: renderGenericForm(),
-  };
 
   return (
-    <div className="w-full max-w-md mx-auto p-8 bg-white rounded-xl shadow">
-      {/* Form Content */}
-      <div className="space-y-4">
-        {forms[activeTab as keyof typeof forms]}
-      </div>
+    <div className="w-full">
+      {renderFlightForm()}
       
       {/* CJ Affiliate Pixel */}
       <img src="https://www.lduhtrp.net/image-101486313-15754452" width="1" height="1" style={{border: 0}} alt="" />
