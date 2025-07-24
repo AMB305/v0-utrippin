@@ -58,19 +58,30 @@ export const ChatAssistant = () => {
   }, [aiMessages]);
 
   const handleSendMessage = async (message: string) => {
-    console.log('ChatAssistant: handleSendMessage called with:', message);
-    console.log('ChatAssistant: sendMessage function:', sendMessage);
+    console.log('=== ChatAssistant handleSendMessage START ===');
+    console.log('ChatAssistant: handleSendMessage called with message:', message);
+    console.log('ChatAssistant: message length:', message.length);
+    console.log('ChatAssistant: sendMessage function exists:', !!sendMessage);
     console.log('ChatAssistant: loading state:', loading);
-    console.log('ChatAssistant: current messages before send:', aiMessages);
+    console.log('ChatAssistant: current aiMessages before send:', aiMessages);
+    console.log('ChatAssistant: current displayMessages before send:', displayMessages);
+    
+    if (!message || message.trim().length === 0) {
+      console.log('ChatAssistant: Empty message, aborting');
+      return;
+    }
     
     try {
+      console.log('ChatAssistant: About to call sendMessage...');
       await sendMessage(message);
       console.log('ChatAssistant: sendMessage completed successfully');
     } catch (error) {
       console.error('ChatAssistant: Error in handleSendMessage:', error);
     }
     
-    console.log('ChatAssistant: current messages after send:', aiMessages);
+    console.log('ChatAssistant: current aiMessages after send:', aiMessages);
+    console.log('ChatAssistant: current displayMessages after send:', displayMessages);
+    console.log('=== ChatAssistant handleSendMessage END ===');
   };
 
   return (
