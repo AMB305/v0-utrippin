@@ -24,6 +24,7 @@ interface Props {
 }
 
 import { useAuth } from '@/hooks/useAuth';
+import { KeilaThinking } from '@/components/KeilaThinking';
 
 // Keila AI Assistant ID (fixed for all users)
 const KEILA_AI_ID = '00000000-0000-0000-0000-000000000002';
@@ -254,30 +255,80 @@ export const ChatContainer = ({
   return (
     <div className="flex flex-col bg-zinc-900 rounded-xl border border-white/10 shadow-xl">
       <div className={containerStyles}>
-        {messages.map(msg => (
-          <div key={msg.id} className={`mb-3 flex ${msg.sender_id === currentUserId ? 'justify-end' : 'justify-start'}`}>
-            <div className={`relative max-w-sm px-4 py-2 rounded-lg text-sm whitespace-pre-wrap shadow-md ${msg.sender_id === currentUserId ? 'bg-blue-600 text-white' : 'bg-zinc-800 text-white'}`}>
-              {msg.message}
-              <div className="text-[10px] text-right mt-1 text-gray-400">
-                {formatDistanceToNow(new Date(msg.sent_at), { addSuffix: true })}
-              </div>
-              <div className="absolute -top-2 -right-2 flex gap-1">
-                {enablePinning && <button title="Pin" className="text-xs bg-zinc-700 px-1 rounded">📌</button>}
-                {enableReactions && <button title="React" className="text-xs bg-zinc-700 px-1 rounded">😊</button>}
-                {enableSharing && <button title="Share" className="text-xs bg-zinc-700 px-1 rounded">🔗</button>}
+        {messages.map((msg, index) => (
+          <div key={msg.id}>
+            <div className={`mb-3 flex ${msg.sender_id === currentUserId ? 'justify-end' : 'justify-start'}`}>
+              <div className={`relative max-w-sm px-4 py-2 rounded-lg text-sm whitespace-pre-wrap shadow-md ${msg.sender_id === currentUserId ? 'bg-blue-600 text-white' : 'bg-zinc-800 text-white'}`}>
+                {msg.message}
+                <div className="text-[10px] text-right mt-1 text-gray-400">
+                  {formatDistanceToNow(new Date(msg.sent_at), { addSuffix: true })}
+                </div>
+                <div className="absolute -top-2 -right-2 flex gap-1">
+                  {enablePinning && <button title="Pin" className="text-xs bg-zinc-700 px-1 rounded">📌</button>}
+                  {enableReactions && <button title="React" className="text-xs bg-zinc-700 px-1 rounded">😊</button>}
+                  {enableSharing && <button title="Share" className="text-xs bg-zinc-700 px-1 rounded">🔗</button>}
+                </div>
               </div>
             </div>
+            
+            {/* Show AI quick replies and buttons only for AI messages */}
+            {msg.sender_id !== currentUserId && msg.message.includes('would you like to travel') && (
+              <div className="mb-3 flex flex-wrap gap-2 justify-start ml-2">
+                {['Plan a weekend getaway', 'Plan a week-long vacation', 'Inspire me with destinations', 'Budget-friendly trip', 'Luxury travel'].map((reply, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setNewMessage(reply)}
+                    className="px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-white text-xs rounded-full transition-colors"
+                  >
+                    {reply}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Show clarifying question quick replies for destination-specific responses */}
+            {msg.sender_id !== currentUserId && msg.message.includes('To create the perfect itinerary') && (
+              <div className="mb-3 flex flex-wrap gap-2 justify-start ml-2">
+                {['1-3 days', '4-7 days', '1-2 weeks', 'Budget-friendly', 'Mid-range', 'Luxury'].map((reply, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setNewMessage(reply)}
+                    className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs rounded-full transition-colors"
+                  >
+                    {reply}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Show follow-up action buttons */}
+            {msg.sender_id !== currentUserId && index === messages.length - 1 && (
+              <div className="mb-3 flex flex-wrap gap-2 justify-start ml-2">
+                <button
+                  onClick={() => setNewMessage('Tell me about nightlife options')}
+                  className="px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white text-xs rounded-full transition-colors"
+                >
+                  Nightlife & Entertainment
+                </button>
+                <button
+                  onClick={() => setNewMessage('What movies are playing and where are the malls?')}
+                  className="px-3 py-1 bg-green-600 hover:bg-green-500 text-white text-xs rounded-full transition-colors"
+                >
+                  Movies & Shopping
+                </button>
+                <button
+                  onClick={() => setNewMessage('Add travel buddy')}
+                  className="px-3 py-1 bg-orange-600 hover:bg-orange-500 text-white text-xs rounded-full transition-colors"
+                >
+                  Add Travel Buddy
+                </button>
+              </div>
+            )}
           </div>
         ))}
 
         {/* Keila is thinking... indicator */}
-        {isLoading && (
-          <div className="mb-3 flex justify-start">
-            <div className="bg-zinc-800 text-white px-4 py-2 rounded-lg text-sm italic text-gray-400">
-              Keila is thinking...
-            </div>
-          </div>
-        )}
+        {isLoading && <KeilaThinking />}
 
         <div ref={chatEndRef} />
       </div>

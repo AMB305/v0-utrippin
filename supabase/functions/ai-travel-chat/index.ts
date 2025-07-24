@@ -116,6 +116,51 @@ serve(async (req) => {
     const tripDetails = extractTripDetails(message);
     console.log('AI Travel Chat - Detected trip details:', tripDetails);
 
+    // Check if this is a vague request that needs clarification
+    const isVagueRequest = (msg: string, details: any) => {
+      const lowerMsg = msg.toLowerCase();
+      
+      // Check for greetings without travel context
+      if (/^(hi|hello|hey|good\s+(morning|afternoon|evening))\s*[!.]*$/i.test(msg.trim())) {
+        return true;
+      }
+      
+      // Check for vague destination requests like "Columbia" that could be multiple places
+      if (details.destination) {
+        const ambiguousDestinations = ['columbia', 'paris', 'london', 'georgia', 'florence'];
+        if (ambiguousDestinations.some(dest => details.destination.toLowerCase().includes(dest))) {
+          return true;
+        }
+      }
+      
+      // Check for requests missing key details
+      if (details.destination && (!details.dates && !details.budget)) {
+        return true;
+      }
+      
+      return false;
+    };
+
+    // Handle vague requests with clarifying questions
+    if (isVagueRequest(message, tripDetails)) {
+      const clarifyingResponse = {
+        response: tripDetails.destination 
+          ? `I'd love to help you plan a trip to ${tripDetails.destination}! To create the perfect itinerary, could you tell me:\n\n• When would you like to travel?\n• How many days are you planning?\n• What's your approximate budget?\n• Are you traveling solo, as a couple, or with family?`
+          : "Hello! I'm Keila, your AI travel assistant. I'd love to help you plan an amazing trip! Where would you like to go, and when are you thinking of traveling?",
+        quickReplies: tripDetails.destination 
+          ? ["1-3 days", "4-7 days", "1-2 weeks", "Budget-friendly", "Mid-range", "Luxury"]
+          : ["Plan a weekend getaway", "Plan a week-long vacation", "Inspire me with destinations", "Budget-friendly trip", "Luxury travel"],
+        callsToAction: [
+          { text: "Get Trip Inspiration", action: "CONTINUE_CHAT" },
+          { text: "Popular Destinations", action: "CONTINUE_CHAT" }
+        ]
+      };
+      
+      return new Response(JSON.stringify(clarifyingResponse), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     // Session context management
     let sessionContext = null;
     if (sessionId) {
