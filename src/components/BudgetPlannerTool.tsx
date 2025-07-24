@@ -28,30 +28,30 @@ const BudgetPlannerTool = () => {
   };
 
   return (
-    <section className="py-10 bg-white text-gray-900">
+    <section className="py-10 bg-gradient-to-b from-gray-900 to-black text-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight text-gray-900">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight text-white">
             Plan Your Perfect
           </h2>
-          <div className="text-gray-900 text-xl font-bold mb-8">
+          <div className="text-white text-xl font-bold mb-8">
             Staycation or Vacation
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Set your budget and group size to discover amazing destinations
           </p>
         </div>
 
         {/* Trip Type Toggle */}
         <div className="flex justify-center mb-12">
-          <div className="bg-gray-100 p-2 rounded-2xl flex">
+          <div className="bg-gray-800/50 p-2 rounded-2xl flex">
             <button
               onClick={() => setTripType('staycation')}
               className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
                 tripType === 'staycation'
-                  ? 'border border-gray-900 text-gray-900 bg-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'border border-white text-white bg-gray-800/30'
+                  : 'text-gray-400 hover:text-white'
               }`}
             >
               <Home size={20} />
@@ -61,8 +61,8 @@ const BudgetPlannerTool = () => {
               onClick={() => setTripType('vacation')}
               className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
                 tripType === 'vacation'
-                  ? 'border border-gray-900 text-gray-900 bg-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'border border-white text-white bg-gray-800/30'
+                  : 'text-gray-400 hover:text-white'
               }`}
             >
               <Plane size={20} />
@@ -86,12 +86,12 @@ const BudgetPlannerTool = () => {
               step="100"
               value={budget}
               onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
               style={{
-                background: `linear-gradient(to right, #374151 0%, #374151 ${((budget - 100) / (100000 - 100)) * 100}%, #e5e7eb ${((budget - 100) / (100000 - 100)) * 100}%, #e5e7eb 100%)`
+                background: `linear-gradient(to right, #ffffff 0%, #ffffff ${((budget - 100) / (100000 - 100)) * 100}%, #374151 ${((budget - 100) / (100000 - 100)) * 100}%, #374151 100%)`
               }}
             />
-            <div className="flex justify-between text-sm text-gray-600 mt-2">
+            <div className="flex justify-between text-sm text-gray-400 mt-2">
               <span>$100</span>
               <span>$1.0M</span>
             </div>
@@ -105,14 +105,14 @@ const BudgetPlannerTool = () => {
         {/* Group Size */}
         <div className="mb-12">
           <div className="flex items-center gap-4 mb-6">
-            <span className="text-gray-600">👥</span>
+            <span className="text-gray-400">👥</span>
             <h3 className="text-2xl font-light">Group Size</h3>
           </div>
           
           <div className="flex items-center justify-center gap-6">
             <button
               onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
-              className="w-12 h-12 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl flex items-center justify-center transition-colors"
+              className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-xl flex items-center justify-center transition-colors"
               disabled={groupSize <= 1}
             >
               <Minus size={20} />
@@ -122,7 +122,7 @@ const BudgetPlannerTool = () => {
             
             <button
               onClick={() => setGroupSize(groupSize + 1)}
-              className="w-12 h-12 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl flex items-center justify-center transition-colors"
+              className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-xl flex items-center justify-center transition-colors"
             >
               <Plus size={20} />
             </button>
@@ -133,7 +133,7 @@ const BudgetPlannerTool = () => {
         <div className="text-center">
           <Button
             onClick={handleGenerateItinerary}
-            className="bg-gray-900 text-white hover:bg-gray-700 px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300"
+            className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300"
           >
             Generate Perfect Itinerary
           </Button>
@@ -146,19 +146,19 @@ const BudgetPlannerTool = () => {
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #374151;
+          background: #ffffff;
           cursor: pointer;
-          box-shadow: 0 0 0 3px rgba(55, 65, 81, 0.3);
+          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
         }
 
         .slider::-moz-range-thumb {
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #374151;
+          background: #ffffff;
           cursor: pointer;
           border: none;
-          box-shadow: 0 0 0 3px rgba(55, 65, 81, 0.3);
+          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
         }
       `}</style>
     </section>
