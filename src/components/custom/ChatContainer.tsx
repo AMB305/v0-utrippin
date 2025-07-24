@@ -23,23 +23,31 @@ interface Props {
   enableSharing?: boolean;
 }
 
-const MOCK_USER = '00000000-0000-0000-0000-000000000001';
-const MOCK_BUDDY = '00000000-0000-0000-0000-000000000002';
+import { useAuth } from '@/hooks/useAuth';
+
+// Keila AI Assistant ID (fixed for all users)
+const KEILA_AI_ID = '00000000-0000-0000-0000-000000000002';
 
 export const ChatContainer = ({
-  userId = MOCK_USER,
-  buddyId = MOCK_BUDDY,
+  userId,
+  buddyId = KEILA_AI_ID,
   variant = 'desktop',
   enableReactions = true,
   enablePinning = true,
   enableSharing = true
 }: Props) => {
+  const { user, loading: authLoading } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Use authenticated user ID or provided userId
+  const currentUserId = userId || user?.id;
+
   useEffect(() => {
+    if (!currentUserId) return;
+    
     loadMessages();
 
     const channel = supabase
@@ -48,7 +56,7 @@ export const ChatContainer = ({
         event: 'INSERT',
         schema: 'public',
         table: 'travel_chat',
-        filter: `receiver_id=eq.${userId}`
+        filter: `receiver_id=eq.${currentUserId}`
       }, payload => {
         const newMsg = payload.new as ChatMessage;
         if (newMsg.sender_id === buddyId) {
@@ -60,19 +68,21 @@ export const ChatContainer = ({
     return () => {
       channel.unsubscribe();
     };
-  }, [userId, buddyId]);
+  }, [currentUserId, buddyId]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   async function loadMessages() {
-    console.log('🔄 Loading messages for userId:', userId, 'buddyId:', buddyId);
+    if (!currentUserId) return;
+    
+    console.log('🔄 Loading messages for userId:', currentUserId, 'buddyId:', buddyId);
     
     const { data, error } = await supabase
       .from('travel_chat')
       .select('*')
-      .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
+      .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`)
       .order('sent_at', { ascending: true });
 
     console.log('📨 Raw messages from DB:', data);
@@ -81,8 +91,8 @@ export const ChatContainer = ({
     if (!error && data) {
       const filtered = data.filter(
         (m: ChatMessage) =>
-          (m.sender_id === userId && m.receiver_id === buddyId) ||
-          (m.receiver_id === userId && m.sender_id === buddyId)
+          (m.sender_id === currentUserId && m.receiver_id === buddyId) ||
+          (m.receiver_id === currentUserId && m.sender_id === buddyId)
       );
       console.log('✅ Filtered messages:', filtered);
       setMessages(filtered);
@@ -93,11 +103,11 @@ export const ChatContainer = ({
 
   async function sendMessage() {
     console.log('🚀 SEND MESSAGE FUNCTION CALLED!');
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || !currentUserId) return;
 
     const userText = newMessage.trim();
     console.log('📤 Sending message:', userText);
-    console.log('👤 User ID:', userId);
+    console.log('👤 User ID:', currentUserId);
     console.log('🤖 Buddy ID:', buddyId);
     
     setNewMessage(''); // Clear input immediately
@@ -106,7 +116,7 @@ export const ChatContainer = ({
       // 1️⃣ Insert user message
       console.log('💾 Attempting to insert user message...');
       const { data: insertData, error: userError } = await supabase.from('travel_chat').insert({
-        sender_id: userId,
+        sender_id: currentUserId,
         receiver_id: buddyId,
         message: userText
       }).select();
@@ -131,7 +141,7 @@ export const ChatContainer = ({
       const response = await supabase.functions.invoke('ai-travel-chat', {
         body: { 
           message: userText,
-          sessionId: `${userId}-${buddyId}` 
+          sessionId: `${currentUserId}-${buddyId}` 
         }
       });
 
@@ -184,7 +194,7 @@ export const ChatContainer = ({
       // 4️⃣ Insert Keila's reply back into Supabase
       const { data: aiInsertData, error: aiError } = await supabase.from('travel_chat').insert({
         sender_id: buddyId, // Keila's response
-        receiver_id: userId,
+        receiver_id: currentUserId,
         message: aiReply
       }).select();
 
@@ -210,12 +220,43 @@ export const ChatContainer = ({
     ? 'h-[60vh] overflow-y-auto px-4 pt-4'
     : 'h-[30vh] overflow-y-auto px-4 pt-2';
 
+  // Show loading state while auth is loading
+  if (authLoading) {
+    return (
+      <div className="flex flex-col bg-zinc-900 rounded-xl border border-white/10 shadow-xl">
+        <div className={containerStyles}>
+          <div className="flex items-center justify-center h-full">
+            <div className="text-white/60">Loading...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login prompt if not authenticated
+  if (!user) {
+    return (
+      <div className="flex flex-col bg-zinc-900 rounded-xl border border-white/10 shadow-xl">
+        <div className={containerStyles}>
+          <div className="flex items-center justify-center h-full text-center px-4">
+            <div className="text-white/80">
+              <p className="mb-2">Please sign in to chat with Keila</p>
+              <a href="/auth" className="text-blue-400 hover:text-blue-300 underline">
+                Sign In
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col bg-zinc-900 rounded-xl border border-white/10 shadow-xl">
       <div className={containerStyles}>
         {messages.map(msg => (
-          <div key={msg.id} className={`mb-3 flex ${msg.sender_id === userId ? 'justify-end' : 'justify-start'}`}>
-            <div className={`relative max-w-sm px-4 py-2 rounded-lg text-sm whitespace-pre-wrap shadow-md ${msg.sender_id === userId ? 'bg-blue-600 text-white' : 'bg-zinc-800 text-white'}`}>
+          <div key={msg.id} className={`mb-3 flex ${msg.sender_id === currentUserId ? 'justify-end' : 'justify-start'}`}>
+            <div className={`relative max-w-sm px-4 py-2 rounded-lg text-sm whitespace-pre-wrap shadow-md ${msg.sender_id === currentUserId ? 'bg-blue-600 text-white' : 'bg-zinc-800 text-white'}`}>
               {msg.message}
               <div className="text-[10px] text-right mt-1 text-gray-400">
                 {formatDistanceToNow(new Date(msg.sent_at), { addSuffix: true })}

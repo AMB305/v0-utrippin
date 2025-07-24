@@ -1,10 +1,10 @@
 // DesktopTravelPlanner.tsx
 import React from 'react';
 import { ChatContainer } from './custom/ChatContainer';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function DesktopTravelPlanner() {
-  const userId = '00000000-0000-0000-0000-000000000001';
-  const buddyId = '00000000-0000-0000-0000-000000000002'; // From connected Travel Buddy
+  const { user } = useAuth();
 
   return (
     <div className="hidden lg:block bg-black min-h-screen text-white px-6 py-10">
@@ -55,8 +55,7 @@ export default function DesktopTravelPlanner() {
         {/* Real-time Chat Integration */}
         <div className="mt-12">
           <ChatContainer
-            userId={userId}
-            buddyId={buddyId}
+            userId={user?.id}
             variant="desktop"
             enableReactions={true}
             enablePinning={true}

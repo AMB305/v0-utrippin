@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -47,6 +48,7 @@ import { AuthRequiredDialog } from "@/components/AuthRequiredDialog";
 import UtrippinLogo from "@/components/UtrippinLogo";
 import Header from "@/components/Header";
 import HereLocationAutocomplete from "@/components/HereLocationAutocomplete";
+import { AuthStatus } from "@/components/AuthStatus";
 import { EnhancedMapComponent } from "@/components/EnhancedMapComponent";
 import DesktopTravelPlanner from "@/components/DesktopTravelPlanner";
 import { DetailedItineraryCard } from "@/components/DetailedItineraryCard";
@@ -116,6 +118,7 @@ interface Trip {
 }
 
 const AiTravel = () => {
+  const { user, loading: authLoading } = useAuth();
   const [mobileInput, setMobileInput] = useState("");
   const [desktopInput, setDesktopInput] = useState("");
   const [hasStartedChat, setHasStartedChat] = useState(false);
@@ -356,13 +359,8 @@ const AiTravel = () => {
                         {/* Separator */}
                         <div className="border-t border-gray-700 my-2"></div>
                         
-                        {/* Authentication Options */}
-                        <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/auth"}>
-                          👤 Log In
-                        </Button>
-                        <Button className="justify-start bg-blue-600 hover:bg-blue-700 text-white" onClick={() => window.location.href = "/auth"}>
-                          ⭐ Join Utrippin
-                        </Button>
+                        {/* Authentication Status */}
+                        <AuthStatus />
                       </div>
                     </SheetContent>
                   </Sheet>
