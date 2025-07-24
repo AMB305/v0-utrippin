@@ -46,8 +46,6 @@ import { SaveTripDialog } from "@/components/SaveTripDialog";
 import { AuthRequiredDialog } from "@/components/AuthRequiredDialog";
 import UtrippinLogo from "@/components/UtrippinLogo";
 import Header from "@/components/Header";
-import LuxuryNav from "@/components/LuxuryNav";
-import Footer from "@/components/Footer";
 import HereLocationAutocomplete from "@/components/HereLocationAutocomplete";
 import { EnhancedMapComponent } from "@/components/EnhancedMapComponent";
 import { DetailedItineraryCard } from "@/components/DetailedItineraryCard";
@@ -581,300 +579,291 @@ const AiTravel = () => {
           </div>
         </div>
       ) : (
-        // Desktop Layout - AI Command Center with Header and Footer
-        <div className="min-h-screen bg-slate-900 text-white">
-          {/* Header */}
-          <LuxuryNav />
-          
-          {/* Main Content - Two Column Layout */}
-          <div className="flex">
-            {/* Left Column - Control Panel (40%) */}
-            <div className="w-2/5 bg-slate-800 border-r border-slate-700 flex flex-col">
-              {/* Header */}
-              <div className="p-6 border-b border-slate-700">
-                <div className="flex items-center gap-3">
-                  <img 
-                    src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
-                    alt="Keila Bot" 
-                    className="w-10 h-10"
-                  />
-                  <div>
-                    <h1 className="text-xl font-bold text-white">
-                      AI Travel Planner
-                    </h1>
-                    <p className="text-sm text-slate-400">
-                      Chat with Keila to plan your perfect trip
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Chat History - Scrollable */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-4">
-                {!hasStartedChat ? (
-                  <div className="text-center py-12">
-                    <img 
-                      src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
-                      alt="Keila Bot" 
-                      className="w-16 h-16 mx-auto mb-4 animate-float"
-                    />
-                    <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
-                      Hi there! I'm Keila
-                    </h2>
-                    <p className="text-slate-400 mb-6">
-                      Ready to plan your dream trip? Let's get started!
-                    </p>
-                    
-                    {/* Suggested Prompts */}
-                    <div className="space-y-2">
-                      <p className="text-sm text-slate-500 mb-3">Try asking:</p>
-                      {[
-                        "Plan a weekend trip to Paris",
-                        "Find me a beach vacation under $2000",
-                        "Suggest family activities in Tokyo",
-                        "Plan a romantic getaway"
-                      ].map((prompt, idx) => (
-                        <Button
-                          key={idx}
-                          variant="outline"
-                          size="sm"
-                          className="block w-full text-left border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
-                          onClick={() => {
-                            setHasStartedChat(true);
-                            sendEnhancedMessage(prompt, true); // Desktop gets budget enhancement
-                          }}
-                        >
-                          {prompt}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  // Chat Messages
-                  mobileChatMessages.map((message) => (
-                    <div key={message.id} className="space-y-3">
-                      {/* User Message */}
-                      <div className="flex justify-end">
-                        <div className="bg-blue-600 px-4 py-2 rounded-2xl max-w-[80%]">
-                          <p className="text-sm text-white">{message.question}</p>
-                        </div>
-                      </div>
-
-                      {/* Loading State */}
-                      {message.loading && <KeilaThinking />}
-
-                      {/* AI Response */}
-                      {message.response && !message.loading && (
-                        <div className="flex justify-start">
-                          <div className="bg-slate-700 px-4 py-2 rounded-2xl max-w-[80%] border border-slate-600">
-                            <p className="text-sm text-slate-200">{message.response}</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* Text Input - Fixed at Bottom */}
-              <div className="p-6 border-t border-slate-700">
-                <div className="flex gap-2">
-                  <Input
-                    value={mobileInput}
-                    onChange={(e) => setMobileInput(e.target.value)}
-                    placeholder="Ask me about your travel plans..."
-                    className="flex-1 bg-slate-700 border-slate-600 text-white placeholder-slate-400"
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendEnhancedMessage(mobileInput, true); // Desktop gets budget enhancement
-                      }
-                    }}
-                  />
-                  <Button
-                    onClick={() => sendEnhancedMessage(mobileInput, true)} // Desktop gets budget enhancement
-                    disabled={!mobileInput.trim() || mobileChatLoading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    <Send className="h-4 w-4" />
-                  </Button>
+        // Desktop Layout - AI Command Center (Two Column)
+        <div className="min-h-screen bg-slate-900 text-white flex">
+          {/* Left Column - Control Panel (40%) */}
+          <div className="w-2/5 bg-slate-800 border-r border-slate-700 flex flex-col">
+            {/* Header */}
+            <div className="p-6 border-b border-slate-700">
+              <div className="flex items-center gap-3">
+                <img 
+                  src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
+                  alt="Keila Bot" 
+                  className="w-10 h-10"
+                />
+                <div>
+                  <h1 className="text-xl font-bold text-white">
+                    AI Travel Planner
+                  </h1>
+                  <p className="text-sm text-slate-400">
+                    Chat with Keila to plan your perfect trip
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Right Column - Dynamic Canvas (60%) */}
-            <div className="flex-1 bg-slate-900 flex flex-col">
-              {/* Canvas Header */}
-              <div className="p-6 border-b border-slate-700">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-white">
-                    Travel Plan Canvas
+            {/* Chat History - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {!hasStartedChat ? (
+                <div className="text-center py-12">
+                  <img 
+                    src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
+                    alt="Keila Bot" 
+                    className="w-16 h-16 mx-auto mb-4 animate-float"
+                  />
+                  <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+                    Hi there! I'm Keila
                   </h2>
-                  {hasStartedChat && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white"
-                      onClick={handleSaveTrip}
-                    >
-                      Save Trip
-                    </Button>
-                  )}
+                  <p className="text-slate-400 mb-6">
+                    Ready to plan your dream trip? Let's get started!
+                  </p>
+                  
+                  {/* Suggested Prompts */}
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-500 mb-3">Try asking:</p>
+                    {[
+                      "Plan a weekend trip to Paris",
+                      "Find me a beach vacation under $2000",
+                      "Suggest family activities in Tokyo",
+                      "Plan a romantic getaway"
+                    ].map((prompt, idx) => (
+                      <Button
+                        key={idx}
+                        variant="outline"
+                        size="sm"
+                        className="block w-full text-left border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
+                        onClick={() => {
+                          setHasStartedChat(true);
+                          sendEnhancedMessage(prompt, true); // Desktop gets budget enhancement
+                        }}
+                      >
+                        {prompt}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              {/* Canvas Content */}
-              <div className="flex-1 p-6">
-                {!hasStartedChat ? (
-                  // Welcome State
-                  <div className="h-full flex items-center justify-center">
-                    <div className="text-center max-w-md">
-                      <div className="w-24 h-24 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <Map className="w-12 h-12 text-slate-400" />
-                      </div>
-                      <h3 className="text-2xl font-bold text-white mb-4">
-                        Your Travel Canvas Awaits
-                      </h3>
-                      <p className="text-slate-400 mb-6">
-                        Start chatting with Keila on the left, and watch your travel plans come to life here with interactive maps, hotel cards, and detailed itineraries.
-                      </p>
-                      <div className="flex flex-wrap justify-center gap-3">
-                        <Badge variant="outline" className="border-purple-500 text-purple-400">
-                          Interactive Maps
-                        </Badge>
-                        <Badge variant="outline" className="border-blue-500 text-blue-400">
-                          Hotel & Flight Cards
-                        </Badge>
-                        <Badge variant="outline" className="border-green-500 text-green-400">
-                          Day-by-Day Itineraries
-                        </Badge>
+              ) : (
+                // Chat Messages
+                mobileChatMessages.map((message) => (
+                  <div key={message.id} className="space-y-3">
+                    {/* User Message */}
+                    <div className="flex justify-end">
+                      <div className="bg-blue-600 px-4 py-2 rounded-2xl max-w-[80%]">
+                        <p className="text-sm text-white">{message.question}</p>
                       </div>
                     </div>
+
+                    {/* Loading State */}
+                    {message.loading && <KeilaThinking />}
+
+                    {/* AI Response */}
+                    {message.response && !message.loading && (
+                      <div className="flex justify-start">
+                        <div className="bg-slate-700 px-4 py-2 rounded-2xl max-w-[80%] border border-slate-600">
+                          <p className="text-sm text-slate-200">{message.response}</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  // Dynamic Content Area - Always show detailed itineraries
-                  <div className="space-y-6">
-                    {mobileChatMessages.map((message) => (
-                      <div key={`canvas-${message.id}`}>
-                        {/* Always render detailed itinerary cards for desktop Canvas */}
-                        {message.isDetailedItinerary && message.detailedItinerary ? (
-                          <div className="w-full">
-                            <DetailedItineraryCard 
-                              itinerary={message.detailedItinerary}
-                              destination={message.mapLocation}
-                              onFollowUpClick={(question) => sendEnhancedMessage(question, true)}
-                            />
-                          </div>
-                        ) : message.response && !message.loading ? (
-                          // Fallback for non-itinerary responses - still show structured content
-                          <div className="space-y-4">
-                            <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
-                              <h3 className="text-lg font-semibold text-white mb-4">Travel Recommendations</h3>
-                              <p className="text-slate-300 mb-4">{message.response}</p>
-                              
-                              {/* Show any trip cards */}
-                              {message.tripCards && message.tripCards.length > 0 && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                  {message.tripCards.map((card, idx) => (
-                                    <Card key={idx} className="bg-slate-700 border-slate-600">
-                                      <div className="p-4">
-                                        <div className="flex items-center gap-2 mb-2">
-                                          {card.type === 'hotel' && <Hotel className="w-4 h-4 text-blue-400" />}
-                                          {card.type === 'flight' && <Plane className="w-4 h-4 text-green-400" />}
-                                          {card.type === 'activity' && <Star className="w-4 h-4 text-yellow-400" />}
-                                          <h4 className="font-semibold text-white">{card.title}</h4>
-                                        </div>
-                                        <p className="text-sm text-slate-300 mb-3">{card.description}</p>
-                                        <div className="flex items-center justify-between">
-                                          {card.price && (
-                                            <span className="text-lg font-bold text-green-400">{card.price}</span>
-                                          )}
-                                          {card.rating && (
-                                            <div className="flex items-center gap-1">
-                                              <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                              <span className="text-sm text-slate-300">{card.rating}</span>
-                                            </div>
-                                          )}
-                                        </div>
-                                         {card.bookingUrl ? (
-                                           <a 
-                                             href={card.bookingUrl} 
-                                             target="_blank" 
-                                             rel="noopener noreferrer"
-                                             className="block w-full mt-3"
-                                           >
-                                             <Button 
-                                               size="sm" 
-                                               className="w-full bg-blue-600 hover:bg-blue-700 pointer-events-none"
-                                             >
-                                               Book on Utrippin
-                                               <ExternalLink className="w-3 h-3 ml-1" />
-                                             </Button>
-                                           </a>
-                                         ) : (
+                ))
+              )}
+            </div>
+
+            {/* Text Input - Fixed at Bottom */}
+            <div className="p-6 border-t border-slate-700">
+              <div className="flex gap-2">
+                <Input
+                  value={mobileInput}
+                  onChange={(e) => setMobileInput(e.target.value)}
+                  placeholder="Ask me about your travel plans..."
+                  className="flex-1 bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendEnhancedMessage(mobileInput, true); // Desktop gets budget enhancement
+                    }
+                  }}
+                />
+                <Button
+                  onClick={() => sendEnhancedMessage(mobileInput, true)} // Desktop gets budget enhancement
+                  disabled={!mobileInput.trim() || mobileChatLoading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Dynamic Canvas (60%) */}
+          <div className="flex-1 bg-slate-900 flex flex-col">
+            {/* Canvas Header */}
+            <div className="p-6 border-b border-slate-700">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-white">
+                  Travel Plan Canvas
+                </h2>
+                {hasStartedChat && (
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white"
+                    onClick={handleSaveTrip}
+                  >
+                    Save Trip
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {/* Canvas Content */}
+            <div className="flex-1 p-6">
+              {!hasStartedChat ? (
+                // Welcome State
+                <div className="h-full flex items-center justify-center">
+                  <div className="text-center max-w-md">
+                    <div className="w-24 h-24 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Map className="w-12 h-12 text-slate-400" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Your Travel Canvas Awaits
+                    </h3>
+                    <p className="text-slate-400 mb-6">
+                      Start chatting with Keila on the left, and watch your travel plans come to life here with interactive maps, hotel cards, and detailed itineraries.
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-3">
+                      <Badge variant="outline" className="border-purple-500 text-purple-400">
+                        Interactive Maps
+                      </Badge>
+                      <Badge variant="outline" className="border-blue-500 text-blue-400">
+                        Hotel & Flight Cards
+                      </Badge>
+                      <Badge variant="outline" className="border-green-500 text-green-400">
+                        Day-by-Day Itineraries
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                // Dynamic Content Area - Always show detailed itineraries
+                <div className="space-y-6">
+                  {mobileChatMessages.map((message) => (
+                    <div key={`canvas-${message.id}`}>
+                      {/* Always render detailed itinerary cards for desktop Canvas */}
+                      {message.isDetailedItinerary && message.detailedItinerary ? (
+                        <div className="w-full">
+                          <DetailedItineraryCard 
+                            itinerary={message.detailedItinerary}
+                            destination={message.mapLocation}
+                            onFollowUpClick={(question) => sendEnhancedMessage(question, true)}
+                          />
+                        </div>
+                      ) : message.response && !message.loading ? (
+                        // Fallback for non-itinerary responses - still show structured content
+                        <div className="space-y-4">
+                          <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                            <h3 className="text-lg font-semibold text-white mb-4">Travel Recommendations</h3>
+                            <p className="text-slate-300 mb-4">{message.response}</p>
+                            
+                            {/* Show any trip cards */}
+                            {message.tripCards && message.tripCards.length > 0 && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                {message.tripCards.map((card, idx) => (
+                                  <Card key={idx} className="bg-slate-700 border-slate-600">
+                                    <div className="p-4">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        {card.type === 'hotel' && <Hotel className="w-4 h-4 text-blue-400" />}
+                                        {card.type === 'flight' && <Plane className="w-4 h-4 text-green-400" />}
+                                        {card.type === 'activity' && <Star className="w-4 h-4 text-yellow-400" />}
+                                        <h4 className="font-semibold text-white">{card.title}</h4>
+                                      </div>
+                                      <p className="text-sm text-slate-300 mb-3">{card.description}</p>
+                                      <div className="flex items-center justify-between">
+                                        {card.price && (
+                                          <span className="text-lg font-bold text-green-400">{card.price}</span>
+                                        )}
+                                        {card.rating && (
+                                          <div className="flex items-center gap-1">
+                                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                            <span className="text-sm text-slate-300">{card.rating}</span>
+                                          </div>
+                                        )}
+                                      </div>
+                                       {card.bookingUrl ? (
+                                         <a 
+                                           href={card.bookingUrl} 
+                                           target="_blank" 
+                                           rel="noopener noreferrer"
+                                           className="block w-full mt-3"
+                                         >
                                            <Button 
                                              size="sm" 
-                                             className="w-full mt-3 bg-gray-600 cursor-not-allowed"
-                                             disabled
+                                             className="w-full bg-blue-600 hover:bg-blue-700 pointer-events-none"
                                            >
                                              Book on Utrippin
                                              <ExternalLink className="w-3 h-3 ml-1" />
                                            </Button>
-                                         )}
-                                      </div>
-                                    </Card>
+                                         </a>
+                                       ) : (
+                                         <Button 
+                                           size="sm" 
+                                           className="w-full mt-3 bg-gray-600 cursor-not-allowed"
+                                           disabled
+                                         >
+                                           Book on Utrippin
+                                           <ExternalLink className="w-3 h-3 ml-1" />
+                                         </Button>
+                                       )}
+                                    </div>
+                                  </Card>
+                                ))}
+                              </div>
+                            )}
+                            
+                            {/* Follow-up questions */}
+                            {message.quickReplies && message.quickReplies.length > 0 && (
+                              <div className="mt-4">
+                                <h4 className="text-sm font-semibold text-white mb-2">Continue Planning:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {message.quickReplies.map((reply, idx) => (
+                                    <Button
+                                      key={idx}
+                                      variant="outline"
+                                      size="sm"
+                                      className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
+                                      onClick={() => sendEnhancedMessage(reply, true)}
+                                    >
+                                      {reply}
+                                    </Button>
                                   ))}
                                 </div>
-                              )}
-                              
-                              {/* Follow-up questions */}
-                              {message.quickReplies && message.quickReplies.length > 0 && (
-                                <div className="mt-4">
-                                  <h4 className="text-sm font-semibold text-white mb-2">Continue Planning:</h4>
-                                  <div className="flex flex-wrap gap-2">
-                                    {message.quickReplies.map((reply, idx) => (
-                                      <Button
-                                        key={idx}
-                                        variant="outline"
-                                        size="sm"
-                                        className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
-                                        onClick={() => sendEnhancedMessage(reply, true)}
-                                      >
-                                        {reply}
-                                      </Button>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ) : null}
-
-                        {/* Map Display */}
-                        {message.showMap && message.mapLocation && (
-                          <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
-                            <h3 className="text-lg font-semibold text-white mb-4">
-                              Explore {message.mapLocation}
-                            </h3>
-                            <div className="h-64 bg-slate-700 rounded-lg flex items-center justify-center">
-                              <div className="text-center">
-                                <MapPin className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                                <p className="text-slate-400">Interactive map for {message.mapLocation}</p>
-                                <p className="text-xs text-slate-500 mt-1">Map integration coming soon</p>
                               </div>
+                            )}
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {/* Map Display */}
+                      {message.showMap && message.mapLocation && (
+                        <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                          <h3 className="text-lg font-semibold text-white mb-4">
+                            Explore {message.mapLocation}
+                          </h3>
+                          <div className="h-64 bg-slate-700 rounded-lg flex items-center justify-center">
+                            <div className="text-center">
+                              <MapPin className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                              <p className="text-slate-400">Interactive map for {message.mapLocation}</p>
+                              <p className="text-xs text-slate-500 mt-1">Map integration coming soon</p>
                             </div>
                           </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-          
-          {/* Footer */}
-          <Footer />
         </div>
       )}
 
