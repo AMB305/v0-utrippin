@@ -418,6 +418,12 @@
     animation: pulse-glow 2s ease-in-out infinite;
   }
 
+  /* Vertical writing mode for sidebar navigation */
+  .writing-mode-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
   /* Stagger animations for lists */
   .stagger-1 { animation-delay: 0.1s; }
   .stagger-2 { animation-delay: 0.2s; }

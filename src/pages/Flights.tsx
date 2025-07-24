@@ -77,12 +77,71 @@ export default function Flights() {
       />
       <Header />
       
-      {/* Clean white background matching Figma */}
-      <div className="bg-white min-h-screen">
-        {/* Main Content Container */}
-        <div className="container mx-auto px-6 py-8">
-          {/* Flight Search Widget */}
+      {/* Hero Section with Background */}
+      <div className="relative h-screen overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('/lovable-uploads/dd949a6b-079d-4828-9b8d-09578dc11945.png')`
+          }}
+        />
+        
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/40" />
+        
+        {/* Left sidebar navigation */}
+        <div className="absolute left-6 top-1/2 -translate-y-1/2 z-20">
+          <div className="flex flex-col space-y-8 text-white">
+            <div className="writing-mode-vertical text-sm font-light tracking-[0.3em] opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+              AIR TICKETS
+            </div>
+            <div className="writing-mode-vertical text-sm font-light tracking-[0.3em] opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+              EXCURSIONS
+            </div>
+            <div className="writing-mode-vertical text-sm font-light tracking-[0.3em] opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+              HOTELS
+            </div>
+            <div className="writing-mode-vertical text-sm font-light tracking-[0.3em] opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+              TOURS
+            </div>
+          </div>
+        </div>
+        
+        {/* Right side location markers */}
+        <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20">
+          <div className="flex flex-col items-end space-y-4">
+            <div className="flex items-center space-x-2 text-white">
+              <span className="text-sm font-light tracking-wide">LOS ANGELES</span>
+              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Center content */}
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="text-center text-white px-4 max-w-4xl mx-auto">
+            <div className="mb-4">
+              <span className="text-6xl md:text-8xl font-light tracking-wider">Discover</span>
+            </div>
+            <div className="mb-8">
+              <span className="text-3xl md:text-5xl font-light tracking-wide">Adventure & Action in Travel</span>
+            </div>
+            <div className="text-sm font-light tracking-[0.2em] opacity-80">
+              ATMOSPHERE OF LOS ANGELES COUNTRY
+            </div>
+          </div>
+        </div>
+        
+        {/* Bottom search widget */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 w-full max-w-4xl px-4">
           <ExpediaWidget />
+        </div>
+      </div>
+      
+      {/* Content below hero */}
+      <div className="bg-white">
+        <div className="container mx-auto px-6 py-8">
           
           {/* Popular Destinations Section */}
           <div className="mt-16">
