@@ -26,10 +26,10 @@ export default function Packages() {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead 
-        title="Vacation Packages & Travel Deals | Utrippin.ai"
-        description="Book amazing vacation packages with flights, hotels, and more. Find the best travel deals and save on your next getaway."
+        title="AI-Curated Cultural Travel Packages | Utrippin.ai"
+        description="Experience culturally rich vacation packages curated by The Melanin Compass. Join Travel Buddies for group adventures and get personalized recommendations from our AI Traveler."
         canonical="https://utrippin.ai/packages"
-        keywords="vacation packages, travel packages, flight hotel packages, all inclusive packages, travel deals"
+        keywords="AI travel packages, cultural vacation packages, melanin compass, travel buddies, group packages, AI traveler, cultural experiences"
         structuredData={{
           "@context": "https://schema.org",
           "@graph": [
@@ -39,8 +39,8 @@ export default function Packages() {
               "@type": "WebPage",
               "@id": "https://utrippin.ai/packages#webpage",
               "url": "https://utrippin.ai/packages",
-              "name": "Vacation Packages & Travel Deals | Utrippin.ai",
-              "description": "Book amazing vacation packages with flights, hotels, and more. Find the best travel deals and save on your next getaway.",
+              "name": "AI-Curated Cultural Travel Packages | Utrippin.ai",
+              "description": "Experience culturally rich vacation packages curated by The Melanin Compass. Join Travel Buddies for group adventures and get personalized recommendations from our AI Traveler.",
               "inLanguage": "en-US"
             }
           ]

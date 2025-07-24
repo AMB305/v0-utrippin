@@ -28,10 +28,10 @@ export default function Hotels() {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead 
-        title="Find Hotels & Accommodations Online - AI Hotel Search | Utrippin.ai"
-        description="Discover the perfect hotels and accommodations with our AI search. Compare prices from top booking sites and find the best deals."
+        title="AI Hotel Search & Black-Owned Stays | Utrippin.ai"
+        description="Discover culturally rich accommodations with The Melanin Compass. Find Black-owned hotels, boutique stays, and budget-friendly options with our AI Traveler assistant."
         canonical="https://utrippin.ai/hotels"
-        keywords="hotel booking, cheap hotels, hotel deals, accommodation, luxury hotels, budget hotels"
+        keywords="AI hotel search, black-owned hotels, cultural accommodations, melanin compass, boutique hotels, AI traveler, diverse travel"
         structuredData={{
           "@context": "https://schema.org",
           "@graph": [
@@ -41,8 +41,8 @@ export default function Hotels() {
               "@type": "WebPage",
               "@id": "https://utrippin.ai/hotels#webpage",
               "url": "https://utrippin.ai/hotels",
-              "name": "Find Hotels & Accommodations Online - AI Hotel Search | Utrippin.ai",
-              "description": "Discover the perfect hotels and accommodations with our AI search. Compare prices from top booking sites and find the best deals.",
+              "name": "AI Hotel Search & Black-Owned Stays | Utrippin.ai",
+              "description": "Discover culturally rich accommodations with The Melanin Compass. Find Black-owned hotels, boutique stays, and budget-friendly options with our AI Traveler assistant.",
               "inLanguage": "en-US"
             }
           ]

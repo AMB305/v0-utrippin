@@ -56,10 +56,10 @@ export default function Flights() {
     <div className="min-h-screen bg-background">
       <SkipNavigation />
       <SEOHead 
-        title="Find Cheap Flights Online - AI Flight Planner | Utrippin.ai"
-        description="Discover cheap flights with our AI search. Compare millions of flights from 500+ airlines and book with confidence. Best prices guaranteed."
+        title="AI-Powered Flight Search & Booking | Utrippin.ai"
+        description="Find cheap flights with our AI Traveler assistant. Compare prices, discover cultural destinations with The Melanin Compass, and connect with Travel Buddies for group trips."
         canonical="https://utrippin.ai/flights"
-        keywords="cheap flights, flight booking, AI flight search, airline tickets, flight deals"
+        keywords="AI flight search, cheap flights, cultural travel, melanin compass, travel buddies, AI traveler, flight deals"
         structuredData={{
           "@context": "https://schema.org",
           "@graph": [
@@ -69,8 +69,8 @@ export default function Flights() {
               "@type": "WebPage",
               "@id": "https://utrippin.ai/flights#webpage",
               "url": "https://utrippin.ai/flights",
-              "name": "Find Cheap Flights Online - AI Flight Planner | Utrippin.ai",
-              "description": "Discover cheap flights with our AI search. Compare millions of flights from 500+ airlines and book with confidence. Best prices guaranteed.",
+              "name": "AI-Powered Flight Search & Booking | Utrippin.ai",
+              "description": "Find cheap flights with our AI Traveler assistant. Compare prices, discover cultural destinations with The Melanin Compass, and connect with Travel Buddies for group trips.",
               "inLanguage": "en-US"
             }
           ]

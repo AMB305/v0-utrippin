@@ -22,10 +22,22 @@ const Index = () => {
   return (
     <>
       <SEOHead 
-        title="Put the World in Your Hands | Utrippin.ai"
-        description="Find extraordinary deals for every budget. Travel more, spend less, experience everything with AI-powered travel planning."
+        title="#1 AI Trip Planner for Flights, Hotels, Cars & More – Utrippin.ai"
+        description="Utrippin.ai is the #1 AI trip planner for booking flights, hotels, cars, and curating cultural experiences with The Melanin Compass. Plan your perfect vacation with our AI Traveler and connect with like-minded Travel Buddies."
         canonical="https://utrippin.ai"
-        keywords="budget travel, cheap flights, hotel deals, travel packages, AI travel planner"
+        keywords="AI trip planner, flights, hotels, cars, melanin compass, AI traveler, travel buddies, black-owned businesses, cultural travel"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Utrippin.ai",
+          "url": "https://utrippin.ai",
+          "description": "Utrippin.ai is the #1 AI travel planner to book flights, hotels, and cars, discover culturally rich destinations with The Melanin Compass, plan smarter with our AI Traveler, and connect with Travel Buddies.",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://utrippin.ai/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }}
       />
 
       <div className="min-h-screen bg-white">

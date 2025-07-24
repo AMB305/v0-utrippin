@@ -26,10 +26,10 @@ export default function Cruises() {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead 
-        title="Luxury Cruise Deals & Ocean Voyages | Utrippin.ai"
-        description="Discover amazing cruise deals and luxury ocean voyages. Book Caribbean, Mediterranean, Alaska cruises and more. Compare prices from top cruise lines."
+        title="AI Cultural Cruise Planning & Travel Buddies | Utrippin.ai"
+        description="Discover culturally immersive cruise experiences with The Melanin Compass. Connect with Travel Buddies for group cruises and get AI-powered itinerary recommendations."
         canonical="https://utrippin.ai/cruises"
-        keywords="cruise deals, luxury cruises, Caribbean cruises, Mediterranean cruises, cruise booking, ocean voyages"
+        keywords="AI cruise planning, cultural cruises, melanin compass, travel buddies, group cruises, AI traveler, cultural immersion"
         structuredData={{
           "@context": "https://schema.org",
           "@graph": [
@@ -39,8 +39,8 @@ export default function Cruises() {
               "@type": "WebPage",
               "@id": "https://utrippin.ai/cruises#webpage",
               "url": "https://utrippin.ai/cruises",
-              "name": "Luxury Cruise Deals & Ocean Voyages | Utrippin.ai",
-              "description": "Discover amazing cruise deals and luxury ocean voyages. Book Caribbean, Mediterranean, Alaska cruises and more. Compare prices from top cruise lines.",
+              "name": "AI Cultural Cruise Planning & Travel Buddies | Utrippin.ai",
+              "description": "Discover culturally immersive cruise experiences with The Melanin Compass. Connect with Travel Buddies for group cruises and get AI-powered itinerary recommendations.",
               "inLanguage": "en-US"
             }
           ]

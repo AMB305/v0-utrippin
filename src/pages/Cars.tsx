@@ -26,10 +26,10 @@ export default function Cars() {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead 
-        title="Cheap Car Rentals & Airport Cars | Utrippin.ai"
-        description="Rent cars easily. Find deals on economy, luxury, SUV and electric car rentals worldwide. Compare prices from top rental companies."
+        title="AI Car Rental & Cultural Road Trips | Utrippin.ai"
+        description="Find rental cars for cultural road trips with The Melanin Compass. Connect with Travel Buddies for group adventures and get AI-powered route recommendations."
         canonical="https://utrippin.ai/cars"
-        keywords="car rental, cheap car rentals, airport car rental, luxury car rental, economy car rental"
+        keywords="AI car rental, cultural road trips, melanin compass, travel buddies, group travel, AI traveler, road trip planning"
         structuredData={{
           "@context": "https://schema.org",
           "@graph": [
@@ -39,8 +39,8 @@ export default function Cars() {
               "@type": "WebPage",
               "@id": "https://utrippin.ai/cars#webpage",
               "url": "https://utrippin.ai/cars",
-              "name": "Cheap Car Rentals & Airport Cars | Utrippin.ai",
-              "description": "Rent cars easily. Find deals on economy, luxury, SUV and electric car rentals worldwide. Compare prices from top rental companies.",
+              "name": "AI Car Rental & Cultural Road Trips | Utrippin.ai",
+              "description": "Find rental cars for cultural road trips with The Melanin Compass. Connect with Travel Buddies for group adventures and get AI-powered route recommendations.",
               "inLanguage": "en-US"
             }
           ]
