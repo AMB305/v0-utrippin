@@ -9,7 +9,7 @@ import {
   ArrowLeft, MoreHorizontal, Send, Camera, Plus, X, Check
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { ChatContainer } from "@/components/custom/ChatContainer";
+import { ChatContainer } from "@/components/custom/chat-container";
 import SignUpWall from "@/components/SignUpWall";
 import TravelBuddyCard from "@/components/custom/TravelBuddyCard";
 
@@ -77,8 +77,9 @@ const mockTravelBuddies: TravelBuddy[] = [
 
 const TravelBuddiesNew = () => {
   const { user } = useAuth();
-  const [activeView, setActiveView] = useState<'discover' | 'matches' | 'chat' | 'profile'>('discover');
+  const [activeView, setActiveView] = useState<'discover' | 'matches' | 'chat' | 'profile' | 'groups'>('discover');
   const [selectedBuddy, setSelectedBuddy] = useState<TravelBuddy | null>(null);
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [currentBuddyIndex, setCurrentBuddyIndex] = useState(0);
   const [showSignupWall, setShowSignupWall] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -88,6 +89,13 @@ const TravelBuddiesNew = () => {
     distance: 50,
     travel_style: 'all'
   });
+
+  // Mock group chats
+  const mockGroups = [
+    { id: 'group-1', name: 'Southeast Asia Adventure', members: 4, lastMessage: 'Let\'s meet at the airport!' },
+    { id: 'group-2', name: 'European Backpackers', members: 6, lastMessage: 'Train passes booked!' },
+    { id: 'group-3', name: 'Japan Culture Trip', members: 3, lastMessage: 'Found a great ryokan!' }
+  ];
 
   const currentBuddy = mockTravelBuddies[currentBuddyIndex];
 
@@ -118,8 +126,18 @@ const TravelBuddiesNew = () => {
   };
 
   const handleNavigation = (view: string) => {
-    const validView = view as 'discover' | 'matches' | 'chat' | 'profile';
+    const validView = view as 'discover' | 'matches' | 'chat' | 'profile' | 'groups';
     setActiveView(validView);
+  };
+
+  const handleJoinGroup = (groupId: string) => {
+    if (!user) {
+      setShowSignupWall(true);
+      return;
+    }
+    setSelectedGroupId(groupId);
+    setSelectedBuddy(null); // Clear individual buddy selection
+    setActiveView('chat');
   };
 
   // Desktop header component
@@ -156,7 +174,8 @@ const TravelBuddiesNew = () => {
       <h1 className="text-lg font-semibold text-white">
         {activeView === 'discover' && 'Discover'}
         {activeView === 'matches' && 'Matches'}
-        {activeView === 'chat' && selectedBuddy?.name}
+        {activeView === 'groups' && 'Groups'}
+        {activeView === 'chat' && (selectedBuddy?.name || (selectedGroupId && mockGroups.find(g => g.id === selectedGroupId)?.name) || 'Chat')}
         {activeView === 'profile' && 'Profile'}
       </h1>
       <Button variant="ghost" size="sm">
@@ -220,6 +239,33 @@ const TravelBuddiesNew = () => {
     </div>
   );
 
+  // Groups view
+  const GroupsView = () => (
+    <div className="p-4 space-y-4">
+      <h2 className="text-xl font-bold text-white mb-4">Group Chats</h2>
+      {mockGroups.map((group) => (
+        <Card key={group.id} className="bg-gray-800 border-gray-700" onClick={() => handleJoinGroup(group.id)}>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-tinderOrange to-uttippPurple flex items-center justify-center text-white font-bold">
+                {group.members}
+              </div>
+              <div className="flex-1">
+                <h3 className="text-white font-semibold">{group.name}</h3>
+                <p className="text-gray-400 text-sm">{group.lastMessage}</p>
+              </div>
+              <div className="text-right">
+                <Badge className="bg-orange-500 text-white text-xs">
+                  {group.members} members
+                </Badge>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+
   // Chat view
   const ChatView = () => {
     if (!user) {
@@ -232,11 +278,11 @@ const TravelBuddiesNew = () => {
       );
     }
 
-    if (!selectedBuddy) {
+    if (!selectedBuddy && !selectedGroupId) {
       return (
         <div className="h-full flex items-center justify-center">
           <div className="text-center text-gray-400">
-            <p>Select a travel buddy to start chatting</p>
+            <p>Select a travel buddy or group to start chatting</p>
           </div>
         </div>
       );
@@ -246,7 +292,8 @@ const TravelBuddiesNew = () => {
       <div className="h-full flex flex-col">
         <ChatContainer
           userId={user.id}
-          buddyId={selectedBuddy.id}
+          buddyId={selectedBuddy?.id}
+          groupId={selectedGroupId || undefined}
           variant="mobile"
           enableReactions={true}
           enablePinning={true}
@@ -375,6 +422,7 @@ const TravelBuddiesNew = () => {
         <div className="flex-1 overflow-hidden">
           {activeView === 'discover' && <DiscoveryView />}
           {activeView === 'matches' && <MatchesView />}
+          {activeView === 'groups' && <GroupsView />}
           {activeView === 'chat' && <ChatView />}
           {activeView === 'profile' && <ProfileView />}
         </div>
