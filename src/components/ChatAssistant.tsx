@@ -1,29 +1,56 @@
 import React, { useState } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
 import { SimpleChatInput } from "@/components/SimpleChatInput";
+import { useChatAI } from "@/hooks/useChatAI";
 
 export const ChatAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Hi! I'm your AI travel assistant. How can I help you plan your perfect trip?",
-      isUser: false
-    }
-  ]);
+  const { messages: aiMessages, sendMessage, loading } = useChatAI([]);
 
-  const handleSendMessage = (message: string) => {
-    // Add user message
-    const newMessages = [
-      ...messages,
-      { id: Date.now(), text: message, isUser: true },
-      { 
-        id: Date.now() + 1, 
-        text: "I'd love to help you plan that trip! Let me suggest some great options based on your interests.", 
-        isUser: false 
+  // Convert AI messages to display format
+  const displayMessages = React.useMemo(() => {
+    const converted = [];
+    
+    // Add initial greeting if no messages
+    if (aiMessages.length === 0) {
+      converted.push({
+        id: 'greeting',
+        text: "Hi! I'm your AI travel assistant. How can I help you plan your perfect trip?",
+        isUser: false
+      });
+    }
+
+    // Convert AI messages to display format
+    aiMessages.forEach((msg) => {
+      // Add user message
+      converted.push({
+        id: `user-${msg.id}`,
+        text: msg.question,
+        isUser: true
+      });
+
+      // Add AI response or loading state
+      if (msg.loading) {
+        converted.push({
+          id: `loading-${msg.id}`,
+          text: "Keila is typing...",
+          isUser: false,
+          isLoading: true
+        });
+      } else if (msg.response) {
+        converted.push({
+          id: `ai-${msg.id}`,
+          text: msg.response,
+          isUser: false
+        });
       }
-    ];
-    setMessages(newMessages);
+    });
+
+    return converted;
+  }, [aiMessages]);
+
+  const handleSendMessage = async (message: string) => {
+    await sendMessage(message);
   };
 
   return (
@@ -57,7 +84,7 @@ export const ChatAssistant = () => {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((message) => (
+            {displayMessages.map((message) => (
               <div
                 key={message.id}
                 className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
@@ -69,7 +96,9 @@ export const ChatAssistant = () => {
                       : 'bg-slate-800 text-slate-200 border border-slate-700'
                   }`}
                 >
-                  <p className="text-sm">{message.text}</p>
+                  <p className={`text-sm ${(message as any).isLoading ? 'italic text-slate-400' : ''}`}>
+                    {message.text}
+                  </p>
                 </div>
               </div>
             ))}
