@@ -61,9 +61,28 @@ interface StructuredItinerary {
 
 interface ItineraryCardProps {
   data: StructuredItinerary;
+  isLoading?: boolean;
+  error?: string | null;
 }
 
-export const ItineraryCard: React.FC<ItineraryCardProps> = ({ data }) => {
+export const ItineraryCard: React.FC<ItineraryCardProps> = ({ data, isLoading = false, error = null }) => {
+  if (isLoading) {
+    return (
+      <div className="p-6 max-w-5xl mx-auto text-center animate-pulse">
+        <p className="text-lg text-muted-foreground">Keila is thinking... ✨</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 max-w-5xl mx-auto text-center">
+        <p className="text-destructive font-semibold">⚠️ Keila couldn't generate your itinerary.</p>
+        <p className="text-sm text-muted-foreground">Please try again or adjust your prompt.</p>
+      </div>
+    );
+  }
+
   const { 
     destination, 
     dates, 
