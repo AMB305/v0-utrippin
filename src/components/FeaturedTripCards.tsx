@@ -1,5 +1,7 @@
 import React from 'react';
 import { MapPin, Plane, Hotel, Calendar, Star } from 'lucide-react';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { BlurFade } from '@/components/magicui/blur-fade';
 
 const featuredTrips = [
   {
@@ -26,14 +28,18 @@ const featuredTrips = [
 ];
 
 export default function FeaturedTripCards() {
+  const { elementRef, isIntersecting } = useIntersectionObserver({ threshold: 0.1 });
+
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-10">
+    <div ref={elementRef} className="w-full max-w-6xl mx-auto px-4 py-10">
       <h2 className="text-foreground text-2xl font-bold mb-6">🌟 Featured Trips You Might Love</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {featuredTrips.map((trip, idx) => (
-          <div
-            key={idx}
-            className="bg-card rounded-xl p-6 shadow-md border hover:shadow-xl transition duration-300 hover:scale-[1.02]"
+          <BlurFade 
+            key={idx} 
+            delay={idx * 0.2} 
+            inView={isIntersecting}
+            className="bg-card rounded-xl p-6 shadow-md border hover:shadow-xl transition-all duration-500 hover:scale-105 hover:shadow-2xl"
           >
             <div className="flex items-center gap-2 text-primary text-sm font-medium mb-1">
               <MapPin size={16} /> {trip.location}
