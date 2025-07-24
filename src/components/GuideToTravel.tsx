@@ -42,8 +42,8 @@ const GuideToTravel = () => {
           {/* Image */}
           <div className="relative">
             <img
-              src={guideImage}
-              alt="Mountain landscape"
+              src="/lovable-uploads/1e144bc6-1e6e-44e3-8706-44a264517b6f.png"
+              alt="Happy family with luggage in hotel room"
               className="w-full h-full object-cover"
             />
           </div>
