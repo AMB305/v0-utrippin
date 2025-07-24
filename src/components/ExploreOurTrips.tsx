@@ -1,10 +1,71 @@
 import React from 'react';
 
 const ExploreOurTrips: React.FC = () => {
+  const trips = [
+    {
+      id: 1,
+      title: "SELOUS TO ZANZIBAR: ESCAPE THE CROWDS IN TANZANIA",
+      nights: "8 NIGHTS",
+      image: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&h=600&fit=crop"
+    },
+    {
+      id: 2,
+      title: "HIGHLAND LUXURY: CLASSIC INDULGENCE",
+      nights: "5 NIGHTS", 
+      image: "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=800&h=600&fit=crop"
+    },
+    {
+      id: 3,
+      title: "Wild Waterways of the Amazon",
+      nights: "9 NIGHTS",
+      image: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?w=400&h=300&fit=crop"
+    },
+    {
+      id: 4,
+      title: "Art Deco Days & Neon Nights",
+      nights: "5 NIGHTS",
+      image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?w=400&h=300&fit=crop"
+    }
+  ];
+
   return (
     <section className="py-8 bg-slate-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-12">
+        {/* Mobile Layout */}
+        <div className="block md:hidden">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-bold mb-4 tracking-wider">EXPLORE OUR TRIPS</h2>
+            <p className="text-lg text-gray-300 italic">
+              Remarkable experiences to inspire the mind
+            </p>
+          </div>
+          
+          <div className="space-y-6">
+            {trips.slice(0, 2).map((trip, index) => (
+              <div key={trip.id} className="relative h-96 rounded-lg overflow-hidden">
+                <div 
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{ backgroundImage: `url('${trip.image}')` }}
+                />
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 text-sm font-medium">
+                  {trip.nights}
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold mb-4 text-white leading-tight">
+                    {trip.title}
+                  </h3>
+                  <button className="border-2 border-white text-white px-8 py-3 text-sm font-medium tracking-wider hover:bg-white hover:text-black transition-colors">
+                    EXPLORE TRIP
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden md:flex items-center gap-12">
           <div className="flex-shrink-0 w-1/3">
             <h2 className="text-5xl font-bold mb-6">EXPLORE<br/>OUR TRIPS</h2>
             <p className="text-xl text-gray-300 mb-8">
