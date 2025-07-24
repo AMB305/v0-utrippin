@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import SignUpWall from "@/components/SignUpWall";
-import TravelBuddyMap from "@/components/custom/TravelBuddyMap";
+import TravelBuddyMapbox from "@/components/custom/TravelBuddyMapbox";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 
@@ -41,7 +41,7 @@ const mockTrips: Trip[] = [
     description: 'Would like to travel the islands',
     author: {
       name: 'Sarah',
-      photo: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400',
+      photo: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=600&fit=crop&crop=face',
       verified: false
     },
     likes: 12,
@@ -610,7 +610,7 @@ const TravelBuddiesNew = () => {
 
             {/* Map Sidebar */}
             <div className="w-96 bg-white border-l border-gray-200">
-              <TravelBuddyMap 
+              <TravelBuddyMapbox 
                 buddies={mockTrips.map((trip, index) => ({
                   id: trip.id,
                   name: trip.author.name,
