@@ -9,11 +9,15 @@ export const ChatAssistant = () => {
 
   // Convert AI messages to display format
   const displayMessages = React.useMemo(() => {
-    console.log('ChatAssistant: Converting AI messages to display format', aiMessages);
+    console.log('=== ChatAssistant: displayMessages useMemo START ===');
+    console.log('ChatAssistant: aiMessages input:', aiMessages);
+    console.log('ChatAssistant: aiMessages length:', aiMessages.length);
+    
     const converted = [];
     
     // Add initial greeting if no messages
     if (aiMessages.length === 0) {
+      console.log('ChatAssistant: Adding initial greeting');
       converted.push({
         id: 'greeting',
         text: "Hi! I'm your AI travel assistant. How can I help you plan your perfect trip?",
@@ -24,36 +28,49 @@ export const ChatAssistant = () => {
     // Convert AI messages to display format
     aiMessages.forEach((msg, index) => {
       console.log(`ChatAssistant: Processing message ${index}:`, msg);
+      console.log(`ChatAssistant: Message properties - id: ${msg.id}, question: ${msg.question}, response: ${msg.response}, loading: ${msg.loading}`);
       
       // Add user message
-      converted.push({
+      const userMessage = {
         id: `user-${msg.id}`,
         text: msg.question,
         isUser: true
-      });
+      };
+      console.log(`ChatAssistant: Adding user message:`, userMessage);
+      converted.push(userMessage);
 
       // Add AI response or loading state
       if (msg.loading) {
         console.log('ChatAssistant: Adding loading message');
-        converted.push({
+        const loadingMessage = {
           id: `loading-${msg.id}`,
           text: "Keila is thinking...",
           isUser: false,
           isLoading: true
-        });
+        };
+        console.log('ChatAssistant: Loading message:', loadingMessage);
+        converted.push(loadingMessage);
       } else if (msg.response) {
         console.log('ChatAssistant: Adding AI response:', msg.response);
-        converted.push({
+        const aiMessage = {
           id: `ai-${msg.id}`,
           text: msg.response,
           isUser: false
-        });
+        };
+        console.log('ChatAssistant: AI message:', aiMessage);
+        converted.push(aiMessage);
       } else {
-        console.log('ChatAssistant: Message has no response yet');
+        console.log('ChatAssistant: Message has no response yet, current state:', {
+          loading: msg.loading,
+          response: msg.response,
+          hasResponse: !!msg.response
+        });
       }
     });
 
     console.log('ChatAssistant: Final converted messages:', converted);
+    console.log('ChatAssistant: Final converted length:', converted.length);
+    console.log('=== ChatAssistant: displayMessages useMemo END ===');
     return converted;
   }, [aiMessages]);
 
