@@ -19,86 +19,14 @@ import Footer from '@/components/Footer';
 import { ChatAssistant } from '@/components/ChatAssistant';
 import { BackToTop } from '@/components/BackToTop';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/components/ui/card';
+import { Search, Heart, MessageCircle, MapPin } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
   const { user } = useAuth();
 
-  // If user is logged in, show existing dashboard
-  if (user) {
-    return (
-      <>
-        <SEOHead 
-          title="#1 AI Trip Planner for Flights, Hotels, Cars & More – Utrippin.ai"
-          description="Utrippin.ai is the #1 AI trip planner for booking flights, hotels, cars, and curating cultural experiences with The Melanin Compass. Plan your perfect vacation with our AI Traveler and connect with like-minded Travel Buddies."
-          canonical="https://utrippin.ai"
-          keywords="AI trip planner, flights, hotels, cars, melanin compass, AI traveler, travel buddies, black-owned businesses, cultural travel"
-          structuredData={{
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "Utrippin.ai",
-            "url": "https://utrippin.ai",
-            "description": "Utrippin.ai is the #1 AI travel planner to book flights, hotels, and cars, discover culturally rich destinations with The Melanin Compass, plan smarter with our AI Traveler, and connect with Travel Buddies.",
-            "potentialAction": {
-              "@type": "SearchAction",
-              "target": "https://utrippin.ai/search?q={search_term_string}",
-              "query-input": "required name=search_term_string"
-            }
-          }}
-        />
-
-        <div className="min-h-screen bg-white">
-          {/* Navigation */}
-          <LuxuryNav />
-
-          {/* Hero Sections - Mobile vs Desktop */}
-          <SwipeToTravelHero />
-          <EnhancedHeroSection />
-
-          {/* Testimonials - The Smart Travel Deal Experts */}
-          <TestimonialsSection />
-
-          {/* Start Journey */}
-          <StartJourney />
-
-          {/* Explore Our Trips */}
-          <ExploreOurTrips />
-
-          {/* Awards Section */}
-          <AwardsSection />
-
-          {/* Main Content */}
-          <div className="">
-            {/* Deals Engine */}
-            <DealsEngine />
-
-            {/* Alternating Checkerboard Layout Sections */}
-            {/* Guide to Travel - Text LEFT, Image RIGHT */}
-            <GuideToTravel />
-
-            {/* The Melanin Compass - Image LEFT, Text RIGHT */}
-            <PursuitOfFeeling />
-
-            {/* What We Do Section - Text LEFT, Image RIGHT */}
-            <WhatWeDoSection />
-
-            {/* Budget Planner Tool */}
-            <BudgetPlannerTool />
-
-          </div>
-
-          {/* Footer */}
-          <Footer />
-
-          {/* Floating Components */}
-          <ChatAssistant />
-          <BackToTop />
-        </div>
-      </>
-    );
-  }
-
-  // Public home page for non-logged in users (as requested)
   return (
     <>
       <SEOHead 
@@ -115,65 +43,148 @@ const Index = () => {
         }}
       />
 
-      <div className="min-h-screen">
-        {/* Hero Section */}
-        <section className="h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-red-600 relative">
-          <div className="absolute inset-0 bg-black/50" />
-          <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
-              Find Your Next Travel Buddy
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl">
-              Join Utrippin's global community and explore together!
-            </p>
+      <div className="min-h-screen bg-black">
+        {/* Header */}
+        <header className="px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-red-600 to-red-500 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">U</span>
+            </div>
+            <span className="text-white font-bold text-xl">UTRIPPIN</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link to="/travel-buddies">
+              <Button variant="ghost" className="text-white hover:text-gray-300">
+                Start a Trip
+              </Button>
+            </Link>
             <Link to="/auth">
-              <Button className="px-8 py-4 bg-red-600 hover:bg-red-700 text-white text-lg rounded-full font-semibold">
-                Get Started
+              <Button variant="ghost" className="text-white hover:text-gray-300">
+                Login
+              </Button>
+            </Link>
+            <Link to="/auth">
+              <Button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full">
+                JOIN UTRIPPIN
               </Button>
             </Link>
           </div>
-        </section>
+        </header>
 
-        {/* Feature Highlights */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center px-6">
-            {[
-              { 
-                icon: '🌎', 
-                title: 'Global Community', 
-                desc: 'Meet travelers in 100+ countries.' 
-              },
-              { 
-                icon: '🔒', 
-                title: 'Verified Profiles', 
-                desc: 'Trust through email & social logins.' 
-              },
-              { 
-                icon: '💬', 
-                title: 'Instant Chat', 
-                desc: 'Plan your trip together in real time.' 
-              },
-            ].map((feature, index) => (
-              <div key={feature.title} className="p-6 bg-white rounded-2xl shadow-soft hover-lift">
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-2xl font-semibold mb-2 text-gray-900">{feature.title}</h3>
-                <p className="text-gray-600">{feature.desc}</p>
-              </div>
-            ))}
+        {/* Hero Section */}
+        <section className="relative min-h-[70vh] flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1920')`
+            }}
+          />
+          <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+              Find A Travel Buddy,<br />
+              Share Costs & Experiences
+            </h1>
+            
+            <div className="bg-white rounded-full p-2 flex items-center max-w-md mx-auto mb-8">
+              <Search className="w-5 h-5 text-gray-400 ml-4" />
+              <Input
+                placeholder="Where are you traveling to?"
+                className="border-0 bg-transparent flex-1 px-4 focus:ring-0"
+              />
+              <Button className="bg-red-600 hover:bg-red-700 text-white rounded-full px-8">
+                Search
+              </Button>
+            </div>
+
+            <p className="text-xl text-white">
+              Travelers From <span className="font-bold">190+ Countries</span> Have Started{' '}
+              <span className="font-bold">Over 40000 Trips</span> on UTRIPPIN
+            </p>
           </div>
         </section>
 
-        {/* Call-to-Action Footer */}
-        <footer className="py-16 bg-white text-center">
-          <h2 className="text-3xl font-bold mb-4 text-gray-900">
+        {/* Stats Cards */}
+        <section className="px-6 py-16">
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+            <Card className="bg-gray-800 border-gray-700 rounded-3xl overflow-hidden">
+              <CardContent className="p-8 text-white">
+                <h3 className="text-xl font-semibold mb-2">Travelers from</h3>
+                <h2 className="text-4xl font-bold mb-2">190+ Countries</h2>
+                <p className="text-gray-300 mb-6">Around the world</p>
+                <Button className="bg-white text-gray-900 hover:bg-gray-100">
+                  Find Trips
+                </Button>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-blue-900 border-blue-800 rounded-3xl overflow-hidden">
+              <CardContent className="p-8 text-white">
+                <h3 className="text-xl font-semibold mb-2">Started</h3>
+                <h2 className="text-4xl font-bold mb-2">40000+ Trips</h2>
+                <p className="text-gray-300 mb-6">Worldwide</p>
+                <Button className="bg-white text-gray-900 hover:bg-gray-100">
+                  Start A Trip
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* How Utrippin Works */}
+        <section className="px-6 py-16 bg-white">
+          <div className="max-w-6xl mx-auto text-center">
+            <h2 className="text-4xl font-bold text-gray-900 mb-16">How UTRIPPIN Works</h2>
+            
+            <div className="grid md:grid-cols-4 gap-8">
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full border-2 border-red-600">
+                  <Search className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Search Destination</h3>
+                <p className="text-gray-600">Search and select a destination that you are traveling to.</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full border-2 border-red-600">
+                  <Heart className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Find Travel Partners</h3>
+                <p className="text-gray-600">Browse through the list of trips, locals, and nearby users in that location.</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full border-2 border-red-600">
+                  <MessageCircle className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Get Connected</h3>
+                <p className="text-gray-600">When you find someone that you want to meet up with, click the connect button and start chatting with them.</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full border-2 border-red-600">
+                  <MapPin className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Trip Together</h3>
+                <p className="text-gray-600">Plan together, meet up with your travel companion at a pre-decided public place and travel together.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Call to Action */}
+        <section className="px-6 py-16 bg-gray-900 text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
             Ready to Share Your Next Adventure?
           </h2>
+          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+            Tired of traveling alone? Connect, plan tours, and travel together with users from over 190 countries.
+          </p>
           <Link to="/auth">
-            <Button className="px-10 py-3 bg-red-600 hover:bg-red-700 text-white rounded-full text-lg font-semibold">
+            <Button className="bg-red-600 hover:bg-red-700 text-white px-10 py-3 rounded-full text-lg font-semibold">
               Join Utrippin Today
             </Button>
           </Link>
-        </footer>
+        </section>
       </div>
     </>
   );
