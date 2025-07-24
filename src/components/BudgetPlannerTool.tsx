@@ -97,9 +97,6 @@ const BudgetPlannerTool = () => {
             </div>
           </div>
           
-          <p className="text-center text-gray-400 mt-4">
-            {getBudgetDescription(budget)}
-          </p>
           <p className="text-center text-orange-400 mt-2 font-medium">
             {getBudgetDescription(budget)}
           </p>
