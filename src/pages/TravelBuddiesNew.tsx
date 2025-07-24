@@ -308,20 +308,40 @@ const TravelBuddiesNew = () => {
   );
 
   // Chat view
-  const ChatView = () => (
-    <div className="h-full flex flex-col">
-      {selectedBuddy && (
+  const ChatView = () => {
+    if (!user) {
+      return (
+        <div className="h-full flex items-center justify-center">
+          <div className="text-center text-gray-400">
+            <p>Please sign in to start chatting with travel buddies</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (!selectedBuddy) {
+      return (
+        <div className="h-full flex items-center justify-center">
+          <div className="text-center text-gray-400">
+            <p>Select a travel buddy to start chatting</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="h-full flex flex-col">
         <ChatContainer
-          userId={user?.id || 'mock-user'}
+          userId={user.id}
           buddyId={selectedBuddy.id}
           variant="mobile"
           enableReactions={true}
           enablePinning={true}
           enableSharing={true}
         />
-      )}
-    </div>
-  );
+      </div>
+    );
+  };
 
   // Profile view
   const ProfileView = () => (
@@ -484,7 +504,24 @@ const TravelBuddiesNew = () => {
                 <CardContent className="p-0 h-full">
                   {activeView === 'discover' && <DiscoveryView />}
                   {activeView === 'matches' && <MatchesView />}
-                  {activeView === 'chat' && <ChatView />}
+                  {activeView === 'chat' && (
+                    user && selectedBuddy ? (
+                      <ChatContainer
+                        userId={user.id}
+                        buddyId={selectedBuddy.id}
+                        variant="desktop"
+                        enableReactions={true}
+                        enablePinning={true}
+                        enableSharing={true}
+                      />
+                    ) : (
+                      <div className="h-full flex items-center justify-center">
+                        <div className="text-center text-gray-400">
+                          <p>{!user ? 'Please sign in to start chatting' : 'Select a travel buddy to start chatting'}</p>
+                        </div>
+                      </div>
+                    )
+                  )}
                   {activeView === 'profile' && <ProfileView />}
                 </CardContent>
               </Card>
