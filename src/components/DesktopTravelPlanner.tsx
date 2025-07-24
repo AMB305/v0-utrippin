@@ -13,7 +13,7 @@ export default function DesktopTravelPlanner() {
           <img 
             src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
             alt="Keila Bot" 
-            className="w-8 h-8 animate-pulse"
+            className="w-12 h-12 animate-pulse"
           />
           <span className="text-gradient-keila text-lg font-bold">
             Hi there! I'm Keila
