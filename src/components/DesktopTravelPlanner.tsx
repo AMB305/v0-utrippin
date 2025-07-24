@@ -42,7 +42,7 @@ export default function DesktopTravelPlanner() {
         </div>
 
         {/* Real-time Chat Integration */}
-        <div className="mt-12 max-w-2xl mx-auto">
+        <div className="mt-12">
           <ChatContainer
             userId={userId}
             buddyId={buddyId}

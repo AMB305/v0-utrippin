@@ -98,7 +98,7 @@ export const ChatContainer = ({
 
   const containerStyles = variant === 'mobile'
     ? 'h-[60vh] overflow-y-auto px-4 pt-4'
-    : 'h-[50vh] overflow-y-auto px-4 pt-2';
+    : 'h-[30vh] overflow-y-auto px-4 pt-2';
 
   return (
     <div className="flex flex-col bg-zinc-900 rounded-xl border border-white/10 shadow-xl">
