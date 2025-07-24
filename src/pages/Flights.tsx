@@ -77,34 +77,20 @@ export default function Flights() {
       />
       <Header />
       
-      {/* Hero Section with Sky Gradient and Modern Search */}
-      <div className="bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 relative overflow-hidden min-h-[500px]">
-        {/* Cloud Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Subtle cloud shapes */}
-          <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white/10 to-transparent rounded-b-[100%] transform -translate-y-12"></div>
-          <div className="absolute top-16 right-32 w-20 h-10 bg-white/8 rounded-full blur-sm"></div>
-          <div className="absolute top-20 left-24 w-16 h-8 bg-white/6 rounded-full blur-sm"></div>
-          <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-white/15 to-transparent rounded-t-[100%] transform translate-y-10"></div>
-          
-          {/* Subtle sparkles */}
-          <div className="absolute top-32 right-16 w-2 h-2 bg-white/40 rounded-full animate-pulse"></div>
-          <div className="absolute top-48 left-20 w-1 h-1 bg-white/50 rounded-full animate-pulse"></div>
-          <div className="absolute top-40 right-40 w-1.5 h-1.5 bg-white/30 rounded-full animate-pulse"></div>
-        </div>
-
-        <div className="container mx-auto px-4 py-16 relative z-10">
+      {/* Hero Section with Clean Background and Modern Search */}
+      <div className="bg-gradient-to-b from-gray-50 to-white py-12">
+        <div className="container mx-auto px-4">
           {/* Hero Text */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Book flights. Pay later.
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Find & book great flights
             </h1>
-            <p className="text-white/90 text-lg max-w-2xl mx-auto">
-              Book your perfect flight with confidence.
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Search and compare flights from 500+ airlines and travel sites to get you the cheapest flights
             </p>
           </div>
 
-          {/* Expedia Widget */}
+          {/* Flight Search Widget */}
           <ExpediaWidget />
         </div>
       </div>
