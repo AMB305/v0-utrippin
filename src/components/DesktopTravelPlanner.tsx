@@ -9,7 +9,16 @@ export default function DesktopTravelPlanner() {
   return (
     <div className="hidden lg:block bg-black min-h-screen text-white px-6 py-10">
       <header className="text-xl font-bold mb-6 flex justify-between items-center">
-        <span className="text-white">✈️ Keila Travel AI</span>
+        <div className="flex items-center gap-3">
+          <img 
+            src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
+            alt="Keila Bot" 
+            className="w-8 h-8 animate-pulse"
+          />
+          <span className="text-gradient-keila text-lg font-bold">
+            Hi there! I'm Keila
+          </span>
+        </div>
         <span className="text-sm text-gray-400">Plan. Share. Go.</span>
       </header>
 

@@ -398,6 +398,11 @@
     animation: float 6s ease-in-out infinite;
   }
 
+  /* Keila gradient text */
+  .text-gradient-keila {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-orange-400;
+  }
+
   .animate-fade-in-up {
     animation: fadeInUp 0.6s ease-out;
   }
