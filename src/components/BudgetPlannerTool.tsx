@@ -43,105 +43,100 @@ const BudgetPlannerTool = () => {
           </p>
         </div>
 
-        {/* Interactive Tool Container */}
-        <div className="bg-gray-50 rounded-2xl p-8 mx-auto max-w-3xl" style={{
-          boxShadow: '0 10px 25px -5px rgba(111, 123, 255, 0.1), 0 10px 10px -5px rgba(111, 123, 255, 0.04)'
-        }}>
-          {/* Trip Type Toggle */}
-          <div className="flex justify-center mb-12">
-            <div className="bg-gray-100 p-2 rounded-2xl flex">
-              <button
-                onClick={() => setTripType('staycation')}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
-                  tripType === 'staycation'
-                    ? 'border border-gray-900 text-gray-900 bg-white'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <Home size={20} />
-                Staycation
-              </button>
-              <button
-                onClick={() => setTripType('vacation')}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
-                  tripType === 'vacation'
-                    ? 'border border-gray-900 text-gray-900 bg-white'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <Plane size={20} />
-                Vacation
-              </button>
-            </div>
-          </div>
-
-          {/* Budget Range */}
-          <div className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-light">Budget Range</h3>
-              <span className="text-3xl font-bold">{formatBudget(budget)}</span>
-            </div>
-            
-            <div className="relative">
-              <input
-                type="range"
-                min="100"
-                max="100000"
-                step="100"
-                value={budget}
-                onChange={(e) => setBudget(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                style={{
-                  background: `linear-gradient(to right, #374151 0%, #374151 ${((budget - 100) / (100000 - 100)) * 100}%, #e5e7eb ${((budget - 100) / (100000 - 100)) * 100}%, #e5e7eb 100%)`
-                }}
-              />
-              <div className="flex justify-between text-sm text-gray-600 mt-2">
-                <span>$100</span>
-                <span>$1.0M</span>
-              </div>
-            </div>
-            
-            <p className="text-center text-orange-400 mt-2 font-medium">
-              {getBudgetDescription(budget)}
-            </p>
-          </div>
-
-          {/* Group Size */}
-          <div className="mb-12">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="text-gray-600">👥</span>
-              <h3 className="text-2xl font-light">Group Size</h3>
-            </div>
-            
-            <div className="flex items-center justify-center gap-6">
-              <button
-                onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
-                className="w-12 h-12 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl flex items-center justify-center transition-colors"
-                disabled={groupSize <= 1}
-              >
-                <Minus size={20} />
-              </button>
-              
-              <span className="text-4xl font-bold w-16 text-center">{groupSize}</span>
-              
-              <button
-                onClick={() => setGroupSize(groupSize + 1)}
-                className="w-12 h-12 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl flex items-center justify-center transition-colors"
-              >
-                <Plus size={20} />
-              </button>
-            </div>
-          </div>
-
-          {/* Generate Button */}
-          <div className="text-center">
-            <Button
-              onClick={handleGenerateItinerary}
-              className="bg-gray-900 text-white hover:bg-gray-700 px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300"
+        {/* Trip Type Toggle */}
+        <div className="flex justify-center mb-12">
+          <div className="bg-gray-100 p-2 rounded-2xl flex">
+            <button
+              onClick={() => setTripType('staycation')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
+                tripType === 'staycation'
+                  ? 'border border-gray-900 text-gray-900 bg-white'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
             >
-              Generate Perfect Itinerary
-            </Button>
+              <Home size={20} />
+              Staycation
+            </button>
+            <button
+              onClick={() => setTripType('vacation')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
+                tripType === 'vacation'
+                  ? 'border border-gray-900 text-gray-900 bg-white'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <Plane size={20} />
+              Vacation
+            </button>
           </div>
+        </div>
+
+        {/* Budget Range */}
+        <div className="mb-12">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-light">Budget Range</h3>
+            <span className="text-3xl font-bold">{formatBudget(budget)}</span>
+          </div>
+          
+          <div className="relative">
+            <input
+              type="range"
+              min="100"
+              max="100000"
+              step="100"
+              value={budget}
+              onChange={(e) => setBudget(Number(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+              style={{
+                background: `linear-gradient(to right, #374151 0%, #374151 ${((budget - 100) / (100000 - 100)) * 100}%, #e5e7eb ${((budget - 100) / (100000 - 100)) * 100}%, #e5e7eb 100%)`
+              }}
+            />
+            <div className="flex justify-between text-sm text-gray-600 mt-2">
+              <span>$100</span>
+              <span>$1.0M</span>
+            </div>
+          </div>
+          
+          <p className="text-center text-orange-400 mt-2 font-medium">
+            {getBudgetDescription(budget)}
+          </p>
+        </div>
+
+        {/* Group Size */}
+        <div className="mb-12">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="text-gray-600">👥</span>
+            <h3 className="text-2xl font-light">Group Size</h3>
+          </div>
+          
+          <div className="flex items-center justify-center gap-6">
+            <button
+              onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
+              className="w-12 h-12 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl flex items-center justify-center transition-colors"
+              disabled={groupSize <= 1}
+            >
+              <Minus size={20} />
+            </button>
+            
+            <span className="text-4xl font-bold w-16 text-center">{groupSize}</span>
+            
+            <button
+              onClick={() => setGroupSize(groupSize + 1)}
+              className="w-12 h-12 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl flex items-center justify-center transition-colors"
+            >
+              <Plus size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Generate Button */}
+        <div className="text-center">
+          <Button
+            onClick={handleGenerateItinerary}
+            className="bg-gray-900 text-white hover:bg-gray-700 px-8 py-4 text-lg font-medium rounded-xl transition-all duration-300"
+          >
+            Generate Perfect Itinerary
+          </Button>
         </div>
       </div>
 
