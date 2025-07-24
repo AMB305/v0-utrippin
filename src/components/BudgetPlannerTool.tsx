@@ -44,7 +44,7 @@ const BudgetPlannerTool = () => {
         </div>
 
         {/* Interactive Tool Container */}
-        <div className="bg-white rounded-2xl p-8 mx-auto max-w-3xl" style={{
+        <div className="bg-gray-50 rounded-2xl p-8 mx-auto max-w-3xl" style={{
           boxShadow: '0 10px 25px -5px rgba(111, 123, 255, 0.1), 0 10px 10px -5px rgba(111, 123, 255, 0.04)'
         }}>
           {/* Trip Type Toggle */}
