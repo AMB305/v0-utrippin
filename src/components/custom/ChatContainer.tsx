@@ -140,18 +140,43 @@ export const ChatContainer = ({
       let aiReply = "I'm sorry, I'm having trouble responding right now. Please try again later!";
       
       if (response.data && !response.error) {
-        // Try to extract a simple text response from the AI
+        console.log('🤖 Processing AI response data:', response.data);
+        
+        // Handle structured response from ai-travel-chat
         if (typeof response.data === 'string') {
           aiReply = response.data;
         } else if (response.data.response) {
+          // Main response field from ai-travel-chat
           aiReply = response.data.response;
+        } else if (response.data.detailedItinerary) {
+          // Detailed itinerary response
+          const itinerary = response.data.detailedItinerary;
+          if (itinerary.summary) {
+            aiReply = itinerary.summary;
+          } else if (itinerary.title) {
+            aiReply = `${itinerary.title}\n\n${itinerary.recommendations?.map(r => 
+              `${r.category_name}: ${r.places?.map(p => p.name).join(', ') || 'Various options'}`
+            ).join('\n') || 'Recommendations available'}`;
+          }
+        } else if (response.data.trips && response.data.trips.length > 0) {
+          // Trip recommendations
+          const trip = response.data.trips[0];
+          aiReply = `Great! I found some options for you:\n\n${trip.name}\n${trip.summary}`;
+        } else if (response.data.message) {
+          // Generic message field
+          aiReply = response.data.message;
         } else if (response.data.summary) {
           aiReply = response.data.summary;
         } else if (response.data.title) {
           aiReply = response.data.title;
+        } else {
+          // Log the structure for debugging
+          console.warn('🤖 Unhandled AI response structure:', Object.keys(response.data));
+          aiReply = "I received your message but I'm having trouble formatting my response. Let me try again - what would you like to know about travel?";
         }
       } else {
         console.error('AI response error:', response.error);
+        aiReply = "I'm experiencing some technical difficulties. Please try asking your question again!";
       }
 
       console.log('🤖 AI reply to insert:', aiReply);
