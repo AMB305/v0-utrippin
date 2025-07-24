@@ -61,11 +61,22 @@ serve(async (req) => {
 
 function buildExpediaUrl(hotelName: string, destination?: string): string {
   const baseUrl = 'https://www.expedia.com/Hotel-Search';
-  const affiliateParams = 'clickref=1110l15dQSW&camref=1110l15dQSW';
+  // Use the same affiliate credentials as defined in affiliateConfig.js
+  const clickref = '1101l5dQSW';
+  const camref = '1101l5dQSW';
   
   // Use destination if provided, otherwise use hotel name for search
   const searchTerm = destination || hotelName;
   const encodedDestination = encodeURIComponent(searchTerm);
   
-  return `${baseUrl}?destination=${encodedDestination}&${affiliateParams}`;
+  // Build comprehensive affiliate URL with proper parameters
+  const affiliateParams = new URLSearchParams({
+    destination: searchTerm,
+    clickref: clickref,
+    camref: camref,
+    rooms: '1',
+    adults: '2'
+  });
+  
+  return `${baseUrl}?${affiliateParams.toString()}`;
 }

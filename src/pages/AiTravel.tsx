@@ -64,6 +64,7 @@ interface ChatMessage {
     price?: string;
     rating?: number;
     duration?: string;
+    bookingUrl?: string;
   }>;
   quickReplies?: string[];
   recommendations?: {
@@ -793,13 +794,31 @@ const AiTravel = () => {
                                           </div>
                                         )}
                                       </div>
-                                      <Button 
-                                        size="sm" 
-                                        className="w-full mt-3 bg-blue-600 hover:bg-blue-700"
-                                      >
-                                        Book on Utrippin
-                                        <ExternalLink className="w-3 h-3 ml-1" />
-                                      </Button>
+                                       {card.bookingUrl ? (
+                                         <a 
+                                           href={card.bookingUrl} 
+                                           target="_blank" 
+                                           rel="noopener noreferrer"
+                                           className="block w-full mt-3"
+                                         >
+                                           <Button 
+                                             size="sm" 
+                                             className="w-full bg-blue-600 hover:bg-blue-700 pointer-events-none"
+                                           >
+                                             Book on Utrippin
+                                             <ExternalLink className="w-3 h-3 ml-1" />
+                                           </Button>
+                                         </a>
+                                       ) : (
+                                         <Button 
+                                           size="sm" 
+                                           className="w-full mt-3 bg-gray-600 cursor-not-allowed"
+                                           disabled
+                                         >
+                                           Book on Utrippin
+                                           <ExternalLink className="w-3 h-3 ml-1" />
+                                         </Button>
+                                       )}
                                     </div>
                                   </Card>
                                 ))}

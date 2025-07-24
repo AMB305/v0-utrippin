@@ -242,28 +242,38 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                         </div>
                       </div>
 
-                      {/* Booking Button */}
-                      {(place.booking_url || placeDetails[place.name]?.websiteUrl || placeDetails[place.name]?.googleMapsUrl) && place.type !== 'Transportation' && (
-                         <Button 
-                           size="sm" 
-                           className="w-full text-xs bg-blue-600 hover:bg-blue-700 text-white"
-                          onClick={() => {
-                            const url = place.booking_url || 
-                                         placeDetails[place.name]?.websiteUrl || 
-                                         placeDetails[place.name]?.googleMapsUrl;
-                            if (url) window.open(url, '_blank');
-                          }}
-                        >
-                          {place.booking_url ? 
-                            (place.type.toLowerCase().includes('restaurant') || place.type.toLowerCase().includes('dining') 
-                              ? 'Book Table on Utrippin'
-                              : place.type.toLowerCase().includes('hotel')
-                              ? 'Book Hotel on Utrippin'
-                              : 'Book Tour on Utrippin')
-                            : placeDetails[place.name]?.websiteUrl ? 'Visit Website' : 
-                            'View on Google Maps'}
-                        </Button>
-                      )}
+                       {/* Booking Button */}
+                       {(place.booking_url || placeDetails[place.name]?.websiteUrl || placeDetails[place.name]?.googleMapsUrl) && place.type !== 'Transportation' && (
+                         (() => {
+                           const url = place.booking_url || 
+                                        placeDetails[place.name]?.websiteUrl || 
+                                        placeDetails[place.name]?.googleMapsUrl;
+                           const buttonText = place.booking_url ? 
+                             (place.type.toLowerCase().includes('restaurant') || place.type.toLowerCase().includes('dining') 
+                               ? 'Book Table on Utrippin'
+                               : place.type.toLowerCase().includes('hotel')
+                               ? 'Book Hotel on Utrippin'
+                               : 'Book Tour on Utrippin')
+                             : placeDetails[place.name]?.websiteUrl ? 'Visit Website' : 
+                             'View on Google Maps';
+                           
+                           return (
+                             <a 
+                               href={url} 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               className="block w-full"
+                             >
+                               <Button 
+                                 size="sm" 
+                                 className="w-full text-xs bg-blue-600 hover:bg-blue-700 text-white pointer-events-none"
+                               >
+                                 {buttonText}
+                               </Button>
+                             </a>
+                           );
+                         })()
+                       )}
                     </div>
                   </div>
                 );

@@ -476,7 +476,7 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
         }
       }
       
-      // Enhanced detailed response with Google Places integration
+      // Enhanced detailed response with Expedia affiliate links integration
       const detailedResponse = {
         response: parsedResponse.summary,
         showMap: tripDetails.destination ? true : false,
@@ -485,13 +485,13 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
         quickReplies: parsedResponse.follow_up_questions || [],
         recommendations: [],
         callsToAction: [],
-        detailedItinerary: {
+        detailedItinerary: await enhanceItineraryWithAffiliateLinks({
           title: parsedResponse.title,
           summary: parsedResponse.summary,
           recommendations: parsedResponse.recommendations,
           actionable_suggestions: parsedResponse.actionable_suggestions,
           follow_up_questions: parsedResponse.follow_up_questions
-        },
+        }, tripDetails.destination, supabase),
         isDetailedItinerary: true // Flag to trigger detailed UI
       };
       
@@ -543,3 +543,80 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
     });
   }
 });
+
+// Function to enhance itinerary with Expedia affiliate links
+async function enhanceItineraryWithAffiliateLinks(itinerary: any, destination: string, supabase: any) {
+  console.log('AI Travel Chat - Enhancing itinerary with affiliate links for destination:', destination);
+  
+  // Create enhanced recommendations with affiliate booking URLs
+  const enhancedRecommendations = await Promise.all(
+    itinerary.recommendations.map(async (category: any) => {
+      // Only add affiliate links for hotel/restaurant categories
+      const isBookableCategory = ['hotel', 'restaurant', 'dining', 'accommodation'].some(type => 
+        category.category_name.toLowerCase().includes(type) ||
+        category.places?.some((place: any) => place.type?.toLowerCase().includes(type))
+      );
+
+      if (!isBookableCategory) {
+        return category;
+      }
+
+      const enhancedPlaces = await Promise.all(
+        category.places.map(async (place: any) => {
+          // Only add affiliate links for hotels and restaurants
+          const isHotelOrRestaurant = ['hotel', 'restaurant', 'accommodation', 'dining'].some(type =>
+            place.type?.toLowerCase().includes(type)
+          );
+
+          if (!isHotelOrRestaurant) {
+            return place;
+          }
+
+          try {
+            console.log(`AI Travel Chat - Getting Expedia link for: ${place.name} in ${destination}`);
+            
+            // Call our Expedia hotel lookup function
+            const { data: expediaData, error } = await supabase.functions.invoke('expedia-hotel-lookup', {
+              body: {
+                hotelName: place.name,
+                destination: destination
+              }
+            });
+
+            if (error) {
+              console.error('AI Travel Chat - Error calling expedia-hotel-lookup:', error);
+              return place;
+            }
+
+            if (expediaData && expediaData.bookingUrl) {
+              console.log(`AI Travel Chat - Successfully got Expedia affiliate link for ${place.name}`);
+              return {
+                ...place,
+                booking_url: expediaData.bookingUrl,
+                // Also update image if Expedia provides a better one
+                image_url: expediaData.imageUrl || place.image_url,
+                // Update pricing info if available
+                estimated_cost: expediaData.price || place.estimated_cost
+              };
+            }
+
+            return place;
+          } catch (error) {
+            console.error(`AI Travel Chat - Error enhancing ${place.name} with affiliate link:`, error);
+            return place;
+          }
+        })
+      );
+
+      return {
+        ...category,
+        places: enhancedPlaces
+      };
+    })
+  );
+
+  return {
+    ...itinerary,
+    recommendations: enhancedRecommendations
+  };
+}

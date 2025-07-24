@@ -34,6 +34,7 @@ interface ChatMessage {
     price?: string;
     rating?: number;
     duration?: string;
+    bookingUrl?: string;
   }>;
   quickReplies?: string[];
   recommendations?: {
