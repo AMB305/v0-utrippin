@@ -1,569 +1,343 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
-  Search, MapPin, Heart, MessageCircle, Star, Filter, Settings,
-  ArrowLeft, MoreHorizontal, Send, Camera, Plus, X, Check
+  Search, MapPin, Heart, Filter, Share2
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { ChatContainer } from "@/components/custom/chat-container";
 import SignUpWall from "@/components/SignUpWall";
-import TravelBuddyCard from "@/components/custom/TravelBuddyCard";
 import TravelBuddyMap from "@/components/custom/TravelBuddyMap";
-import TravelBuddyGrid from "@/components/custom/TravelBuddyGrid";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 
-// Travel buddy profile interface
-interface TravelBuddy {
+// Trip interface for the new layout
+interface Trip {
   id: string;
-  name: string;
-  age: number;
+  title: string;
   location: string;
-  bio: string;
-  interests: string[];
-  travel_style: string;
-  photo_url: string;
-  looking_for: 'buddy' | 'group' | 'solo';
-  upcoming_trips: string[];
-  distance?: string;
-  compatibility?: number;
+  dates: string;
+  description: string;
+  author: {
+    name: string;
+    photo: string;
+    verified: boolean;
+  };
+  likes: number;
+  shares: number;
 }
 
-// Mock data for travel buddies
-const mockTravelBuddies: TravelBuddy[] = [
+// Mock data for trips (matching the reference design)
+const mockTrips: Trip[] = [
   {
     id: '1',
-    name: 'Alex',
-    age: 25,
-    location: 'San Francisco, CA',
-    bio: 'Adventure seeker looking for travel companions to explore Southeast Asia. Love hiking, street food, and meeting locals.',
-    interests: ['Hiking', 'Photography', 'Food', 'Culture'],
-    travel_style: 'Backpacker',
-    photo_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-    looking_for: 'buddy',
-    upcoming_trips: ['Thailand', 'Vietnam', 'Cambodia'],
-    distance: '2 miles',
-    compatibility: 92
+    title: 'Birthday trip',
+    location: 'SAINT THOMAS',
+    dates: 'Oct 7, 2026 - Oct 11, 2026 (flexible)',
+    description: 'Would like to travel the islands',
+    author: {
+      name: 'Sarah',
+      photo: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400',
+      verified: false
+    },
+    likes: 12,
+    shares: 3
   },
   {
     id: '2',
-    name: 'Maria',
-    age: 28,
-    location: 'New York, NY',
-    bio: 'Digital nomad planning a 3-month European tour. Looking for fellow remote workers to share experiences.',
-    interests: ['Art', 'Museums', 'Coffee', 'Architecture'],
-    travel_style: 'Cultural Explorer',
-    photo_url: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400',
-    looking_for: 'group',
-    upcoming_trips: ['Barcelona', 'Amsterdam', 'Berlin'],
-    distance: '5 miles',
-    compatibility: 88
+    title: 'Exploring',
+    location: 'SAN JUAN',
+    dates: 'Aug 7, 2025 - Aug 10, 2025 (flexible)',
+    description: 'Hi there looking to meet new people to with in san juan puerto rico. Im going on a solo trip as of',
+    author: {
+      name: 'Mike',
+      photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
+      verified: false
+    },
+    likes: 8,
+    shares: 5
   },
   {
     id: '3',
-    name: 'James',
-    age: 32,
-    location: 'London, UK',
-    bio: 'Experienced solo traveler open to sharing adventures. Love off-the-beaten-path destinations.',
-    interests: ['Adventure', 'Nature', 'Wildlife', 'Photography'],
-    travel_style: 'Adventure Seeker',
-    photo_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
-    looking_for: 'buddy',
-    upcoming_trips: ['Patagonia', 'Iceland', 'Nepal'],
-    distance: '12 miles',
-    compatibility: 85
+    title: 'A week in puerto rico!',
+    location: 'SAN JUAN',
+    dates: 'Mar 22, 2026 - Mar 29, 2026 (flexible)',
+    description: 'Hello, I am 29 looking for a travel partner for PR in March 2026 :)',
+    author: {
+      name: 'Maria',
+      photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
+      verified: false
+    },
+    likes: 15,
+    shares: 7
+  },
+  {
+    id: '4',
+    title: 'New year\'s eve cruise',
+    location: 'PHILLIPSBURG',
+    dates: 'Dec 27, 2026 - Jan 3, 2027',
+    description: 'Looking for travel companions for an amazing NYE cruise experience',
+    author: {
+      name: 'David',
+      photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+      verified: true
+    },
+    likes: 22,
+    shares: 12
+  },
+  {
+    id: '5',
+    title: 'Punta cana solo trip',
+    location: 'PUNTA CANA',
+    dates: 'Jul 27, 2025 - Jul 30, 2025',
+    description: 'Solo adventure in beautiful Punta Cana, looking for like-minded travelers',
+    author: {
+      name: 'Lisa',
+      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400',
+      verified: false
+    },
+    likes: 9,
+    shares: 4
+  },
+  {
+    id: '6',
+    title: 'Vacation',
+    location: 'PUNTA CANA',
+    dates: 'Aug 17, 2025 - Aug 23, 2025',
+    description: 'Relaxing vacation in tropical paradise, open to meeting new people',
+    author: {
+      name: 'Alex',
+      photo: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400',
+      verified: false
+    },
+    likes: 18,
+    shares: 6
   }
 ];
 
 const TravelBuddiesNew = () => {
   const { user } = useAuth();
-  const [activeView, setActiveView] = useState<'discover' | 'matches' | 'chat' | 'profile' | 'groups'>('discover');
-  const [selectedBuddy, setSelectedBuddy] = useState<TravelBuddy | null>(null);
-  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
-  const [currentBuddyIndex, setCurrentBuddyIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState<'trips' | 'locals' | 'nearby' | 'blog'>('trips');
   const [showSignupWall, setShowSignupWall] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBuddyId, setSelectedBuddyId] = useState<string | null>(null);
-  const [filters, setFilters] = useState({
-    looking_for: 'all',
-    age_range: [18, 65],
-    distance: 50,
-    travel_style: 'all'
-  });
+  const [searchQuery, setSearchQuery] = useState('U.S. Virgin Islands');
 
-  // Mock group chats
-  const mockGroups = [
-    { id: 'group-1', name: 'Southeast Asia Adventure', members: 4, lastMessage: 'Let\'s meet at the airport!' },
-    { id: 'group-2', name: 'European Backpackers', members: 6, lastMessage: 'Train passes booked!' },
-    { id: 'group-3', name: 'Japan Culture Trip', members: 3, lastMessage: 'Found a great ryokan!' }
-  ];
-
-  // Mock desktop buddies data
-  const mockDesktopBuddies = mockTravelBuddies.map((buddy, index) => ({
-    id: buddy.id,
-    name: buddy.name,
-    avatarUrl: buddy.photo_url,
-    location: buddy.location,
-    coords: { 
-      lat: 37.7749 + (index * 0.1), 
-      lng: -122.4194 + (index * 0.1) 
-    },
-    isOnline: index % 2 === 0,
-    isVerified: buddy.compatibility && buddy.compatibility > 85,
-    connectStatus: undefined as 'none' | 'pending' | 'connected' | undefined
-  }));
-
-  const currentBuddy = mockTravelBuddies[currentBuddyIndex];
-
-  const handleLike = () => {
-    if (!user) {
-      setShowSignupWall(true);
-      return;
-    }
-    // TODO: Implement like logic
-    nextBuddy();
-  };
-
-  const handlePass = () => {
-    nextBuddy();
-  };
-
-  const nextBuddy = () => {
-    setCurrentBuddyIndex((prev) => (prev + 1) % mockTravelBuddies.length);
-  };
-
-  const handleMessage = (buddy: TravelBuddy) => {
-    if (!user) {
-      setShowSignupWall(true);
-      return;
-    }
-    setSelectedBuddy(buddy);
-    setActiveView('chat');
-  };
-
-  const handleNavigation = (view: string) => {
-    const validView = view as 'discover' | 'matches' | 'chat' | 'profile' | 'groups';
-    setActiveView(validView);
-  };
-
-  const handleJoinGroup = (groupId: string) => {
-    if (!user) {
-      setShowSignupWall(true);
-      return;
-    }
-    setSelectedGroupId(groupId);
-    setSelectedBuddy(null); // Clear individual buddy selection
-    setActiveView('chat');
-  };
-
-  const handleConnect = (buddyId: string) => {
-    if (!user) {
-      setShowSignupWall(true);
-      return;
-    }
-    // TODO: Implement connect logic
-    console.log('Connecting to buddy:', buddyId);
-  };
-
-  const handleMapPinClick = (buddyId: string) => {
-    setSelectedBuddyId(buddyId);
-    // Scroll to the buddy card
-    const buddyElement = document.getElementById(`buddy-${buddyId}`);
-    if (buddyElement) {
-      buddyElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  // Desktop header component
-  const DesktopHeader = () => (
-    <div className="flex items-center justify-between mb-8 px-6 py-4 bg-white shadow-sm">
-      <div className="flex items-center gap-4">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-600 to-red-500 flex items-center justify-center">
-          <span className="text-white font-bold text-lg">U</span>
-        </div>
-        <h1 className="text-2xl font-bold text-gray-900">Travel Buddies</h1>
-      </div>
-      <div className="flex items-center gap-6">
-        <nav className="flex items-center gap-6 text-sm font-medium">
-          <button className="text-red-600 border-b-3 border-red-600 pb-2">Travel Buddies</button>
-          <button className="text-gray-600 hover:text-gray-900">Messages</button>
-          <button className="text-gray-600 hover:text-gray-900">Likes</button>
-          <button className="text-gray-600 hover:text-gray-900">Views</button>
-          <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">Get Unlimited</button>
-        </nav>
-        {user && (
-          <Avatar className="w-8 h-8">
-            <AvatarImage src={user.user_metadata?.avatar_url} />
-            <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
-          </Avatar>
-        )}
-      </div>
-    </div>
-  );
-
-  // Desktop main view
-  const DesktopMainView = () => (
-    <div className="flex h-screen bg-gray-50">
-      <div className="flex-1 flex flex-col">
-        <DesktopHeader />
-        
-        {/* Filters Bar */}
-        <div className="px-6 py-4 bg-white border-b border-gray-200">
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm">Online now</Button>
-            <Button variant="outline" size="sm">Verified</Button>
-            <Button variant="outline" size="sm">Nearby</Button>
-            <Button variant="outline" size="sm">Interests</Button>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 flex">
-          {/* Left Column - Map */}
-          <div className="w-2/5 p-6">
-            <div className="h-full bg-white rounded-xl shadow-sm">
-              <TravelBuddyMap 
-                buddies={mockDesktopBuddies}
-                onPinClick={handleMapPinClick}
-              />
-            </div>
-          </div>
-          
-          {/* Right Column - Buddy Grid */}
-          <div className="w-3/5 p-6 pl-3">
-            <div className="h-full overflow-y-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {mockDesktopBuddies.map((buddy) => (
-                  <div 
-                    key={buddy.id}
-                    id={`buddy-${buddy.id}`}
-                    className={`bg-white rounded-2xl p-4 shadow-soft grid grid-rows-[auto,1fr,auto] gap-2 hover-lift ${
-                      selectedBuddyId === buddy.id ? 'ring-2 ring-red-600' : ''
-                    }`}
-                  >
-                    <div className="relative mx-auto">
-                      <img 
-                        src={buddy.avatarUrl} 
-                        alt={buddy.name}
-                        className="w-24 h-24 rounded-full object-cover"
-                      />
-                      {buddy.isOnline && (
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-3 border-white"></div>
-                      )}
-                      {buddy.isVerified && (
-                        <Badge className="absolute -top-2 -right-2 bg-blue-600 text-white px-2 py-1 text-xs">
-                          <Check className="w-3 h-3 mr-1" />
-                          Verified
-                        </Badge>
-                      )}
-                    </div>
-                    
-                    <div className="text-center">
-                      <h3 className="text-xl font-semibold mb-1">{buddy.name}</h3>
-                      <p className="text-sm text-gray-600 flex items-center justify-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        {buddy.location}
-                      </p>
-                      {buddy.isOnline && (
-                        <Badge className="mt-2 bg-green-100 text-green-800">
-                          Online now
-                        </Badge>
-                      )}
-                    </div>
-                    
-                    <Button 
-                      className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg"
-                      onClick={() => handleConnect(buddy.id)}
-                    >
-                      Connect
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  // Mobile header component
-  const MobileHeader = () => (
-    <div className="flex items-center justify-between p-4 border-b border-gray-800">
-      {activeView !== 'discover' && (
-        <Button variant="ghost" size="sm" onClick={() => setActiveView('discover')}>
-          <ArrowLeft className="w-5 h-5 text-white" />
-        </Button>
-      )}
-      <h1 className="text-lg font-semibold text-white">
-        {activeView === 'discover' && 'Discover'}
-        {activeView === 'matches' && 'Matches'}
-        {activeView === 'groups' && 'Groups'}
-        {activeView === 'chat' && (selectedBuddy?.name || (selectedGroupId && mockGroups.find(g => g.id === selectedGroupId)?.name) || 'Chat')}
-        {activeView === 'profile' && 'Profile'}
-      </h1>
-      <Button variant="ghost" size="sm">
-        <MoreHorizontal className="w-5 h-5 text-white" />
-      </Button>
-    </div>
-  );
-
-  // Discovery view with swipeable cards
-  const DiscoveryView = () => (
-    <div className="min-h-screen bg-backgroundDark flex items-center justify-center p-4">
-      {currentBuddy && (
-        <TravelBuddyCard
-          user={{
-            id: currentBuddy.id,
-            name: currentBuddy.name,
-            age: currentBuddy.age,
-            photo: currentBuddy.photo_url,
-            match: currentBuddy.compatibility || 0,
-            location: currentBuddy.location,
-            bio: currentBuddy.bio,
-            tags: [...currentBuddy.interests, currentBuddy.travel_style]
-          }}
-          variant="mobile"
-          activeView={activeView}
-          onNavigate={handleNavigation}
-          onLike={handleLike}
-          onDislike={handlePass}
-          onChat={() => handleMessage(currentBuddy)}
-        />
-      )}
-    </div>
-  );
-
-  // Matches view
-  const MatchesView = () => (
-    <div className="p-4 space-y-4">
-      <h2 className="text-xl font-bold text-white mb-4">Your Matches</h2>
-      {mockTravelBuddies.slice(0, 3).map((buddy) => (
-        <Card key={buddy.id} className="bg-gray-800 border-gray-700" onClick={() => handleMessage(buddy)}>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <Avatar className="w-12 h-12">
-                <AvatarImage src={buddy.photo_url} />
-                <AvatarFallback>{buddy.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <h3 className="text-white font-semibold">{buddy.name}</h3>
-                <p className="text-gray-400 text-sm">{buddy.location}</p>
-              </div>
-              <div className="text-right">
-                <Badge className="bg-orange-500 text-white text-xs">
-                  {buddy.compatibility}%
-                </Badge>
-                <p className="text-gray-400 text-xs mt-1">{buddy.distance}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-
-  // Groups view
-  const GroupsView = () => (
-    <div className="p-4 space-y-4">
-      <h2 className="text-xl font-bold text-white mb-4">Group Chats</h2>
-      {mockGroups.map((group) => (
-        <Card key={group.id} className="bg-gray-800 border-gray-700" onClick={() => handleJoinGroup(group.id)}>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-tinderOrange to-uttippPurple flex items-center justify-center text-white font-bold">
-                {group.members}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-white font-semibold">{group.name}</h3>
-                <p className="text-gray-400 text-sm">{group.lastMessage}</p>
-              </div>
-              <div className="text-right">
-                <Badge className="bg-orange-500 text-white text-xs">
-                  {group.members} members
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-
-  // Chat view
-  const ChatView = () => {
-    if (!user) {
-      return (
-        <div className="h-full flex items-center justify-center">
-          <div className="text-center text-gray-400">
-            <p>Please sign in to start chatting with travel buddies</p>
-          </div>
-        </div>
-      );
-    }
-
-    if (!selectedBuddy && !selectedGroupId) {
-      return (
-        <div className="h-full flex items-center justify-center">
-          <div className="text-center text-gray-400">
-            <p>Select a travel buddy or group to start chatting</p>
-          </div>
-        </div>
-      );
-    }
-
+  // If user is not logged in, show sign up wall
+  if (!user) {
     return (
-      <div className="h-full flex flex-col">
-        <ChatContainer
-          userId={user.id}
-          buddyId={selectedBuddy?.id}
-          groupId={selectedGroupId || undefined}
-          variant="mobile"
-          enableReactions={true}
-          enablePinning={true}
-          enableSharing={true}
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <SignUpWall
+          isOpen={true}
+          onClose={() => {}}
+          triggerSource="travel-buddies"
         />
       </div>
     );
+  }
+
+  const handleConnect = (tripId: string) => {
+    console.log('Connecting to trip:', tripId);
   };
 
-  // Profile view
-  const ProfileView = () => (
-    <div className="p-4 space-y-6">
-      <div className="text-center">
-        <Avatar className="w-24 h-24 mx-auto mb-4">
-          <AvatarImage src={user?.user_metadata?.avatar_url} />
-          <AvatarFallback className="text-2xl">
-            {user?.email?.charAt(0).toUpperCase() || 'U'}
-          </AvatarFallback>
-        </Avatar>
-        <h2 className="text-xl font-bold text-white">Your Profile</h2>
-        <p className="text-gray-400">Complete your profile to find better matches</p>
-      </div>
+  const handleLike = (tripId: string) => {
+    console.log('Liking trip:', tripId);
+  };
 
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Looking For
-          </label>
-          <div className="flex gap-2">
-            <Badge className="bg-orange-500 text-white">Travel Buddy</Badge>
-            <Badge variant="outline" className="border-gray-700 text-gray-300">Join Group</Badge>
+  const handleShare = (tripId: string) => {
+    console.log('Sharing trip:', tripId);
+  };
+
+  // Desktop layout matching the reference image
+  const DesktopLayout = () => (
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-gray-50">
+        <AppSidebar />
+        
+        <div className="flex-1 flex flex-col">
+          {/* Header */}
+          <header className="bg-white border-b border-gray-200 px-6 py-4">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger />
+              
+              {/* Search Bar */}
+              <div className="flex-1 max-w-md">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search destinations..."
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            </div>
+            
+            {/* Navigation Tabs */}
+            <div className="flex items-center gap-6 mt-4">
+              <Button
+                variant={activeTab === 'trips' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('trips')}
+                className={activeTab === 'trips' ? 'bg-red-100 text-red-700' : ''}
+              >
+                <MapPin className="w-4 h-4 mr-2" />
+                Trips
+              </Button>
+              <Button
+                variant={activeTab === 'locals' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('locals')}
+                className={activeTab === 'locals' ? 'bg-red-100 text-red-700' : ''}
+              >
+                <Heart className="w-4 h-4 mr-2" />
+                Locals
+              </Button>
+              <Button
+                variant={activeTab === 'nearby' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('nearby')}
+                className={activeTab === 'nearby' ? 'bg-red-100 text-red-700' : ''}
+              >
+                <Search className="w-4 h-4 mr-2" />
+                Nearby
+              </Button>
+              <Button
+                variant={activeTab === 'blog' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('blog')}
+                className={activeTab === 'blog' ? 'bg-red-100 text-red-700' : ''}
+              >
+                Blog
+              </Button>
+              <Button variant="outline" size="sm">
+                <Filter className="w-4 h-4 mr-2" />
+                Filters
+              </Button>
+              <Button className="bg-green-600 hover:bg-green-700 text-white" size="sm">
+                Get Verified
+              </Button>
+            </div>
+          </header>
+
+          {/* Main Content Area */}
+          <div className="flex-1 flex">
+            {/* Content Area */}
+            <div className="flex-1 p-6">
+              <div className="mb-6">
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                  Trips to {searchQuery}
+                  <Button className="ml-4 bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-1">
+                    Start Your Trip
+                  </Button>
+                </h1>
+              </div>
+
+              {/* Trip Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {mockTrips.map((trip) => (
+                  <Card key={trip.id} className="bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <CardContent className="p-0">
+                      <div className="relative">
+                        <img 
+                          src={trip.author.photo} 
+                          alt={trip.title}
+                          className="w-full h-48 object-cover rounded-t-lg"
+                        />
+                        <div className="absolute top-3 right-3 flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="bg-white/80 hover:bg-white/90 p-2"
+                            onClick={() => handleLike(trip.id)}
+                          >
+                            <Heart className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="bg-white/80 hover:bg-white/90 p-2"
+                            onClick={() => handleShare(trip.id)}
+                          >
+                            <Share2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        
+                        {/* Badge with location */}
+                        <div className="absolute bottom-3 left-3">
+                          <Badge className="bg-red-600 text-white">
+                            <MapPin className="w-3 h-3 mr-1" />
+                            {trip.location}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="p-4">
+                        <h3 className="font-semibold text-lg mb-2">{trip.title}</h3>
+                        <p className="text-sm text-gray-600 mb-3">{trip.dates}</p>
+                        <p className="text-sm text-gray-700 mb-4 line-clamp-3">{trip.description}</p>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <img 
+                              src={trip.author.photo} 
+                              alt={trip.author.name}
+                              className="w-6 h-6 rounded-full"
+                            />
+                            <span className="text-sm font-medium">{trip.author.name}</span>
+                            {trip.author.verified && (
+                              <Badge className="bg-green-600 text-white text-xs px-2 py-0">
+                                Verified
+                              </Badge>
+                            )}
+                          </div>
+                          <Button 
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                            size="sm"
+                            onClick={() => handleConnect(trip.id)}
+                          >
+                            Connect
+                          </Button>
+                        </div>
+                        
+                        <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
+                          <Button variant="ghost" size="sm" className="text-gray-500">
+                            Connect
+                          </Button>
+                          <Button variant="ghost" size="sm" className="text-gray-500">
+                            Details
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Map Sidebar */}
+            <div className="w-96 bg-white border-l border-gray-200">
+              <TravelBuddyMap 
+                buddies={mockTrips.map((trip, index) => ({
+                  id: trip.id,
+                  name: trip.author.name,
+                  avatarUrl: trip.author.photo,
+                  coords: { 
+                    lat: 18.3358 + (index * 0.1), 
+                    lng: -64.8963 + (index * 0.1) 
+                  },
+                  isOnline: index % 2 === 0
+                }))}
+                onPinClick={(tripId) => console.log('Pin clicked:', tripId)}
+              />
+            </div>
           </div>
         </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Travel Style
-          </label>
-          <Badge variant="outline" className="border-orange-500 text-orange-400">
-            Adventure Seeker
-          </Badge>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Interests
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {['Photography', 'Hiking', 'Food', 'Culture', 'Art'].map((interest) => (
-              <Badge key={interest} variant="secondary" className="text-xs">
-                {interest}
-              </Badge>
-            ))}
-          </div>
-        </div>
-
-        <Button className="w-full bg-orange-500 hover:bg-orange-600">
-          Edit Profile
-        </Button>
       </div>
-    </div>
+    </SidebarProvider>
   );
 
-  // Bottom navigation for mobile
-  const BottomNav = () => (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800">
-      <div className="flex">
-        <Button
-          variant="ghost"
-          className={`flex-1 p-4 rounded-none ${activeView === 'discover' ? 'text-orange-500' : 'text-gray-400'}`}
-          onClick={() => setActiveView('discover')}
-        >
-          <div className="flex flex-col items-center gap-1">
-            <Search className="w-5 h-5" />
-            <span className="text-xs">Discover</span>
-          </div>
-        </Button>
-        
-        <Button
-          variant="ghost"
-          className={`flex-1 p-4 rounded-none ${activeView === 'matches' ? 'text-orange-500' : 'text-gray-400'}`}
-          onClick={() => setActiveView('matches')}
-        >
-          <div className="flex flex-col items-center gap-1">
-            <Heart className="w-5 h-5" />
-            <span className="text-xs">Matches</span>
-          </div>
-        </Button>
-        
-        <Button
-          variant="ghost"
-          className={`flex-1 p-4 rounded-none ${activeView === 'chat' ? 'text-orange-500' : 'text-gray-400'}`}
-          onClick={() => setActiveView('chat')}
-        >
-          <div className="flex flex-col items-center gap-1">
-            <MessageCircle className="w-5 h-5" />
-            <span className="text-xs">Chat</span>
-          </div>
-        </Button>
-        
-        <Button
-          variant="ghost"
-          className={`flex-1 p-4 rounded-none ${activeView === 'profile' ? 'text-orange-500' : 'text-gray-400'}`}
-          onClick={() => setActiveView('profile')}
-        >
-          <div className="flex flex-col items-center gap-1">
-            <Settings className="w-5 h-5" />
-            <span className="text-xs">Profile</span>
-          </div>
-        </Button>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen">
-      {/* Desktop Layout - 2-column with map and cards */}
-      <div className="hidden md:block">
-        <DesktopMainView />
-      </div>
-
-      {/* Mobile Layout - Keep existing mobile functionality */}
-      <div className="md:hidden h-screen flex flex-col bg-backgroundDark">
-        {activeView !== 'discover' && <MobileHeader />}
-        
-        <div className="flex-1 overflow-hidden">
-          {activeView === 'discover' && <DiscoveryView />}
-          {activeView === 'matches' && <MatchesView />}
-          {activeView === 'groups' && <GroupsView />}
-          {activeView === 'chat' && <ChatView />}
-          {activeView === 'profile' && <ProfileView />}
-        </div>
-
-        {activeView !== 'discover' && <BottomNav />}
-      </div>
-
-      {/* Sign up wall */}
-      <SignUpWall
-        isOpen={showSignupWall}
-        onClose={() => setShowSignupWall(false)}
-        triggerSource="travel-buddies"
-      />
-    </div>
-  );
+  return <DesktopLayout />;
 };
 
 export default TravelBuddiesNew;
