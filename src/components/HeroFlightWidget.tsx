@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Plane, MapPin, Calendar, Users } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Plane, MapPin, Calendar, Users, ChevronDown } from 'lucide-react';
 import SimpleAirportAutocomplete from './SimpleAirportAutocomplete';
 import InlineAirportDropdown from './InlineAirportDropdown';
 import { DuffelAirport } from '@/lib/duffel';
@@ -14,6 +14,8 @@ export default function HeroFlightWidget() {
   const [checkOutDate, setCheckOutDate] = useState("");
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [showPassengerDropdown, setShowPassengerDropdown] = useState(false);
+  const passengerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
@@ -32,6 +34,16 @@ export default function HeroFlightWidget() {
     
     setCheckInDate(today.toISOString().split('T')[0]);
     setCheckOutDate(returnDate.toISOString().split('T')[0]);
+
+    // Close passenger dropdown when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      if (passengerRef.current && !passengerRef.current.contains(event.target as Node)) {
+        setShowPassengerDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleFlightSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -160,30 +172,65 @@ export default function HeroFlightWidget() {
               </div>
 
               {/* Passengers */}
-              <div className="flex items-center px-6 py-4 border-r border-gray-200">
+              <div className="flex items-center px-6 py-4 border-r border-gray-200 relative" ref={passengerRef}>
                 <Users className="text-teal-500 w-5 h-5 mr-3 flex-shrink-0" />
-                <div className="text-gray-700 font-medium">
-                  {adults + children === 1 ? `0${adults + children} Adult` : `0${adults + children} Adults`}
-                  {/* Hidden selects for functionality */}
-                  <select
-                    value={adults}
-                    onChange={(e) => setAdults(Number(e.target.value))}
-                    className="sr-only"
-                  >
-                    {[1, 2, 3, 4, 5, 6].map(num => (
-                      <option key={num} value={num}>{num}</option>
-                    ))}
-                  </select>
-                  <select
-                    value={children}
-                    onChange={(e) => setChildren(Number(e.target.value))}
-                    className="sr-only"
-                  >
-                    {[0, 1, 2, 3, 4].map(num => (
-                      <option key={num} value={num}>{num}</option>
-                    ))}
-                  </select>
+                <div 
+                  className="flex items-center cursor-pointer text-gray-700 font-medium"
+                  onClick={() => setShowPassengerDropdown(!showPassengerDropdown)}
+                >
+                  <span>
+                    {adults + children < 10 ? `0${adults + children}` : adults + children} {adults + children === 1 ? 'Adult' : 'Adults'}
+                  </span>
+                  <ChevronDown className="w-4 h-4 ml-2 text-gray-400" />
                 </div>
+                
+                {/* Passenger Dropdown */}
+                {showPassengerDropdown && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 mt-2 p-4 min-w-[200px]">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Adults</span>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            type="button"
+                            onClick={() => setAdults(Math.max(1, adults - 1))}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                          >
+                            -
+                          </button>
+                          <span className="w-8 text-center">{adults}</span>
+                          <button
+                            type="button"
+                            onClick={() => setAdults(Math.min(6, adults + 1))}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Children</span>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            type="button"
+                            onClick={() => setChildren(Math.max(0, children - 1))}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                          >
+                            -
+                          </button>
+                          <span className="w-8 text-center">{children}</span>
+                          <button
+                            type="button"
+                            onClick={() => setChildren(Math.min(4, children + 1))}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Search Button */}
