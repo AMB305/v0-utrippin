@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Search, MapPin, Heart, Filter, Share2
+  Search, MapPin, Heart, Filter, Share2, Settings, X, Star, 
+  Zap, ArrowLeft, MessageCircle, User
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import SignUpWall from "@/components/SignUpWall";
@@ -119,8 +120,20 @@ const mockTrips: Trip[] = [
 const TravelBuddiesNew = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'trips' | 'locals' | 'nearby' | 'blog'>('trips');
-  const [showSignupWall, setShowSignupWall] = useState(false);
   const [searchQuery, setSearchQuery] = useState('U.S. Virgin Islands');
+  const [currentBuddyIndex, setCurrentBuddyIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // If user is not logged in, show sign up wall
   if (!user) {
@@ -135,6 +148,18 @@ const TravelBuddiesNew = () => {
     );
   }
 
+  const handleSwipeLeft = () => {
+    if (currentBuddyIndex < mockTrips.length - 1) {
+      setCurrentBuddyIndex(currentBuddyIndex + 1);
+    }
+  };
+
+  const handleSwipeRight = () => {
+    if (currentBuddyIndex < mockTrips.length - 1) {
+      setCurrentBuddyIndex(currentBuddyIndex + 1);
+    }
+  };
+
   const handleConnect = (tripId: string) => {
     console.log('Connecting to trip:', tripId);
   };
@@ -146,6 +171,135 @@ const TravelBuddiesNew = () => {
   const handleShare = (tripId: string) => {
     console.log('Sharing trip:', tripId);
   };
+
+  // Mobile Layout - Tinder-style interface
+  if (isMobile) {
+    const currentTrip = mockTrips[currentBuddyIndex];
+    if (!currentTrip) return null;
+
+    return (
+      <div className="min-h-screen bg-black text-white relative overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 z-10 relative">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-lg">U</span>
+            </div>
+            <span className="text-white font-semibold">utrippin</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Settings className="w-6 h-6 text-white" />
+            <div className="w-6 h-6 text-white">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7 6h10l-2 6-2-2-2 2L7 6z"/>
+                <path d="M4 10h3l2 6 2-2 2 2 2-6h3l-4 10H8l-4-10z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Match Percentage */}
+        <div className="absolute top-16 right-4 z-10">
+          <div className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+            92% Match
+          </div>
+        </div>
+
+        {/* Profile Card */}
+        <div className="absolute inset-4 top-20 bottom-32 rounded-2xl overflow-hidden">
+          <div 
+            className="w-full h-full bg-cover bg-center relative"
+            style={{
+              backgroundImage: `linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.8) 100%), url('${currentTrip.author.photo}')`
+            }}
+          >
+            {/* Profile Info */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <h2 className="text-4xl font-bold mb-2">{currentTrip.author.name}, 25</h2>
+              <p className="text-gray-200 mb-3 leading-relaxed">
+                Adventure seeker looking for travel companions to explore Southeast Asia. Love hiking, street food, and meeting locals.
+              </p>
+              <div className="flex items-center gap-2 mb-4">
+                <MapPin className="w-4 h-4" />
+                <span className="text-gray-300">San Francisco, CA</span>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">Hiking</span>
+                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">Photography</span>
+                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">Food</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="absolute bottom-20 left-0 right-0 flex justify-center items-center gap-4 px-8">
+          <button 
+            onClick={handleSwipeLeft}
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+          >
+            <ArrowLeft className="w-6 h-6 text-yellow-500" />
+          </button>
+          <button 
+            onClick={handleSwipeLeft}
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+          >
+            <X className="w-6 h-6 text-red-500" />
+          </button>
+          <button 
+            onClick={handleSwipeRight}
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+          >
+            <Star className="w-6 h-6 text-blue-400" />
+          </button>
+          <button 
+            onClick={handleSwipeRight}
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+          >
+            <Heart className="w-6 h-6 text-green-500" />
+          </button>
+          <button 
+            onClick={handleSwipeRight}
+            className="w-14 h-14 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-600"
+          >
+            <Zap className="w-6 h-6 text-purple-500" />
+          </button>
+        </div>
+
+        {/* Bottom Navigation */}
+        <div className="absolute bottom-0 left-0 right-0 bg-black/90 backdrop-blur-sm border-t border-gray-800">
+          <div className="flex justify-around items-center py-3">
+            <button className="p-3">
+              <div className="w-6 h-6 text-red-500">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                </svg>
+              </div>
+            </button>
+            <button className="p-3">
+              <div className="w-6 h-6 text-gray-400">
+                <div className="grid grid-cols-2 gap-1">
+                  <div className="w-2 h-2 bg-current rounded-full"></div>
+                  <div className="w-2 h-2 bg-current rounded-full"></div>
+                  <div className="w-2 h-2 bg-current rounded-full"></div>
+                  <div className="w-2 h-2 bg-current rounded-full"></div>
+                </div>
+              </div>
+            </button>
+            <button className="p-3">
+              <Star className="w-6 h-6 text-gray-400" />
+            </button>
+            <button className="p-3">
+              <MessageCircle className="w-6 h-6 text-gray-400" />
+            </button>
+            <button className="p-3">
+              <User className="w-6 h-6 text-gray-400" />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Desktop layout matching the reference image
   const DesktopLayout = () => (
