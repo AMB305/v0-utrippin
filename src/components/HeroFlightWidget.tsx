@@ -117,21 +117,21 @@ export default function HeroFlightWidget() {
             {/* Main Form Row */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
               {/* From Field */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-3">
                 <label className="block text-sm font-medium text-gray-600 mb-2">From</label>
                 <div className="relative">
                   <Plane className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
                   <MapPin className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
                   {isMobile ? (
                     <InlineAirportDropdown
-                      placeholder="City or Airport"
+                      placeholder="Departure"
                       value={fromAirport}
                       onChange={setFromAirport}
                       inputClassName="pl-12 pr-12 py-4 w-full border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
                     />
                   ) : (
                     <SimpleAirportAutocomplete
-                      placeholder="City or Airport"
+                      placeholder="Departure"
                       value={fromAirport}
                       onChange={setFromAirport}
                       className="pl-12 pr-12 py-4 w-full border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
@@ -141,21 +141,21 @@ export default function HeroFlightWidget() {
               </div>
 
               {/* To Field */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-3">
                 <label className="block text-sm font-medium text-gray-600 mb-2">To</label>
                 <div className="relative">
                   <Plane className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
                   <MapPin className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
                   {isMobile ? (
                     <InlineAirportDropdown
-                      placeholder="City or Airport"
+                      placeholder="Destination"
                       value={toAirport}
                       onChange={setToAirport}
                       inputClassName="pl-12 pr-12 py-4 w-full border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
                     />
                   ) : (
                     <SimpleAirportAutocomplete
-                      placeholder="City or Airport"
+                      placeholder="Destination"
                       value={toAirport}
                       onChange={setToAirport}
                       className="pl-12 pr-12 py-4 w-full border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
@@ -230,7 +230,7 @@ export default function HeroFlightWidget() {
               </div>
 
               {/* Search Button */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-1">
                 <button 
                   type="submit"
                   className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold px-8 py-4 rounded-xl text-lg transition-colors duration-200 shadow-lg"
