@@ -61,7 +61,7 @@ export default function FeaturedTripCards() {
                 Book Now
               </button>
             </div>
-          </div>
+          </BlurFade>
         ))}
       </div>
     </div>
