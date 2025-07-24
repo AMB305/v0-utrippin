@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plane, MapPin, Calendar, Users, ArrowLeftRight, Globe } from 'lucide-react';
+import { Plane, MapPin, Calendar, Users, ArrowLeftRight } from 'lucide-react';
 import SimpleAirportAutocomplete from './SimpleAirportAutocomplete';
 import InlineAirportDropdown from './InlineAirportDropdown';
 import { DuffelAirport } from '@/lib/duffel';
@@ -75,108 +75,161 @@ export default function ExpediaWidget() {
   };
 
   const renderFlightForm = () => (
-    <div className="glass-card rounded-2xl p-6 max-w-5xl mx-auto backdrop-blur-md">
-      {/* Search Form - Horizontal Layout */}
-      <form onSubmit={handleFlightSubmit} className="flex flex-wrap items-center gap-4">
-        {/* From Field */}
-        <div className="relative flex-1 min-w-[200px]">
-          <div className="relative">
-            <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
-            {isMobile ? (
-              <InlineAirportDropdown
-                placeholder="USA"
-                value={fromAirport}
-                onChange={setFromAirport}
-                inputClassName="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:ring-2 focus:ring-white/30 focus:border-white/40 backdrop-blur-sm"
-              />
-            ) : (
-              <SimpleAirportAutocomplete
-                placeholder="USA"
-                value={fromAirport}
-                onChange={setFromAirport}
-                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:ring-2 focus:ring-white/30 focus:border-white/40 backdrop-blur-sm"
-              />
-            )}
-          </div>
-        </div>
-
-        {/* To Field */}
-        <div className="relative flex-1 min-w-[200px]">
-          <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
-            {isMobile ? (
-              <InlineAirportDropdown
-                placeholder="Los Angeles"
-                value={toAirport}
-                onChange={setToAirport}
-                inputClassName="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:ring-2 focus:ring-white/30 focus:border-white/40 backdrop-blur-sm"
-              />
-            ) : (
-              <SimpleAirportAutocomplete
-                placeholder="Los Angeles"
-                value={toAirport}
-                onChange={setToAirport}
-                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:ring-2 focus:ring-white/30 focus:border-white/40 backdrop-blur-sm"
-              />
-            )}
-          </div>
-        </div>
-
-        {/* Date Range */}
-        <div className="relative min-w-[180px]">
-          <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-8">
+      {/* Trip Type Radio Buttons */}
+      <div className="flex gap-8 mb-8">
+        {[
+          { value: 'one-way', label: 'One way' },
+          { value: 'round-trip', label: 'Round trip' },
+          { value: 'multi-city', label: 'Multi-city' }
+        ].map((type) => (
+          <label key={type.value} className="flex items-center gap-3 cursor-pointer">
             <input
-              type="date"
-              value={checkInDate}
-              onChange={(e) => setCheckInDate(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:ring-2 focus:ring-white/30 focus:border-white/40 backdrop-blur-sm [color-scheme:dark]"
-              required
+              type="radio"
+              name="tripType"
+              value={type.value}
+              checked={tripType === type.value}
+              onChange={(e) => setTripType(e.target.value)}
+              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
             />
+            <span className="text-base font-medium text-gray-700">
+              {type.label}
+            </span>
+          </label>
+        ))}
+      </div>
+
+      <form onSubmit={handleFlightSubmit}>
+        {/* Flight Search Fields */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
+          {/* From */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
+            <div className="relative">
+              <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
+              {isMobile ? (
+                <InlineAirportDropdown
+                  placeholder="Departure"
+                  value={fromAirport}
+                  onChange={setFromAirport}
+                  inputClassName="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                />
+              ) : (
+                <SimpleAirportAutocomplete
+                  placeholder="Departure"
+                  value={fromAirport}
+                  onChange={setFromAirport}
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                />
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="text-white/60 text-sm">-</div>
-
-        <div className="relative min-w-[180px]">
-          <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
-            <input
-              type="date"
-              value={checkOutDate}
-              onChange={(e) => setCheckOutDate(e.target.value)}
-              disabled={tripType === 'one-way'}
-              className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:ring-2 focus:ring-white/30 focus:border-white/40 backdrop-blur-sm disabled:bg-white/5 disabled:text-white/40 [color-scheme:dark]"
-              required={tripType === 'round-trip'}
-            />
+          {/* To */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
+              {isMobile ? (
+                <InlineAirportDropdown
+                  placeholder="Destination"
+                  value={toAirport}
+                  onChange={setToAirport}
+                  inputClassName="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                />
+              ) : (
+                <SimpleAirportAutocomplete
+                  placeholder="Destination"
+                  value={toAirport}
+                  onChange={setToAirport}
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                />
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Passengers */}
-        <div className="relative min-w-[150px]">
-          <div className="relative">
-            <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
-            <select
-              value={passengers}
-              onChange={(e) => setPassengers(Number(e.target.value))}
-              className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-white/30 focus:border-white/40 backdrop-blur-sm appearance-none cursor-pointer"
+          {/* Departure Date */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Departure</label>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
+              <input
+                type="date"
+                value={checkInDate}
+                onChange={(e) => setCheckInDate(e.target.value)}
+                className="pl-10 pr-3 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Return Date */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Return</label>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
+              <input
+                type="date"
+                value={checkOutDate}
+                onChange={(e) => setCheckOutDate(e.target.value)}
+                disabled={tripType === 'one-way'}
+                className={`pl-10 pr-3 py-3 w-full border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none ${
+                  tripType === 'one-way' ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
+                }`}
+                required={tripType === 'round-trip'}
+              />
+            </div>
+          </div>
+
+          {/* Search Button */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-transparent mb-2">Search</label>
+            <button 
+              type="submit"
+              className="w-full py-3 bg-blue-600 text-white font-medium rounded-lg text-sm hover:bg-blue-700 transition-colors duration-200"
             >
-              {[1, 2, 3, 4, 5, 6].map(num => (
-                <option key={num} value={num} className="bg-gray-800 text-white">
-                  {num < 10 ? '0' : ''}{num} Adult{num !== 1 ? 's' : ''}
-                </option>
-              ))}
+              Search flights
+            </button>
+          </div>
+        </div>
+
+        {/* Second Row - Passengers and Class */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          {/* Passengers */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Passengers</label>
+            <div className="relative">
+              <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
+              <select
+                value={passengers}
+                onChange={(e) => setPassengers(Number(e.target.value))}
+                className="pl-10 pr-8 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
+              >
+                {[1, 2, 3, 4, 5, 6].map(num => (
+                  <option key={num} value={num}>{num} {num === 1 ? 'Passenger' : 'Passengers'}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Class */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
+            <select
+              value={cabinClass}
+              onChange={(e) => setCabinClass(e.target.value)}
+              className="px-3 py-3 w-full border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
+            >
+              <option value="Economy">Economy</option>
+              <option value="Premium Economy">Premium Economy</option>
+              <option value="Business">Business</option>
+              <option value="First">First Class</option>
             </select>
           </div>
-        </div>
 
-        {/* Search Button */}
-        <button
-          type="submit"
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors min-w-[120px] text-sm uppercase tracking-wider"
-        >
-          SEARCH
-        </button>
+          {/* Empty columns for spacing */}
+          <div className="lg:col-span-3"></div>
+        </div>
       </form>
     </div>
   );
