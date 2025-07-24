@@ -160,7 +160,7 @@ export const PromptInputArea = ({
               <TooltipTrigger asChild>
                 <label
                   htmlFor="file-upload"
-                  className="hover:bg-card-foreground/10 border border-input flex h-6 w-6 md:h-8 md:w-8 cursor-pointer items-center justify-center rounded-2xl"
+                  className="hover:bg-card-foreground/10 border border-input flex h-8 w-8 cursor-pointer items-center justify-center rounded-2xl"
                 >
                   <input
                     type="file"
@@ -170,7 +170,7 @@ export const PromptInputArea = ({
                     id="file-upload"
                     ref={uploadInputRef}
                   />
-                  <Plus className="size-2 md:size-3" />
+                  <Plus className="size-3" />
                 </label>
               </TooltipTrigger>
               <TooltipContent>
