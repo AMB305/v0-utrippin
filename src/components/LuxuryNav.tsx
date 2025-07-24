@@ -13,8 +13,8 @@ const LuxuryNav = () => {
     { name: 'Cars', href: '/cars' },
     { name: 'Packages', href: '/packages' },
     { name: 'Cruises', href: '/cruises' },
-    { name: 'AI Travel Buddy', href: '/ai-travel' },
-    { name: 'Melanin & Trippin', href: '/melanin' },
+    { name: 'AI Travel', href: '/ai-travel' },
+    { name: 'The Melanin Compass', href: '/melanin' },
   ];
 
   return (
