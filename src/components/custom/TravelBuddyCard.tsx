@@ -50,21 +50,21 @@ export default function TravelBuddyCard({ user, variant = 'desktop', onLike, onD
           {user.match}% Match
         </span>
 
-        {/* Bottom gradient overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6">
-          {/* User info */}
-          <div className="mb-4">
+        {/* Bottom gradient overlay with user info */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent pb-32">
+          {/* User info - positioned higher */}
+          <div className="p-6 pb-8">
             <h2 className="text-white text-3xl font-bold mb-2">
               {user.name}, {user.age}
             </h2>
-            <p className="text-gray-300 text-lg mb-3">{user.bio}</p>
+            <p className="text-gray-300 text-lg mb-3 leading-relaxed">{user.bio}</p>
             <div className="flex items-center gap-1 text-gray-300 mb-4">
               <MapPin className="w-4 h-4" />
               {user.location}
             </div>
             
             {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-8">
+            <div className="flex flex-wrap gap-2 mb-6">
               {user.tags.slice(0, 3).map((tag) => (
                 <span
                   key={tag}
