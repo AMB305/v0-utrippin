@@ -84,7 +84,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
       {/* Top Navigation Line - Logo, Search, User Actions, Mobile Menu */}
       <div className="border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-14">
+          <div className="flex items-center justify-between h-10">
             {/* Left: Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex items-center flex-shrink-0">
@@ -107,7 +107,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                   <Input 
                     name="search"
                     placeholder="Search destinations, hotels, flights..." 
-                    className="pl-12 pr-4 py-3 bg-gray-50 border-gray-200 h-12 rounded-full text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white shadow-sm"
+                    className="pl-12 pr-4 py-2 bg-gray-50 border-gray-200 h-9 rounded-full text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white shadow-sm"
                   />
                 </div>
               </form>
@@ -115,7 +115,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
 
             {/* Right: User Actions + Mobile Menu */}
             <div className="flex items-center gap-2">
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-1">
                 <CurrencySelector />
                 <EnhancedLanguageSelector />
               </div>
@@ -123,15 +123,15 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               {user ? (
                 <UserProfileDropdown />
               ) : (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <Link to="/auth">
-                    <Button variant="ghost" size="sm" className="text-xs h-7 px-3 text-muted-foreground hover:text-foreground">
+                    <Button variant="ghost" size="sm" className="text-xs h-6 px-2 text-muted-foreground hover:text-foreground">
                       <User className="w-3 h-3 mr-1" />
                       Log In
                     </Button>
                   </Link>
                   <Link to="/auth">
-                    <Button size="sm" className="text-xs h-7 px-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0">
+                    <Button size="sm" className="text-xs h-6 px-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0">
                       Register
                     </Button>
                   </Link>
@@ -300,9 +300,9 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
       {/* Main Navigation Line - Desktop Only */}
       <div className="hidden lg:block bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between py-2">
+          <div className="flex items-center justify-between py-1">
             {/* Main Navigation - Desktop */}
-            <nav className="flex items-center gap-6">
+            <nav className="flex items-center gap-4">
               {bookingTabs.slice(0, 5).map((tab) => (
                 <Link 
                   key={tab.key} 
@@ -311,7 +311,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
                 >
                   <Button 
                     variant="ghost" 
-                    className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 ${
+                    className={`flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 ${
                       currentActiveTab === tab.key
                         ? 'text-blue-600 bg-blue-50 border border-blue-200'
                         : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -327,7 +327,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               <Link to="/ai-travel">
                 <Button 
                   variant="ghost" 
-                  className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 ${
+                  className={`flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 ${
                     currentActiveTab === 'ai'
                       ? 'text-blue-600 bg-blue-50 border border-blue-200'
                       : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -341,7 +341,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               <Link to="/travel-buddies">
                 <Button 
                   variant="ghost" 
-                  className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                  className="flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
                 >
                   <Users className="w-4 h-4" />
                   Travel Buddies
@@ -351,7 +351,7 @@ const Header = ({ activeTab, onTabChange }: HeaderProps = {}) => {
               {/* More Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center gap-1 text-sm font-semibold px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
+                  <Button variant="ghost" className="flex items-center gap-1 text-sm font-semibold px-3 py-1.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
                     More
                     <ChevronDown className="w-4 h-4" />
                   </Button>
