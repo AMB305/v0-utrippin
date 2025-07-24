@@ -92,6 +92,7 @@ export const ChatContainer = ({
   }
 
   async function sendMessage() {
+    console.log('🚀 SEND MESSAGE FUNCTION CALLED!');
     if (!newMessage.trim()) return;
 
     const userText = newMessage.trim();
@@ -225,7 +226,10 @@ export const ChatContainer = ({
         />
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-          onClick={sendMessage}
+          onClick={() => {
+            console.log('🔘 BUTTON CLICKED!');
+            sendMessage();
+          }}
         >
           Send
         </button>
