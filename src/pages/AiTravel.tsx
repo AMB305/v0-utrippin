@@ -161,12 +161,6 @@ const AiTravel = () => {
   const sendEnhancedMessage = (message: string, includeBudget: boolean = true) => {
     let enhancedMessage = message;
     
-    if (includeBudget && !isDesktop) {
-      // For mobile, send as-is
-      sendMobileChatMessage(message);
-      return;
-    }
-    
     if (includeBudget && isDesktop) {
       // For desktop, always include budget context in the message to trigger detailed itinerary
       const budgetText = budget >= 1000 ? `$${(budget/1000).toFixed(0)}k` : `$${budget}`;
@@ -176,6 +170,7 @@ const AiTravel = () => {
       enhancedMessage = `${message}. This is for a ${tripTypeText} with a total budget of approximately ${budgetText}. Please provide a complete day-by-day itinerary with detailed recommendations that fit within this budget.`;
     }
     
+    // Send the message (enhanced or original)
     sendMobileChatMessage(enhancedMessage);
   };
 
