@@ -36,6 +36,7 @@ export const ChatContainer = ({
 }: Props) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -85,14 +86,68 @@ export const ChatContainer = ({
   async function sendMessage() {
     if (!newMessage.trim()) return;
 
-    const { error } = await supabase.from('travel_chat').insert({
-      sender_id: userId,
-      receiver_id: buddyId,
-      message: newMessage
-    });
+    const userText = newMessage.trim();
+    setNewMessage('');
 
-    if (!error) {
-      setNewMessage('');
+    try {
+      // 1️⃣ Insert user message
+      const { error: userError } = await supabase.from('travel_chat').insert({
+        sender_id: userId,
+        receiver_id: buddyId,
+        message: userText
+      });
+
+      if (userError) {
+        console.error('Error sending user message:', userError);
+        return;
+      }
+
+      // 2️⃣ Show "Keila is thinking..." 
+      setIsLoading(true);
+
+      // 3️⃣ Call the AI endpoint
+      const response = await supabase.functions.invoke('ai-travel-chat', {
+        body: { 
+          message: userText,
+          sessionId: `${userId}-${buddyId}` 
+        }
+      });
+
+      let aiReply = "I'm sorry, I'm having trouble responding right now. Please try again later!";
+      
+      if (response.data && !response.error) {
+        // Try to extract a simple text response from the AI
+        if (typeof response.data === 'string') {
+          aiReply = response.data;
+        } else if (response.data.response) {
+          aiReply = response.data.response;
+        } else if (response.data.summary) {
+          aiReply = response.data.summary;
+        } else if (response.data.title) {
+          aiReply = response.data.title;
+        }
+      } else {
+        console.error('AI response error:', response.error);
+      }
+
+      // 4️⃣ Insert Keila's reply back into Supabase
+      const { error: aiError } = await supabase.from('travel_chat').insert({
+        sender_id: buddyId, // Keila's response
+        receiver_id: userId,
+        message: aiReply
+      });
+
+      if (aiError) {
+        console.error('Error sending AI reply:', aiError);
+      }
+
+      // 5️⃣ Hide loading and refresh messages
+      setIsLoading(false);
+      loadMessages(); // Reload to show both messages
+
+    } catch (error) {
+      console.error('Error in sendMessage:', error);
+      setIsLoading(false);
     }
   }
 
@@ -118,6 +173,16 @@ export const ChatContainer = ({
             </div>
           </div>
         ))}
+
+        {/* Keila is thinking... indicator */}
+        {isLoading && (
+          <div className="mb-3 flex justify-start">
+            <div className="bg-zinc-800 text-white px-4 py-2 rounded-lg text-sm italic text-gray-400">
+              Keila is thinking...
+            </div>
+          </div>
+        )}
+
         <div ref={chatEndRef} />
       </div>
 
