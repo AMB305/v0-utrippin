@@ -61,8 +61,16 @@ export const ChatAssistant = () => {
     console.log('ChatAssistant: handleSendMessage called with:', message);
     console.log('ChatAssistant: sendMessage function:', sendMessage);
     console.log('ChatAssistant: loading state:', loading);
-    console.log('ChatAssistant: current messages:', aiMessages);
-    await sendMessage(message);
+    console.log('ChatAssistant: current messages before send:', aiMessages);
+    
+    try {
+      await sendMessage(message);
+      console.log('ChatAssistant: sendMessage completed successfully');
+    } catch (error) {
+      console.error('ChatAssistant: Error in handleSendMessage:', error);
+    }
+    
+    console.log('ChatAssistant: current messages after send:', aiMessages);
   };
 
   return (
