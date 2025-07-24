@@ -12,6 +12,7 @@ interface ChatMessage {
   pinned?: boolean;
   reactions?: any;
   created_at?: string;
+  structuredItinerary?: any; // For structured AI responses
 }
 
 interface Props {
@@ -25,6 +26,7 @@ interface Props {
 
 import { useAuth } from '@/hooks/useAuth';
 import { KeilaThinking } from '@/components/KeilaThinking';
+import { ItineraryCard } from '@/components/ItineraryCard';
 
 // Keila AI Assistant ID (fixed for all users)
 const KEILA_AI_ID = '00000000-0000-0000-0000-000000000002';
@@ -41,6 +43,7 @@ export const ChatContainer = ({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [structuredItinerary, setStructuredItinerary] = useState<any>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Use authenticated user ID or provided userId
@@ -149,12 +152,20 @@ export const ChatContainer = ({
       console.log('🤖 AI response:', response);
 
       let aiReply = "I'm sorry, I'm having trouble responding right now. Please try again later!";
+      let structuredData = null;
       
       if (response.data && !response.error) {
         console.log('🤖 Processing AI response data:', response.data);
         
-        // Handle structured response from ai-travel-chat
-        if (typeof response.data === 'string') {
+        // Handle new structured itinerary format
+        if (response.data.structuredItinerary) {
+          console.log('🗺️ Structured itinerary detected!');
+          structuredData = response.data.structuredItinerary;
+          aiReply = structuredData.overview.summary;
+          setStructuredItinerary(structuredData);
+        }
+        // Handle old formats for compatibility
+        else if (typeof response.data === 'string') {
           aiReply = response.data;
         } else if (response.data.response) {
           // Main response field from ai-travel-chat
@@ -329,6 +340,13 @@ export const ChatContainer = ({
 
         {/* Keila is thinking... indicator */}
         {isLoading && <KeilaThinking />}
+
+        {/* Show structured itinerary if available */}
+        {structuredItinerary && (
+          <div className="mt-6 mb-4">
+            <ItineraryCard data={structuredItinerary} />
+          </div>
+        )}
 
         <div ref={chatEndRef} />
       </div>

@@ -234,213 +234,68 @@ Create GENERAL INTEREST itineraries that appeal to a broad audience unless the u
 
 YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structure:
 {
-  "title": "X-day itinerary for [destination]",
-  "summary": "A brief overview like 'Here is a X-day itinerary for your trip to [destination], packed with iconic sights, cultural hotspots, and fun activities!'",
-  "dates": { "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" },
-  "traveler_count": 2,
-  "rooms": 1,
-  "images": ["https://example.com/hero.jpg", "https://example.com/img1.jpg", "https://example.com/img2.jpg", "https://example.com/img3.jpg", "https://example.com/img4.jpg"],
-  "recommendations": [
+  "destination": "[City, Country]",
+  "dates": {
+    "start": "YYYY-MM-DD",
+    "end": "YYYY-MM-DD"
+  },
+  "travelers": {
+    "count": 2,
+    "rooms": 1,
+    "isFamilyTrip": false
+  },
+  "overview": {
+    "title": "X-Day [Destination] Adventure",
+    "summary": "Perfect overview of the trip highlighting main themes and experiences"
+  },
+  "themes": ["Beach", "Culture", "Family-friendly", "Nightlife", "Walkable", "Parks & Rec"],
+  "images": ["https://example.com/hero.jpg", "https://example.com/img1.jpg", "https://example.com/img2.jpg"],
+  "transportation": {
+    "arrival": "[Airport/Station]",
+    "local": ["Hotel Shuttle", "Bike Rentals", "Public Bus"],
+    "walkabilityScore": 85
+  },
+  "flights": [
     {
-      "category_name": "Day 1",
-      "places": [
-        {
-          "name": "Specific Place/Activity Name",
-          "description": "Detailed description of the place and what to expect",
-          "type": "Museum" | "Restaurant" | "Park" | "Activity" | "Hotel" | etc,
-          "image_url": "https://example.com/image.jpg (use a real, accessible image URL if possible)",
-          "location": "Address or general location",
-          "rating": 4.5,
-          "price_range": "$" | "$$" | "$$$" | "$$$$",
-          "estimated_cost": "~$25/person" | "~$129/ticket" | "$25-$40 entrees",
-          "booking_url": "VERIFIED_LINK_ONLY" (CRITICAL: NEVER generate URLs - only use verified links from Google Places API. If no verified website available, use Google Maps link format: "https://www.google.com/maps/place/[Place+Name]/[coordinates]")
-        }
-      ]
-    },
-    {
-      "category_name": "Day 2",
-      "places": [
-        {
-          "name": "Place Name",
-          "description": "Description including what makes it special and visit details",
-          "type": "Activity" | "Restaurant" | "Cultural Site" | etc,
-          "image_url": "https://example.com/image.jpg",
-          "location": "Neighborhood/Area",
-          "rating": 4.3,
-          "price_range": "$$"
-        }
-      ]
-    },
-    {
-      "category_name": "Fine Dining",
-      "places": [
-        {
-          "name": "Upscale Restaurant Name",
-          "description": "Description of cuisine, atmosphere, and signature dishes",
-          "type": "Restaurant",
-          "image_url": "https://example.com/image.jpg",
-          "location": "District/Area",
-          "rating": 4.7,
-          "price_range": "$$$",
-          "estimated_cost": "$50-$80 per person",
-           "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
-        }
-      ]
-    },
-    {
-      "category_name": "Budget-Friendly Local Favorites",
-      "places": [
-        {
-          "name": "Local Favorite Name",
-          "description": "Popular local spot with authentic cuisine and great value",
-          "type": "Restaurant",
-          "image_url": "https://example.com/image.jpg",
-          "location": "District/Area",
-          "rating": 4.4,
-          "price_range": "$",
-          "estimated_cost": "$12-$20 per person",
-          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
-        }
-      ]
-    },
-    {
-      "category_name": "Family-Friendly Dining",
-      "places": [
-        {
-          "name": "Family Restaurant Name",
-          "description": "Great for families with kids, casual atmosphere",
-          "type": "Restaurant",
-          "image_url": "https://example.com/image.jpg",
-          "location": "District/Area",
-          "rating": 4.3,
-          "price_range": "$$",
-          "estimated_cost": "$15-$25 per person",
-          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
-        }
-      ]
-    },
-    {
-      "category_name": "Family & Kids' Activities",
-      "places": [
-        {
-          "name": "Family Activity Name",
-          "description": "Description of interactive museums, movie theaters, parks, playgrounds, or kid-friendly attractions",
-          "type": "Family Activity" | "Museum" | "Entertainment" | "Park",
-          "image_url": "https://example.com/image.jpg",
-          "location": "Family District/Area",
-          "rating": 4.5,
-          "price_range": "$" | "$$",
-          "estimated_cost": "~$15/child, ~$20/adult",
-          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
-        }
-      ]
-    },
-    {
-      "category_name": "Cultural Attractions",
-      "places": [
-        {
-          "name": "Museum/Site Name", 
-          "description": "Description of exhibits, significance, and visitor information",
-          "type": "Museum" | "Cultural Site" | "Gallery",
-          "image_url": "https://example.com/image.jpg",
-          "location": "Cultural District",
-          "rating": 4.4,
-          "price_range": "$$",
-          "estimated_cost": "~$25/adult ticket",
-          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
-        }
-      ]
-    },
-    {
-      "category_name": "Shopping Recommendations", 
-      "places": [
-        {
-          "name": "Shopping Center/Mall Name",
-          "description": "Description of shopping options, brands, and atmosphere",
-          "type": "Shopping",
-          "image_url": "https://example.com/image.jpg",
-          "location": "Shopping District",
-          "rating": 4.2,
-          "price_range": "$$",
-          "estimated_cost": "Varies by store",
-          "booking_url": "VERIFIED_LINK_ONLY" (use verified website URL from Google Places API or Google Maps link)
-        }
-      ]
-    },
-    {
-      "category_name": "Free Activities",
-      "places": [
-        {
-          "name": "Park/Public Space Name",
-          "description": "Description of free attractions and activities available",
-          "type": "Park" | "Public Space",
-          "image_url": "https://example.com/image.jpg", 
-          "location": "Area/District",
-          "rating": 4.3,
-          "price_range": "Free",
-          "estimated_cost": "Free",
-          "booking_url": ""
-        }
-      ]
-    },
-    {
-      "category_name": "Getting Around",
-      "places": [
-        {
-          "name": "Transportation Options",
-          "description": "Recommended transportation methods including public transit, ride-sharing, rental cars, and walking",
-          "type": "Transportation",
-          "image_url": "",
-          "location": "City-wide",
-          "rating": 0,
-          "price_range": "$",
-          "estimated_cost": "Varies by method",
-          "booking_url": ""
-        }
-      ]
+      "airline": "American Airlines",
+      "from": "JFK",
+      "to": "CUN",
+      "duration": "4h 50m",
+      "price": "$349",
+      "departure": "Aug 1 - 07:00",
+      "arrival": "Aug 1 - 10:50"
     }
   ],
-  "actionable_suggestions": [
-    "Practical travel tip 1 for the destination",
-    "Transportation and logistics tip",
-    "Local etiquette or safety advice"
+  "hotels": [
+    {
+      "name": "Hotel Name",
+      "pricePerNight": "$85",
+      "rating": "4.2",
+      "location": "Near Hotel Zone",
+      "amenities": ["Pool", "Family Room", "Free Shuttle"],
+      "link": "https://booking.utrippin.ai/hotel"
+    }
   ],
-  "follow_up_questions": [
-    "What specific cuisine would you like to try?",
-    "Are you interested in nightlife recommendations?",
-    "Would you like more details about any particular day?"
+  "days": [
+    {
+      "day": "Day 1",
+      "date": "YYYY-MM-DD",
+      "title": "Arrival + Beach Relaxation",
+      "costEstimate": "$60",
+      "morning": ["Activity 1", "Activity 2"],
+      "afternoon": ["Activity 3", "Activity 4"],
+      "evening": ["Activity 5", "Activity 6"]
+    }
   ],
-  "culture_adapter": {
-    "tipping_etiquette": "Detailed tipping customs and expectations",
-    "dining_customs": "Local dining etiquette and meal traditions",
-    "public_behavior": "Social norms and cultural expectations in public",
-    "language_tips": "Useful phrases and communication advice",
-    "beach_etiquette": "Beach and coastal behavior guidelines (if applicable)"
+  "culture_tips": {
+    "Tipping Etiquette": "10-15% is appreciated but not mandatory",
+    "Dining Customs": "Lunch is the largest meal",
+    "Public Behavior": "Casual attire is fine in tourist areas",
+    "Language Tips": "Basic Spanish phrases go a long way",
+    "Beach Etiquette": "Use reef-safe sunscreen"
   },
-  "insights": {
-    "transportation": "Local transportation options and tips",
-    "freeThings": "Free activities and attractions available",
-    "walkability": "Walking conditions and pedestrian-friendly areas",
-    "kidsActivities": "Family-friendly activities and attractions",
-    "malls": "Shopping centers and retail districts",
-    "safety": "Safety tips and precautions for travelers",
-    "bestLocalFoods": "Must-try local dishes and specialties",
-    "bestLocalActivities": "Unique local experiences and activities",
-    "nightlife": "Evening entertainment and nightlife options",
-    "gyms": "Fitness facilities and wellness options"
-  },
-  "cost_breakdown": {
-    "daily_estimates": [
-      {
-        "day": 1,
-        "transport": "$25",
-        "food": "$40/person",
-        "activities": "Free",
-        "accommodation": "$120/night"
-      }
-    ],
-    "total_estimated": "$500-800 per person"
-  }
+  "sources": ["TripAdvisor", "Booking.com", "Google Maps"],
+  "buttons": ["Book Flights", "Book Hotels", "Add Travel Buddy", "View on Map"]
 }
 
 For OTHER QUERIES (without destination + dates + budget), use the simpler response format:
@@ -536,9 +391,9 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
       };
     }
 
-    // Handle detailed itinerary response format
-    if (parsedResponse.title && parsedResponse.summary && parsedResponse.recommendations) {
-      console.log('AI Travel Chat - Detected detailed itinerary response');
+    // Handle detailed itinerary response format (new structured format)
+    if (parsedResponse.destination && parsedResponse.overview && parsedResponse.days) {
+      console.log('AI Travel Chat - Detected structured itinerary response');
       
       // Store or update session context when we have a detailed itinerary
       if (sessionId && (tripDetails.destination || tripDetails.dates || tripDetails.budget)) {
@@ -570,23 +425,20 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
         }
       }
       
-      // Enhanced detailed response with Expedia affiliate links integration
+      // Enhanced detailed response with new structured format
       const detailedResponse = {
-        response: parsedResponse.summary,
+        response: parsedResponse.overview.summary,
         showMap: tripDetails.destination ? true : false,
-        mapLocation: tripDetails.destination || null,
+        mapLocation: parsedResponse.destination || null,
         tripCards: [],
-        quickReplies: parsedResponse.follow_up_questions || [],
+        quickReplies: parsedResponse.buttons || [],
         recommendations: [],
-        callsToAction: [],
-        detailedItinerary: await enhanceItineraryWithAffiliateLinks({
-          title: parsedResponse.title,
-          summary: parsedResponse.summary,
-          recommendations: parsedResponse.recommendations,
-          actionable_suggestions: parsedResponse.actionable_suggestions,
-          follow_up_questions: parsedResponse.follow_up_questions
-        }, tripDetails.destination, supabase),
-        isDetailedItinerary: true // Flag to trigger detailed UI
+        callsToAction: parsedResponse.buttons?.map((button: string) => ({
+          text: button,
+          action: "CONTINUE_CHAT"
+        })) || [],
+        structuredItinerary: parsedResponse, // Pass the entire structured response
+        isStructuredItinerary: true // Flag to trigger new structured UI
       };
       
       console.log('AI Travel Chat - Sending detailed itinerary response');
