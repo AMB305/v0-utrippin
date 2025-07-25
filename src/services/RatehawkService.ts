@@ -108,66 +108,47 @@ export class RatehawkService {
       
       console.log('🧠 Suggest response structure:', JSON.stringify(suggestions, null, 2));
       
-      // Check multiple possible response structures
-      // Structure 1: data.regions (current assumption)
-      if (suggestions.data && suggestions.data.regions && suggestions.data.regions.length > 0) {
-        console.log('✅ Found regions array in data.regions');
+      // Handle the new Ratehawk API response structure
+      // Structure: { locations: [ { id, name, type, country, region_id } ] }
+      if (suggestions.locations && Array.isArray(suggestions.locations) && suggestions.locations.length > 0) {
+        console.log('✅ Found locations array in response');
         
-        // Prioritize City type regions first, then other types
-        const cityRegion = suggestions.data.regions.find((region: any) => 
-          region.type === 'City' && 
-          region.name.toLowerCase().includes(destination.toLowerCase())
+        // Prioritize locations with exact name match first
+        const exactMatch = suggestions.locations.find((location: any) => 
+          location.name && location.name.toLowerCase() === destination.toLowerCase()
         );
         
-        if (cityRegion) {
-          console.log(`✅ Found city region: ${cityRegion.name} (ID: ${cityRegion.id})`);
-          return parseInt(cityRegion.id);
+        if (exactMatch && exactMatch.region_id) {
+          console.log(`✅ Found exact match: ${exactMatch.name} (region_id: ${exactMatch.region_id})`);
+          return parseInt(exactMatch.region_id);
         }
         
-        // Fallback to any region that matches the destination name
-        const anyRegion = suggestions.data.regions.find((region: any) => 
-          region.name.toLowerCase().includes(destination.toLowerCase())
+        // Fallback to any location that contains the destination name
+        const partialMatch = suggestions.locations.find((location: any) => 
+          location.name && location.name.toLowerCase().includes(destination.toLowerCase())
         );
         
-        if (anyRegion) {
-          console.log(`✅ Found matching region: ${anyRegion.name} (ID: ${anyRegion.id})`);
-          return parseInt(anyRegion.id);
+        if (partialMatch && partialMatch.region_id) {
+          console.log(`✅ Found partial match: ${partialMatch.name} (region_id: ${partialMatch.region_id})`);
+          return parseInt(partialMatch.region_id);
         }
         
-        // If no name match, return the first region (often the most relevant)
-        console.log(`✅ Using first available region: ${suggestions.data.regions[0].name} (ID: ${suggestions.data.regions[0].id})`);
-        return parseInt(suggestions.data.regions[0].id);
-      }
-      
-      // Structure 2: data.locations (alternative structure)
-      if (suggestions.data && suggestions.data.locations && suggestions.data.locations.length > 0) {
-        console.log('✅ Found locations array in data.locations');
-        const location = suggestions.data.locations[0];
-        if (location.region_id) {
-          console.log(`✅ Found region_id in location: ${location.region_id}`);
-          return parseInt(location.region_id);
+        // If no name match, use the first location with a region_id
+        const firstWithRegion = suggestions.locations.find((location: any) => location.region_id);
+        if (firstWithRegion) {
+          console.log(`✅ Using first location with region_id: ${firstWithRegion.name} (region_id: ${firstWithRegion.region_id})`);
+          return parseInt(firstWithRegion.region_id);
         }
-        if (location.id) {
-          console.log(`✅ Using location.id as region_id: ${location.id}`);
-          return parseInt(location.id);
+        
+        // If no region_id, try using the location id as region_id
+        const firstLocation = suggestions.locations[0];
+        if (firstLocation && firstLocation.id) {
+          console.log(`✅ Using location.id as region_id: ${firstLocation.name} (id: ${firstLocation.id})`);
+          return parseInt(firstLocation.id);
         }
       }
       
-      // Structure 3: Direct data array
-      if (suggestions.data && Array.isArray(suggestions.data) && suggestions.data.length > 0) {
-        console.log('✅ Found direct data array');
-        const item = suggestions.data[0];
-        if (item.region_id) {
-          console.log(`✅ Found region_id: ${item.region_id}`);
-          return parseInt(item.region_id);
-        }
-        if (item.id) {
-          console.log(`✅ Using item.id as region_id: ${item.id}`);
-          return parseInt(item.id);
-        }
-      }
-      
-      console.warn('❌ No valid region found in any expected structure');
+      console.warn('❌ No valid region found in response');
       return null;
     } catch (error) {
       console.error('❌ Failed to find region ID:', error);

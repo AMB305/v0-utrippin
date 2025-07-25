@@ -8,7 +8,7 @@ const corsHeaders = {
 
 const RATEHAWK_KEY_ID = Deno.env.get('RATEHAWK_KEY_ID');
 const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
-const RATEHAWK_BASE_URL = 'https://api.worldota.net/api/b2b/v3';
+const RATEHAWK_BASE_URL = 'https://api-sandbox.emergingtravel.com/v1';
 
 interface SuggestRequest {
   query: string;
@@ -30,9 +30,9 @@ serve(async (req) => {
       );
     }
 
-    console.log(`🔑 API Credentials Check:`);
+    console.log(`🔑 Ratehawk Credentials Debug:`);
     console.log(`RATEHAWK_KEY_ID: ${RATEHAWK_KEY_ID ? 'Present' : 'Missing'}`);
-    console.log(`RATEHAWK_API_KEY: ${RATEHAWK_API_KEY ? 'Present' : 'Missing'}`);
+    console.log(`RATEHAWK_API_KEY: ${RATEHAWK_API_KEY ? 'Present (length: ' + RATEHAWK_API_KEY.length + ')' : 'Missing'}`);
 
     if (!RATEHAWK_KEY_ID || !RATEHAWK_API_KEY) {
       console.error('❌ Missing API credentials:', { 
@@ -44,15 +44,14 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    const credentials = btoa(`${RATEHAWK_KEY_ID}:${RATEHAWK_API_KEY}`);
     
     console.log(`🧠 Ratehawk Suggest - Searching for: ${query}`);
+    console.log(`🌐 API URL: ${RATEHAWK_BASE_URL}/search/suggest`);
 
-    const response = await fetch(`${RATEHAWK_BASE_URL}/search/multicomplete/`, {
+    const response = await fetch(`${RATEHAWK_BASE_URL}/search/suggest`, {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${credentials}`,
+        'Authorization': `Bearer ${RATEHAWK_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -63,9 +62,16 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Ratehawk suggest error:', response.status, errorText);
-      console.error('Request URL:', `${RATEHAWK_BASE_URL}/search/multicomplete/`);
-      console.error('Request body:', JSON.stringify({ query, language }));
+      console.error('❌ Ratehawk suggest error:', response.status, errorText);
+      console.error('🔍 Request details:', {
+        url: `${RATEHAWK_BASE_URL}/search/suggest`,
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer [REDACTED]',
+          'Content-Type': 'application/json'
+        },
+        body: { query, language }
+      });
       return new Response(
         JSON.stringify({ 
           error: `Ratehawk API error: ${response.status}`, 
@@ -80,8 +86,9 @@ serve(async (req) => {
     
     console.log('✅ RATEHAWK SUGGEST SUCCESS:');
     console.log('Query:', query);
+    console.log('Response status:', response.status);
     console.log('Full response:', JSON.stringify(data, null, 2));
-    console.log('Results count:', data.data?.length || 0);
+    console.log('Locations count:', data.locations?.length || 0);
     
     return new Response(
       JSON.stringify(data),
