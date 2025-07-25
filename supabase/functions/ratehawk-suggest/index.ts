@@ -48,17 +48,47 @@ serve(async (req) => {
     console.log(`🧠 Ratehawk Suggest - Searching for: ${query}`);
     console.log(`🌐 API URL: ${RATEHAWK_BASE_URL}/search/suggest`);
 
-    const response = await fetch(`${RATEHAWK_BASE_URL}/search/suggest`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RATEHAWK_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        language
-      })
-    });
+    // Test external connectivity first
+    try {
+      await fetch('https://postman-echo.com/get');
+      console.log('🔔 External connectivity OK');
+    } catch (err) {
+      console.error('❌ Cannot reach external network:', err);
+    }
+
+    // Make the actual API call with detailed logging
+    let response;
+    try {
+      console.log('🔔 ratehawk-suggest: calling API URL:', `${RATEHAWK_BASE_URL}/search/suggest`);
+      console.log('🔔 ratehawk-suggest: using API key:', RATEHAWK_API_KEY?.slice(0,4) + '…');
+      console.log('🔔 ratehawk-suggest: request body:', JSON.stringify({ query, language }, null, 2));
+      
+      response = await fetch(`${RATEHAWK_BASE_URL}/search/suggest`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${RATEHAWK_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          language
+        })
+      });
+    } catch (err) {
+      console.error('❌ ratehawk-suggest: network error calling sandbox API:', err);
+      console.error('❌ ratehawk-suggest: error details:', {
+        message: err.message,
+        name: err.name,
+        stack: err.stack
+      });
+      return new Response(
+        JSON.stringify({ 
+          error: `Ratehawk Suggest network error: ${err.message}`,
+          details: 'Failed to reach Ratehawk sandbox API'
+        }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
