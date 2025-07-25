@@ -22,7 +22,7 @@ export default function HeroHotelWidget() {
     const nextWeek = new Date(today);
     nextWeek.setDate(today.getDate() + 7);
     
-    setCheckInDate(today.toISOString().split('T')[0]);
+    setCheckInDate(tomorrow.toISOString().split('T')[0]);
     setCheckOutDate(nextWeek.toISOString().split('T')[0]);
 
     // Close dropdown when clicking outside

@@ -37,6 +37,7 @@ export default function HotelSearch() {
 
   const searchHotels = async () => {
     if (!searchData.destination || !searchData.checkInDate || !searchData.checkOutDate) {
+      console.log('Missing search parameters:', searchData);
       setLoading(false);
       return;
     }
