@@ -49,30 +49,35 @@ export function HotelBookingForm({
     setIsLoading(true);
 
     try {
-      // Call Ratehawk booking API
+      console.log('🔍 Starting booking with user data:', formData);
+      
+      // Call Ratehawk booking API with real user data
       const { data, error } = await supabase.functions.invoke('ratehawk-hotel-book', {
         body: {
-          prebookId: prebookId,
-          guest: {
+          book_hash: prebookId,
+          user: {
+            email: formData.email,
+            phone: formData.phone,
             firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email
+            lastName: formData.lastName
           }
         }
       });
 
       if (error) {
+        console.error('❌ Booking error:', error);
         throw new Error(error.message);
       }
 
+      console.log('✅ Booking successful:', data);
       toast({
         title: "Booking Successful!",
-        description: `Your reservation has been confirmed. Reservation: ${data.reservationId}`,
+        description: `Your reservation has been confirmed. Order ID: ${data.data?.order_id}`,
       });
 
       onBookingComplete(data);
     } catch (error) {
-      console.error('Booking error:', error);
+      console.error('❌ Booking submission error:', error);
       toast({
         title: "Booking Failed",
         description: "There was an error processing your booking. Please try again.",

@@ -14,15 +14,8 @@ interface RatehawkBookingRequest {
   user: {
     email: string;
     phone: string;
-  };
-  rooms: Array<{
-    guests: Array<{
-      first_name: string;
-      last_name: string;
-    }>;
-  }>;
-  partner: {
-    partner_order_id: string;
+    firstName: string;
+    lastName: string;
   };
 }
 
@@ -48,11 +41,11 @@ serve(async (req) => {
   }
 
   try {
-    const { book_hash, user, rooms, partner }: RatehawkBookingRequest = await req.json();
+    const { book_hash, user }: RatehawkBookingRequest = await req.json();
 
-    if (!book_hash || !user || !user.email || !rooms || !partner || !partner.partner_order_id) {
+    if (!book_hash || !user || !user.email || !user.firstName || !user.lastName) {
       return new Response(
-        JSON.stringify({ error: 'Missing required parameters: book_hash, user.email, rooms, partner.partner_order_id' }),
+        JSON.stringify({ error: 'Missing required parameters: book_hash, user.email, user.firstName, user.lastName' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -61,10 +54,30 @@ serve(async (req) => {
       // Get authentication headers
       const authHeaders = getRatehawkAuthHeader();
       
+      // Build request body with real user data
+      const requestBody = {
+        book_hash,
+        user: {
+          email: user.email,
+          phone: user.phone || "1234567890"
+        },
+        rooms: [{
+          guests: [{ 
+            first_name: user.firstName, 
+            last_name: user.lastName 
+          }]
+        }],
+        partner: {
+          partner_order_id: `utrippin-test-${Date.now()}`
+        }
+      };
+      
+      console.log('🔍 Booking request with real user data:', JSON.stringify(requestBody, null, 2));
+      
       const response = await fetch(`${RATEHAWK_BASE_URL}/hotel/booking/start/`, {
         method: 'POST',
         headers: authHeaders,
-        body: JSON.stringify({ book_hash, user, rooms, partner }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -76,15 +89,16 @@ serve(async (req) => {
       const data: RatehawkBookingResponse = await response.json();
       
       if (!data.data?.order_id) {
+        console.error("Booking start failed. RateHawk response:", data);
         throw new Error("Booking start failed or did not return an order_id");
       }
 
-      console.log(`✅ Booking success - Order ID: ${data.data.order_id}`);
-      console.log(`Ratehawk Book - Created booking for: ${user.email}`);
+      console.log(`✅ Booking success with real user data - Order ID: ${data.data.order_id}`);
+      console.log(`Ratehawk Book - Created booking for: ${user.email} (${user.firstName} ${user.lastName})`);
       
       // Log certification data
       console.log('🧪 RATEHAWK CERTIFICATION LOG - ratehawk-hotel-book:');
-      console.log('Request:', JSON.stringify({ book_hash, user, rooms, partner }, null, 2));
+      console.log('Request:', JSON.stringify(requestBody, null, 2));
       console.log('Response:', JSON.stringify(data, null, 2));
       console.log('Authentication: API Keys Present');
       
@@ -119,11 +133,12 @@ serve(async (req) => {
         }
       };
 
-      console.log(`✅ Mock Booking success - Order ID: ${mockResponse.data.order_id}`);
+      console.log(`✅ Mock Booking success with user data - Order ID: ${mockResponse.data.order_id}`);
+      console.log(`User: ${user.email} (${user.firstName} ${user.lastName})`);
       
       // Log certification data with mock response
       console.log('🧪 RATEHAWK CERTIFICATION LOG - ratehawk-hotel-book:');
-      console.log('Request:', JSON.stringify({ book_hash, user, rooms, partner }, null, 2));
+      console.log('Request:', JSON.stringify({ book_hash, user }, null, 2));
       console.log('Response:', JSON.stringify(mockResponse, null, 2));
       console.log('Authentication: Using mock data due to API error');
       
