@@ -116,13 +116,90 @@ serve(async (req) => {
     const tripDetails = extractTripDetails(message);
     console.log('AI Travel Chat - Detected trip details:', tripDetails);
 
+    // Enhanced context inference from user prompt
+    const inferUserContext = (prompt: string) => {
+      const text = prompt.toLowerCase();
+      
+      // Family trip detection
+      const isFamilyTrip = /kid|child|family|children|toddler|mom|dad|parent|baby|infant|us with kids|family-friendly|playground/i.test(prompt);
+      
+      // Couples trip detection  
+      const isCouplesTrip = /romantic|getaway with wife|getaway with husband|honeymoon|couple|partner|date night|anniversary|romantic dinner|intimate/i.test(prompt);
+      
+      // Group trip detection
+      const isGroupTrip = /\bus\b|group of|we\b|our trip|friends|gang|crew|squad|party of|together with/i.test(prompt);
+      
+      // Solo trip detection
+      const isSoloTrip = /\bi\b|myself|solo|alone|individual|personal|just me/i.test(prompt);
+      
+      // Adventure/activity preferences
+      const isAdventureTrip = /adventure|hiking|extreme|thrill|adrenaline|climbing|safari|diving|surfing/i.test(prompt);
+      const isRelaxationTrip = /relax|spa|peaceful|quiet|calm|beach|resort|unwind|chill/i.test(prompt);
+      const isCulturalTrip = /culture|museum|history|heritage|local|traditional|art|historic/i.test(prompt);
+      const isFoodTrip = /food|cuisine|culinary|restaurant|local food|street food|dining|cooking|gastronomy/i.test(prompt);
+      
+      // Budget indicators
+      const isBudgetTrip = /budget|cheap|affordable|economical|low cost|save money|inexpensive/i.test(prompt);
+      const isLuxuryTrip = /luxury|high-end|premium|upscale|fancy|expensive|5-star|first class/i.test(prompt);
+      
+      const travelerContext = isFamilyTrip
+        ? 'a family with kids'
+        : isCouplesTrip
+          ? 'a couple seeking romance'
+          : isGroupTrip
+            ? 'a group of friends'
+            : isSoloTrip
+              ? 'a solo traveler'
+              : 'travelers';
+              
+      const travelStyle = isAdventureTrip
+        ? 'adventure'
+        : isRelaxationTrip
+          ? 'relaxation'
+          : isCulturalTrip
+            ? 'cultural'
+            : isFoodTrip
+              ? 'food-focused'
+              : 'general interest';
+              
+      const budgetLevel = isBudgetTrip
+        ? 'budget-conscious'
+        : isLuxuryTrip
+          ? 'luxury'
+          : 'mid-range';
+          
+      return {
+        travelerContext,
+        travelStyle,
+        budgetLevel,
+        isFamilyTrip,
+        isCouplesTrip,
+        isGroupTrip,
+        isSoloTrip,
+        isAdventureTrip,
+        isRelaxationTrip,
+        isCulturalTrip,
+        isFoodTrip,
+        isBudgetTrip,
+        isLuxuryTrip
+      };
+    };
+
+    const userContext = inferUserContext(message);
+    console.log('AI Travel Chat - Inferred user context:', userContext);
+
     // Check if this is a vague request that needs clarification
-    const isVagueRequest = (msg: string, details: any) => {
+    const isVagueRequest = (msg: string, details: any, context: any) => {
       const lowerMsg = msg.toLowerCase();
       
       // Check for greetings without travel context
       if (/^(hi|hello|hey|good\s+(morning|afternoon|evening))\s*[!.]*$/i.test(msg.trim())) {
         return true;
+      }
+      
+      // If we have clear destination AND context (family/couple/etc), don't ask for clarification
+      if (details.destination && (context.isFamilyTrip || context.isCouplesTrip || context.isGroupTrip || context.isSoloTrip)) {
+        return false;
       }
       
       // Check for vague destination requests like "Columbia" that could be multiple places
@@ -133,8 +210,8 @@ serve(async (req) => {
         }
       }
       
-      // Check for requests missing key details
-      if (details.destination && (!details.dates && !details.budget)) {
+      // Check for requests missing key details (but not if we have good context)
+      if (details.destination && (!details.dates && !details.budget) && !context.travelerContext) {
         return true;
       }
       
@@ -142,7 +219,7 @@ serve(async (req) => {
     };
 
     // Handle vague requests with clarifying questions
-    if (isVagueRequest(message, tripDetails)) {
+    if (isVagueRequest(message, tripDetails, userContext)) {
       const clarifyingResponse = {
         response: tripDetails.destination 
           ? `I'd love to help you plan a trip to ${tripDetails.destination}! To create the perfect itinerary, could you tell me:\n\n• When would you like to travel?\n• How many days are you planning?\n• What's your approximate budget?\n• Are you traveling solo, as a couple, or with family?`
@@ -200,6 +277,46 @@ ${isFollowUpQuestion ?
 }`;
     }
 
+    // Build dynamic system prompt based on inferred context
+    let contextualPrompt = '';
+    if (userContext.travelerContext !== 'travelers') {
+      contextualPrompt += `\n\nIMPORTANT USER CONTEXT: This request is for ${userContext.travelerContext}. `;
+      
+      if (userContext.isFamilyTrip) {
+        contextualPrompt += 'Focus heavily on family-friendly activities, kid-safe locations, playgrounds, interactive museums, easy walkability, and family restaurants. Include safety tips for traveling with children.';
+      } else if (userContext.isCouplesTrip) {
+        contextualPrompt += 'Focus on romantic experiences, intimate dining, sunset spots, couples activities, and romantic accommodations. Avoid large group activities.';
+      } else if (userContext.isGroupTrip) {
+        contextualPrompt += 'Focus on group-friendly activities, nightlife, larger venues, group dining options, and activities that work well for multiple people.';
+      } else if (userContext.isSoloTrip) {
+        contextualPrompt += 'Focus on solo-friendly activities, safe areas for solo travelers, social opportunities to meet people, and independent exploration options.';
+      }
+    }
+    
+    if (userContext.travelStyle !== 'general interest') {
+      contextualPrompt += `\n\nTRAVEL STYLE: This is an ${userContext.travelStyle} trip. `;
+      
+      if (userContext.isAdventureTrip) {
+        contextualPrompt += 'Prioritize outdoor activities, hiking, water sports, adventure tours, and active experiences.';
+      } else if (userContext.isRelaxationTrip) {
+        contextualPrompt += 'Prioritize beaches, spas, peaceful locations, resorts, and low-key activities.';
+      } else if (userContext.isCulturalTrip) {
+        contextualPrompt += 'Prioritize museums, historical sites, cultural experiences, local traditions, and educational activities.';
+      } else if (userContext.isFoodTrip) {
+        contextualPrompt += 'Prioritize local cuisine, food tours, cooking classes, markets, and unique dining experiences.';
+      }
+    }
+    
+    if (userContext.budgetLevel !== 'mid-range') {
+      contextualPrompt += `\n\nBUDGET CONTEXT: This is a ${userContext.budgetLevel} trip. `;
+      
+      if (userContext.isBudgetTrip) {
+        contextualPrompt += 'Focus on free activities, budget accommodations, local transportation, street food, and money-saving tips.';
+      } else if (userContext.isLuxuryTrip) {
+        contextualPrompt += 'Focus on high-end accommodations, fine dining, premium experiences, private tours, and luxury services.';
+      }
+    }
+
     const systemPrompt = `You are Keila, an AI travel planning assistant. 
 
 CRITICAL JSON RESPONSE RULE: 
@@ -209,7 +326,7 @@ RESPONSE FORMAT RULES:
 - For travel planning requests with destinations, return the complete structured itinerary JSON below
 - For simple greetings without destinations, return the simple JSON format  
 - NEVER include text like "For a detailed insight..." or explanations outside JSON
-- START your response with { and END with }${contextPrompt}
+- START your response with { and END with }${contextPrompt}${contextualPrompt}
 
 PERSONA ACTIVATION RULES:
 When a user provides ANY DESTINATION (with or without dates/budget), you MUST activate the "Itinerary Planner" persona and provide the DETAILED JSON FORMAT below. This ensures users get comprehensive, rich itineraries immediately.
@@ -225,15 +342,12 @@ For simple greetings without travel context, use this simple JSON format:
 }
 
 PERSONA: The "Itinerary Planner" Expert
-Create GENERAL INTEREST itineraries that appeal to a broad audience unless the user specifically requests a theme (e.g., "family-friendly," "nightlife focused," "cultural trip," "food tour"). Provide balanced recommendations with:
-- Day-by-Day Suggested Itinerary highlighting popular attractions, cultural landmarks, and diverse activities
-- Dining Recommendations with THREE distinct categories: Fine Dining, Budget-Friendly Local Favorites, and Family-Friendly options
-- Family & Kids' Activities including interactive museums, local movie theaters, large parks/playgrounds, and attractions suitable for children of various ages
-- Cultural Hotspots including museums, galleries, historic sites, and entertainment venues
-- Shopping Recommendations including malls, outlets, and local markets
-- Free Activities including parks, public spaces, and no-cost attractions
-- Getting Around with specific transportation options and local guidance
-- Safety Tips and practical travel advice for that location
+Create itineraries that match the user's inferred context and preferences. Provide balanced recommendations with:
+- Day-by-Day Suggested Itinerary highlighting attractions and activities suited to the traveler type
+- Dining Recommendations appropriate for the travel style and group type
+- Transportation guidance suitable for the traveler context
+- Activities and experiences matching the inferred preferences
+- Safety tips and practical advice relevant to the trip type
 
 YOUR RESPONSE MUST ALWAYS BE A SINGLE, VALID JSON OBJECT with this EXACT structure:
 {
