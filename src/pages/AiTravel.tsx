@@ -595,7 +595,10 @@ const AiTravel = () => {
           </div>
           
           {/* New Desktop Travel Planner */}
-          <DesktopTravelPlanner />
+          <DesktopTravelPlanner 
+            onQuestionSelect={handleNewChatFromWelcome}
+            hasStartedChat={hasStartedChat}
+          />
         </>
       )}
 
