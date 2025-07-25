@@ -41,11 +41,23 @@ serve(async (req) => {
   }
 
   try {
-    const { book_hash, user }: RatehawkBookingRequest = await req.json();
+    const requestBody = await req.json();
+    console.log('🔍 Received request body:', JSON.stringify(requestBody, null, 2));
+    
+    const { book_hash, user }: RatehawkBookingRequest = requestBody;
+
+    console.log('🔍 Extracted values:', { 
+      book_hash, 
+      user_email: user?.email, 
+      user_firstName: user?.firstName, 
+      user_lastName: user?.lastName 
+    });
 
     if (!book_hash || !user || !user.email || !user.firstName || !user.lastName) {
+      const errorMsg = `Missing required parameters - book_hash: ${!!book_hash}, user: ${!!user}, email: ${!!user?.email}, firstName: ${!!user?.firstName}, lastName: ${!!user?.lastName}`;
+      console.error('❌ Validation failed:', errorMsg);
       return new Response(
-        JSON.stringify({ error: 'Missing required parameters: book_hash, user.email, user.firstName, user.lastName' }),
+        JSON.stringify({ error: errorMsg }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
