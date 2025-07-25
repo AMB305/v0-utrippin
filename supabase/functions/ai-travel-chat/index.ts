@@ -433,8 +433,36 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
       
       const structuredResponse = {
         response: parsedResponse.overview.summary,
-        structuredItinerary: parsedResponse,
-        isStructuredItinerary: true
+        showMap: true,
+        mapLocation: parsedResponse.destination,
+        tripCards: [],
+        quickReplies: parsedResponse.buttons || [],
+        recommendations: [],
+        callsToAction: [
+          { text: "Book Flights", action: "book_flights" },
+          { text: "Find Hotels", action: "book_hotels" },
+          { text: "Add Travel Buddy", action: "add_buddy" }
+        ],
+        detailedItinerary: {
+          title: parsedResponse.overview.title,
+          summary: parsedResponse.overview.summary,
+          days: parsedResponse.days.map((day: any) => ({
+            day: day.day,
+            activities: [
+              ...(day.morning || []),
+              ...(day.afternoon || []),
+              ...(day.evening || [])
+            ]
+          })),
+          actionable_suggestions: Object.values(parsedResponse.culture_tips || {}),
+          follow_up_questions: [
+            "Tell me more about nightlife",
+            "What are the best family activities?", 
+            "Show me local restaurants",
+            "What's the transportation like?"
+          ]
+        },
+        isDetailedItinerary: true
       };
       
       return new Response(JSON.stringify(structuredResponse), {

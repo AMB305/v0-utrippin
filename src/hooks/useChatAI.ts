@@ -144,24 +144,23 @@ export const useChatAI = (trips: Trip[]) => {
         throw error;
       }
 
-      if (data && (data.response || data.structuredItinerary)) {
-        // Handle structured itinerary responses
-        if (data.isStructuredItinerary && data.structuredItinerary) {
+      if (data && (data.response || data.isDetailedItinerary)) {
+        // Handle detailed itinerary responses with exact schema
+        if (data.isDetailedItinerary && data.detailedItinerary) {
           setMessages(prev => prev.map(msg => 
             msg.id === messageId 
               ? {
                   ...msg,
                   loading: false,
                   response: data.response,
-                  detailedItinerary: data.structuredItinerary,
+                  detailedItinerary: data.detailedItinerary,
                   isDetailedItinerary: true,
-                  showMap: true,
-                  mapLocation: data.structuredItinerary.destination,
-                  quickReplies: data.structuredItinerary.buttons || [],
-                  callsToAction: [
+                  showMap: data.showMap || true,
+                  mapLocation: data.mapLocation,
+                  quickReplies: data.quickReplies || data.detailedItinerary.follow_up_questions || [],
+                  callsToAction: data.callsToAction || [
                     { text: "Book Flights", action: "book_flights" },
-                    { text: "Find Hotels", action: "book_hotels" },
-                    { text: "Add Travel Buddy", action: "add_buddy" }
+                    { text: "Find Hotels", action: "book_hotels" }
                   ]
                 }
               : msg

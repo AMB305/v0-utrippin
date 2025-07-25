@@ -157,42 +157,21 @@ export const ChatContainer = ({
       if (response.data && !response.error) {
         console.log('🤖 Processing AI response data:', response.data);
         
-        // Handle new structured itinerary format
-        if (response.data.structuredItinerary) {
-          console.log('🗺️ Structured itinerary detected!');
-          structuredData = response.data.structuredItinerary;
-          aiReply = structuredData.overview.summary;
+        // Handle detailed itinerary responses with exact schema
+        if (response.data.isDetailedItinerary && response.data.detailedItinerary) {
+          console.log('🗺️ Detailed itinerary detected!');
+          structuredData = response.data.detailedItinerary;
+          aiReply = response.data.response || structuredData.summary;
           setStructuredItinerary(structuredData);
         }
-        // Handle old formats for compatibility
+        // Handle other response formats for compatibility
         else if (typeof response.data === 'string') {
           aiReply = response.data;
         } else if (response.data.response) {
-          // Main response field from ai-travel-chat
           aiReply = response.data.response;
-        } else if (response.data.detailedItinerary) {
-          // Detailed itinerary response
-          const itinerary = response.data.detailedItinerary;
-          if (itinerary.summary) {
-            aiReply = itinerary.summary;
-          } else if (itinerary.title) {
-            aiReply = `${itinerary.title}\n\n${itinerary.recommendations?.map(r => 
-              `${r.category_name}: ${r.places?.map(p => p.name).join(', ') || 'Various options'}`
-            ).join('\n') || 'Recommendations available'}`;
-          }
-        } else if (response.data.trips && response.data.trips.length > 0) {
-          // Trip recommendations
-          const trip = response.data.trips[0];
-          aiReply = `Great! I found some options for you:\n\n${trip.name}\n${trip.summary}`;
         } else if (response.data.message) {
-          // Generic message field
           aiReply = response.data.message;
-        } else if (response.data.summary) {
-          aiReply = response.data.summary;
-        } else if (response.data.title) {
-          aiReply = response.data.title;
         } else {
-          // Log the structure for debugging
           console.warn('🤖 Unhandled AI response structure:', Object.keys(response.data));
           aiReply = "I received your message but I'm having trouble formatting my response. Let me try again - what would you like to know about travel?";
         }
@@ -341,29 +320,19 @@ export const ChatContainer = ({
         {/* Keila is thinking... indicator */}
         {isLoading && <KeilaThinking />}
 
-        {/* Show structured itinerary if available */}
+        {/* Show detailed itinerary if available */}
         {structuredItinerary && (
           <div className="mt-6 mb-4">
             <KeilaItineraryCard
               isLoading={false}
-              destination={structuredItinerary.destination || 'Your Destination'}
-              dates={structuredItinerary.dates ? 
-                `${structuredItinerary.dates.start} to ${structuredItinerary.dates.end}` : 
-                'Flexible dates'
-              }
-              summary={structuredItinerary.overview?.summary || 'Amazing travel experience awaits!'}
-              days={structuredItinerary.days?.map((day: any) => ({
-                day: day.day,
-                activities: [
-                  ...(day.morning || []),
-                  ...(day.afternoon || []),
-                  ...(day.evening || [])
-                ]
-              })) || []}
-              suggestions={structuredItinerary.sources || [
-                'Bring sunscreen and water for outdoor walks',
-                'Local currency is preferred for small purchases',
-                'Check weather conditions before outdoor activities'
+              destination={structuredItinerary.title?.split(' for ')[1] || 'Your Destination'}
+              dates="Based on your preferences"
+              summary={structuredItinerary.summary || 'Amazing travel experience awaits!'}
+              days={structuredItinerary.days || []}
+              suggestions={structuredItinerary.actionable_suggestions || [
+                'Bring comfortable walking shoes',
+                'Try local specialties and street food', 
+                'Keep your passport and documents safe'
               ]}
               rating={4.8}
             />
