@@ -250,15 +250,24 @@ export class RatehawkService {
    * Get detailed hotel information (legacy method)
    */
   static async getHotelInfo(hotelId: string): Promise<any> {
-    const { data, error } = await supabase.functions.invoke('ratehawk-hotel-info', {
-      body: { hotelId }
+    // Use the ratehawk-hotel-page function with mock data for getting hotel details
+    const { data, error } = await supabase.functions.invoke('ratehawk-hotel-page', {
+      body: {
+        checkin: '2025-07-25',
+        checkout: '2025-08-01',
+        hotel_id: hotelId,
+        guests: [{ adults: 2, children: [] }],
+        currency: 'USD',
+        language: 'en',
+        residency: 'us'
+      }
     });
 
     if (error) {
       throw new Error(`Hotel info failed: ${error.message}`);
     }
 
-    return data;
+    return data?.data || data;
   }
 
   /**
