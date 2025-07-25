@@ -144,15 +144,15 @@ export function HotelDetailsModal({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <span className="font-medium text-gray-900">Check-in:</span>
-              <p className="text-gray-600">{hotel.policies.check_in}</p>
+              <p className="text-gray-600">{hotel.policies?.check_in || 'Not available'}</p>
             </div>
             <div>
               <span className="font-medium text-gray-900">Check-out:</span>
-              <p className="text-gray-600">{hotel.policies.check_out}</p>
+              <p className="text-gray-600">{hotel.policies?.check_out || 'Not available'}</p>
             </div>
             <div>
               <span className="font-medium text-gray-900">Cancellation:</span>
-              <p className="text-gray-600">{hotel.policies.cancellation}</p>
+              <p className="text-gray-600">{hotel.policies?.cancellation || 'Contact hotel for details'}</p>
             </div>
           </div>
         </div>
