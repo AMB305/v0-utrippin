@@ -84,23 +84,68 @@ export class RatehawkService {
     language?: string;
     residency?: string;
   }): Promise<any> {
-    const { data, error } = await supabase.functions.invoke('ratehawk-search-region', {
-      body: {
-        checkin: params.checkin,
-        checkout: params.checkout,
-        region_id: params.region_id,
-        guests: params.guests,
-        currency: params.currency || 'USD',
-        language: params.language || 'en',
-        residency: params.residency || 'us'
+    try {
+      console.log('🔍 Searching hotels by region:', params.region_id);
+      
+      const { data, error } = await supabase.functions.invoke('ratehawk-search-region', {
+        body: {
+          hotel_id: params.region_id.toString(), // Convert region_id to hotel_id for hotel-based search
+          checkin: params.checkin,
+          checkout: params.checkout,
+          guests: params.guests,
+          currency: params.currency,
+          language: params.language,
+          residency: params.residency
+        }
+      });
+
+      if (error) {
+        console.error('❌ Hotel search error:', error);
+        throw new Error(`Hotel search failed: ${error.message}`);
       }
-    });
 
-    if (error) {
-      throw new Error(`Hotel search failed: ${error.message}`);
+      if (!data || data.status !== 'ok') {
+        throw new Error('Invalid response from hotel search');
+      }
+
+      console.log(`✅ Found hotel data`);
+      
+      return data;
+    } catch (error) {
+      console.error('Hotel search error:', error);
+      throw error;
     }
+  }
 
-    return data;
+  // New method for complete workflow testing
+  async executeCompleteWorkflow(params: {
+    hotel_id?: string;
+    checkin: string;
+    checkout: string;
+    guests: Array<{ adults: number; children: number[] }>;
+    currency?: string;
+    language?: string;
+    residency?: string;
+  }): Promise<any> {
+    try {
+      console.log('🔍 Executing complete RateHawk workflow');
+      
+      const { data, error } = await supabase.functions.invoke('ratehawk-complete-workflow', {
+        body: params
+      });
+
+      if (error) {
+        console.error('❌ Complete workflow error:', error);
+        throw new Error(`Complete workflow failed: ${error.message}`);
+      }
+
+      console.log('✅ Complete workflow executed successfully');
+      
+      return data;
+    } catch (error) {
+      console.error('Complete workflow error:', error);
+      throw error;
+    }
   }
 
   /**

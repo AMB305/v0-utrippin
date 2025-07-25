@@ -9,10 +9,10 @@ const corsHeaders = {
 
 const RATEHAWK_BASE_URL = 'https://api-sandbox.emergingtravel.com/v1';
 
-interface RegionSearchRequest {
+interface HotelSearchRequest {
   checkin: string;
   checkout: string;
-  region_id: number;
+  hotel_id: string;
   guests: Array<{
     adults: number;
     children: number[];
@@ -28,17 +28,20 @@ serve(async (req) => {
   }
 
   try {
-    const searchParams: RegionSearchRequest = await req.json();
+    const searchParams: HotelSearchRequest = await req.json();
 
-    if (!searchParams.checkin || !searchParams.checkout || !searchParams.region_id || !searchParams.guests) {
+    // Use test hotel if hotel_id not provided for certification
+    const hotelId = searchParams.hotel_id || 'test_hotel_do_not_book';
+
+    if (!searchParams.checkin || !searchParams.checkout || !searchParams.guests) {
       return new Response(
-        JSON.stringify({ error: 'Required fields: checkin, checkout, region_id, guests' }),
+        JSON.stringify({ error: 'Required fields: checkin, checkout, guests' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     const requestBody = {
-      id: searchParams.region_id,  // v1 API uses 'id' instead of 'region_id'
+      id: hotelId,  // Use hotel_id as id for hotel-based search
       checkin: searchParams.checkin,
       checkout: searchParams.checkout,
       guests: searchParams.guests,
@@ -47,8 +50,8 @@ serve(async (req) => {
       residency: searchParams.residency || 'us'
     };
 
-    console.log(`Ratehawk Region Search - Region: ${searchParams.region_id}, Dates: ${searchParams.checkin} to ${searchParams.checkout}`);
-    console.log('🔔 ratehawk-search-region: request body:', JSON.stringify(requestBody, null, 2));
+    console.log(`Ratehawk Hotel Search - Hotel: ${hotelId}, Dates: ${searchParams.checkin} to ${searchParams.checkout}`);
+    console.log('🔔 ratehawk-hotel-search: request body:', JSON.stringify(requestBody, null, 2));
     
     try {
       // Get authentication headers
