@@ -154,7 +154,8 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
       )}
 
       {/* Recommendations by Category */}
-      {itinerary.recommendations.map((category, categoryIndex) => (
+      {Array.isArray(itinerary.recommendations) && itinerary.recommendations.length > 0 ? (
+        itinerary.recommendations.map((category, categoryIndex) => (
         <Card key={categoryIndex} className="bg-white border border-gray-200 shadow-lg">
           <div className="p-6">
             <h3 className="font-semibold text-gray-900 text-lg mb-4">
@@ -162,7 +163,8 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
             </h3>
             
             <div className="space-y-4">
-              {category.places.map((place, placeIndex) => {
+              {Array.isArray(category.places) && category.places.length > 0 ? (
+                category.places.map((place, placeIndex) => {
                 const IconComponent = getTypeIcon(place.type);
                 const isSaved = savedPlaces.has(place.name);
                 
@@ -281,11 +283,23 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                     </div>
                   </div>
                 );
-              })}
+              })
+              ) : (
+                <div className="text-center text-gray-500 italic py-4">
+                  No places available for this category.
+                </div>
+              )}
             </div>
           </div>
         </Card>
-      ))}
+        ))
+      ) : (
+        <Card className="bg-white border border-gray-200 shadow-lg">
+          <div className="p-6 text-center text-gray-500 italic">
+            No recommendations available at this time.
+          </div>
+        </Card>
+      )}
 
       {/* Actionable Suggestions */}
       {itinerary.actionable_suggestions && itinerary.actionable_suggestions.length > 0 && (
