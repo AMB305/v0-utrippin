@@ -22,7 +22,7 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
     try {
       const { data, error } = await supabase.functions.invoke('ratehawk-hotel-cancel', {
         body: {
-          reservationId: booking.reservationId
+          order_id: booking?.data?.order_id || booking?.reservationId
         }
       });
 
@@ -33,7 +33,7 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
       setIsCancelled(true);
       toast({
         title: "Booking Cancelled",
-        description: `Refund: ${data.refundedAmount.currency} ${data.refundedAmount.amount}`,
+        description: `Refund: ${data?.data?.refunded_amount?.currency || 'USD'} ${data?.data?.refunded_amount?.amount || 'N/A'}`,
       });
 
       // Log cancellation for certification tracking
@@ -65,7 +65,7 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
             {isCancelled ? 'Booking Cancelled' : 'Booking Confirmed!'}
           </CardTitle>
           <p className="text-gray-600">
-            Reservation ID: <span className="font-bold">{booking.reservationId}</span>
+            Reservation ID: <span className="font-bold">{booking?.data?.order_id || booking?.reservationId || 'N/A'}</span>
           </p>
         </CardHeader>
         
@@ -121,7 +121,7 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
               <div className="flex justify-between items-center">
                 <span>Total Amount:</span>
                 <span className="font-bold text-lg">
-                  {booking.totalAmount.currency} {booking.totalAmount.amount}
+                  {booking?.data?.total_amount?.currency || 'USD'} {booking?.data?.total_amount?.amount || 'N/A'}
                 </span>
               </div>
               <Badge variant="secondary" className="mt-2">
@@ -166,7 +166,7 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
 
           {/* Booking Status */}
           <div className="text-center text-sm text-gray-500">
-            Reservation ID: {booking.reservationId} | Status: {isCancelled ? 'Cancelled' : booking.status}
+            Reservation ID: {booking?.data?.order_id || booking?.reservationId || 'N/A'} | Status: {isCancelled ? 'Cancelled' : (booking?.status || 'Confirmed')}
           </div>
         </CardContent>
       </Card>
