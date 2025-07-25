@@ -49,19 +49,41 @@ export interface RatehawkGuestInfo {
 
 export class RatehawkService {
   /**
-   * Search for hotels using Ratehawk API
+   * Suggest destinations and hotels by name (autocomplete)
    */
-  static async searchHotels(params: RatehawkSearchParams): Promise<{ hotels: RatehawkHotel[]; search_id: string }> {
-    const { data, error } = await supabase.functions.invoke('ratehawk-hotel-search', {
+  static async suggestDestinations(query: string, language = 'en'): Promise<any> {
+    const { data, error } = await supabase.functions.invoke('ratehawk-suggest', {
+      body: { query, language }
+    });
+
+    if (error) {
+      throw new Error(`Destination suggest failed: ${error.message}`);
+    }
+
+    return data;
+  }
+
+  /**
+   * Search for hotels using Ratehawk region search API
+   */
+  static async searchHotelsByRegion(params: {
+    checkin: string;
+    checkout: string;
+    region_id: number;
+    guests: Array<{ adults: number; children: number[] }>;
+    currency?: string;
+    language?: string;
+    residency?: string;
+  }): Promise<any> {
+    const { data, error } = await supabase.functions.invoke('ratehawk-search-region', {
       body: {
-        destination: params.destination,
-        checkIn: params.checkIn,
-        checkOut: params.checkOut,
-        adults: params.adults,
-        children: params.children || [],
-        language: "en",
-        currency: "USD",
-        residency: "US"
+        checkin: params.checkin,
+        checkout: params.checkout,
+        region_id: params.region_id,
+        guests: params.guests,
+        currency: params.currency || 'USD',
+        language: params.language || 'en',
+        residency: params.residency || 'us'
       }
     });
 
@@ -73,7 +95,78 @@ export class RatehawkService {
   }
 
   /**
-   * Get detailed hotel information
+   * Get hotel page with rates (legacy method for backward compatibility)
+   */
+  static async searchHotels(params: RatehawkSearchParams): Promise<{ hotels: RatehawkHotel[]; search_id: string }> {
+    // This is a legacy method - convert to new format if destination contains region_id
+    if (typeof params.destination === 'object' && 'regionCode' in params.destination) {
+      const regionId = parseInt(params.destination.regionCode || '0');
+      if (regionId) {
+        const guests = [{ adults: params.adults, children: params.children || [] }];
+        const result = await this.searchHotelsByRegion({
+          checkin: params.checkIn,
+          checkout: params.checkOut,
+          region_id: regionId,
+          guests,
+          currency: params.currency,
+          language: params.language,
+          residency: params.residency
+        });
+        
+        // Transform to legacy format
+        return {
+          hotels: result.data?.hotels || [],
+          search_id: result.data?.search_id || 'legacy'
+        };
+      }
+    }
+
+    // Fallback to old mock implementation
+    const { data, error } = await supabase.functions.invoke('ratehawk-hotel-search', {
+      body: {
+        destination: params.destination,
+        checkIn: params.checkIn,
+        checkOut: params.checkOut,
+        adults: params.adults,
+        children: params.children || [],
+        language: params.language || "en",
+        currency: params.currency || "USD",
+        residency: params.residency || "us"
+      }
+    });
+
+    if (error) {
+      throw new Error(`Hotel search failed: ${error.message}`);
+    }
+
+    return data;
+  }
+
+  /**
+   * Get hotel page with detailed rates and information
+   */
+  static async getHotelPage(params: {
+    checkin: string;
+    checkout: string;
+    hotel_id: string;
+    guests: Array<{ adults: number; children: number[] }>;
+    currency?: string;
+    language?: string;
+    residency?: string;
+  }): Promise<any> {
+    const { data, error } = await supabase.functions.invoke('ratehawk-hotel-page', {
+      body: params
+    });
+
+    if (error) {
+      throw new Error(`Hotel page failed: ${error.message}`);
+    }
+
+    return data;
+  }
+
+  /**
+   * Get detailed hotel information (legacy method)
    */
   static async getHotelInfo(hotelId: string): Promise<any> {
     const { data, error } = await supabase.functions.invoke('ratehawk-hotel-info', {
