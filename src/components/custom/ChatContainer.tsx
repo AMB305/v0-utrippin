@@ -160,6 +160,15 @@ export const ChatContainer = ({
         // Handle detailed itinerary responses with exact schema
         if (response.data.isDetailedItinerary && response.data.detailedItinerary) {
           console.log('🗺️ Detailed itinerary detected!');
+          console.log('📊 Itinerary content validation:', {
+            hasSummary: !!response.data.detailedItinerary.summary,
+            summaryLength: response.data.detailedItinerary.summary?.length,
+            hasDays: !!response.data.detailedItinerary.days,
+            daysCount: response.data.detailedItinerary.days?.length,
+            hasSuggestions: !!response.data.detailedItinerary.actionable_suggestions,
+            suggestionsCount: response.data.detailedItinerary.actionable_suggestions?.length
+          });
+          
           structuredData = response.data.detailedItinerary;
           aiReply = response.data.response || structuredData.summary;
           setStructuredItinerary(structuredData);

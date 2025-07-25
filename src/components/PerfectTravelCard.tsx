@@ -21,6 +21,32 @@ export const PerfectTravelCard: React.FC<PerfectTravelCardProps> = ({
   suggestions,
   rating = 4.8
 }) => {
+  // Validation: Don't render if essential content is missing
+  if (!summary || summary.length < 10 || !activities || activities.length === 0) {
+    console.warn('PerfectTravelCard: Missing essential content', { 
+      hasSummary: !!summary, 
+      summaryLength: summary?.length, 
+      hasActivities: !!activities, 
+      activitiesLength: activities?.length 
+    });
+    
+    return (
+      <div className="bg-gradient-to-br from-zinc-800/90 to-zinc-900/90 backdrop-blur-sm rounded-xl p-6 border border-purple-500/30 shadow-lg animate-fade-in max-w-3xl mx-auto text-center">
+        <div className="text-purple-300 mb-4">
+          🚫 Unable to load trip details
+        </div>
+        <p className="text-gray-300 mb-4">
+          I need more specific information to create your perfect itinerary.
+        </p>
+        <Button 
+          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-semibold shadow-lg hover:shadow-purple-500/25"
+          onClick={() => window.location.reload()}
+        >
+          Try Again
+        </Button>
+      </div>
+    );
+  }
   return (
     <div className="bg-gradient-to-br from-zinc-800/90 to-zinc-900/90 backdrop-blur-sm rounded-xl p-6 border border-purple-500/30 shadow-lg animate-fade-in max-w-3xl mx-auto">
       {/* Header */}

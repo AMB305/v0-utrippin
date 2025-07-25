@@ -322,6 +322,15 @@ ${isFollowUpQuestion ?
 CRITICAL JSON RESPONSE RULE: 
 You MUST respond with VALID JSON ONLY. NO explanatory text before or after. NO conversational text outside the JSON structure.
 
+CONTENT REQUIREMENTS:
+- summary MUST be at least 50 characters long and descriptive
+- days array MUST have at least 2 days with morning, afternoon, evening activities
+- Each day MUST have at least 2 activities in morning/afternoon/evening arrays
+- culture_tips MUST have at least 3 useful tips
+- overview.title MUST be descriptive and specific to the destination
+
+If you cannot provide meaningful content for ALL required fields, return a simple response format instead.
+
 RESPONSE FORMAT RULES:
 - For travel planning requests with destinations, return the complete structured itinerary JSON below
 - For simple greetings without destinations, return the simple JSON format  
@@ -512,17 +521,52 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
     if (parsedResponse.destination && parsedResponse.overview && parsedResponse.days) {
       console.log('AI Travel Chat - Detected structured itinerary response');
       
-      // Validate complete schema
+      // Validate complete schema with content checks
       const requiredFields = ['destination', 'dates', 'travelers', 'overview', 'themes', 'images', 'transportation', 'flights', 'hotels', 'days', 'culture_tips', 'sources', 'buttons'];
       const missingFields = requiredFields.filter(field => !parsedResponse[field]);
       
-      if (missingFields.length > 0) {
-        console.error('AI Travel Chat - Schema validation failed. Missing fields:', missingFields);
+      // Additional content validation
+      const hasValidSummary = parsedResponse.overview?.summary && parsedResponse.overview.summary.length > 10;
+      const hasValidDays = Array.isArray(parsedResponse.days) && parsedResponse.days.length > 0;
+      const hasDayContent = parsedResponse.days.some((day: any) => 
+        (day.morning && day.morning.length > 0) || 
+        (day.afternoon && day.afternoon.length > 0) || 
+        (day.evening && day.evening.length > 0)
+      );
+      const hasValidTips = parsedResponse.culture_tips && Object.keys(parsedResponse.culture_tips).length > 0;
+      
+      console.log('AI Travel Chat - Content validation:', {
+        hasValidSummary,
+        hasValidDays,
+        hasDayContent,
+        hasValidTips,
+        missingFields: missingFields.length
+      });
+      
+      // If basic schema is missing or content is empty, reject the response
+      if (missingFields.length > 0 || !hasValidSummary || !hasValidDays || !hasDayContent) {
+        console.error('AI Travel Chat - Content validation failed:', {
+          missingFields,
+          hasValidSummary,
+          hasValidDays, 
+          hasDayContent
+        });
+        
+        // Return a simple response instead of broken detailed itinerary
         return new Response(JSON.stringify({
-          error: "Keila failed to return a complete itinerary. Please try again.",
-          missingFields: missingFields
+          response: `I'd love to help you plan your trip! Could you provide more specific details about your destination, travel dates, and what kind of activities you're interested in? This will help me create a better personalized itinerary for you.`,
+          showMap: false,
+          quickReplies: [
+            "Plan a 3-day city break",
+            "Plan a week-long adventure",
+            "Plan a family vacation",
+            "Plan a romantic getaway"
+          ],
+          callsToAction: [
+            { text: "Try a different destination", action: "CONTINUE_CHAT" }
+          ],
+          isDetailedItinerary: false
         }), {
-          status: 500,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
       }
