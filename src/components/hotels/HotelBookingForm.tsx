@@ -50,7 +50,11 @@ export function HotelBookingForm({
 
     try {
       console.log('🔍 Starting booking with user data:', formData);
+      console.log('🔍 Prebook ID:', prebookId);
       
+      if (!prebookId) {
+        throw new Error('No prebook ID available. Please try the prebook step again.');
+      }
       // Call Ratehawk booking API with real user data
       const { data, error } = await supabase.functions.invoke('ratehawk-hotel-book', {
         body: {
