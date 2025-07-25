@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, Users, ChevronDown, Bed } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import heroImage from '@/assets/hero-hotels.jpg';
 
 export default function HeroHotelWidget() {
+  const navigate = useNavigate();
   const [destination, setDestination] = useState("");
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
@@ -36,9 +38,9 @@ export default function HeroHotelWidget() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleHotelSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleHotelSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     console.log('🚀 FORM SUBMIT DEBUG:', {
       destination,
       checkInDate,
@@ -47,16 +49,29 @@ export default function HeroHotelWidget() {
       children,
       rooms
     });
-    
+
     if (!destination) {
-      alert('Please enter a destination');
+      alert("Please enter a destination.");
       return;
     }
 
-    if (!checkInDate || !checkOutDate) {
-      alert('Please select check-in and check-out dates');
-      return;
-    }
+    // Set default dates if not provided
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const nextWeek = new Date(today);
+    nextWeek.setDate(today.getDate() + 7);
+
+    const queryParams = new URLSearchParams({
+      destination: destination,
+      checkInDate: checkInDate || today.toISOString().split('T')[0],
+      checkOutDate: checkOutDate || nextWeek.toISOString().split('T')[0],
+      adults: adults.toString(),
+      children: children.toString(),
+      rooms: rooms.toString()
+    });
+
+    console.log("🚀 Redirecting with query:", queryParams.toString());
 
     // GA4 tracking
     if (typeof window !== 'undefined' && window.gtag) {
@@ -67,20 +82,7 @@ export default function HeroHotelWidget() {
       });
     }
 
-    // Navigate to hotel search results using internal Ratehawk integration
-    const searchParams = new URLSearchParams({
-      destination,
-      checkInDate,
-      checkOutDate,
-      adults: adults.toString(),
-      children: children.toString(),
-      rooms: rooms.toString()
-    });
-    
-    const searchUrl = `/hotels/search?${searchParams.toString()}`;
-    console.log('🔗 Redirecting to:', searchUrl);
-    
-    window.location.href = searchUrl;
+    navigate(`/hotels/search?${queryParams.toString()}`);
   };
 
   return (

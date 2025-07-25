@@ -161,6 +161,33 @@ export default function HotelSearch() {
   };
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const destination = params.get("destination");
+    const checkInDate = params.get("checkInDate");
+    const checkOutDate = params.get("checkOutDate");
+    const adults = params.get("adults");
+    const children = params.get("children");
+    const rooms = params.get("rooms");
+
+    console.log("🧪 HotelSearch URL params:", {
+      destination,
+      checkInDate,
+      checkOutDate,
+      adults,
+      children,
+      rooms,
+      fullURL: window.location.href
+    });
+
+    console.log("🧪 HotelSearch searchData:", searchData);
+
+    if (!destination || !checkInDate || !checkOutDate) {
+      console.warn("❌ Missing required search parameters");
+      setLoading(false);
+      return;
+    }
+
+    console.log("✅ All required params present, calling searchHotels()");
     searchHotels();
   }, []);
 
