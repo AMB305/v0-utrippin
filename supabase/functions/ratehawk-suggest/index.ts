@@ -14,6 +14,14 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // 0) Quick connectivity probe
+  try {
+    const ping = await fetch("https://postman-echo.com/get");
+    console.log("🔔 Connectivity Test OK:", ping.status);
+  } catch (err) {
+    console.error("❌ Connectivity Test FAILED:", err);
+  }
+
   try {
     // Check API key first
     if (!RATEHAWK_API_KEY) {
@@ -24,14 +32,14 @@ serve(async (req) => {
       );
     }
 
-    // 1) Parse the incoming query
+    // Parse the incoming query
     const { query } = await req.json();
     console.log("🔔 ratehawk-suggest: incoming query:", query);
-    console.log("🔔 ratehawk-suggest: API key present:", !!RATEHAWK_API_KEY);
 
-    // 2) Call the sandbox suggest endpoint
+    // Call the sandbox suggest endpoint
     const apiUrl = `${RATEHAWK_BASE_URL}/search/suggest`;
     console.log("🔔 ratehawk-suggest: calling API URL:", apiUrl);
+    console.log("🔔 Using API key (first 4 chars):", RATEHAWK_API_KEY?.slice(0,4) + "…");
 
     const apiRes = await fetch(apiUrl, {
       method: "POST",
@@ -42,26 +50,24 @@ serve(async (req) => {
       body: JSON.stringify({ query }),
     });
 
-    // 3) Network error?
     if (!apiRes.ok) {
       const text = await apiRes.text();
-      console.error("❌ ratehawk-suggest: non-200 status", apiRes.status, text);
+      console.error("❌ ratehawk-suggest non-200:", apiRes.status, text);
       return new Response(text, {
         status: apiRes.status,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // 4) Parse & return
     const data = await apiRes.json();
-    console.log("✅ ratehawk-suggest: got data:", JSON.stringify(data));
+    console.log("✅ ratehawk-suggest SUCCESS:", JSON.stringify(data));
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (err) {
-    console.error("❌ ratehawk-suggest: network/error calling API:", err);
+    console.error("❌ ratehawk-suggest NETWORK ERROR:", err);
     return new Response(
       JSON.stringify({ error: err.message }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
