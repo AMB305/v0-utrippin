@@ -26,7 +26,7 @@ interface Props {
 
 import { useAuth } from '@/hooks/useAuth';
 import { KeilaThinking } from '@/components/KeilaThinking';
-import KeilaItineraryCard from '@/components/KeilaItineraryCard';
+import { PerfectTravelCard } from '@/components/PerfectTravelCard';
 
 // Keila AI Assistant ID (fixed for all users)
 const KEILA_AI_ID = '00000000-0000-0000-0000-000000000002';
@@ -332,16 +332,22 @@ export const ChatContainer = ({
         {/* Show detailed itinerary if available */}
         {structuredItinerary && (
           <div className="mt-6 mb-4">
-            <KeilaItineraryCard
-              isLoading={false}
-              destination={structuredItinerary.title?.split(' for ')[1] || 'Your Destination'}
-              dates="Based on your preferences"
+            <PerfectTravelCard
+              destination={structuredItinerary.title?.replace(/^\d+-Day\s+/, '').replace(' Adventure', '') || 'Your Destination'}
+              days={structuredItinerary.days?.length || 3}
               summary={structuredItinerary.summary || 'Amazing travel experience awaits!'}
-              days={structuredItinerary.days || []}
-              suggestions={structuredItinerary.actionable_suggestions || [
+              activities={structuredItinerary.days?.map(day => 
+                `${day.day}: ${day.activities?.slice(0, 2).join(', ')}`
+              ) || []}
+              tips={structuredItinerary.actionable_suggestions?.slice(0, 3) || [
                 'Bring comfortable walking shoes',
                 'Try local specialties and street food', 
                 'Keep your passport and documents safe'
+              ]}
+              suggestions={structuredItinerary.follow_up_questions || [
+                'Tell me more about nightlife',
+                'What are the best family activities?',
+                'Show me local restaurants'
               ]}
               rating={4.8}
             />
