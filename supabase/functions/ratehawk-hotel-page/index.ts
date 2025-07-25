@@ -8,7 +8,7 @@ const corsHeaders = {
 
 const RATEHAWK_KEY_ID = Deno.env.get('RATEHAWK_KEY_ID');
 const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
-const RATEHAWK_BASE_URL = 'https://api.worldota.net/api/b2b/v3';
+const RATEHAWK_BASE_URL = 'https://api-sandbox.emergingtravel.com/v1';
 
 interface HotelPageRequest {
   checkin: string;
@@ -45,8 +45,7 @@ serve(async (req) => {
       );
     }
 
-    const credentials = btoa(`${RATEHAWK_KEY_ID}:${RATEHAWK_API_KEY}`);
-    
+    console.log(`🔑 Ratehawk Hotel Page - Using API Key: ${RATEHAWK_API_KEY ? 'Present' : 'Missing'}`);
     console.log(`Ratehawk Hotel Page - Hotel: ${searchParams.hotel_id}, Dates: ${searchParams.checkin} to ${searchParams.checkout}`);
 
     const requestBody = {
@@ -59,10 +58,10 @@ serve(async (req) => {
       residency: searchParams.residency || 'us'
     };
 
-    const response = await fetch(`${RATEHAWK_BASE_URL}/search/hp/`, {
+    const response = await fetch(`${RATEHAWK_BASE_URL}/hotels/info`, {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${credentials}`,
+        'Authorization': `Bearer ${RATEHAWK_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody)
