@@ -56,8 +56,14 @@ serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Ratehawk suggest error:', response.status, errorText);
+      console.error('Request URL:', `${RATEHAWK_BASE_URL}/search/multicomplete/`);
+      console.error('Request body:', JSON.stringify({ query, language }));
       return new Response(
-        JSON.stringify({ error: `Ratehawk API error: ${response.status}` }),
+        JSON.stringify({ 
+          error: `Ratehawk API error: ${response.status}`, 
+          details: errorText,
+          requestData: { query, language }
+        }),
         { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -66,6 +72,7 @@ serve(async (req) => {
     
     console.log('✅ RATEHAWK SUGGEST SUCCESS:');
     console.log('Query:', query);
+    console.log('Full response:', JSON.stringify(data, null, 2));
     console.log('Results count:', data.data?.length || 0);
     
     return new Response(

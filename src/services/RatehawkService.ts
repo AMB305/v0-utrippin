@@ -52,14 +52,18 @@ export class RatehawkService {
    * Suggest destinations and hotels by name (autocomplete)
    */
   static async suggestDestinations(query: string, language = 'en'): Promise<any> {
+    console.log(`🧠 Calling Ratehawk suggest API with query: '${query}'`);
+    
     const { data, error } = await supabase.functions.invoke('ratehawk-suggest', {
       body: { query, language }
     });
 
     if (error) {
+      console.error('❌ Suggest API error:', error);
       throw new Error(`Destination suggest failed: ${error.message}`);
     }
 
+    console.log('✅ Suggest API response:', data);
     return data;
   }
 
@@ -99,10 +103,16 @@ export class RatehawkService {
    */
   static async findRegionId(destination: string): Promise<number | null> {
     try {
+      console.log(`🔍 Finding region ID for destination: ${destination}`);
       const suggestions = await this.suggestDestinations(destination);
       
-      // Look for a region match in the suggestions
+      console.log('🧠 Suggest response structure:', JSON.stringify(suggestions, null, 2));
+      
+      // Check multiple possible response structures
+      // Structure 1: data.regions (current assumption)
       if (suggestions.data && suggestions.data.regions && suggestions.data.regions.length > 0) {
+        console.log('✅ Found regions array in data.regions');
+        
         // Prioritize City type regions first, then other types
         const cityRegion = suggestions.data.regions.find((region: any) => 
           region.type === 'City' && 
@@ -110,6 +120,7 @@ export class RatehawkService {
         );
         
         if (cityRegion) {
+          console.log(`✅ Found city region: ${cityRegion.name} (ID: ${cityRegion.id})`);
           return parseInt(cityRegion.id);
         }
         
@@ -119,16 +130,47 @@ export class RatehawkService {
         );
         
         if (anyRegion) {
+          console.log(`✅ Found matching region: ${anyRegion.name} (ID: ${anyRegion.id})`);
           return parseInt(anyRegion.id);
         }
         
         // If no name match, return the first region (often the most relevant)
+        console.log(`✅ Using first available region: ${suggestions.data.regions[0].name} (ID: ${suggestions.data.regions[0].id})`);
         return parseInt(suggestions.data.regions[0].id);
       }
       
+      // Structure 2: data.locations (alternative structure)
+      if (suggestions.data && suggestions.data.locations && suggestions.data.locations.length > 0) {
+        console.log('✅ Found locations array in data.locations');
+        const location = suggestions.data.locations[0];
+        if (location.region_id) {
+          console.log(`✅ Found region_id in location: ${location.region_id}`);
+          return parseInt(location.region_id);
+        }
+        if (location.id) {
+          console.log(`✅ Using location.id as region_id: ${location.id}`);
+          return parseInt(location.id);
+        }
+      }
+      
+      // Structure 3: Direct data array
+      if (suggestions.data && Array.isArray(suggestions.data) && suggestions.data.length > 0) {
+        console.log('✅ Found direct data array');
+        const item = suggestions.data[0];
+        if (item.region_id) {
+          console.log(`✅ Found region_id: ${item.region_id}`);
+          return parseInt(item.region_id);
+        }
+        if (item.id) {
+          console.log(`✅ Using item.id as region_id: ${item.id}`);
+          return parseInt(item.id);
+        }
+      }
+      
+      console.warn('❌ No valid region found in any expected structure');
       return null;
     } catch (error) {
-      console.error('Failed to find region ID:', error);
+      console.error('❌ Failed to find region ID:', error);
       return null;
     }
   }
