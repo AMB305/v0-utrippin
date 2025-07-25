@@ -144,26 +144,47 @@ export const useChatAI = (trips: Trip[]) => {
         throw error;
       }
 
-      if (data && data.response) {
-        // Update message with AI response
-        setMessages(prev => prev.map(msg => 
-          msg.id === messageId 
-            ? {
-                ...msg,
-                loading: false,
-                response: data.response,
-                showMap: data.showMap,
-                mapLocation: data.mapLocation,
-                tripCards: data.tripCards || [],
-                quickReplies: data.quickReplies || [],
-                recommendations: data.recommendations,
-                trips: data.trips || [],
-                callsToAction: data.callsToAction || [],
-                detailedItinerary: data.detailedItinerary,
-                isDetailedItinerary: data.isDetailedItinerary
-              }
-            : msg
-        ));
+      if (data && (data.response || data.structuredItinerary)) {
+        // Handle structured itinerary responses
+        if (data.isStructuredItinerary && data.structuredItinerary) {
+          setMessages(prev => prev.map(msg => 
+            msg.id === messageId 
+              ? {
+                  ...msg,
+                  loading: false,
+                  response: data.response,
+                  detailedItinerary: data.structuredItinerary,
+                  isDetailedItinerary: true,
+                  showMap: true,
+                  mapLocation: data.structuredItinerary.destination,
+                  quickReplies: data.structuredItinerary.buttons || [],
+                  callsToAction: [
+                    { text: "Book Flights", action: "book_flights" },
+                    { text: "Find Hotels", action: "book_hotels" },
+                    { text: "Add Travel Buddy", action: "add_buddy" }
+                  ]
+                }
+              : msg
+          ));
+        } else {
+          // Handle regular responses
+          setMessages(prev => prev.map(msg => 
+            msg.id === messageId 
+              ? {
+                  ...msg,
+                  loading: false,
+                  response: data.response,
+                  showMap: data.showMap,
+                  mapLocation: data.mapLocation,
+                  tripCards: data.tripCards || [],
+                  quickReplies: data.quickReplies || [],
+                  recommendations: data.recommendations,
+                  trips: data.trips || [],
+                  callsToAction: data.callsToAction || []
+                }
+              : msg
+          ));
+        }
       } else {
         throw new Error('No response data received');
       }
