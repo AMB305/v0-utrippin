@@ -267,7 +267,19 @@ export class RatehawkService {
       throw new Error(`Hotel info failed: ${error.message}`);
     }
 
-    return data?.data || data;
+    const hotel = data?.data || data;
+    
+    // Inject fallback policies if missing
+    if (!hotel.policies) {
+      hotel.policies = {
+        check_in: '14:00',
+        check_out: '12:00',
+        children: 'Children allowed',
+        pets: 'Pets not allowed'
+      };
+    }
+
+    return hotel;
   }
 
   /**
