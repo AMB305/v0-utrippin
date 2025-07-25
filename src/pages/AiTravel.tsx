@@ -56,6 +56,7 @@ import DesktopTravelPlanner from "@/components/DesktopTravelPlanner";
 import { DetailedItineraryCard } from "@/components/DetailedItineraryCard";
 import KeilaThinkingCard from "@/components/KeilaThinkingCard";
 import FeaturedTripCards from "@/components/FeaturedTripCards";
+import { TripItineraryCard } from "@/components/ItineraryCard";
 
 interface ChatMessage {
   id: string;
@@ -120,6 +121,37 @@ interface Trip {
   budget: number;
   user_id: string;
 }
+
+// Helper function to extract destination from user message
+const extractDestinationFromMessage = (question: string, response: string): string => {
+  const questionLower = question.toLowerCase();
+  const responseLower = response.toLowerCase();
+  
+  // Common destination patterns
+  const destinations = [
+    'colombia', 'paris', 'thailand', 'tokyo', 'japan', 'kenya', 'morocco',
+    'barcelona', 'spain', 'europe', 'orlando', 'florida', 'cancun', 'mexico',
+    'bali', 'indonesia', 'italy', 'rome', 'greece', 'london', 'england',
+    'peru', 'machu picchu', 'egypt', 'cairo', 'brazil', 'argentina', 'chile'
+  ];
+  
+  // Look for destinations in the question first
+  for (const dest of destinations) {
+    if (questionLower.includes(dest)) {
+      return dest.charAt(0).toUpperCase() + dest.slice(1);
+    }
+  }
+  
+  // Look for destinations in the response
+  for (const dest of destinations) {
+    if (responseLower.includes(dest)) {
+      return dest.charAt(0).toUpperCase() + dest.slice(1);
+    }
+  }
+  
+  // Default fallback
+  return 'Your Destination';
+};
 
 const AiTravel = () => {
   const { user, loading: authLoading } = useAuth();
@@ -204,18 +236,21 @@ const AiTravel = () => {
   // Handler for new chat sessions from welcome screen and suggested prompts
   const handleNewChatFromWelcome = (question: string) => {
     if (question.trim()) {
-      console.log('🚀 Starting new chat with question:', question);
+      console.log('🚀 Starting fresh conversation with:', question);
       
-      // Force clear existing chat history and reset state
+      // Force complete reset
       clearMobileChat();
       setLastChatResponse(null);
+      setHasStartedChat(false);
       
-      // Small delay to ensure clean state
+      // Small delay to ensure state is fully cleared
       setTimeout(() => {
-        // Start new chat session with appropriate enhancement
+        console.log('🔄 State cleared, starting chat...');
         setHasStartedChat(true);
+        
+        // Send message with proper context
         sendEnhancedMessage(question, isDesktop);
-      }, 100);
+      }, 200);
     }
   };
 
@@ -560,16 +595,18 @@ const AiTravel = () => {
                               )}
                             </div>
                             
-                            {/* Generate Featured Trip Cards after first response */}
-                            {index === 0 && message.response && (
-                              <div className="mt-4">
-                                <FeaturedTripCards 
-                                  title="✨ Trip Ideas Based on Your Request"
-                                  onBookTrip={(trip) => {
-                                    handleMobileSubmit(`Tell me more about planning a trip to ${trip.location} similar to "${trip.title}"`);
-                                  }}
-                                />
-                              </div>
+                            {/* AUTO-GENERATE ITINERARY CARD after AI response */}
+                            {message.response && index === mobileChatMessages.length - 1 && (
+                              <TripItineraryCard
+                                destination={extractDestinationFromMessage(message.question, message.response)}
+                                response={message.response}
+                                onBookNow={() => {
+                                  handleMobileSubmit(`I'm interested in booking this trip. Can you help me with next steps?`);
+                                }}
+                                onExploreMore={(activity) => {
+                                  handleMobileSubmit(`Tell me more about ${activity} in this destination`);
+                                }}
+                              />
                             )}
                           </>
                         )}
