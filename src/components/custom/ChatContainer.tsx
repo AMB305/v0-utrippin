@@ -26,7 +26,7 @@ interface Props {
 
 import { useAuth } from '@/hooks/useAuth';
 import { KeilaThinking } from '@/components/KeilaThinking';
-import { ItineraryCard } from '@/components/ItineraryCard';
+import KeilaItineraryCard from '@/components/KeilaItineraryCard';
 
 // Keila AI Assistant ID (fixed for all users)
 const KEILA_AI_ID = '00000000-0000-0000-0000-000000000002';
@@ -344,7 +344,29 @@ export const ChatContainer = ({
         {/* Show structured itinerary if available */}
         {structuredItinerary && (
           <div className="mt-6 mb-4">
-            <ItineraryCard data={structuredItinerary} />
+            <KeilaItineraryCard
+              isLoading={false}
+              destination={structuredItinerary.destination || 'Your Destination'}
+              dates={structuredItinerary.dates ? 
+                `${structuredItinerary.dates.start} to ${structuredItinerary.dates.end}` : 
+                'Flexible dates'
+              }
+              summary={structuredItinerary.overview?.summary || 'Amazing travel experience awaits!'}
+              days={structuredItinerary.days?.map((day: any) => ({
+                day: day.day,
+                activities: [
+                  ...(day.morning || []),
+                  ...(day.afternoon || []),
+                  ...(day.evening || [])
+                ]
+              })) || []}
+              suggestions={structuredItinerary.sources || [
+                'Bring sunscreen and water for outdoor walks',
+                'Local currency is preferred for small purchases',
+                'Check weather conditions before outdoor activities'
+              ]}
+              rating={4.8}
+            />
           </div>
         )}
 

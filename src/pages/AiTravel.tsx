@@ -47,6 +47,7 @@ import { KeilaThinking } from "@/components/KeilaThinking";
 import { ChatCTAButtons } from "@/components/ChatCTAButtons";
 import { SaveTripDialog } from "@/components/SaveTripDialog";
 import { AuthRequiredDialog } from "@/components/AuthRequiredDialog";
+import KeilaItineraryCard from "@/components/KeilaItineraryCard";
 import UtrippinLogo from "@/components/UtrippinLogo";
 import Header from "@/components/Header";
 import HereLocationAutocomplete from "@/components/HereLocationAutocomplete";
@@ -56,7 +57,7 @@ import DesktopTravelPlanner from "@/components/DesktopTravelPlanner";
 import { DetailedItineraryCard } from "@/components/DetailedItineraryCard";
 import KeilaThinkingCard from "@/components/KeilaThinkingCard";
 import FeaturedTripCards from "@/components/FeaturedTripCards";
-import { TripItineraryCard } from "@/components/ItineraryCard";
+
 
 interface ChatMessage {
   id: string;
@@ -595,17 +596,33 @@ const AiTravel = () => {
                               )}
                             </div>
                             
-                            {/* AUTO-GENERATE ITINERARY CARD after AI response */}
-                            {message.response && index === mobileChatMessages.length - 1 && (
-                              <TripItineraryCard
+                            {/* AUTO-GENERATE KEILA ITINERARY CARD after AI response */}
+                            {message.response && index === mobileChatMessages.length - 1 && !message.isDetailedItinerary && (
+                              <KeilaItineraryCard
+                                isLoading={false}
                                 destination={extractDestinationFromMessage(message.question, message.response)}
-                                response={message.response}
-                                onBookNow={() => {
-                                  handleMobileSubmit(`I'm interested in booking this trip. Can you help me with next steps?`);
-                                }}
-                                onExploreMore={(activity) => {
-                                  handleMobileSubmit(`Tell me more about ${activity} in this destination`);
-                                }}
+                                dates="Flexible dates"
+                                summary={message.response}
+                                days={[
+                                  {
+                                    day: "Day 1",
+                                    activities: ["Arrival and check-in", "Explore local area", "Welcome dinner"]
+                                  },
+                                  {
+                                    day: "Day 2", 
+                                    activities: ["Morning sightseeing", "Cultural experiences", "Local cuisine"]
+                                  },
+                                  {
+                                    day: "Day 3",
+                                    activities: ["Adventure activities", "Shopping", "Farewell dinner"]
+                                  }
+                                ]}
+                                suggestions={[
+                                  "Bring comfortable walking shoes",
+                                  "Try local specialties and street food",
+                                  "Keep your passport and documents safe"
+                                ]}
+                                rating={4.8}
                               />
                             )}
                           </>
