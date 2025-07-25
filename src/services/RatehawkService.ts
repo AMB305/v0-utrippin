@@ -60,6 +60,11 @@ export class RatehawkService {
 
     if (error) {
       console.error('❌ Suggest API error:', error);
+      console.error('❌ Error details:', JSON.stringify(error, null, 2));
+      // Log the specific error properties
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error name:', error.name);
+      console.error('❌ Error context:', error.context);
       throw new Error(`Destination suggest failed: ${error.message}`);
     }
 
