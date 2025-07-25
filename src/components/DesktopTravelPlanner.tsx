@@ -8,6 +8,8 @@ import StarfieldBackground from './StarfieldBackground';
 import { Button } from '@/components/ui/button';
 import { Home, RefreshCw, MessageSquare, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import KeilaThinkingCard from './KeilaThinkingCard';
+import FeaturedTripCards from './FeaturedTripCards';
 
 interface DesktopTravelPlannerProps {
   onQuestionSelect?: (question: string) => void;
@@ -210,18 +212,39 @@ export default function DesktopTravelPlanner({
               </BlurFade>
             </div>
 
-            {/* Chat Container */}
-            <BlurFade delay={2.4} inView>
-              <div className="bg-zinc-900/50 backdrop-blur-sm rounded-xl border border-gray-800/50 overflow-hidden min-h-[400px]">
-                <ChatContainer
-                  userId={user?.id}
-                  variant="desktop"
-                  enableReactions={true}
-                  enablePinning={true}
-                  enableSharing={true}
-                />
-              </div>
-            </BlurFade>
+              {/* Chat Container */}
+              <BlurFade delay={2.4} inView>
+                <div className="bg-zinc-900/50 backdrop-blur-sm rounded-xl border border-gray-800/50 overflow-hidden min-h-[400px]">
+                  <div className="p-4">
+                    {/* Show loading state initially */}
+                    {(!chatMessages || chatMessages.length === 0) && isLoading && (
+                      <KeilaThinkingCard message="Ready to help you plan your perfect trip!" />
+                    )}
+                    
+                    {/* Chat messages will appear here */}
+                    {chatMessages && chatMessages.length > 0 && (
+                      <div className="mb-4">
+                        <FeaturedTripCards 
+                          title="✨ Recommended Trips for You"
+                          onBookTrip={(trip) => {
+                            if (onSendMessage) {
+                              onSendMessage(`Tell me more about planning a trip to ${trip.location} similar to "${trip.title}"`);
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <ChatContainer
+                    userId={user?.id}
+                    variant="desktop"
+                    enableReactions={true}
+                    enablePinning={true}
+                    enableSharing={true}
+                  />
+                </div>
+              </BlurFade>
           </main>
         </div>
       </div>
