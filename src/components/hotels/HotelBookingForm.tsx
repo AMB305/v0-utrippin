@@ -89,7 +89,7 @@ export function HotelBookingForm({
         <CardHeader>
           <CardTitle>Complete Your Booking</CardTitle>
           <p className="text-gray-600">
-            Booking: {hotel?.name} - {prebookId.includes('test_hotel_do_not_book') ? 'TEST RESERVATION' : 'Live Booking'}
+            Booking: {hotel?.name} - {prebookId?.includes('test_hotel_do_not_book') ? 'TEST RESERVATION' : 'Live Booking'}
           </p>
         </CardHeader>
         <CardContent>
@@ -140,7 +140,7 @@ export function HotelBookingForm({
               />
             </div>
 
-            {prebookId.includes('test_hotel_do_not_book') && (
+            {prebookId?.includes('test_hotel_do_not_book') && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <p className="text-yellow-800 font-medium">🧪 Test Booking</p>
                 <p className="text-yellow-700 text-sm mt-1">
