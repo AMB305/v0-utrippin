@@ -589,8 +589,75 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
         }
       }
       
+      
+      // Build the detailed itinerary structure
+      const detailedItinerary = {
+        title: parsedResponse.overview?.title || '',
+        summary: parsedResponse.overview?.summary || '',
+        days: (parsedResponse.days || []).map((day: any) => ({
+          day: day.day || '',
+          activities: [
+            ...(day.morning || []),
+            ...(day.afternoon || []),
+            ...(day.evening || [])
+          ].filter(activity => activity && activity.trim().length > 0)
+        })).filter(day => day.activities.length > 0),
+        actionable_suggestions: Object.values(parsedResponse.culture_tips || {}).filter(tip => tip && typeof tip === 'string' && tip.trim().length > 0),
+        follow_up_questions: [
+          "Tell me more about nightlife",
+          "What are the best family activities?", 
+          "Show me local restaurants",
+          "What's the transportation like?"
+        ]
+      };
+
+      // CRITICAL VALIDATION: Only set isDetailedItinerary if we have real content
+      const hasValidContent = (
+        detailedItinerary.summary && detailedItinerary.summary.trim().length > 20 &&
+        detailedItinerary.days && detailedItinerary.days.length >= 2 &&
+        detailedItinerary.actionable_suggestions && detailedItinerary.actionable_suggestions.length >= 3
+      );
+
+      console.log('AI Travel Chat - Content validation:', {
+        hasValidSummary: detailedItinerary.summary?.length > 20,
+        hasValidDays: detailedItinerary.days?.length >= 2,
+        hasValidSuggestions: detailedItinerary.actionable_suggestions?.length >= 3,
+        isDetailedItinerary: hasValidContent
+      });
+
+      if (!hasValidContent) {
+        // Return fallback content instead of broken itinerary
+        return new Response(JSON.stringify({
+          response: "I'm having trouble creating a complete itinerary right now. Here's some helpful information while I work on a better response!",
+          isDetailedItinerary: false,
+          fallbackContent: {
+            summary: `${tripDetails.destination || 'This destination'} offers amazing experiences for travelers. Perfect for exploring culture, food, and local attractions.`,
+            suggestions: [
+              "Research local customs and tipping practices",
+              "Download offline maps and translation apps", 
+              "Try authentic local cuisine from recommended spots",
+              "Book accommodations in safe, well-reviewed areas"
+            ],
+            culture_tips: [
+              "Learn a few basic phrases in the local language",
+              "Respect local dress codes and cultural norms",
+              "Use official transportation and tour guides",
+              "Keep copies of important documents secure"
+            ],
+            quick_replies: [
+              "Tell me more about nightlife",
+              "Show me local food spots",
+              "What's a good 3-day itinerary?",
+              "What's the transportation like?"
+            ]
+          }
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+
       const structuredResponse = {
-        response: parsedResponse.overview.summary,
+        response: detailedItinerary.summary,
         showMap: true,
         mapLocation: parsedResponse.destination,
         tripCards: [],
@@ -601,25 +668,7 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
           { text: "Find Hotels", action: "book_hotels" },
           { text: "Add Travel Buddy", action: "add_buddy" }
         ],
-        detailedItinerary: {
-          title: parsedResponse.overview.title,
-          summary: parsedResponse.overview.summary,
-          days: parsedResponse.days.map((day: any) => ({
-            day: day.day,
-            activities: [
-              ...(day.morning || []),
-              ...(day.afternoon || []),
-              ...(day.evening || [])
-            ]
-          })),
-          actionable_suggestions: Object.values(parsedResponse.culture_tips || {}),
-          follow_up_questions: [
-            "Tell me more about nightlife",
-            "What are the best family activities?", 
-            "Show me local restaurants",
-            "What's the transportation like?"
-          ]
-        },
+        detailedItinerary,
         isDetailedItinerary: true
       };
       
