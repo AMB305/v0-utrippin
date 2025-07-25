@@ -7,6 +7,7 @@ const corsHeaders = {
 };
 
 const RATEHAWK_API_KEY = Deno.env.get("RATEHAWK_API_KEY")!;
+const RATEHAWK_KEY_ID = Deno.env.get("RATEHAWK_KEY_ID")!;
 const RATEHAWK_BASE_URL = "https://api-sandbox.emergingtravel.com/v1";
 
 serve(async (req) => {
@@ -23,11 +24,14 @@ serve(async (req) => {
   }
 
   try {
-    // Check API key first
-    if (!RATEHAWK_API_KEY) {
-      console.error("❌ RATEHAWK_API_KEY is not set");
+    // Check API credentials
+    if (!RATEHAWK_API_KEY || !RATEHAWK_KEY_ID) {
+      console.error("❌ RATEHAWK credentials missing:", { 
+        key_id: !!RATEHAWK_KEY_ID, 
+        api_key: !!RATEHAWK_API_KEY 
+      });
       return new Response(
-        JSON.stringify({ error: "Ratehawk API key not configured" }),
+        JSON.stringify({ error: "Ratehawk API credentials not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -36,15 +40,21 @@ serve(async (req) => {
     const { query } = await req.json();
     console.log("🔔 ratehawk-suggest: incoming query:", query);
 
+    // Create Basic Auth header (Key ID:API Key base64 encoded)
+    const credentials = `${RATEHAWK_KEY_ID}:${RATEHAWK_API_KEY}`;
+    const base64Credentials = btoa(credentials);
+    
+    console.log("🔔 ratehawk-suggest: using Key ID:", RATEHAWK_KEY_ID?.slice(0,4) + "…");
+    console.log("🔔 ratehawk-suggest: using API key:", RATEHAWK_API_KEY?.slice(0,4) + "…");
+
     // Call the sandbox suggest endpoint
     const apiUrl = `${RATEHAWK_BASE_URL}/search/suggest`;
     console.log("🔔 ratehawk-suggest: calling API URL:", apiUrl);
-    console.log("🔔 Using API key (first 4 chars):", RATEHAWK_API_KEY?.slice(0,4) + "…");
 
     const apiRes = await fetch(apiUrl, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${RATEHAWK_API_KEY}`,
+        Authorization: `Basic ${base64Credentials}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ query }),
