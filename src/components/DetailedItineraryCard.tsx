@@ -80,8 +80,13 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
   // Fetch details for places that don't have complete information
   useEffect(() => {
     const fetchPlaceDetails = async () => {
+      // Safety check to prevent flatMap error
+      if (!itinerary.recommendations || !Array.isArray(itinerary.recommendations)) {
+        return;
+      }
+
       const placesToFetch = itinerary.recommendations
-        .flatMap(category => category.places)
+        .flatMap(category => Array.isArray(category.places) ? category.places : [])
         .filter(place => !place.image_url || !place.booking_url)
         .map(place => ({ 
           name: place.name, 
@@ -118,67 +123,68 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
   return (
     <div className="space-y-6 w-full max-w-lg mx-auto">
       {/* Header */}
-      <Card className="bg-white border border-gray-200 shadow-lg">
-        <div className="p-6">
-          <h2 className="text-2xl font-bold mb-3 text-gray-900">{itinerary.title}</h2>
-          <p className="text-gray-700 text-base leading-relaxed">{itinerary.summary}</p>
-        </div>
-      </Card>
+      <div className="bg-gradient-to-br from-zinc-800/90 to-zinc-900/90 backdrop-blur-sm rounded-xl p-6 border border-purple-500/30 shadow-lg animate-fade-in">
+        <h2 className="text-2xl font-bold mb-3 text-white flex items-center gap-2">
+          🧭 {itinerary.title}
+        </h2>
+        <p className="text-gray-300 text-base leading-relaxed">{itinerary.summary}</p>
+      </div>
 
       {/* Flight Booking CTA */}
-      <Card className="bg-white border border-gray-200 shadow-lg">
-        <div className="p-4">
-          <Button 
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 font-medium text-base py-3"
-            onClick={() => {
-              // Navigate to actual flight booking instead of placeholder
-              const searchQuery = destination ? `flights to ${destination}` : 'flights';
-              window.open(`https://www.expedia.com/Flights?search=${encodeURIComponent(searchQuery)}`, '_blank');
-            }}
-          >
-            ✈️ Book Your Flight on Utrippin
-          </Button>
-        </div>
-      </Card>
+      <div className="bg-gradient-to-br from-zinc-800/90 to-zinc-900/90 backdrop-blur-sm rounded-xl p-4 border border-purple-500/30 shadow-lg">
+        <Button 
+          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium text-base py-3 shadow-lg hover:shadow-purple-500/25 transition-all duration-200"
+          onClick={() => {
+            const searchQuery = destination ? `flights to ${destination}` : 'flights';
+            window.open(`https://www.expedia.com/Flights?search=${encodeURIComponent(searchQuery)}`, '_blank');
+          }}
+        >
+          ✈️ Book Your Flight on Utrippin
+        </Button>
+      </div>
 
       {/* Map Component */}
       {destination && (
-        <Card className="overflow-hidden bg-white border border-gray-200 shadow-lg">
+        <div className="bg-gradient-to-br from-zinc-800/90 to-zinc-900/90 backdrop-blur-sm rounded-xl overflow-hidden border border-purple-500/30 shadow-lg">
+          <div className="p-4 border-b border-purple-500/20">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+              📍 {destination} Location
+            </h3>
+          </div>
           <StaticMapImage 
             destinationName={destination}
             size="medium"
             className="w-full h-56"
             showFallback={true}
           />
-        </Card>
+        </div>
       )}
 
       {/* Recommendations by Category */}
-      {Array.isArray(itinerary.recommendations) && itinerary.recommendations.length > 0 ? (
+      {Array.isArray(itinerary.recommendations) && itinerary.recommendations.length > 0 && (
         itinerary.recommendations.map((category, categoryIndex) => (
-        <Card key={categoryIndex} className="bg-white border border-gray-200 shadow-lg">
+        <div key={categoryIndex} className="bg-gradient-to-br from-zinc-800/90 to-zinc-900/90 backdrop-blur-sm rounded-xl border border-purple-500/30 shadow-lg">
           <div className="p-6">
-            <h3 className="font-semibold text-gray-900 text-lg mb-4">
-              {category.category_name}
+            <h3 className="font-semibold text-white text-lg mb-4 flex items-center gap-2">
+              ✨ {category.category_name}
             </h3>
             
             <div className="space-y-4">
-              {Array.isArray(category.places) && category.places.length > 0 ? (
+              {Array.isArray(category.places) && category.places.length > 0 && (
                 category.places.map((place, placeIndex) => {
                 const IconComponent = getTypeIcon(place.type);
                 const isSaved = savedPlaces.has(place.name);
                 
                 return (
-                  <div key={placeIndex} className="border border-gray-200 rounded-lg bg-gray-50 overflow-hidden shadow-sm">
+                  <div key={placeIndex} className="border border-zinc-700/50 rounded-lg bg-zinc-700/30 overflow-hidden shadow-sm">
                     {/* Place Image */}
                     {(place.image_url || placeDetails[place.name]?.imageUrl) && (
-                      <div className="h-40 bg-gray-200 relative overflow-hidden">
+                      <div className="h-40 bg-zinc-800 relative overflow-hidden">
                         <img 
                           src={place.image_url || placeDetails[place.name]?.imageUrl} 
                           alt={place.name}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            // Hide image on error
                             (e.target as HTMLElement).style.display = 'none';
                           }}
                         />
@@ -186,20 +192,20 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                           <Button
                             size="sm"
                             variant="secondary"
-                            className="h-8 w-8 p-0 bg-white/90 hover:bg-white shadow-md"
+                            className="h-8 w-8 p-0 bg-black/60 hover:bg-black/80 border border-purple-500/30 shadow-md"
                             onClick={() => toggleSavePlace(place.name)}
                           >
                             <Heart 
-                              className={`h-4 w-4 ${isSaved ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+                              className={`h-4 w-4 ${isSaved ? 'fill-pink-500 text-pink-500' : 'text-gray-300'}`} 
                             />
                           </Button>
                           <Button
                             size="sm"
                             variant="secondary"
-                            className="h-8 w-8 p-0 bg-white/90 hover:bg-white shadow-md"
+                            className="h-8 w-8 p-0 bg-black/60 hover:bg-black/80 border border-purple-500/30 shadow-md"
                             onClick={() => handleViewOnMap(place.name)}
                           >
-                            <MapPin className="h-4 w-4 text-gray-600" />
+                            <MapPin className="h-4 w-4 text-gray-300" />
                           </Button>
                         </div>
                       </div>
@@ -209,20 +215,20 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                     <div className="p-4">
                       <div className="flex items-start justify-between gap-3 mb-3">
                         <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <IconComponent className="h-5 w-5 text-gray-600 flex-shrink-0" />
-                          <h4 className="font-semibold text-gray-900 text-base leading-tight">
+                          <IconComponent className="h-5 w-5 text-purple-400 flex-shrink-0" />
+                          <h4 className="font-semibold text-white text-base leading-tight">
                             {place.name}
                           </h4>
                         </div>
                         <Badge 
                           variant="outline" 
-                          className={`text-sm ${getTypeColor(place.type)} flex-shrink-0`}
+                          className="text-sm bg-purple-600/20 text-purple-300 border-purple-500/30 flex-shrink-0"
                         >
                           {place.type}
                         </Badge>
                       </div>
                       
-                      <p className="text-sm text-gray-600 leading-relaxed mb-3">
+                      <p className="text-sm text-gray-300 leading-relaxed mb-3">
                         {place.description}
                       </p>
                       
@@ -231,17 +237,17 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                         {place.rating && place.rating > 0 && (
                           <div className="flex items-center gap-1">
                             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                            <span className="text-gray-700 font-medium">{place.rating}</span>
+                            <span className="text-white font-medium">{place.rating}</span>
                           </div>
                         )}
                         <div className="flex flex-col items-end">
                           {place.price_range && (
-                            <span className="text-green-600 font-semibold text-base">
+                            <span className="text-green-400 font-semibold text-base">
                               {place.price_range}
                             </span>
                           )}
                           {place.estimated_cost && (
-                            <span className="text-gray-500 text-sm">
+                            <span className="text-gray-400 text-sm">
                               {place.estimated_cost}
                             </span>
                           )}
@@ -256,12 +262,12 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                                         placeDetails[place.name]?.googleMapsUrl;
                            const buttonText = place.booking_url ? 
                              (place.type.toLowerCase().includes('restaurant') || place.type.toLowerCase().includes('dining') 
-                               ? 'Book Table on Utrippin'
+                               ? '🍽️ Book Table on Utrippin'
                                : place.type.toLowerCase().includes('hotel')
-                               ? 'Book Hotel on Utrippin'
-                               : 'Book Tour on Utrippin')
-                             : placeDetails[place.name]?.websiteUrl ? 'Visit Website' : 
-                             'View on Google Maps';
+                               ? '🏨 Book Hotel on Utrippin'
+                               : '🎫 Book Tour on Utrippin')
+                             : placeDetails[place.name]?.websiteUrl ? '🌐 Visit Website' : 
+                             '📍 View on Google Maps';
                            
                            return (
                              <a 
@@ -272,7 +278,7 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                              >
                                <Button 
                                  size="sm" 
-                                 className="w-full text-sm bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-2"
+                                 className="w-full text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-2 shadow-lg hover:shadow-purple-500/25 transition-all duration-200"
                                >
                                  {buttonText}
                                </Button>
@@ -284,53 +290,43 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                   </div>
                 );
               })
-              ) : (
-                <div className="text-center text-gray-500 italic py-4">
-                  No places available for this category.
-                </div>
               )}
             </div>
           </div>
-        </Card>
+        </div>
         ))
-      ) : (
-        <Card className="bg-white border border-gray-200 shadow-lg">
-          <div className="p-6 text-center text-gray-500 italic">
-            No recommendations available at this time.
-          </div>
-        </Card>
       )}
 
       {/* Actionable Suggestions */}
       {itinerary.actionable_suggestions && itinerary.actionable_suggestions.length > 0 && (
-        <Card className="bg-white border border-gray-200 shadow-lg">
+        <div className="bg-gradient-to-br from-zinc-800/90 to-zinc-900/90 backdrop-blur-sm rounded-xl border border-purple-500/30 shadow-lg">
           <div className="p-6">
-            <h3 className="font-semibold text-gray-900 text-lg mb-4 flex items-center gap-2">
-              <Star className="h-5 w-5 text-green-500" />
-              Travel Tips
+            <h3 className="font-semibold text-white text-lg mb-4 flex items-center gap-2">
+              💡 Travel Tips
             </h3>
             <div className="space-y-3">
               {itinerary.actionable_suggestions.map((suggestion, index) => (
                 <div key={index} className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-                  <p className="text-sm text-gray-700 leading-relaxed">{suggestion}</p>
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0" />
+                  <p className="text-sm text-gray-300 leading-relaxed">{suggestion}</p>
                 </div>
               ))}
             </div>
-            <Separator className="my-4 bg-gray-300" />
-            <p className="text-sm text-gray-500 italic font-medium">
-              *All prices are estimates and subject to change.
-            </p>
+            <div className="mt-4 pt-4 border-t border-purple-500/20">
+              <p className="text-sm text-gray-400 italic font-medium">
+                *All prices are estimates and subject to change.
+              </p>
+            </div>
           </div>
-        </Card>
+        </div>
       )}
 
       {/* Follow-up Questions */}
       {itinerary.follow_up_questions && itinerary.follow_up_questions.length > 0 && (
-        <Card className="bg-white border border-gray-200 shadow-lg">
+        <div className="bg-gradient-to-br from-zinc-800/90 to-zinc-900/90 backdrop-blur-sm rounded-xl border border-purple-500/30 shadow-lg">
           <div className="p-6">
-            <h3 className="font-semibold text-gray-900 text-lg mb-4">
-              Continue Planning
+            <h3 className="font-semibold text-white text-lg mb-4 flex items-center gap-2">
+              🚀 Continue Planning
             </h3>
             <div className="grid gap-3">
               {itinerary.follow_up_questions.map((question, index) => (
@@ -340,17 +336,16 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
                   size="sm"
                   onClick={() => {
                     onFollowUpClick(question);
-                    // Scroll to top of the page
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="text-sm text-left h-auto py-3 px-4 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 justify-start whitespace-normal bg-white"
+                  className="text-sm text-left h-auto py-3 px-4 border border-purple-500/30 text-gray-300 hover:bg-purple-600/20 hover:text-white hover:border-purple-400 justify-start whitespace-normal bg-transparent backdrop-blur-sm transition-all duration-200"
                 >
                   {question}
                 </Button>
               ))}
             </div>
           </div>
-        </Card>
+        </div>
       )}
     </div>
   );
