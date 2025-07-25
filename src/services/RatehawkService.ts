@@ -331,36 +331,52 @@ export class RatehawkService {
    * Get detailed hotel information (legacy method)
    */
   static async getHotelInfo(hotelId: string): Promise<any> {
-    // Use the ratehawk-hotel-page function with mock data for getting hotel details
-    const { data, error } = await supabase.functions.invoke('ratehawk-hotel-page', {
-      body: {
-        checkin: '2025-07-25',
-        checkout: '2025-08-01',
-        hotel_id: hotelId,
-        guests: [{ adults: 2, children: [] }],
-        currency: 'USD',
-        language: 'en',
-        residency: 'us'
-      }
-    });
-
-    if (error) {
-      throw new Error(`Hotel info failed: ${error.message}`);
-    }
-
-    const hotel = data?.data || data;
+    console.log('🔍 Getting hotel info for:', hotelId);
     
-    // Inject fallback policies if missing
-    if (!hotel.policies) {
-      hotel.policies = {
-        check_in: '14:00',
-        check_out: '12:00',
-        children: 'Children allowed',
-        pets: 'Pets not allowed'
-      };
-    }
+    try {
+      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-page', {
+        body: {
+          checkin: '2025-07-25',
+          checkout: '2025-08-01',
+          hotel_id: hotelId,
+          guests: [{ adults: 2, children: [] }],
+          currency: 'USD',
+          language: 'en',
+          residency: 'us'
+        }
+      });
 
-    return hotel;
+      console.log('🔍 Raw response:', { data, error });
+
+      if (error) {
+        console.error('❌ Hotel info API error:', error);
+        throw new Error(`Hotel info failed: ${error.message}`);
+      }
+
+      if (!data) {
+        console.error('❌ No data returned from hotel page API');
+        throw new Error('No hotel data returned');
+      }
+
+      // Handle the response structure - check if it's wrapped in status/data
+      const hotel = data.status === 'ok' ? data.data : data;
+      console.log('✅ Processed hotel data:', hotel);
+      
+      // Inject fallback policies if missing
+      if (!hotel.policies) {
+        hotel.policies = {
+          check_in: '14:00',
+          check_out: '12:00',
+          children: 'Children allowed',
+          pets: 'Pets not allowed'
+        };
+      }
+
+      return hotel;
+    } catch (error) {
+      console.error('❌ getHotelInfo error:', error);
+      throw error;
+    }
   }
 
   /**
