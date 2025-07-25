@@ -95,10 +95,68 @@ export class RatehawkService {
   }
 
   /**
-   * Get hotel page with rates (legacy method for backward compatibility)
+   * Find region ID for a destination using the suggest API
+   */
+  static async findRegionId(destination: string): Promise<number | null> {
+    try {
+      const suggestions = await this.suggestDestinations(destination);
+      
+      // Look for a destination match in the suggestions
+      if (suggestions.data && suggestions.data.length > 0) {
+        // Find the best match (city or region)
+        const match = suggestions.data.find((item: any) => 
+          item.type === 'city' || item.type === 'region'
+        );
+        
+        if (match && match.id) {
+          return match.id;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Failed to find region ID:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Search for hotels (main method that handles the full workflow)
    */
   static async searchHotels(params: RatehawkSearchParams): Promise<{ hotels: RatehawkHotel[]; search_id: string }> {
-    // This is a legacy method - convert to new format if destination contains region_id
+    // If destination is a string, we need to find the region ID first
+    if (typeof params.destination === 'string') {
+      console.log('Searching for destination:', params.destination);
+      
+      // Step 1: Find region ID using suggest API
+      const regionId = await this.findRegionId(params.destination);
+      
+      if (!regionId) {
+        throw new Error(`Could not find region for destination: ${params.destination}`);
+      }
+      
+      console.log('Found region ID:', regionId);
+      
+      // Step 2: Search hotels using the region ID
+      const guests = [{ adults: params.adults, children: params.children || [] }];
+      const result = await this.searchHotelsByRegion({
+        checkin: params.checkIn,
+        checkout: params.checkOut,
+        region_id: regionId,
+        guests,
+        currency: params.currency,
+        language: params.language,
+        residency: params.residency
+      });
+      
+      // Transform to legacy format
+      return {
+        hotels: result.data?.hotels || [],
+        search_id: result.data?.search_id || 'auto_generated'
+      };
+    }
+    
+    // Handle object destination (legacy compatibility)
     if (typeof params.destination === 'object' && 'regionCode' in params.destination) {
       const regionId = parseInt(params.destination.regionCode || '0');
       if (regionId) {
@@ -121,25 +179,7 @@ export class RatehawkService {
       }
     }
 
-    // Fallback to old mock implementation
-    const { data, error } = await supabase.functions.invoke('ratehawk-hotel-search', {
-      body: {
-        destination: params.destination,
-        checkIn: params.checkIn,
-        checkOut: params.checkOut,
-        adults: params.adults,
-        children: params.children || [],
-        language: params.language || "en",
-        currency: params.currency || "USD",
-        residency: params.residency || "us"
-      }
-    });
-
-    if (error) {
-      throw new Error(`Hotel search failed: ${error.message}`);
-    }
-
-    return data;
+    throw new Error('Invalid destination format');
   }
 
   /**
