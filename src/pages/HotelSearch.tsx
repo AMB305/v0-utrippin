@@ -316,7 +316,7 @@ export default function HotelSearch() {
         return (
           <HotelBookingForm
             hotel={selectedHotel}
-            prebookId={prebookData?.prebookId}
+            prebookId={prebookData?.data?.book_hash}
             onBookingComplete={handleBookingComplete}
             onBack={() => setCurrentStep('details')}
           />
