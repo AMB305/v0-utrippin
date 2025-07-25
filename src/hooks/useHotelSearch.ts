@@ -248,8 +248,8 @@ export const useHotelSearch = () => {
     }
 
     try {
-      // Try Hotelbeds API first
-      console.log('Attempting Hotelbeds API search...', {
+      // Use Ratehawk API for hotel search
+      console.log('Attempting Ratehawk API search...', {
         destination: searchData.destination,
         checkIn: searchData.checkInDate.toISOString().split('T')[0],
         checkOut: searchData.checkOutDate.toISOString().split('T')[0],
@@ -258,32 +258,44 @@ export const useHotelSearch = () => {
         rooms: searchData.guests.rooms
       });
 
-      const { data, error } = await supabase.functions.invoke('hotelbeds-hotels-search', {
+      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-search', {
         body: {
           destination: searchData.destination,
           checkIn: searchData.checkInDate.toISOString().split('T')[0],
           checkOut: searchData.checkOutDate.toISOString().split('T')[0],
           adults: searchData.guests.adults,
           children: searchData.guests.children,
-          rooms: searchData.guests.rooms,
-          category: searchData.category,
-          hotelType: searchData.hotelType
+          rooms: searchData.guests.rooms
         }
       });
 
       if (error) {
-        console.error('Hotelbeds API error:', error);
+        console.error('Ratehawk API error:', error);
         throw new Error('API unavailable');
       }
 
       if (data?.hotels && data.hotels.length > 0) {
-        console.log(`Found ${data.hotels.length} hotels from Hotelbeds API`);
+        // Transform Ratehawk data to our format
+        const transformedHotels = data.hotels.map((hotel: any) => ({
+          id: hotel.id,
+          name: hotel.name,
+          starRating: hotel.star_rating || 4,
+          images: hotel.images || [],
+          amenities: hotel.amenities || [],
+          pricePerNight: hotel.price?.amount || 120,
+          currency: hotel.price?.currency || 'USD',
+          location: hotel.address,
+          guestRating: 8.5,
+          roomType: hotel.room_data_trans?.main_name || 'Standard Room'
+        }));
+
+        console.log(`Found ${transformedHotels.length} hotels from Ratehawk API`);
         setApiStatus('live');
-        setHotels(data.hotels);
+        setHotels(transformedHotels);
         
         toast({
-          title: "Live Results",
-          description: `Found ${data.hotels.length} hotels from Hotelbeds`,
+          title: "Ratehawk Hotels",
+          description: `Found ${transformedHotels.length} hotels via Ratehawk`,
         });
       } else {
         throw new Error('No hotels found');
