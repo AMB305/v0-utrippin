@@ -71,10 +71,13 @@ const StartJourney: React.FC = () => {
             {/* Mobile Layout - Stacked full-width cards */}
             <div className="block md:hidden space-y-4">
               {travelerTypes.slice(0, 4).map((type, index) => {
-                // Use new image for GROUPS on mobile only
-                const mobileImage = type.title === 'GROUPS' 
-                  ? '/lovable-uploads/461421fa-d468-4f52-b888-8de7489a2b0f.png' 
-                  : type.image;
+                // Use new images for mobile only
+                let mobileImage = type.image;
+                if (type.title === 'GROUPS') {
+                  mobileImage = '/lovable-uploads/461421fa-d468-4f52-b888-8de7489a2b0f.png';
+                } else if (type.title === 'COUPLES') {
+                  mobileImage = '/lovable-uploads/56295ca2-5692-44e4-af27-8fd7c2765464.png';
+                }
                 
                 return (
                   <Link 
