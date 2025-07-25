@@ -611,19 +611,39 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
         ]
       };
 
-      // CRITICAL VALIDATION: Only set isDetailedItinerary if we have real content
-      const hasValidContent = (
-        detailedItinerary.summary && detailedItinerary.summary.trim().length > 20 &&
-        detailedItinerary.days && detailedItinerary.days.length >= 2 &&
-        detailedItinerary.actionable_suggestions && detailedItinerary.actionable_suggestions.length >= 3
-      );
+      // ✅ CRITICAL VALIDATION: Only set isDetailedItinerary if we have real content
+      const hasValidSummary = 
+        typeof detailedItinerary.summary === 'string' && 
+        detailedItinerary.summary.trim().length >= 30;
 
-      console.log('AI Travel Chat - Content validation:', {
-        hasValidSummary: detailedItinerary.summary?.length > 20,
-        hasValidDays: detailedItinerary.days?.length >= 2,
-        hasValidSuggestions: detailedItinerary.actionable_suggestions?.length >= 3,
-        isDetailedItinerary: hasValidContent
-      });
+      const hasValidDays = 
+        Array.isArray(detailedItinerary.days) &&
+        detailedItinerary.days.length >= 2 &&
+        detailedItinerary.days.every((day: any) => 
+          typeof day.day === 'string' && 
+          Array.isArray(day.activities) &&
+          day.activities.length > 0 &&
+          day.activities.some((activity: string) => activity.trim().length > 0)
+        );
+
+      const hasCultureTips = 
+        Array.isArray(detailedItinerary.actionable_suggestions) &&
+        detailedItinerary.actionable_suggestions.length >= 2 &&
+        detailedItinerary.actionable_suggestions.every((tip: string) => tip.trim().length > 0);
+
+      const hasSuggestions = 
+        Array.isArray(detailedItinerary.follow_up_questions) &&
+        detailedItinerary.follow_up_questions.length >= 2;
+
+      // ✅ ONLY set true if all validation passes
+      const hasValidContent = hasValidSummary && hasValidDays && hasCultureTips && hasSuggestions;
+
+      console.log("AI Travel Chat - VALIDATION RESULTS:");
+      console.log("Summary OK:", hasValidSummary, `(length: ${detailedItinerary.summary?.length})`);
+      console.log("Days OK:", hasValidDays, `(count: ${detailedItinerary.days?.length})`);
+      console.log("Culture Tips OK:", hasCultureTips, `(count: ${detailedItinerary.actionable_suggestions?.length})`);
+      console.log("Suggestions OK:", hasSuggestions, `(count: ${detailedItinerary.follow_up_questions?.length})`);
+      console.log("Final isDetailedItinerary:", hasValidContent);
 
       if (!hasValidContent) {
         // Return fallback content instead of broken itinerary
