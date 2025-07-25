@@ -9,14 +9,16 @@ const corsHeaders = {
 
 const RATEHAWK_BASE_URL = 'https://api-sandbox.emergingtravel.com/v1';
 
+interface UserDetails {
+  email: string;
+  phone: string;
+  firstName: string;
+  lastName: string;
+}
+
 interface RatehawkBookingRequest {
   book_hash: string;
-  user: {
-    email: string;
-    phone: string;
-    firstName: string;
-    lastName: string;
-  };
+  user: UserDetails;
 }
 
 interface RatehawkBookingResponse {
@@ -46,50 +48,58 @@ serve(async (req) => {
     
     const { book_hash, user }: RatehawkBookingRequest = requestBody;
 
-    console.log('🔍 Extracted values:', { 
-      book_hash, 
-      user_email: user?.email, 
-      user_firstName: user?.firstName, 
-      user_lastName: user?.lastName 
-    });
+    // --- START: Added Validation & Logging ---
+    console.log("Attempting to create booking with hash:", book_hash);
+    console.log("User details received:", user);
 
-    if (!book_hash || !user || !user.email || !user.firstName || !user.lastName) {
-      const errorMsg = `Missing required parameters - book_hash: ${!!book_hash}, user: ${!!user}, email: ${!!user?.email}, firstName: ${!!user?.firstName}, lastName: ${!!user?.lastName}`;
+    if (!book_hash || typeof book_hash !== 'string' || !book_hash.startsWith('p-')) {
+      const errorMsg = `Invalid or missing prebookHash. Received: ${book_hash}`;
       console.error('❌ Validation failed:', errorMsg);
       return new Response(
         JSON.stringify({ error: errorMsg }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+    
+    if (!user || !user.email || !user.firstName || !user.lastName || !user.phone) {
+      const errorMsg = `Incomplete user details provided. Received: ${JSON.stringify(user)}`;
+      console.error('❌ Validation failed:', errorMsg);
+      return new Response(
+        JSON.stringify({ error: errorMsg }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    // --- END: Added Validation & Logging ---
 
     try {
       // Get authentication headers
       const authHeaders = getRatehawkAuthHeader();
       
       // Build request body with real user data
-      const requestBody = {
+      const apiRequestBody = {
         book_hash,
         user: {
           email: user.email,
-          phone: user.phone || "1234567890"
+          phone: user.phone
         },
         rooms: [{
           guests: [{ 
             first_name: user.firstName, 
             last_name: user.lastName 
           }]
+          // Note: Add more guests here if your form supports it
         }],
         partner: {
           partner_order_id: `utrippin-test-${Date.now()}`
         }
       };
       
-      console.log('🔍 Booking request with real user data:', JSON.stringify(requestBody, null, 2));
+      console.log('🔍 Booking request with real user data:', JSON.stringify(apiRequestBody, null, 2));
       
       const response = await fetch(`${RATEHAWK_BASE_URL}/hotel/booking/start/`, {
         method: 'POST',
         headers: authHeaders,
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify(apiRequestBody),
       });
 
       if (!response.ok) {
@@ -101,8 +111,9 @@ serve(async (req) => {
       const data: RatehawkBookingResponse = await response.json();
       
       if (!data.data?.order_id) {
+        // Log the detailed error from RateHawk for debugging
         console.error("Booking start failed. RateHawk response:", data);
-        throw new Error("Booking start failed or did not return an order_id");
+        throw new Error("Booking start failed or did not return an order_id.");
       }
 
       console.log(`✅ Booking success with real user data - Order ID: ${data.data.order_id}`);
@@ -110,7 +121,7 @@ serve(async (req) => {
       
       // Log certification data
       console.log('🧪 RATEHAWK CERTIFICATION LOG - ratehawk-hotel-book:');
-      console.log('Request:', JSON.stringify(requestBody, null, 2));
+      console.log('Request:', JSON.stringify(apiRequestBody, null, 2));
       console.log('Response:', JSON.stringify(data, null, 2));
       console.log('Authentication: API Keys Present');
       
