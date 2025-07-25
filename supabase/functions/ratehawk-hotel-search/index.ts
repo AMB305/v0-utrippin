@@ -7,29 +7,31 @@ const corsHeaders = {
 };
 
 interface RatehawkSearchRequest {
-  destination: string;
+  language?: string;
+  currency?: string;
   checkIn: string;
   checkOut: string;
   adults: number;
-  children?: number;
-  rooms?: number;
+  children?: number[];
+  residency?: string;
+  destination: {
+    countryCode?: string;
+    regionCode?: string;
+    cityName: string;
+  };
 }
 
 interface RatehawkHotel {
   id: string;
   name: string;
+  stars: number;
   address: string;
-  star_rating: number;
-  images: string[];
-  amenities: string[];
   price: {
     amount: number;
     currency: string;
   };
-  room_data_trans: {
-    main_room_type: string;
-    main_name: string;
-  };
+  images: string[];
+  amenities?: string[];
 }
 
 serve(async (req) => {
@@ -38,7 +40,17 @@ serve(async (req) => {
   }
 
   try {
-    const { destination, checkIn, checkOut, adults = 2, children = 0, rooms = 1 }: RatehawkSearchRequest = await req.json();
+    const requestData = await req.json();
+    const { 
+      destination, 
+      checkIn, 
+      checkOut, 
+      adults = 2, 
+      children = [], 
+      language = "en",
+      currency = "USD",
+      residency = "US"
+    }: RatehawkSearchRequest & { destination: string } = requestData;
 
     if (!destination || !checkIn || !checkOut) {
       return new Response(
@@ -47,69 +59,61 @@ serve(async (req) => {
       );
     }
 
-    // For now, return mock data following Ratehawk response format
-    // Replace this with actual Ratehawk API call once test keys are provided
+    // Parse destination to create proper destination object
+    const destinationObj = typeof destination === 'string' 
+      ? { cityName: destination, countryCode: "US", regionCode: "" }
+      : destination;
+
+    // Mock Ratehawk data following exact API format
     const mockRatehawkData: RatehawkHotel[] = [
       {
         id: "test_hotel_do_not_book",
-        name: "Ratehawk Test Hotel",
-        address: `${destination} City Center`,
-        star_rating: 4,
+        name: "Mock Hotel Miami Beach",
+        stars: 4,
+        address: `123 Ocean Drive, ${destinationObj.cityName}`,
+        price: {
+          amount: 312.50,
+          currency: currency
+        },
         images: [
           "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
           "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop"
         ],
-        amenities: ["wifi", "pool", "spa", "restaurant", "fitness-center"],
-        price: {
-          amount: 120.00,
-          currency: "USD"
-        },
-        room_data_trans: {
-          main_room_type: "Standard Room",
-          main_name: "Deluxe King Room with City View"
-        }
+        amenities: ["Pool", "Free WiFi", "Bar", "Breakfast included"]
       },
       {
-        id: "hotel_002",
+        id: "hotel_002_premium",
         name: "Premium Resort & Spa",
-        address: `${destination} Beach Front`,
-        star_rating: 5,
+        stars: 5,
+        address: `456 Beach Front, ${destinationObj.cityName}`,
+        price: {
+          amount: 485.00,
+          currency: currency
+        },
         images: [
           "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&fit=crop",
           "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop"
         ],
-        amenities: ["wifi", "pool", "spa", "restaurant", "beach-access", "all-inclusive"],
-        price: {
-          amount: 285.00,
-          currency: "USD"
-        },
-        room_data_trans: {
-          main_room_type: "Ocean View Suite",
-          main_name: "Junior Suite with Ocean View"
-        }
+        amenities: ["Pool", "Free WiFi", "Spa", "All-Inclusive", "Beach Access"]
       },
       {
-        id: "hotel_003",
+        id: "hotel_003_business",
         name: "Business District Hotel",
-        address: `${destination} Financial District`,
-        star_rating: 4,
+        stars: 4,
+        address: `789 Financial District, ${destinationObj.cityName}`,
+        price: {
+          amount: 225.00,
+          currency: currency
+        },
         images: [
           "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop",
           "https://images.unsplash.com/photo-1578774204375-826dc5d996ed?w=800&h=600&fit=crop"
         ],
-        amenities: ["wifi", "business-center", "meeting-rooms", "restaurant", "fitness-center"],
-        price: {
-          amount: 165.00,
-          currency: "USD"
-        },
-        room_data_trans: {
-          main_room_type: "Business Room",
-          main_name: "Executive Room with Work Desk"
-        }
+        amenities: ["Free WiFi", "Business Center", "Meeting Rooms", "Restaurant"]
       }
     ];
 
-    console.log(`Ratehawk Search - Found ${mockRatehawkData.length} hotels for ${destination}`);
+    console.log(`Ratehawk Search - Found ${mockRatehawkData.length} hotels for ${destinationObj.cityName}`);
 
     return new Response(
       JSON.stringify({ 

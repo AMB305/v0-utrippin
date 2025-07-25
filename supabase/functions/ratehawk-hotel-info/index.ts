@@ -35,46 +35,44 @@ serve(async (req) => {
   }
 
   try {
-    const { hotel_id } = await req.json();
+    const { hotelId } = await req.json();
 
-    if (!hotel_id) {
+    if (!hotelId) {
       return new Response(
         JSON.stringify({ error: 'Hotel ID is required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Mock detailed hotel information
-    // Replace with actual Ratehawk API call once test keys are provided
-    const mockHotelInfo: RatehawkHotelInfo = {
-      id: hotel_id,
-      name: hotel_id === "test_hotel_do_not_book" ? "Ratehawk Test Hotel" : "Hotel Details",
-      address: "123 Main Street, City Center",
-      star_rating: 4,
-      description: "Experience luxury and comfort at our beautifully appointed hotel. Located in the heart of the city, we offer world-class amenities and exceptional service to make your stay memorable.",
+    // Mock detailed hotel information following Ratehawk format
+    const mockHotelInfo = {
+      id: hotelId,
+      name: hotelId === "test_hotel_do_not_book" ? "Mock Hotel Miami Beach" : "Hotel Details",
+      description: "This beachfront hotel offers stunning ocean views and luxury amenities. Experience world-class comfort and service in the heart of the city.",
+      address: "123 Ocean Drive, Miami, FL",
+      stars: 4,
+      amenities: ["Pool", "Free WiFi", "Bar", "Breakfast included", "Spa", "Fitness Center"],
       images: [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
         "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop",
         "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&fit=crop",
         "https://images.unsplash.com/photo-1578774204375-826dc5d996ed?w=800&h=600&fit=crop"
       ],
-      amenities: {
-        general: ["Free WiFi", "Swimming Pool", "Spa & Wellness Center", "Restaurant", "Bar", "24-hour Front Desk"],
-        room: ["Air Conditioning", "Flat-screen TV", "Mini Bar", "Room Service", "Safe", "Balcony"],
-        business: ["Business Center", "Meeting Rooms", "Conference Facilities", "Airport Shuttle"]
-      },
-      location: {
-        latitude: 40.7128,
-        longitude: -74.0060
-      },
-      policies: {
-        check_in: "3:00 PM",
-        check_out: "11:00 AM",
-        cancellation: "Free cancellation up to 24 hours before check-in"
-      }
+      rooms: [
+        {
+          roomId: "rm101",
+          name: "Deluxe Ocean View",
+          price: {
+            amount: hotelId === "test_hotel_do_not_book" ? 312.50 : 245.00,
+            currency: "USD"
+          },
+          cancellationPolicy: "Free cancellation until 48h before check-in",
+          images: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop"]
+        }
+      ]
     };
 
-    console.log(`Ratehawk Hotel Info - Retrieved details for hotel: ${hotel_id}`);
+    console.log(`Ratehawk Hotel Info - Retrieved details for hotel: ${hotelId}`);
 
     return new Response(
       JSON.stringify(mockHotelInfo),

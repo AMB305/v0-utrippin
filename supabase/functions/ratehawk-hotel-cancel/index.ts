@@ -7,24 +7,15 @@ const corsHeaders = {
 };
 
 interface RatehawkCancelRequest {
-  booking_id: string;
-  reason?: string;
+  reservationId: string;
 }
 
 interface RatehawkCancelResponse {
-  booking_id: string;
   status: string;
-  cancellation_id: string;
-  cancellation_fee: {
+  refundedAmount: {
     amount: number;
     currency: string;
   };
-  refund_amount: {
-    amount: number;
-    currency: string;
-  };
-  refund_timeline: string;
-  cancelled_at: string;
 }
 
 serve(async (req) => {
@@ -33,41 +24,30 @@ serve(async (req) => {
   }
 
   try {
-    const { booking_id, reason = "User requested cancellation" }: RatehawkCancelRequest = await req.json();
+    const { reservationId }: RatehawkCancelRequest = await req.json();
 
-    if (!booking_id) {
+    if (!reservationId) {
       return new Response(
-        JSON.stringify({ error: 'Booking ID is required' }),
+        JSON.stringify({ error: 'Reservation ID is required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Generate cancellation ID
-    const cancellationId = `cancel_${Date.now()}_${booking_id.split('_').pop()}`;
-
-    // Mock cancellation response - replace with actual Ratehawk API call
+    // Mock cancellation response following exact Ratehawk format
     const cancelResponse: RatehawkCancelResponse = {
-      booking_id: booking_id,
       status: "cancelled",
-      cancellation_id: cancellationId,
-      cancellation_fee: {
-        amount: 0.00, // Free cancellation for test bookings
+      refundedAmount: {
+        amount: reservationId.includes("test_hotel_do_not_book") ? 312.50 : 245.00,
         currency: "USD"
-      },
-      refund_amount: {
-        amount: booking_id.includes("test_hotel_do_not_book") ? 99.99 : 240.00,
-        currency: "USD"
-      },
-      refund_timeline: "3-5 business days",
-      cancelled_at: new Date().toISOString()
+      }
     };
 
-    console.log(`Ratehawk Cancel - Cancelled booking: ${booking_id}`);
+    console.log(`Ratehawk Cancel - Cancelled reservation: ${reservationId}`);
     
     // Log test booking cancellation for certification tracking
-    if (booking_id.includes("test_hotel_do_not_book")) {
+    if (reservationId.includes("test_hotel_do_not_book")) {
       console.log("✅ TEST BOOKING CANCELLED - Required for certification process");
-      console.log(`Cancellation ID: ${cancellationId}`);
+      console.log(`Reservation ID: ${reservationId}`);
     }
 
     return new Response(

@@ -52,12 +52,11 @@ export function HotelBookingForm({
       // Call Ratehawk booking API
       const { data, error } = await supabase.functions.invoke('ratehawk-hotel-book', {
         body: {
-          prebook_id: prebookId,
-          guest_info: {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            email: formData.email,
-            phone: formData.phone
+          prebookId: prebookId,
+          guest: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email
           }
         }
       });
@@ -68,7 +67,7 @@ export function HotelBookingForm({
 
       toast({
         title: "Booking Successful!",
-        description: `Your reservation has been confirmed. Confirmation: ${data.confirmation_number}`,
+        description: `Your reservation has been confirmed. Reservation: ${data.reservationId}`,
       });
 
       onBookingComplete(data);

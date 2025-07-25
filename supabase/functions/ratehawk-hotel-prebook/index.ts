@@ -7,36 +7,27 @@ const corsHeaders = {
 };
 
 interface RatehawkPrebookRequest {
-  hotel_id: string;
-  room_id?: string;
-  check_in: string;
-  check_out: string;
-  adults: number;
-  children?: number;
-  rooms?: number;
+  roomId: string;
+  hotelId: string;
+  checkIn: string;
+  checkOut: string;
+  guests: {
+    adults: number;
+    children: number[];
+  };
 }
 
 interface RatehawkPrebookResponse {
-  prebook_id: string;
-  hotel_id: string;
-  room_data: {
-    room_name: string;
-    bed_type: string;
-    max_occupancy: number;
-  };
-  price: {
+  prebookId: string;
+  finalPrice: {
     amount: number;
     currency: string;
-    taxes_included: boolean;
   };
-  cancellation_policy: {
-    is_free_cancellation: boolean;
-    free_cancellation_until: string;
-    penalty_amount?: number;
-  };
-  booking_conditions: string[];
-  expires_at: string;
-  status: string;
+  expiresAt: string;
+  available: boolean;
+  hotelId: string;
+  roomId: string;
+  cancellationPolicy: string;
 }
 
 serve(async (req) => {
@@ -45,11 +36,11 @@ serve(async (req) => {
   }
 
   try {
-    const { hotel_id, check_in, check_out, adults = 2, children = 0, rooms = 1 }: RatehawkPrebookRequest = await req.json();
+    const { roomId, hotelId, checkIn, checkOut, guests }: RatehawkPrebookRequest = await req.json();
 
-    if (!hotel_id || !check_in || !check_out) {
+    if (!roomId || !hotelId || !checkIn || !checkOut) {
       return new Response(
-        JSON.stringify({ error: 'Missing required parameters: hotel_id, check_in, check_out' }),
+        JSON.stringify({ error: 'Missing required parameters: roomId, hotelId, checkIn, checkOut' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -58,36 +49,21 @@ serve(async (req) => {
     const expiryTime = new Date();
     expiryTime.setMinutes(expiryTime.getMinutes() + 30);
 
-    // Mock prebook response - replace with actual Ratehawk API call
+    // Mock prebook response following exact Ratehawk format
     const prebookResponse: RatehawkPrebookResponse = {
-      prebook_id: `prebook_${Date.now()}_${hotel_id}`,
-      hotel_id: hotel_id,
-      room_data: {
-        room_name: hotel_id === "test_hotel_do_not_book" ? "Test Room - DO NOT BOOK" : "Deluxe King Room",
-        bed_type: "King Bed",
-        max_occupancy: adults + children
+      prebookId: `pbk_${Date.now()}_${hotelId}`,
+      finalPrice: {
+        amount: hotelId === "test_hotel_do_not_book" ? 312.50 : 245.00,
+        currency: "USD"
       },
-      price: {
-        amount: hotel_id === "test_hotel_do_not_book" ? 99.99 : 120.00,
-        currency: "USD",
-        taxes_included: true
-      },
-      cancellation_policy: {
-        is_free_cancellation: true,
-        free_cancellation_until: check_in,
-        penalty_amount: 0
-      },
-      booking_conditions: [
-        "Valid ID required at check-in",
-        "Credit card required for incidentals",
-        "Non-smoking property",
-        hotel_id === "test_hotel_do_not_book" ? "THIS IS A TEST BOOKING - WILL BE CANCELLED" : "Standard hotel policies apply"
-      ],
-      expires_at: expiryTime.toISOString(),
-      status: "confirmed"
+      expiresAt: expiryTime.toISOString(),
+      available: true,
+      hotelId: hotelId,
+      roomId: roomId,
+      cancellationPolicy: "Free cancellation until 48h before check-in"
     };
 
-    console.log(`Ratehawk Prebook - Created prebook for hotel: ${hotel_id}, expires: ${expiryTime.toISOString()}`);
+    console.log(`Ratehawk Prebook - Created prebook for hotel: ${hotelId}, expires: ${expiryTime.toISOString()}`);
 
     return new Response(
       JSON.stringify(prebookResponse),

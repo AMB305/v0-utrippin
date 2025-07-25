@@ -22,8 +22,7 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
     try {
       const { data, error } = await supabase.functions.invoke('ratehawk-hotel-cancel', {
         body: {
-          booking_id: booking.booking_id,
-          reason: "Test booking cancellation for Ratehawk certification"
+          reservationId: booking.reservationId
         }
       });
 
@@ -34,14 +33,13 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
       setIsCancelled(true);
       toast({
         title: "Booking Cancelled",
-        description: `Cancellation ID: ${data.cancellation_id}. Refund: ${data.refund_amount.currency} ${data.refund_amount.amount}`,
+        description: `Refund: ${data.refundedAmount.currency} ${data.refundedAmount.amount}`,
       });
 
       // Log cancellation for certification tracking
       console.log('✅ RATEHAWK CERTIFICATION - Booking cancelled:', {
-        booking_id: booking.booking_id,
-        cancellation_id: data.cancellation_id,
-        refund_amount: data.refund_amount
+        reservationId: booking.reservationId,
+        refundedAmount: data.refundedAmount
       });
 
     } catch (error) {
@@ -67,7 +65,7 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
             {isCancelled ? 'Booking Cancelled' : 'Booking Confirmed!'}
           </CardTitle>
           <p className="text-gray-600">
-            Confirmation Number: <span className="font-bold">{booking.confirmation_number}</span>
+            Reservation ID: <span className="font-bold">{booking.reservationId}</span>
           </p>
         </CardHeader>
         
@@ -76,12 +74,12 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
           <div>
             <h3 className="font-semibold text-lg mb-3">Hotel Details</h3>
             <div className="bg-gray-50 rounded-lg p-4">
-              <h4 className="font-medium">{booking.hotel_info.name}</h4>
+              <h4 className="font-medium">{booking.hotelId === "test_hotel_do_not_book" ? "Mock Hotel Miami Beach" : "Hotel Name"}</h4>
               <div className="flex items-center text-gray-600 mt-1">
                 <MapPin className="w-4 h-4 mr-1" />
-                <span className="text-sm">{booking.hotel_info.address}</span>
+                <span className="text-sm">123 Ocean Drive, Miami, FL</span>
               </div>
-              <p className="text-sm text-gray-600 mt-1">Phone: {booking.hotel_info.phone}</p>
+              <p className="text-sm text-gray-600 mt-1">Phone: +1-305-555-HOTEL</p>
             </div>
           </div>
 
@@ -90,9 +88,9 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
             <h3 className="font-semibold text-lg mb-3">Guest Information</h3>
             <div className="bg-gray-50 rounded-lg p-4">
               <p className="font-medium">
-                {booking.guest_info.first_name} {booking.guest_info.last_name}
+                {booking.guestName}
               </p>
-              <p className="text-sm text-gray-600">{booking.guest_info.email}</p>
+              <p className="text-sm text-gray-600">Guest Information</p>
             </div>
           </div>
 
@@ -103,16 +101,16 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2 text-gray-600" />
                 <span className="text-sm">
-                  {booking.booking_details.check_in} → {booking.booking_details.check_out}
+                  {booking.checkIn} → {booking.checkOut}
                 </span>
               </div>
               <div className="flex items-center">
                 <Users className="w-4 h-4 mr-2 text-gray-600" />
                 <span className="text-sm">
-                  {booking.booking_details.guests} guests
+                  2 guests
                 </span>
               </div>
-              <p className="text-sm">Room: {booking.booking_details.room_type}</p>
+              <p className="text-sm">Room: Deluxe Ocean View</p>
             </div>
           </div>
 
@@ -123,19 +121,17 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
               <div className="flex justify-between items-center">
                 <span>Total Amount:</span>
                 <span className="font-bold text-lg">
-                  {booking.total_amount.currency} {booking.total_amount.amount}
+                  {booking.totalAmount.currency} {booking.totalAmount.amount}
                 </span>
               </div>
-              {booking.cancellation_policy.is_free_cancellation && (
-                <Badge variant="secondary" className="mt-2">
-                  Free Cancellation until {booking.cancellation_policy.cancellation_deadline}
-                </Badge>
-              )}
+              <Badge variant="secondary" className="mt-2">
+                Free Cancellation
+              </Badge>
             </div>
           </div>
 
           {/* Test Booking Notice */}
-          {booking.status === 'confirmed_test' && (
+          {booking.hotelId === 'test_hotel_do_not_book' && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <p className="text-yellow-800 font-medium">🧪 Test Booking Notice</p>
               <p className="text-yellow-700 text-sm mt-1">
@@ -155,7 +151,7 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
               New Search
             </Button>
             
-            {!isCancelled && booking.cancellation_policy.is_free_cancellation && (
+            {!isCancelled && (
               <Button
                 variant="destructive"
                 onClick={handleCancelBooking}
@@ -170,7 +166,7 @@ export function BookingConfirmation({ booking, onNewSearch }: BookingConfirmatio
 
           {/* Booking Status */}
           <div className="text-center text-sm text-gray-500">
-            Booking ID: {booking.booking_id} | Status: {isCancelled ? 'Cancelled' : booking.status}
+            Reservation ID: {booking.reservationId} | Status: {isCancelled ? 'Cancelled' : booking.status}
           </div>
         </CardContent>
       </Card>

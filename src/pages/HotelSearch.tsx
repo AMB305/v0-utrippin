@@ -47,8 +47,10 @@ export default function HotelSearch() {
         checkIn: searchData.checkInDate,
         checkOut: searchData.checkOutDate,
         adults: searchData.adults,
-        children: searchData.children,
-        rooms: searchData.rooms
+        children: [],
+        language: "en",
+        currency: "USD",
+        residency: "US"
       });
 
       const transformedHotels = result.hotels.map(RatehawkService.transformHotelData);
@@ -97,12 +99,11 @@ export default function HotelSearch() {
     try {
       // Prebook the hotel
       const prebook = await RatehawkService.prebookHotel({
-        hotel_id: hotel.id,
-        check_in: searchData.checkInDate,
-        check_out: searchData.checkOutDate,
+        hotelId: hotel.id,
+        checkIn: searchData.checkInDate,
+        checkOut: searchData.checkOutDate,
         adults: searchData.adults,
-        children: searchData.children,
-        rooms: searchData.rooms
+        children: []
       });
 
       setPrebookData(prebook);
@@ -261,7 +262,7 @@ export default function HotelSearch() {
         return (
           <HotelBookingForm
             hotel={selectedHotel}
-            prebookId={prebookData?.prebook_id}
+            prebookId={prebookData?.prebookId}
             onBookingComplete={handleBookingComplete}
             onBack={() => setCurrentStep('details')}
           />

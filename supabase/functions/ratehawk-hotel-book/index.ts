@@ -7,48 +7,27 @@ const corsHeaders = {
 };
 
 interface RatehawkBookingRequest {
-  prebook_id: string;
-  guest_info: {
-    first_name: string;
-    last_name: string;
+  prebookId: string;
+  guest: {
+    firstName: string;
+    lastName: string;
     email: string;
-    phone: string;
   };
-  payment_info?: {
-    type: string;
-    [key: string]: any;
-  };
+  paymentMethod?: string;
+  cardToken?: string;
 }
 
 interface RatehawkBookingResponse {
-  booking_id: string;
-  confirmation_number: string;
+  reservationId: string;
   status: string;
-  hotel_info: {
-    name: string;
-    address: string;
-    phone: string;
-  };
-  guest_info: {
-    first_name: string;
-    last_name: string;
-    email: string;
-  };
-  booking_details: {
-    check_in: string;
-    check_out: string;
-    room_type: string;
-    guests: number;
-  };
-  total_amount: {
+  checkIn: string;
+  checkOut: string;
+  hotelId: string;
+  guestName: string;
+  totalAmount: {
     amount: number;
     currency: string;
   };
-  cancellation_policy: {
-    is_free_cancellation: boolean;
-    cancellation_deadline: string;
-  };
-  created_at: string;
 }
 
 serve(async (req) => {
@@ -57,66 +36,47 @@ serve(async (req) => {
   }
 
   try {
-    const { prebook_id, guest_info }: RatehawkBookingRequest = await req.json();
+    const { prebookId, guest }: RatehawkBookingRequest = await req.json();
 
-    if (!prebook_id || !guest_info) {
+    if (!prebookId || !guest) {
       return new Response(
-        JSON.stringify({ error: 'Missing required parameters: prebook_id, guest_info' }),
+        JSON.stringify({ error: 'Missing required parameters: prebookId, guest' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const { first_name, last_name, email, phone } = guest_info;
+    const { firstName, lastName, email } = guest;
 
-    if (!first_name || !last_name || !email) {
+    if (!firstName || !lastName || !email) {
       return new Response(
-        JSON.stringify({ error: 'Missing required guest information: first_name, last_name, email' }),
+        JSON.stringify({ error: 'Missing required guest information: firstName, lastName, email' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Generate booking confirmation
-    const confirmationNumber = `RTH${Date.now().toString().slice(-6)}`;
-    const bookingId = `booking_${Date.now()}_${prebook_id.split('_').pop()}`;
-
-    // Mock booking response - replace with actual Ratehawk API call
+    // Generate booking confirmation following exact Ratehawk format
+    const reservationId = `rsrv_${Date.now()}`;
+    
+    // Mock booking response following exact API format
     const bookingResponse: RatehawkBookingResponse = {
-      booking_id: bookingId,
-      confirmation_number: confirmationNumber,
-      status: prebook_id.includes("test_hotel_do_not_book") ? "confirmed_test" : "confirmed",
-      hotel_info: {
-        name: prebook_id.includes("test_hotel_do_not_book") ? "Ratehawk Test Hotel" : "Premium Hotel",
-        address: "123 Main Street, City Center",
-        phone: "+1-555-HOTEL"
-      },
-      guest_info: {
-        first_name,
-        last_name,
-        email
-      },
-      booking_details: {
-        check_in: "2025-01-15", // This would come from prebook data
-        check_out: "2025-01-17",
-        room_type: "Deluxe King Room",
-        guests: 2
-      },
-      total_amount: {
-        amount: prebook_id.includes("test_hotel_do_not_book") ? 99.99 : 240.00,
+      reservationId: reservationId,
+      status: "confirmed",
+      checkIn: "2025-09-15",
+      checkOut: "2025-09-18", 
+      hotelId: prebookId.includes("test_hotel_do_not_book") ? "test_hotel_do_not_book" : "hotel_standard",
+      guestName: `${firstName} ${lastName}`,
+      totalAmount: {
+        amount: prebookId.includes("test_hotel_do_not_book") ? 312.50 : 245.00,
         currency: "USD"
-      },
-      cancellation_policy: {
-        is_free_cancellation: true,
-        cancellation_deadline: "2025-01-14T23:59:59Z"
-      },
-      created_at: new Date().toISOString()
+      }
     };
 
-    console.log(`Ratehawk Booking - Created booking: ${bookingId} for ${first_name} ${last_name}`);
+    console.log(`Ratehawk Booking - Created booking: ${reservationId} for ${firstName} ${lastName}`);
     
     // Log test booking for certification tracking
-    if (prebook_id.includes("test_hotel_do_not_book")) {
+    if (prebookId.includes("test_hotel_do_not_book")) {
       console.log("🧪 TEST BOOKING CREATED - Remember to cancel this booking for certification");
-      console.log(`Confirmation: ${confirmationNumber}, Booking ID: ${bookingId}`);
+      console.log(`Reservation ID: ${reservationId}`);
     }
 
     return new Response(
