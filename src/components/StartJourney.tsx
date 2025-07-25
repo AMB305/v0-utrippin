@@ -70,19 +70,26 @@ const StartJourney: React.FC = () => {
           <div className="mb-8">
             {/* Mobile Layout - Stacked full-width cards */}
             <div className="block md:hidden space-y-4">
-              {travelerTypes.slice(0, 4).map((type, index) => (
-                <Link 
-                  key={index}
-                  to={type.link}
-                  className="relative h-64 bg-cover bg-center group cursor-pointer block rounded-lg overflow-hidden"
-                  style={{ backgroundImage: `url('${type.image}')` }}
-                >
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors"></div>
-                  <div className="absolute inset-0 flex items-center justify-center text-white">
-                    <h3 className="text-4xl font-bold text-white text-center tracking-widest">{type.title}</h3>
-                  </div>
-                </Link>
-              ))}
+              {travelerTypes.slice(0, 4).map((type, index) => {
+                // Use new image for GROUPS on mobile only
+                const mobileImage = type.title === 'GROUPS' 
+                  ? '/lovable-uploads/461421fa-d468-4f52-b888-8de7489a2b0f.png' 
+                  : type.image;
+                
+                return (
+                  <Link 
+                    key={index}
+                    to={type.link}
+                    className="relative h-64 bg-cover bg-center group cursor-pointer block rounded-lg overflow-hidden"
+                    style={{ backgroundImage: `url('${mobileImage}')` }}
+                  >
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors"></div>
+                    <div className="absolute inset-0 flex items-center justify-center text-white">
+                      <h3 className="text-4xl font-bold text-white text-center tracking-widest">{type.title}</h3>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
             
             {/* Desktop Layout - Grid */}
