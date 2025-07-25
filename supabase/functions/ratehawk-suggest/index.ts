@@ -30,7 +30,15 @@ serve(async (req) => {
       );
     }
 
+    console.log(`🔑 API Credentials Check:`);
+    console.log(`RATEHAWK_KEY_ID: ${RATEHAWK_KEY_ID ? 'Present' : 'Missing'}`);
+    console.log(`RATEHAWK_API_KEY: ${RATEHAWK_API_KEY ? 'Present' : 'Missing'}`);
+
     if (!RATEHAWK_KEY_ID || !RATEHAWK_API_KEY) {
+      console.error('❌ Missing API credentials:', { 
+        key_id_present: !!RATEHAWK_KEY_ID, 
+        api_key_present: !!RATEHAWK_API_KEY 
+      });
       return new Response(
         JSON.stringify({ error: 'Ratehawk API credentials not configured' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -39,7 +47,7 @@ serve(async (req) => {
 
     const credentials = btoa(`${RATEHAWK_KEY_ID}:${RATEHAWK_API_KEY}`);
     
-    console.log(`Ratehawk Suggest - Searching for: ${query}`);
+    console.log(`🧠 Ratehawk Suggest - Searching for: ${query}`);
 
     const response = await fetch(`${RATEHAWK_BASE_URL}/search/multicomplete/`, {
       method: 'POST',
