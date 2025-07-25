@@ -45,23 +45,30 @@ serve(async (req) => {
       );
     }
 
+    console.log(`🔑 Ratehawk Region Search - Using Key ID: ${RATEHAWK_KEY_ID ? 'Present' : 'Missing'}`);
     console.log(`🔑 Ratehawk Region Search - Using API Key: ${RATEHAWK_API_KEY ? 'Present' : 'Missing'}`);
     console.log(`Ratehawk Region Search - Region: ${searchParams.region_id}, Dates: ${searchParams.checkin} to ${searchParams.checkout}`);
 
+    // Create Basic Auth header (Key ID:API Key base64 encoded)
+    const credentials = `${RATEHAWK_KEY_ID}:${RATEHAWK_API_KEY}`;
+    const base64Credentials = btoa(credentials);
+
     const requestBody = {
+      id: searchParams.region_id,  // v1 API uses 'id' instead of 'region_id'
       checkin: searchParams.checkin,
       checkout: searchParams.checkout,
-      region_id: searchParams.region_id,
       guests: searchParams.guests,
       currency: searchParams.currency || 'USD',
       language: searchParams.language || 'en',
       residency: searchParams.residency || 'us'
     };
 
-    const response = await fetch(`${RATEHAWK_BASE_URL}/hotels/search`, {
+    console.log('🔔 ratehawk-search-region: request body:', JSON.stringify(requestBody, null, 2));
+
+    const response = await fetch(`${RATEHAWK_BASE_URL}/search/hp/`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${RATEHAWK_API_KEY}`,
+        'Authorization': `Basic ${base64Credentials}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody)
