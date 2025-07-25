@@ -191,28 +191,24 @@ const AiTravel = () => {
     },
   });
 
-  const {
-    messages: mobileChatMessages,
-    sendMessage: sendMobileChatMessage,
-    clearChat: clearMobileChat,
-    loading: mobileChatLoading,
-  } = useChatAI([]);
+  const { messages: mobileChatMessages, sendMessage, clearChat: clearMobileChat, resetSession, loading: mobileChatLoading, isFreshStart } = useChatAI([]);
 
   // Clear chat data on component mount only
   useEffect(() => {
-    // Always clear chat on page refresh/load
-    clearMobileChat();
+    console.log("🏁 PAGE LOAD: Clearing chat state on mount");
+    // Clear all states on fresh page load
+    setHasStartedChat(false);
+    setLastChatResponse(null);
+    setShowAuthDialog(false);
+    setShowSaveTripDialog(false);
+    
+    // Clear localStorage
     localStorage.removeItem("chatHistory");
     localStorage.removeItem("tripContext");
     localStorage.removeItem("activePrompt");
     localStorage.removeItem("sessionData");
-    setHasStartedChat(false);
-    setLastChatResponse(null);
     
-    // Set current user ID
-    if (user?.id) {
-      localStorage.setItem("chat_user_id", user.id);
-    }
+    console.log("✅ PAGE LOAD: Fresh state initialized");
   }, []); // Empty dependency array to run only on mount
 
   // Enhanced message sending for desktop with budget information
@@ -229,7 +225,7 @@ const AiTravel = () => {
     }
     
     // Send the message (enhanced or original)
-    sendMobileChatMessage(enhancedMessage);
+    sendMessage(enhancedMessage);
   };
 
   const handleMobileSubmit = (message: string) => {
@@ -327,7 +323,7 @@ const AiTravel = () => {
       
       // Create a loading message for image recognition
       const loadingMessage = "🔍 Identifying landmark...";
-      sendMobileChatMessage(loadingMessage);
+      sendMessage(loadingMessage);
 
       // Create form data
       const formData = new FormData();
@@ -350,7 +346,7 @@ const AiTravel = () => {
 
       if (data.success && data.response) {
         // Send the AI response as a new message
-        sendMobileChatMessage(`📸 Live Guide: ${data.response}`);
+        sendMessage(`📸 Live Guide: ${data.response}`);
       } else {
         toast({
           title: "No landmark detected",
@@ -552,11 +548,8 @@ const AiTravel = () => {
                       size="sm" 
                       className="flex items-center gap-1 border border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
                       onClick={() => {
-                        clearMobileChat();
-                        setHasStartedChat(false);
-                        setLastChatResponse(null);
-                        // Force page refresh to ensure everything is cleared
-                        window.location.reload();
+                        console.log("🔴 NEW CHAT: User clicked New Chat button");
+                        resetSession(); // Use global reset function
                       }}
                     >
                       <MessageSquare className="h-4 w-4" />
@@ -720,7 +713,7 @@ const AiTravel = () => {
             onClearChat={clearMobileChat}
             chatMessages={mobileChatMessages}
             isLoading={mobileChatLoading}
-            onSendMessage={sendMobileChatMessage}
+            onSendMessage={sendMessage}
           />
         </>
       )}

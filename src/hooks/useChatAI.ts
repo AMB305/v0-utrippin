@@ -113,6 +113,7 @@ export const useChatAI = (trips: Trip[]) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [sessionId] = useState(() => generateSessionId());
+  const [isFreshStart, setIsFreshStart] = useState(true); // Track if session was intentionally cleared
 
   const sendMessage = async (message: string) => {
     const messageId = Date.now().toString();
@@ -211,21 +212,40 @@ export const useChatAI = (trips: Trip[]) => {
   };
 
   const clearChat = () => {
-    console.log("Clearing chat - before:", messages.length, "messages");
+    console.log("🧹 GLOBAL RESET: Clearing all chat data...");
+    
+    // Clear React state
     setMessages([]);
-    // Clear all localStorage data related to chat
+    setLoading(false);
+    setIsFreshStart(true);
+    
+    // Clear localStorage
     localStorage.removeItem("chatHistory");
     localStorage.removeItem("tripContext");
     localStorage.removeItem("activePrompt");
     localStorage.removeItem("sessionData");
-    console.log("Chat cleared - localStorage and state reset");
+    localStorage.removeItem("chat_user_id");
+    localStorage.removeItem("lastChatResponse");
+    localStorage.removeItem("hasStartedChat");
+    
+    console.log("✅ GLOBAL RESET: Complete - all state and storage cleared");
+  };
+
+  // Global reset function for complete session reset
+  const resetSession = () => {
+    console.log("🔄 FULL SESSION RESET: Starting complete reset...");
+    clearChat();
+    // Force component re-mount by changing key or refreshing
+    window.location.reload();
   };
 
   return { 
     messages, 
     sendMessage, 
     clearChat, 
+    resetSession, // Expose global reset function
     loading,
-    sessionId // Expose session ID for debugging/tracking if needed
+    sessionId,
+    isFreshStart // Expose fresh start flag
   };
 };
