@@ -87,8 +87,21 @@ serve(async (req) => {
     console.log('✅ RATEHAWK SUGGEST SUCCESS:');
     console.log('Query:', query);
     console.log('Response status:', response.status);
-    console.log('Full response:', JSON.stringify(data, null, 2));
+    console.log('💬 Suggest Response:', JSON.stringify(data, null, 2));
     console.log('Locations count:', data.locations?.length || 0);
+    
+    // Enhanced debugging for certification
+    if (data.locations && data.locations.length > 0) {
+      console.log('🎯 First location details:', JSON.stringify(data.locations[0], null, 2));
+      const location = data.locations[0];
+      if (location.region_id) {
+        console.log(`✅ Found region_id: ${location.region_id} for ${location.name}`);
+      } else {
+        console.log('⚠️ No region_id found in location object');
+      }
+    } else {
+      console.log('❌ No locations returned in response');
+    }
     
     return new Response(
       JSON.stringify(data),
