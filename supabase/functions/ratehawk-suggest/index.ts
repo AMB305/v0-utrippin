@@ -15,9 +15,19 @@ serve(async (req) => {
   }
 
   try {
+    // Check API key first
+    if (!RATEHAWK_API_KEY) {
+      console.error("❌ RATEHAWK_API_KEY is not set");
+      return new Response(
+        JSON.stringify({ error: "Ratehawk API key not configured" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // 1) Parse the incoming query
     const { query } = await req.json();
     console.log("🔔 ratehawk-suggest: incoming query:", query);
+    console.log("🔔 ratehawk-suggest: API key present:", !!RATEHAWK_API_KEY);
 
     // 2) Call the sandbox suggest endpoint
     const apiUrl = `${RATEHAWK_BASE_URL}/search/suggest`;
