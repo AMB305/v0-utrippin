@@ -53,10 +53,17 @@ export default function HeroHotelWidget() {
       });
     }
 
-    // Build hotel search URL (you can replace with your preferred booking platform)
-    const hotelUrl = `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination)}&startDate=${checkInDate}&endDate=${checkOutDate}&rooms=${rooms}&adults=${adults}&children=${children}`;
-    const finalUrl = `https://www.dpbolvw.net/click-101486313-15754452?url=${encodeURIComponent(hotelUrl)}`;
-    window.open(finalUrl, '_blank');
+    // Navigate to hotel search results using internal Ratehawk integration
+    const searchParams = new URLSearchParams({
+      destination,
+      checkInDate,
+      checkOutDate,
+      adults: adults.toString(),
+      children: children.toString(),
+      rooms: rooms.toString()
+    });
+    
+    window.location.href = `/hotels/search?${searchParams.toString()}`;
   };
 
   return (
