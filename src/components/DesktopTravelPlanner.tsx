@@ -152,17 +152,18 @@ export default function DesktopTravelPlanner({
                 </BlurFade>
 
                 <BlurFade delay={1.3} inView>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8 max-w-3xl mx-auto">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 max-w-5xl mx-auto">
                     {quickQuestions.map((question, index) => (
                       <Button
                         key={index}
                         variant="outline"
                         className={`
-                          rounded-full border-zinc-700 px-4 py-2 text-sm 
+                          rounded-2xl border-zinc-700 px-6 py-4 text-base font-medium
                           bg-zinc-800/50 backdrop-blur-sm text-gray-300 
                           hover:bg-purple-600/20 hover:border-purple-500/50 hover:text-white 
                           transition-all duration-300 hover:scale-105 hover:shadow-lg 
-                          hover:shadow-purple-500/20 animate-fade-in-up
+                          hover:shadow-purple-500/20 animate-fade-in-up min-h-[60px]
+                          text-center whitespace-normal leading-relaxed
                         `}
                         style={{ animationDelay: `${1.5 + index * 0.1}s` }}
                         onClick={() => handleQuestionClick(question)}
