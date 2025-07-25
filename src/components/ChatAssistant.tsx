@@ -15,14 +15,9 @@ export const ChatAssistant = () => {
     
     const converted = [];
     
-    // Add initial greeting if no messages
+    // Only add greeting on first load, not after clearing
     if (aiMessages.length === 0) {
-      console.log('ChatAssistant: Adding initial greeting');
-      converted.push({
-        id: 'greeting',
-        text: "Hi! I'm your AI travel assistant. How can I help you plan your perfect trip?",
-        isUser: false
-      });
+      // Don't automatically add greeting - let the chat start empty
     }
 
     // Convert AI messages to display format
