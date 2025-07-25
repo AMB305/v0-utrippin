@@ -390,24 +390,33 @@ export class RatehawkService {
     adults: number;
     children?: number[];
   }): Promise<RatehawkPrebookResponse> {
-    const { data, error } = await supabase.functions.invoke('ratehawk-hotel-prebook', {
-      body: {
-        roomId: params.roomId || "rm101",
-        hotelId: params.hotelId,
-        checkIn: params.checkIn,
-        checkOut: params.checkOut,
-        guests: {
-          adults: params.adults,
-          children: params.children || []
+    console.log('🔍 Starting prebook for hotel:', params);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-prebook', {
+        body: {
+          book_hash: `test_book_hash_${Date.now()}` // Use a test book_hash instead of roomId
         }
+      });
+
+      console.log('🔍 Prebook response:', { data, error });
+
+      if (error) {
+        console.error('❌ Prebook API error:', error);
+        throw new Error(`Prebook failed: ${error.message}`);
       }
-    });
 
-    if (error) {
-      throw new Error(`Prebook failed: ${error.message}`);
+      if (!data) {
+        console.error('❌ No data returned from prebook API');
+        throw new Error('No prebook data returned');
+      }
+
+      console.log('✅ Prebook successful:', data);
+      return data;
+    } catch (error) {
+      console.error('❌ prebookHotel error:', error);
+      throw error;
     }
-
-    return data;
   }
 
   /**
