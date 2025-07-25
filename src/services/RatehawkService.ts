@@ -101,16 +101,29 @@ export class RatehawkService {
     try {
       const suggestions = await this.suggestDestinations(destination);
       
-      // Look for a destination match in the suggestions
-      if (suggestions.data && suggestions.data.length > 0) {
-        // Find the best match (city or region)
-        const match = suggestions.data.find((item: any) => 
-          item.type === 'city' || item.type === 'region'
+      // Look for a region match in the suggestions
+      if (suggestions.data && suggestions.data.regions && suggestions.data.regions.length > 0) {
+        // Prioritize City type regions first, then other types
+        const cityRegion = suggestions.data.regions.find((region: any) => 
+          region.type === 'City' && 
+          region.name.toLowerCase().includes(destination.toLowerCase())
         );
         
-        if (match && match.id) {
-          return match.id;
+        if (cityRegion) {
+          return parseInt(cityRegion.id);
         }
+        
+        // Fallback to any region that matches the destination name
+        const anyRegion = suggestions.data.regions.find((region: any) => 
+          region.name.toLowerCase().includes(destination.toLowerCase())
+        );
+        
+        if (anyRegion) {
+          return parseInt(anyRegion.id);
+        }
+        
+        // If no name match, return the first region (often the most relevant)
+        return parseInt(suggestions.data.regions[0].id);
       }
       
       return null;
