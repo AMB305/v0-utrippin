@@ -213,7 +213,7 @@ const AiTravel = () => {
     if (user?.id) {
       localStorage.setItem("chat_user_id", user.id);
     }
-  }, [clearMobileChat]);
+  }, [user?.id, clearMobileChat]);
 
   // Enhanced message sending for desktop with budget information
   const sendEnhancedMessage = (message: string, includeBudget: boolean = true) => {
@@ -554,10 +554,13 @@ const AiTravel = () => {
                       onClick={() => {
                         clearMobileChat();
                         setHasStartedChat(false);
+                        setLastChatResponse(null);
+                        // Force page refresh to ensure everything is cleared
+                        window.location.reload();
                       }}
                     >
                       <MessageSquare className="h-4 w-4" />
-                      Clear
+                      New Chat
                     </Button>
                     <Button variant="outline" size="sm" className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white"
                       onClick={handleSaveTrip}

@@ -212,7 +212,11 @@ export const useChatAI = (trips: Trip[]) => {
 
   const clearChat = () => {
     setMessages([]);
-    // When clearing chat, we maintain the same session ID but could reset context in the future
+    // Clear all localStorage data related to chat
+    localStorage.removeItem("chatHistory");
+    localStorage.removeItem("tripContext");
+    localStorage.removeItem("activePrompt");
+    localStorage.removeItem("sessionData");
   };
 
   return { 
