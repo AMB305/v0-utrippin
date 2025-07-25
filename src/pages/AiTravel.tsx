@@ -34,7 +34,9 @@ import {
   Star,
   Clock,
   ExternalLink,
-  Languages
+  Languages,
+  Home,
+  MessageSquare
 } from "lucide-react";
 import { TripSummaryCard } from "@/components/TripSummaryCard";
 import { SEOHead } from "@/components/SEOHead";
@@ -474,10 +476,23 @@ const AiTravel = () => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="border border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                      className="flex items-center gap-1 border border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
                       onClick={() => window.location.href = '/'}
                     >
-                      🏠 Home
+                      <Home className="h-4 w-4" />
+                      Home
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="flex items-center gap-1 border border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
+                      onClick={() => {
+                        clearMobileChat();
+                        setHasStartedChat(false);
+                      }}
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                      Clear
                     </Button>
                     <Button variant="outline" size="sm" className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white"
                       onClick={handleSaveTrip}
@@ -598,6 +613,10 @@ const AiTravel = () => {
           <DesktopTravelPlanner 
             onQuestionSelect={handleNewChatFromWelcome}
             hasStartedChat={hasStartedChat}
+            onClearChat={clearMobileChat}
+            chatMessages={mobileChatMessages}
+            isLoading={mobileChatLoading}
+            onSendMessage={sendMobileChatMessage}
           />
         </>
       )}
