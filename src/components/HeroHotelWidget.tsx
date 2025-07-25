@@ -39,8 +39,22 @@ export default function HeroHotelWidget() {
   const handleHotelSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
+    console.log('🚀 FORM SUBMIT DEBUG:', {
+      destination,
+      checkInDate,
+      checkOutDate,
+      adults,
+      children,
+      rooms
+    });
+    
     if (!destination) {
       alert('Please enter a destination');
+      return;
+    }
+
+    if (!checkInDate || !checkOutDate) {
+      alert('Please select check-in and check-out dates');
       return;
     }
 
@@ -63,7 +77,10 @@ export default function HeroHotelWidget() {
       rooms: rooms.toString()
     });
     
-    window.location.href = `/hotels/search?${searchParams.toString()}`;
+    const searchUrl = `/hotels/search?${searchParams.toString()}`;
+    console.log('🔗 Redirecting to:', searchUrl);
+    
+    window.location.href = searchUrl;
   };
 
   return (

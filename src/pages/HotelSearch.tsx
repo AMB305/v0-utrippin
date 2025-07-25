@@ -36,13 +36,32 @@ export default function HotelSearch() {
   };
 
   const searchHotels = async () => {
+    console.log('🔍 HOTEL SEARCH DEBUG - URL Params:', searchData);
+    console.log('🔍 Current URL:', window.location.href);
+    
     if (!searchData.destination || !searchData.checkInDate || !searchData.checkOutDate) {
-      console.log('Missing search parameters:', searchData);
+      console.error('❌ Missing search parameters:', searchData);
+      toast({
+        title: "Missing Search Parameters",
+        description: "Please provide destination and dates to search for hotels.",
+        variant: "destructive",
+      });
       setLoading(false);
       return;
     }
 
     try {
+      console.log('🚀 Calling RatehawkService.searchHotels with:', {
+        destination: searchData.destination,
+        checkIn: searchData.checkInDate,
+        checkOut: searchData.checkOutDate,
+        adults: searchData.adults,
+        children: [],
+        language: "en",
+        currency: "USD",
+        residency: "US"
+      });
+      
       const result = await RatehawkService.searchHotels({
         destination: searchData.destination,
         checkIn: searchData.checkInDate,
@@ -54,7 +73,14 @@ export default function HotelSearch() {
         residency: "US"
       });
 
+      console.log('✅ Raw API response:', result);
+
+      if (!result || !result.hotels) {
+        throw new Error('No hotels returned from API');
+      }
+
       const transformedHotels = result.hotels.map(RatehawkService.transformHotelData);
+      console.log('✅ Transformed hotels:', transformedHotels);
       setHotels(transformedHotels);
       
       toast({
@@ -62,10 +88,10 @@ export default function HotelSearch() {
         description: `Found ${transformedHotels.length} hotels in ${searchData.destination}`,
       });
     } catch (error) {
-      console.error('Hotel search error:', error);
+      console.error('❌ Hotel search error:', error);
       toast({
         title: "Search Error",
-        description: "Unable to load hotels. Please try again.",
+        description: `Unable to load hotels: ${error.message}`,
         variant: "destructive",
       });
     } finally {
