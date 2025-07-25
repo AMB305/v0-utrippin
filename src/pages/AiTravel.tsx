@@ -198,26 +198,22 @@ const AiTravel = () => {
     loading: mobileChatLoading,
   } = useChatAI([]);
 
-  // Clear chat data for new users/sessions
+  // Clear chat data on every page refresh/load
   useEffect(() => {
-    const currentUserId = user?.id;
-    const storedUserId = localStorage.getItem("chat_user_id");
-
-    if (currentUserId !== storedUserId) {
-      // New session or different user: wipe all AI state
-      localStorage.removeItem("chatHistory");
-      localStorage.removeItem("tripContext");
-      localStorage.removeItem("activePrompt");
-      localStorage.removeItem("sessionData");
-      clearMobileChat();
-      setHasStartedChat(false);
-      setLastChatResponse(null);
-      
-      if (currentUserId) {
-        localStorage.setItem("chat_user_id", currentUserId);
-      }
+    // Always clear chat on page refresh/load
+    clearMobileChat();
+    localStorage.removeItem("chatHistory");
+    localStorage.removeItem("tripContext");
+    localStorage.removeItem("activePrompt");
+    localStorage.removeItem("sessionData");
+    setHasStartedChat(false);
+    setLastChatResponse(null);
+    
+    // Set current user ID
+    if (user?.id) {
+      localStorage.setItem("chat_user_id", user.id);
     }
-  }, [user?.id, clearMobileChat]);
+  }, [clearMobileChat]);
 
   // Enhanced message sending for desktop with budget information
   const sendEnhancedMessage = (message: string, includeBudget: boolean = true) => {
