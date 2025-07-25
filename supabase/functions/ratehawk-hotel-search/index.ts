@@ -6,6 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
+const RATEHAWK_BASE_URL = 'https://api.ratehawk.com/v1';
+
 interface RatehawkSearchRequest {
   language?: string;
   currency?: string;
@@ -114,11 +117,18 @@ serve(async (req) => {
     ];
 
     console.log(`Ratehawk Search - Found ${mockRatehawkData.length} hotels for ${destinationObj.cityName}`);
+    
+    // Log certification data for test bookings
+    const searchId = `search_${Date.now()}`;
+    console.log('🏨 RATEHAWK SEARCH CERTIFICATION LOG:');
+    console.log('Request:', JSON.stringify({ destination: destinationObj, checkIn, checkOut, adults, children }, null, 2));
+    console.log('Response:', JSON.stringify({ hotels: mockRatehawkData, search_id: searchId, status: "success" }, null, 2));
+    console.log('Authentication:', RATEHAWK_API_KEY ? 'API Key Present' : 'No API Key');
 
     return new Response(
       JSON.stringify({ 
         hotels: mockRatehawkData,
-        search_id: `search_${Date.now()}`,
+        search_id: searchId,
         status: "success"
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

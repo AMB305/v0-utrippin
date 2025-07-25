@@ -32,3 +32,18 @@ verify_jwt = false
 
 [functions.get-suggested-questions]
 verify_jwt = false
+
+[functions.ratehawk-hotel-search]
+verify_jwt = false
+
+[functions.ratehawk-hotel-info]
+verify_jwt = false
+
+[functions.ratehawk-hotel-prebook]
+verify_jwt = false
+
+[functions.ratehawk-hotel-book]
+verify_jwt = false
+
+[functions.ratehawk-hotel-cancel]
+verify_jwt = false

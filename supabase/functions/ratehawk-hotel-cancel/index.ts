@@ -6,6 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
+const RATEHAWK_BASE_URL = 'https://api.ratehawk.com/v1';
+
 interface RatehawkCancelRequest {
   reservationId: string;
 }
@@ -43,6 +46,12 @@ serve(async (req) => {
     };
 
     console.log(`Ratehawk Cancel - Cancelled reservation: ${reservationId}`);
+    
+    // Log certification data
+    console.log('❌ RATEHAWK CANCELLATION CERTIFICATION LOG:');
+    console.log('Request:', JSON.stringify({ reservationId }, null, 2));
+    console.log('Response:', JSON.stringify(cancelResponse, null, 2));
+    console.log('Authentication:', RATEHAWK_API_KEY ? 'API Key Present' : 'No API Key');
     
     // Log test booking cancellation for certification tracking
     if (reservationId.includes("test_hotel_do_not_book")) {

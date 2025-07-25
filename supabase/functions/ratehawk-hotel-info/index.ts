@@ -6,6 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
+const RATEHAWK_BASE_URL = 'https://api.ratehawk.com/v1';
+
 interface RatehawkHotelInfo {
   id: string;
   name: string;

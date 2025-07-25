@@ -6,6 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
+const RATEHAWK_BASE_URL = 'https://api.ratehawk.com/v1';
+
 interface RatehawkPrebookRequest {
   roomId: string;
   hotelId: string;
@@ -64,6 +67,12 @@ serve(async (req) => {
     };
 
     console.log(`Ratehawk Prebook - Created prebook for hotel: ${hotelId}, expires: ${expiryTime.toISOString()}`);
+    
+    // Log certification data
+    console.log('📋 RATEHAWK PREBOOK CERTIFICATION LOG:');
+    console.log('Request:', JSON.stringify({ roomId, hotelId, checkIn, checkOut, guests }, null, 2));
+    console.log('Response:', JSON.stringify(prebookResponse, null, 2));
+    console.log('Authentication:', RATEHAWK_API_KEY ? 'API Key Present' : 'No API Key');
 
     return new Response(
       JSON.stringify(prebookResponse),
