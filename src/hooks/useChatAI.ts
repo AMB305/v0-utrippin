@@ -211,12 +211,14 @@ export const useChatAI = (trips: Trip[]) => {
   };
 
   const clearChat = () => {
+    console.log("Clearing chat - before:", messages.length, "messages");
     setMessages([]);
     // Clear all localStorage data related to chat
     localStorage.removeItem("chatHistory");
     localStorage.removeItem("tripContext");
     localStorage.removeItem("activePrompt");
     localStorage.removeItem("sessionData");
+    console.log("Chat cleared - localStorage and state reset");
   };
 
   return { 

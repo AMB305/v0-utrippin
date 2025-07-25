@@ -198,7 +198,7 @@ const AiTravel = () => {
     loading: mobileChatLoading,
   } = useChatAI([]);
 
-  // Clear chat data on every page refresh/load
+  // Clear chat data on component mount only
   useEffect(() => {
     // Always clear chat on page refresh/load
     clearMobileChat();
@@ -213,7 +213,7 @@ const AiTravel = () => {
     if (user?.id) {
       localStorage.setItem("chat_user_id", user.id);
     }
-  }, [user?.id, clearMobileChat]);
+  }, []); // Empty dependency array to run only on mount
 
   // Enhanced message sending for desktop with budget information
   const sendEnhancedMessage = (message: string, includeBudget: boolean = true) => {
