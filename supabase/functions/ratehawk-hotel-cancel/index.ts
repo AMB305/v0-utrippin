@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
-const RATEHAWK_BASE_URL = 'https://api.ratehawk.com/v1';
+const RATEHAWK_BASE_URL = 'https://api-sandbox.emergingtravel.com/v1';
 
 interface RatehawkCancelRequest {
   reservationId: string;
@@ -45,10 +45,11 @@ serve(async (req) => {
       }
     };
 
+    console.log(`✅ Cancellation processed - Status: success`);
     console.log(`Ratehawk Cancel - Cancelled reservation: ${reservationId}`);
     
     // Log certification data
-    console.log('❌ RATEHAWK CANCELLATION CERTIFICATION LOG:');
+    console.log('🧪 RATEHAWK CERTIFICATION LOG - ratehawk-hotel-cancel:');
     console.log('Request:', JSON.stringify({ reservationId }, null, 2));
     console.log('Response:', JSON.stringify(cancelResponse, null, 2));
     console.log('Authentication:', RATEHAWK_API_KEY ? 'API Key Present' : 'No API Key');

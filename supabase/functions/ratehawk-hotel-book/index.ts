@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
-const RATEHAWK_BASE_URL = 'https://api.ratehawk.com/v1';
+const RATEHAWK_BASE_URL = 'https://api-sandbox.emergingtravel.com/v1';
 
 interface RatehawkBookingRequest {
   prebookId: string;
@@ -74,10 +74,11 @@ serve(async (req) => {
       }
     };
 
+    console.log(`✅ Booking complete - Reservation ID: ${reservationId}`);
     console.log(`Ratehawk Booking - Created booking: ${reservationId} for ${firstName} ${lastName}`);
     
     // Log certification data
-    console.log('🎯 RATEHAWK BOOKING CERTIFICATION LOG:');
+    console.log('🧪 RATEHAWK CERTIFICATION LOG - ratehawk-hotel-book:');
     console.log('Request:', JSON.stringify({ prebookId, guest }, null, 2));
     console.log('Response:', JSON.stringify(bookingResponse, null, 2));
     console.log('Authentication:', RATEHAWK_API_KEY ? 'API Key Present' : 'No API Key');
