@@ -612,7 +612,7 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
       };
 
       // ✅ CRITICAL VALIDATION: Only set isDetailedItinerary if we have real content
-      const hasValidSummary = 
+      const hasValidItinerarySummary = 
         typeof detailedItinerary.summary === 'string' && 
         detailedItinerary.summary.trim().length >= 30;
 
@@ -636,10 +636,10 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
         detailedItinerary.follow_up_questions.length >= 2;
 
       // ✅ ONLY set true if all validation passes
-      const hasValidContent = hasValidSummary && hasValidDays && hasCultureTips && hasSuggestions;
+      const hasValidContent = hasValidItinerarySummary && hasValidDays && hasCultureTips && hasSuggestions;
 
       console.log("AI Travel Chat - VALIDATION RESULTS:");
-      console.log("Summary OK:", hasValidSummary, `(length: ${detailedItinerary.summary?.length})`);
+      console.log("Summary OK:", hasValidItinerarySummary, `(length: ${detailedItinerary.summary?.length})`);
       console.log("Days OK:", hasValidDays, `(count: ${detailedItinerary.days?.length})`);
       console.log("Culture Tips OK:", hasCultureTips, `(count: ${detailedItinerary.actionable_suggestions?.length})`);
       console.log("Suggestions OK:", hasSuggestions, `(count: ${detailedItinerary.follow_up_questions?.length})`);

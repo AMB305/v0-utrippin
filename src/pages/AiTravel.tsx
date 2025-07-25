@@ -198,6 +198,27 @@ const AiTravel = () => {
     loading: mobileChatLoading,
   } = useChatAI([]);
 
+  // Clear chat data for new users/sessions
+  useEffect(() => {
+    const currentUserId = user?.id;
+    const storedUserId = localStorage.getItem("chat_user_id");
+
+    if (currentUserId !== storedUserId) {
+      // New session or different user: wipe all AI state
+      localStorage.removeItem("chatHistory");
+      localStorage.removeItem("tripContext");
+      localStorage.removeItem("activePrompt");
+      localStorage.removeItem("sessionData");
+      clearMobileChat();
+      setHasStartedChat(false);
+      setLastChatResponse(null);
+      
+      if (currentUserId) {
+        localStorage.setItem("chat_user_id", currentUserId);
+      }
+    }
+  }, [user?.id, clearMobileChat]);
+
   // Enhanced message sending for desktop with budget information
   const sendEnhancedMessage = (message: string, includeBudget: boolean = true) => {
     let enhancedMessage = message;
@@ -244,13 +265,16 @@ const AiTravel = () => {
       setLastChatResponse(null);
       setHasStartedChat(false);
       
+      // Enhanced prompt to ensure detailed itinerary generation
+      const enhancedQuestion = `${question}. Please provide a complete detailed day-by-day itinerary with specific recommendations, cultural insights, and actionable suggestions.`;
+      
       // Small delay to ensure state is fully cleared
       setTimeout(() => {
         console.log('🔄 State cleared, starting chat...');
         setHasStartedChat(true);
         
-        // Send message with proper context
-        sendEnhancedMessage(question, isDesktop);
+        // Send enhanced message to trigger detailed itinerary
+        sendEnhancedMessage(enhancedQuestion, isDesktop);
       }, 200);
     }
   };
