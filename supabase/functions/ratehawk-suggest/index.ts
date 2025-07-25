@@ -2,147 +2,59 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const RATEHAWK_KEY_ID = Deno.env.get('RATEHAWK_KEY_ID');
-const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
-const RATEHAWK_BASE_URL = 'https://api-sandbox.emergingtravel.com/v1';
-
-interface SuggestRequest {
-  query: string;
-  language?: string;
-}
+const RATEHAWK_API_KEY = Deno.env.get("RATEHAWK_API_KEY")!;
+const RATEHAWK_BASE_URL = "https://api-sandbox.emergingtravel.com/v1";
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { query, language = 'en' }: SuggestRequest = await req.json();
+    // 1) Parse the incoming query
+    const { query } = await req.json();
+    console.log("🔔 ratehawk-suggest: incoming query:", query);
 
-    if (!query) {
-      return new Response(
-        JSON.stringify({ error: 'Query parameter is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    // 2) Call the sandbox suggest endpoint
+    const apiUrl = `${RATEHAWK_BASE_URL}/search/suggest`;
+    console.log("🔔 ratehawk-suggest: calling API URL:", apiUrl);
 
-    console.log(`🔑 Ratehawk Credentials Debug:`);
-    console.log(`RATEHAWK_KEY_ID: ${RATEHAWK_KEY_ID ? 'Present' : 'Missing'}`);
-    console.log(`RATEHAWK_API_KEY: ${RATEHAWK_API_KEY ? 'Present (length: ' + RATEHAWK_API_KEY.length + ')' : 'Missing'}`);
+    const apiRes = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RATEHAWK_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query }),
+    });
 
-    if (!RATEHAWK_KEY_ID || !RATEHAWK_API_KEY) {
-      console.error('❌ Missing API credentials:', { 
-        key_id_present: !!RATEHAWK_KEY_ID, 
-        api_key_present: !!RATEHAWK_API_KEY 
+    // 3) Network error?
+    if (!apiRes.ok) {
+      const text = await apiRes.text();
+      console.error("❌ ratehawk-suggest: non-200 status", apiRes.status, text);
+      return new Response(text, {
+        status: apiRes.status,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-      return new Response(
-        JSON.stringify({ error: 'Ratehawk API credentials not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-    
-    console.log(`🧠 Ratehawk Suggest - Searching for: ${query}`);
-    console.log(`🌐 API URL: ${RATEHAWK_BASE_URL}/search/suggest`);
-
-    // Test external connectivity first
-    try {
-      await fetch('https://postman-echo.com/get');
-      console.log('🔔 External connectivity OK');
-    } catch (err) {
-      console.error('❌ Cannot reach external network:', err);
     }
 
-    // Make the actual API call with detailed logging
-    let response;
-    try {
-      console.log('🔔 ratehawk-suggest: calling API URL:', `${RATEHAWK_BASE_URL}/search/suggest`);
-      console.log('🔔 ratehawk-suggest: using API key:', RATEHAWK_API_KEY?.slice(0,4) + '…');
-      console.log('🔔 ratehawk-suggest: request body:', JSON.stringify({ query, language }, null, 2));
-      
-      response = await fetch(`${RATEHAWK_BASE_URL}/search/suggest`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${RATEHAWK_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query,
-          language
-        })
-      });
-    } catch (err) {
-      console.error('❌ ratehawk-suggest: network error calling sandbox API:', err);
-      console.error('❌ ratehawk-suggest: error details:', {
-        message: err.message,
-        name: err.name,
-        stack: err.stack
-      });
-      return new Response(
-        JSON.stringify({ 
-          error: `Ratehawk Suggest network error: ${err.message}`,
-          details: 'Failed to reach Ratehawk sandbox API'
-        }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    // 4) Parse & return
+    const data = await apiRes.json();
+    console.log("✅ ratehawk-suggest: got data:", JSON.stringify(data));
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('❌ Ratehawk suggest error:', response.status, errorText);
-      console.error('🔍 Request details:', {
-        url: `${RATEHAWK_BASE_URL}/search/suggest`,
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer [REDACTED]',
-          'Content-Type': 'application/json'
-        },
-        body: { query, language }
-      });
-      return new Response(
-        JSON.stringify({ 
-          error: `Ratehawk API error: ${response.status}`, 
-          details: errorText,
-          requestData: { query, language }
-        }),
-        { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const data = await response.json();
-    
-    console.log('✅ RATEHAWK SUGGEST SUCCESS:');
-    console.log('Query:', query);
-    console.log('Response status:', response.status);
-    console.log('💬 Suggest Response:', JSON.stringify(data, null, 2));
-    console.log('Locations count:', data.locations?.length || 0);
-    
-    // Enhanced debugging for certification
-    if (data.locations && data.locations.length > 0) {
-      console.log('🎯 First location details:', JSON.stringify(data.locations[0], null, 2));
-      const location = data.locations[0];
-      if (location.region_id) {
-        console.log(`✅ Found region_id: ${location.region_id} for ${location.name}`);
-      } else {
-        console.log('⚠️ No region_id found in location object');
-      }
-    } else {
-      console.log('❌ No locations returned in response');
-    }
-    
+  } catch (err) {
+    console.error("❌ ratehawk-suggest: network/error calling API:", err);
     return new Response(
-      JSON.stringify(data),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-
-  } catch (error) {
-    console.error('Ratehawk suggest error:', error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ error: err.message }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
