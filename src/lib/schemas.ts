@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 
+// Legacy schemas for backward compatibility
 const DaySchema = z.object({
   day: z.string(),
   title: z.string(),
@@ -21,4 +22,91 @@ export const MultiItinerarySchema = z.object({
   options: z.array(ItineraryOptionSchema).length(3)
 });
 
+// New comprehensive schema for Phase 1
+const BookingItemSchema = z.object({
+  name: z.string(),
+  price: z.string(),
+  rating: z.number().optional(),
+  imageUrl: z.string().optional(),
+  bookingLink: z.string(),
+  agentUrl: z.string().optional(),
+  amenities: z.array(z.string()).optional(),
+  description: z.string().optional()
+});
+
+const BookingModuleSchema = z.object({
+  title: z.string(),
+  items: z.array(BookingItemSchema),
+  defaultUrl: z.string().optional()
+});
+
+const EventSchema = z.object({
+  time: z.string(),
+  title: z.string(),
+  description: z.string().optional(),
+  type: z.enum(['activity', 'transport', 'dining', 'accommodation']),
+  location: z.string().optional(),
+  cost: z.string().optional(),
+  imageUrl: z.string().optional(),
+  bookingUrl: z.string().optional()
+});
+
+const DayPlanSchema = z.object({
+  day: z.string(),
+  date: z.string(),
+  title: z.string(),
+  events: z.array(EventSchema),
+  totalEstimatedCost: z.string().optional()
+});
+
+const CultureTipSchema = z.object({
+  category: z.string(),
+  title: z.string(),
+  content: z.string()
+});
+
+const CategoryRecommendationSchema = z.object({
+  category: z.string(),
+  title: z.string(),
+  items: z.array(z.object({
+    name: z.string(),
+    description: z.string(),
+    imageUrl: z.string().optional(),
+    location: z.string().optional(),
+    cost: z.string().optional()
+  }))
+});
+
+export const ComprehensiveItinerarySchema = z.object({
+  itineraryId: z.string(),
+  tripTitle: z.string(),
+  destinationCity: z.string(),
+  destinationCountry: z.string(),
+  startDate: z.string(),
+  endDate: z.string(),
+  numberOfTravelers: z.number(),
+  travelStyle: z.string(),
+  introductoryMessage: z.string(),
+  imageCollageUrls: z.array(z.string()).min(3).max(6),
+  bookingModules: z.object({
+    flights: BookingModuleSchema,
+    accommodations: BookingModuleSchema
+  }),
+  dailyPlan: z.array(DayPlanSchema).min(1),
+  additionalInfo: z.object({
+    cultureAdapter: z.array(CultureTipSchema),
+    categoryBasedRecommendations: z.array(CategoryRecommendationSchema)
+  }),
+  utility: z.object({
+    sources: z.array(z.string()),
+    downloadPdfLink: z.string().optional()
+  })
+});
+
 export type DetailedItinerary = z.infer<typeof MultiItinerarySchema>;
+export type ComprehensiveItinerary = z.infer<typeof ComprehensiveItinerarySchema>;
+export type BookingModule = z.infer<typeof BookingModuleSchema>;
+export type DayPlan = z.infer<typeof DayPlanSchema>;
+export type Event = z.infer<typeof EventSchema>;
+export type CultureTip = z.infer<typeof CultureTipSchema>;
+export type CategoryRecommendation = z.infer<typeof CategoryRecommendationSchema>;

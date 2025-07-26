@@ -13,7 +13,7 @@ export const useChatAI = () => {
   const { messages, addMessage, updateMessage, clearMessages } = context;
   const [loading, setLoading] = useState(false);
 
-  const sendMessage = async (message: string) => {
+  const sendMessage = async (message: string, comprehensive = false) => {
     setLoading(true);
     const messageId = Date.now().toString();
 
@@ -24,8 +24,9 @@ export const useChatAI = () => {
     });
 
     try {
-      const { data, error } = await supabase.functions.invoke('ai-travel-chat', {
-        body: { message },
+      const functionName = comprehensive ? 'ai-comprehensive-itinerary' : 'ai-travel-chat';
+      const { data, error } = await supabase.functions.invoke(functionName, {
+        body: { message, comprehensive },
       });
 
       if (error) throw new Error(`AI Edge Function Error: ${error.message}`);
@@ -34,20 +35,28 @@ export const useChatAI = () => {
         response: data.response,
         detailedItinerary: data.detailedItinerary,
         isDetailedItinerary: data.isDetailedItinerary,
+        comprehensiveItinerary: data.comprehensiveItinerary,
+        isComprehensiveItinerary: data.isComprehensiveItinerary,
         showMap: data.showMap,
         mapLocation: data.mapLocation,
         quickReplies: data.quickReplies,
         callsToAction: data.callsToAction,
+        loading: false,
       });
 
     } catch (err) {
       console.error('Failed to send message:', err);
       updateMessage(messageId, {
         response: "I'm having trouble connecting right now. Please try again in a moment.",
+        loading: false,
       });
     } finally {
       setLoading(false);
     }
+  };
+
+  const sendComprehensiveMessage = async (message: string) => {
+    return sendMessage(message, true);
   };
 
   const resetSession = () => {
@@ -58,6 +67,7 @@ export const useChatAI = () => {
     messages,
     loading,
     sendMessage,
+    sendComprehensiveMessage,
     resetSession,
   };
 };

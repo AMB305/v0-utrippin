@@ -3,9 +3,91 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.23.4/mod.ts";
 
+// Legacy schemas for backward compatibility
 const DaySchema = z.object({ day: z.string(), title: z.string(), activities: z.array(z.string()) });
 const ItineraryOptionSchema = z.object({ title: z.string(), estimated_cost: z.string(), summary: z.string(), days: z.array(DaySchema).min(1) });
 const MultiItinerarySchema = z.object({ destination: z.string(), overview_summary: z.string(), options: z.array(ItineraryOptionSchema).length(3) });
+
+// New comprehensive schema
+const BookingItemSchema = z.object({
+  name: z.string(),
+  price: z.string(),
+  rating: z.number().optional(),
+  imageUrl: z.string().optional(),
+  bookingLink: z.string(),
+  agentUrl: z.string().optional(),
+  amenities: z.array(z.string()).optional(),
+  description: z.string().optional()
+});
+
+const BookingModuleSchema = z.object({
+  title: z.string(),
+  items: z.array(BookingItemSchema),
+  defaultUrl: z.string().optional()
+});
+
+const EventSchema = z.object({
+  time: z.string(),
+  title: z.string(),
+  description: z.string().optional(),
+  type: z.enum(['activity', 'transport', 'dining', 'accommodation']),
+  location: z.string().optional(),
+  cost: z.string().optional(),
+  imageUrl: z.string().optional(),
+  bookingUrl: z.string().optional()
+});
+
+const DayPlanSchema = z.object({
+  day: z.string(),
+  date: z.string(),
+  title: z.string(),
+  events: z.array(EventSchema),
+  totalEstimatedCost: z.string().optional()
+});
+
+const CultureTipSchema = z.object({
+  category: z.string(),
+  title: z.string(),
+  content: z.string()
+});
+
+const CategoryRecommendationSchema = z.object({
+  category: z.string(),
+  title: z.string(),
+  items: z.array(z.object({
+    name: z.string(),
+    description: z.string(),
+    imageUrl: z.string().optional(),
+    location: z.string().optional(),
+    cost: z.string().optional()
+  }))
+});
+
+const ComprehensiveItinerarySchema = z.object({
+  itineraryId: z.string(),
+  tripTitle: z.string(),
+  destinationCity: z.string(),
+  destinationCountry: z.string(),
+  startDate: z.string(),
+  endDate: z.string(),
+  numberOfTravelers: z.number(),
+  travelStyle: z.string(),
+  introductoryMessage: z.string(),
+  imageCollageUrls: z.array(z.string()).min(3).max(6),
+  bookingModules: z.object({
+    flights: BookingModuleSchema,
+    accommodations: BookingModuleSchema
+  }),
+  dailyPlan: z.array(DayPlanSchema).min(1),
+  additionalInfo: z.object({
+    cultureAdapter: z.array(CultureTipSchema),
+    categoryBasedRecommendations: z.array(CategoryRecommendationSchema)
+  }),
+  utility: z.object({
+    sources: z.array(z.string()),
+    downloadPdfLink: z.string().optional()
+  })
+});
 
 const openRouterApiKey = Deno.env.get('OPENROUTER_API_KEY');
 const corsHeaders = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type' };

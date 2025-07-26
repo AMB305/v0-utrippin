@@ -11,7 +11,9 @@ export interface ChatMessage {
   showMap?: boolean;
   mapLocation?: string;
   isDetailedItinerary?: boolean;
-  detailedItinerary?: any; // Using 'any' for simplicity, can be typed later
+  detailedItinerary?: any; // Legacy support
+  isComprehensiveItinerary?: boolean;
+  comprehensiveItinerary?: any; // New comprehensive format
   quickReplies?: string[];
   callsToAction?: any[];
 }
