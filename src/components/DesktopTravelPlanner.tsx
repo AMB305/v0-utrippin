@@ -1,7 +1,8 @@
 // src/components/DesktopTravelPlanner.tsx
 
 import React from 'react';
-import ChatContainer from './custom/chat-container'; // Corrected import
+// CORRECTED IMPORT: We are changing the import to correctly match the export.
+import { ChatContainer } from './custom/chat-container'; 
 import { useChatAI } from '@/hooks/useChatAI';
 import { useAuth } from '@/hooks/useAuth';
 import { TextAnimate } from '@/components/magicui/text-animate';
@@ -10,7 +11,7 @@ import { MobileQuickQuestions } from '@/components/MobileQuickQuestions';
 import { Button } from './ui/button';
 import { MessageSquare } from 'lucide-react';
 
-// This is now the "smart" component that controls the chat state.
+// This is the "smart" component that controls the chat state.
 const DesktopTravelPlanner = ({ onQuestionSelect }) => {
   const { user } = useAuth();
   const { messages, sendMessage, loading, resetSession } = useChatAI();
@@ -27,7 +28,6 @@ const DesktopTravelPlanner = ({ onQuestionSelect }) => {
           </p>
         </div>
         
-        {/* Show welcome prompts only if the chat is empty */}
         {!hasStartedChat && (
           <BlurFade delay={0.3} inView>
             <div>
@@ -37,7 +37,6 @@ const DesktopTravelPlanner = ({ onQuestionSelect }) => {
           </BlurFade>
         )}
         
-        {/* New Chat button is always available at the bottom */}
         <Button onClick={resetSession} variant="outline" className="mt-4 border-red-500 text-red-400 hover:bg-red-500 hover:text-white">
           <MessageSquare className="mr-2 h-4 w-4" />
           New Chat
