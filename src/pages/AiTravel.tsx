@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { useChatAI } from "@/hooks/useChatAI";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Send, ArrowLeft, MessageSquare, LogIn } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Send, Menu, ArrowLeft, MessageSquare, LogIn } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { TextAnimate } from "@/components/magicui/text-animate";
 import { BlurFade } from "@/components/magicui/blur-fade";
@@ -14,6 +15,7 @@ import { MobileQuickQuestions } from "@/components/MobileQuickQuestions";
 import { ItineraryCard } from "@/components/ItineraryCard";
 import DesktopTravelPlanner from "@/components/DesktopTravelPlanner";
 import { Link } from "react-router-dom";
+import { AuthStatus } from "@/components/AuthStatus";
 
 const KeilaThinking = () => (
   <div className="bg-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
@@ -43,9 +45,8 @@ const AiTravel = () => {
   const hasStartedChat = messages.length > 0;
 
   useEffect(() => {
-    // This effect runs once when the component mounts and ensures the chat is always clear on a fresh visit.
     resetSession();
-  }, []); // The empty dependency array means this runs only once on mount.
+  }, []);
 
   const handleSendMessage = (message: string) => {
     if (message.trim()) {
@@ -55,8 +56,11 @@ const AiTravel = () => {
   };
 
   const handleWelcomePrompt = (question: string) => {
-    const enhancedQuestion = `${question}. Please provide a complete detailed day-by-day itinerary.`;
-    sendMessage(enhancedQuestion);
+    if (messages.length > 0) resetSession();
+    setTimeout(() => {
+      const enhancedQuestion = `${question}. Please provide a complete detailed day-by-day itinerary.`;
+      sendMessage(enhancedQuestion);
+    }, 100);
   };
 
   if (authLoading) {
@@ -78,18 +82,41 @@ const AiTravel = () => {
       {isMobile ? (
         <div className="flex flex-col h-dvh bg-black text-white">
           {!hasStartedChat ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-6">
-               <BlurFade delay={0.1} inView>
-                <div className="flex items-center gap-2 mb-6">
-                  <img src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" alt="Keila Bot" className="w-14 h-14 animate-float"/>
-                  <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-xl font-bold bg-gradient-to-r from-purple-400 to-orange-400 bg-clip-text text-transparent">
-                    Hi! I'm Keila
-                  </TextAnimate>
-                </div>
-              </BlurFade>
-              <BlurFade delay={0.7} inView>
-                <MobileQuickQuestions onQuestionSelect={handleWelcomePrompt} />
-              </BlurFade>
+            <div className="flex-1 flex flex-col bg-black">
+              <div className="absolute top-4 left-4 z-10">
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
+                      <Menu className="h-5 w-5" />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="left" className="w-[300px] bg-black border-gray-800 text-white">
+                    <SheetHeader>
+                      <SheetTitle className="text-white">Navigation</SheetTitle>
+                    </SheetHeader>
+                    <div className="flex flex-col space-y-4 pt-4">
+                      <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/"}>Home</Button>
+                      <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/flights"}>Flights</Button>
+                      <Button variant="ghost" className="justify-start text-white hover:bg-gray-800" onClick={() => window.location.href = "/hotels"}>Hotels</Button>
+                      <div className="border-t border-gray-700 my-2"></div>
+                      <AuthStatus />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
+              <div className="flex-1 flex flex-col items-center justify-center p-6">
+                <BlurFade delay={0.1} inView>
+                  <div className="flex items-center gap-2 mb-6">
+                    <img src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" alt="Keila Bot" className="w-14 h-14 animate-float"/>
+                    <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-xl font-bold bg-gradient-to-r from-purple-400 to-orange-400 bg-clip-text text-transparent">
+                      Hi! I'm Keila
+                    </TextAnimate>
+                  </div>
+                </BlurFade>
+                <BlurFade delay={0.7} inView>
+                  <MobileQuickQuestions onQuestionSelect={handleWelcomePrompt} />
+                </BlurFade>
+              </div>
             </div>
           ) : (
             <>
