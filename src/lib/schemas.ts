@@ -1,8 +1,8 @@
-// FILE: src/lib/schemas.ts
+// CREATE THIS NEW FILE: src/lib/schemas.ts
 
 import { z } from 'zod';
 
-// This is the single source of truth for a day plan.
+// This is the single source of truth for a day's plan.
 const DaySchema = z.object({
   day: z.string().min(1, "Day title is required."),
   title: z.string().min(1, "Day title is required."),
@@ -17,7 +17,7 @@ export const DetailedItinerarySchema = z.object({
     summary: z.string().min(50, "Summary must be at least 50 characters long and not be a generic question.")
   }),
   days: z.array(DaySchema).min(1, "Itinerary must have at least one day."),
-  culture_tips: z.record(z.string(), z.string()).optional(),
+  culture_tips: z.record(z.string()).optional(),
   actionable_suggestions: z.array(z.string()).optional()
 });
 
@@ -27,5 +27,5 @@ export const SimpleResponseSchema = z.object({
   quickReplies: z.array(z.string()).optional()
 });
 
-// We can infer the TypeScript type directly from the Zod schema.
+// This allows us to use the schema as a TypeScript type in our components.
 export type DetailedItinerary = z.infer<typeof DetailedItinerarySchema>;
