@@ -336,11 +336,11 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       method: 'POST',
       headers: { 'Authorization': `Bearer ${openRouterApiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'nousresearch/nous-hermes-2-mixtral-8x7b-dpo',
+        model: 'openai/gpt-4o-mini',
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: message }],
         response_format: { type: "json_object" },
         max_tokens: 8000,
-        temperature: 0.8,
+        temperature: 0.7,
       })
     });
 
@@ -426,6 +426,16 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (error) {
     console.error('Edge Function Error:', error.message);
-    return new Response(JSON.stringify({ isDetailedItinerary: false, response: "I'm having trouble connecting right now. Please try again." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    
+    // Smart fallback with intelligent questioning
+    const smartFallback = {
+      isDetailedItinerary: false,
+      response: "I'd love to help you plan an amazing trip! ✈️ Let me ask a few questions to get started:\n\n🗺️ Where are you thinking of traveling?\n📅 When are you planning to go?\n👥 Who's traveling with you?\n\nOnce I have these details, I can create a personalized itinerary just for you!",
+      quickReplies: ["Plan a weekend getaway", "International vacation", "Family trip"]
+    };
+    
+    return new Response(JSON.stringify(smartFallback), { 
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+    });
   }
 });
