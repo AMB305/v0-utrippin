@@ -383,6 +383,71 @@ export default function Hotels() {
               </div>
             </div>
 
+            {/* Popular Destinations Quick Access */}
+            <div className="bg-card rounded-2xl p-6 border border-border mt-6">
+              <h3 className="text-lg font-semibold mb-4 text-foreground">Popular Destinations</h3>
+              <div className="flex flex-wrap gap-2">
+                {['New York', 'Los Angeles', 'Las Vegas', 'Orlando', 'San Francisco', 'Chicago', 'Boston', 'Seattle'].map((city) => (
+                  <Button
+                    key={city}
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                    onClick={() => {
+                      setDestination(city);
+                      handleSearch();
+                    }}
+                  >
+                    {city}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Hotel Categories */}
+            <div className="bg-card rounded-2xl p-6 border border-border mt-6">
+              <h3 className="text-lg font-semibold mb-4 text-foreground">Browse by Category</h3>
+              <div className="space-y-3">
+                {[
+                  { name: 'Luxury Resorts', count: '150+ hotels', icon: Crown },
+                  { name: 'Boutique Hotels', count: '85+ hotels', icon: Sparkles },
+                  { name: 'Family-Friendly', count: '200+ hotels', icon: Users },
+                  { name: 'Business Hotels', count: '120+ hotels', icon: Building },
+                  { name: 'Beach Access', count: '75+ hotels', icon: Palmtree }
+                ].map((category) => (
+                  <div key={category.name} className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
+                    <div className="flex items-center gap-3">
+                      <category.icon size={20} className="text-primary" />
+                      <div>
+                        <p className="font-medium text-foreground">{category.name}</p>
+                        <p className="text-sm text-muted-foreground">{category.count}</p>
+                      </div>
+                    </div>
+                    <ArrowRight size={16} className="text-muted-foreground" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Travel Tips */}
+            <div className="bg-card rounded-2xl p-6 border border-border mt-6">
+              <h3 className="text-lg font-semibold mb-4 text-foreground">Travel Tips</h3>
+              <div className="space-y-3 text-sm text-muted-foreground">
+                <div className="flex items-start gap-2">
+                  <Star size={16} className="text-primary mt-1 flex-shrink-0" />
+                  <p><strong>Best Time to Visit:</strong> October to April for perfect weather and fewer crowds.</p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Car size={16} className="text-primary mt-1 flex-shrink-0" />
+                  <p><strong>Getting Around:</strong> Many hotels offer shuttle services to popular attractions.</p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Wifi size={16} className="text-primary mt-1 flex-shrink-0" />
+                  <p><strong>Hotel Amenities:</strong> Most properties include free WiFi, pools, and beach access.</p>
+                </div>
+              </div>
+            </div>
+
             {/* Popular Destinations */}
             <div className="bg-card rounded-2xl p-6 border border-border">
               <h3 className="text-lg font-semibold mb-4 text-foreground">Popular Destinations</h3>
