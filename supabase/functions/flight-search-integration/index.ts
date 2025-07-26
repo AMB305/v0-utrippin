@@ -206,10 +206,15 @@ function generateMockFlights(origin: string, destination: string, departureDate:
 }
 
 function buildKeilaFlightBookingUrl(origin: string, destination: string, departureDate: string, returnDate?: string) {
-  // Platform's Expedia affiliate ID for all Keila Bot customers
-  const keilaAffiliateId = "YOUR_KEILA_AFFILIATE_ID"; // Replace with actual affiliate ID
+  // Your Commission Junction affiliate tracking for Expedia
+  const affiliateId = "101486313";
+  const advertiserId = "15575456";
   
-  return `https://www.expedia.com/Flights-Search?trip=${returnDate ? 'roundtrip' : 'oneway'}&leg1=from:${origin},to:${destination},departure:${departureDate}${returnDate ? `&leg2=from:${destination},to:${origin},departure:${returnDate}` : ''}&passengers=adults:1&options=cabinclass:economy&affid=${keilaAffiliateId}&c=keila_bot`;
+  // Build the Expedia flight search URL
+  const expediaUrl = `https://www.expedia.com/Flights-Search?trip=${returnDate ? 'roundtrip' : 'oneway'}&leg1=from:${origin},to:${destination},departure:${departureDate}${returnDate ? `&leg2=from:${destination},to:${origin},departure:${returnDate}` : ''}&passengers=adults:1&options=cabinclass:economy`;
+  
+  // Wrap with CJ tracking
+  return `https://www.jdoqocy.com/click-${affiliateId}-${advertiserId}?url=${encodeURIComponent(expediaUrl)}`;
 }
 
 async function buildFlightBookingUrl(flight: any, userRole: string, userId?: string) {
@@ -218,6 +223,10 @@ async function buildFlightBookingUrl(flight: any, userRole: string, userId?: str
 }
 
 function buildDefaultFlightUrl(origin: string, destination: string, departureDate: string, returnDate?: string) {
-  const keilaAffiliateId = "YOUR_KEILA_AFFILIATE_ID";
-  return `https://www.expedia.com/Flights-Search?trip=${returnDate ? 'roundtrip' : 'oneway'}&leg1=from:${origin},to:${destination},departure:${departureDate}${returnDate ? `&leg2=from:${destination},to:${origin},departure:${returnDate}` : ''}&passengers=adults:1&options=cabinclass:economy&affid=${keilaAffiliateId}&c=keila_bot`;
+  const affiliateId = "101486313";
+  const advertiserId = "15575456";
+  
+  const expediaUrl = `https://www.expedia.com/Flights-Search?trip=${returnDate ? 'roundtrip' : 'oneway'}&leg1=from:${origin},to:${destination},departure:${departureDate}${returnDate ? `&leg2=from:${destination},to:${origin},departure:${returnDate}` : ''}&passengers=adults:1&options=cabinclass:economy`;
+  
+  return `https://www.jdoqocy.com/click-${affiliateId}-${advertiserId}?url=${encodeURIComponent(expediaUrl)}`;
 }

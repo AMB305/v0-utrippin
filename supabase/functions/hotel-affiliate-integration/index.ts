@@ -154,13 +154,22 @@ function buildKeilaAffiliateUrl(searchParams: URLSearchParams) {
   const guests = searchParams.get('guests');
   const rooms = searchParams.get('rooms');
 
-  // Platform's Expedia affiliate ID for all Keila Bot customers
-  const keilaAffiliateId = "YOUR_KEILA_AFFILIATE_ID"; // Replace with actual affiliate ID
+  // Your Commission Junction affiliate tracking for Expedia
+  const affiliateId = "101486313";
+  const advertiserId = "15575456";
   
-  return `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination!)}&startDate=${checkin}&endDate=${checkout}&rooms=${rooms}&adults=${guests}&affid=${keilaAffiliateId}&c=keila_bot&mcid=keila_travel`;
+  // Build the Expedia destination URL
+  const expediaUrl = `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination!)}&startDate=${checkin}&endDate=${checkout}&rooms=${rooms}&adults=${guests}`;
+  
+  // Wrap with CJ tracking
+  return `https://www.jdoqocy.com/click-${affiliateId}-${advertiserId}?url=${encodeURIComponent(expediaUrl)}`;
 }
 
 function buildDefaultHotelUrl(destination: string, checkIn: string, checkOut: string, guests: number, rooms: number) {
-  const keilaAffiliateId = "YOUR_KEILA_AFFILIATE_ID";
-  return `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination)}&startDate=${checkIn}&endDate=${checkOut}&rooms=${rooms}&adults=${guests}&affid=${keilaAffiliateId}&c=keila_bot`;
+  const affiliateId = "101486313";
+  const advertiserId = "15575456";
+  
+  const expediaUrl = `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination)}&startDate=${checkIn}&endDate=${checkOut}&rooms=${rooms}&adults=${guests}`;
+  
+  return `https://www.jdoqocy.com/click-${affiliateId}-${advertiserId}?url=${encodeURIComponent(expediaUrl)}`;
 }
