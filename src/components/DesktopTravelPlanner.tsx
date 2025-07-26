@@ -49,6 +49,10 @@ const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, c
     onQuestionSelect("Help me plan my next adventure!");
   };
 
+  const handleCreateComprehensiveTrip = () => {
+    onSendMessage("Create a comprehensive travel itinerary for me", true);
+  };
+
   return (
     <div className="hidden lg:flex flex-col min-h-screen bg-gray-50 font-sans">
       {/* Top Filter Bar */}

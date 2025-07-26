@@ -14,6 +14,8 @@ interface ChatMessage {
   mapLocation?: string;
   isDetailedItinerary?: boolean;
   detailedItinerary?: any;
+  isComprehensiveItinerary?: boolean;
+  comprehensiveItinerary?: any;
   quickReplies?: string[];
   callsToAction?: any[];
 }
@@ -38,9 +40,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading, onSe
               </div>
             </div>
 
-            {!message.loading && (message.response || message.detailedItinerary) && (
+            {!message.loading && (message.response || message.detailedItinerary || message.comprehensiveItinerary) && (
               <div className="flex justify-start">
-                {message.isDetailedItinerary && message.detailedItinerary ? (
+                {message.isComprehensiveItinerary && message.comprehensiveItinerary ? (
+                  <ItineraryCard comprehensiveItinerary={message.comprehensiveItinerary} />
+                ) : message.isDetailedItinerary && message.detailedItinerary ? (
                   <ItineraryCard itinerary={message.detailedItinerary} />
                 ) : (
                   <div className="bg-gray-100 px-4 py-2 rounded-lg max-w-[80%]">

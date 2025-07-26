@@ -1,10 +1,11 @@
 // src/components/ItineraryCard.tsx
 
 import React from 'react';
-import { DetailedItinerary } from '@/lib/schemas';
+import { DetailedItinerary, ComprehensiveItinerary } from '@/lib/schemas';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { MapPin, Check, DollarSign, Gem, ShieldCheck } from 'lucide-react';
+import { ComprehensiveItineraryDisplay } from './comprehensive-itinerary/ComprehensiveItineraryDisplay';
 
 const ItineraryOption = ({ option }) => (
   <Card className="bg-transparent border-none shadow-none">
@@ -33,7 +34,28 @@ const ItineraryOption = ({ option }) => (
   </Card>
 );
 
-export const ItineraryCard: React.FC<{ itinerary: DetailedItinerary }> = ({ itinerary }) => {
+interface ItineraryCardProps {
+  itinerary?: DetailedItinerary;
+  comprehensiveItinerary?: ComprehensiveItinerary;
+  onBack?: () => void;
+}
+
+export const ItineraryCard: React.FC<ItineraryCardProps> = ({ 
+  itinerary, 
+  comprehensiveItinerary,
+  onBack 
+}) => {
+  // If we have a comprehensive itinerary, show it
+  if (comprehensiveItinerary) {
+    return (
+      <ComprehensiveItineraryDisplay 
+        itinerary={comprehensiveItinerary} 
+        onBack={onBack}
+      />
+    );
+  }
+
+  // Legacy simple itinerary display
   if (!itinerary || !itinerary.options || itinerary.options.length !== 3) {
     return <div className="text-red-500 p-4 bg-red-100 rounded-lg">Error: Invalid itinerary data received.</div>;
   }
