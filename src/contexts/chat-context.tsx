@@ -1,30 +1,28 @@
+// src/contexts/chat-context.tsx
+
 import { createContext } from 'react';
 
-export interface Message {
-  id: number;
-  role: 'user' | 'assistant';
-  content: React.ReactNode | string;
-  files?: File[];
-}
-
+// Define the shape of a single message
 export interface ChatMessage {
   id: string;
-  question?: string;
+  question: string;
   response?: string;
-  detailedItinerary?: any;
-  isDetailedItinerary?: boolean;
+  loading?: boolean;
   showMap?: boolean;
   mapLocation?: string;
+  isDetailedItinerary?: boolean;
+  detailedItinerary?: any; // Using 'any' for simplicity, can be typed later
   quickReplies?: string[];
-  callsToAction?: Array<{ label: string; action: string }>;
-  loading?: boolean;
+  callsToAction?: any[];
 }
 
-interface ChatContextType {
+// Define the shape of the context's value
+export interface ChatContextType {
   messages: ChatMessage[];
   addMessage: (message: ChatMessage) => void;
   updateMessage: (id: string, updates: Partial<ChatMessage>) => void;
   clearMessages: () => void;
 }
 
+// Create the context
 export const ChatContext = createContext<ChatContextType | undefined>(undefined);

@@ -2,27 +2,24 @@
 
 import { useContext, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { ChatContext } from '@/contexts/chat-context';
+import { ChatContext, ChatContextType } from '@/contexts/chat-context';
 
 export const useChatAI = () => {
-  // 1. Consume the GLOBAL state from the context. No more local useState for messages!
   const context = useContext(ChatContext);
   if (!context) {
     throw new Error('useChatAI must be used within a ChatProvider');
   }
-  const { messages, addMessage, updateMessage, clearMessages } = context;
 
+  const { messages, addMessage, updateMessage, clearMessages } = context;
   const [loading, setLoading] = useState(false);
 
   const sendMessage = async (message: string) => {
     setLoading(true);
     const messageId = Date.now().toString();
 
-    // 2. Add the user's message to the GLOBAL state.
     addMessage({
       id: messageId,
       question: message,
-      isDetailedItinerary: false, // Default value
       loading: true,
     });
 
@@ -31,9 +28,8 @@ export const useChatAI = () => {
         body: { message },
       });
 
-      if (error) throw new Error(error.message);
-
-      // 3. Update the message in the GLOBAL state with the AI's response.
+      if (error) throw new Error(`AI Edge Function Error: ${error.message}`);
+      
       updateMessage(messageId, {
         response: data.response,
         detailedItinerary: data.detailedItinerary,
@@ -44,26 +40,25 @@ export const useChatAI = () => {
         callsToAction: data.callsToAction,
       });
 
-    } catch (error) {
-      console.error('Error calling AI chat:', error);
+    } catch (err) {
+      console.error('Failed to send message:', err);
       updateMessage(messageId, {
-        response: "I'm having trouble processing your request right now. Please try again.",
+        response: "I'm having trouble connecting right now. Please try again in a moment.",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  // 4. The clearChat function now correctly clears the GLOBAL state. No page reload needed.
   const resetSession = () => {
-    console.log("SESSION RESET: Clearing global chat state and storage.");
-    clearMessages(); 
+    console.log("Calling resetSession, which will clear the global context.");
+    clearMessages();
   };
 
   return {
     messages,
     loading,
     sendMessage,
-    resetSession, // This is the only function you need to call now.
+    resetSession,
   };
 };
