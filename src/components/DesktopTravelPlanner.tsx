@@ -46,9 +46,15 @@ const DesktopTravelPlanner: React.FC<DesktopTravelPlannerProps> = ({ onQuestionS
           </BlurFade>
         )}
         
-        <Button onClick={resetSession} variant="outline" className="mt-4 border-red-500 text-red-400 hover:bg-red-500 hover:text-white">
-          <MessageSquare className="mr-2 h-4 w-4" />
-          New Chat
+        <Button 
+          onClick={resetSession} 
+          variant="outline" 
+          className="mt-4 border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
+        >
+          <div className="flex items-center">
+            <MessageSquare className="mr-2 h-4 w-4" />
+            New Chat
+          </div>
         </Button>
       </div>
 
