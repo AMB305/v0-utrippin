@@ -1,15 +1,12 @@
 // src/components/DesktopTravelPlanner.tsx
 
 import React from 'react';
-// CORRECTED IMPORT: We are changing the import to correctly match the export.
 import ChatContainer from './custom/ChatContainer';
 import { useChatAI } from '@/hooks/useChatAI';
 import { useAuth } from '@/hooks/useAuth';
-import { TextAnimate } from '@/components/magicui/text-animate';
-import { BlurFade } from '@/components/magicui/blur-fade';
-import { MobileQuickQuestions } from '@/components/MobileQuickQuestions';
+import { AnimatedKeila } from '@/components/AnimatedKeila';
 import { Button } from './ui/button';
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare, Compass, Heart, Utensils, User } from 'lucide-react';
 
 interface DesktopTravelPlannerProps {
   onQuestionSelect: (question: string) => void;
@@ -20,55 +17,60 @@ interface DesktopTravelPlannerProps {
   onSendMessage?: (message: string) => void;
 }
 
+const WelcomePromptCard = ({ icon, title, question, onClick }: { icon: React.ReactNode; title: string; question: string; onClick: (question: string) => void }) => (
+  <button onClick={() => onClick(question)} className="bg-blue-900/40 border border-blue-500/30 rounded-lg p-4 text-left w-full hover:bg-blue-800/50 transition-colors flex items-center gap-4 mb-3">
+    <div className="text-blue-400">{icon}</div>
+    <span className="font-semibold">{title}</span>
+  </button>
+);
+
 // This is the "smart" component that controls the chat state.
 const DesktopTravelPlanner: React.FC<DesktopTravelPlannerProps> = ({ onQuestionSelect }) => {
   const { user } = useAuth();
   const { messages, sendMessage, loading, resetSession } = useChatAI();
   const hasStartedChat = messages.length > 0;
 
+  const handleWelcomePrompt = (question: string) => {
+    if (messages.length > 0) resetSession();
+    setTimeout(() => {
+      const enhancedQuestion = `${question}. Please provide a complete detailed day-by-day itinerary.`;
+      onQuestionSelect(enhancedQuestion);
+    }, 100);
+  };
+
   return (
     <div className="hidden lg:grid grid-cols-12 h-screen bg-black text-white">
       {/* Left Panel */}
-      <div className="col-span-4 p-8 flex flex-col justify-between border-r border-gray-700">
-        <div>
-          <h1 className="text-3xl font-bold mb-4">AI Travel Planner</h1>
-          <p className="text-gray-400">
-            Welcome, {user?.email || 'Traveler'}. Let Keila help you plan your next adventure.
-          </p>
-        </div>
-        
-        {!hasStartedChat && (
-          <BlurFade delay={0.3} inView>
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Get Started</h2>
-              <MobileQuickQuestions onQuestionSelect={onQuestionSelect} />
+      <div className="col-span-4 p-8 flex flex-col justify-center border-r border-gray-700">
+        {!hasStartedChat ? (
+          <div className="flex flex-col items-center text-center">
+            <AnimatedKeila />
+            <h1 className="text-3xl font-bold mt-6 mb-2">Hi, I'm Keila!</h1>
+            <p className="text-blue-200/80 mb-8">How can I help you plan your next trip?</p>
+            
+            <div className="w-full max-w-sm space-y-3">
+              <WelcomePromptCard icon={<Compass size={24} />} title="Plan a Full Trip" question="Plan a weekend getaway." onClick={handleWelcomePrompt} />
+              <WelcomePromptCard icon={<Heart size={24} />} title="Romantic Getaway" question="Find a romantic getaway for two." onClick={handleWelcomePrompt} />
+              <WelcomePromptCard icon={<Utensils size={24} />} title="Foodie Tour" question="Create a foodie tour." onClick={handleWelcomePrompt} />
+              <WelcomePromptCard icon={<User size={24} />} title="Solo Adventure" question="Plan a solo adventure." onClick={handleWelcomePrompt} />
             </div>
-          </BlurFade>
-        )}
-        
-        <div className="flex gap-2">
-          <Button 
-            onClick={resetSession} 
-            variant="ghost" 
-            size="sm"
-            className="text-gray-400 hover:text-white border-gray-600 hover:border-gray-500"
-          >
-            Clear Chat
-          </Button>
-          <Button 
-            onClick={resetSession} 
-            variant="outline" 
-            className="mt-4 border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
-          >
-            <div className="flex items-center">
+          </div>
+        ) : (
+          <div className="flex flex-col items-center text-center">
+            <h1 className="text-2xl font-bold mb-4">Chat with Keila</h1>
+            <Button 
+              onClick={resetSession} 
+              variant="outline" 
+              className="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white"
+            >
               <MessageSquare className="mr-2 h-4 w-4" />
               New Chat
-            </div>
-          </Button>
-        </div>
+            </Button>
+          </div>
+        )}
       </div>
 
-      {/* Right Panel - The "dumb" ChatContainer now receives state as props */}
+      {/* Right Panel - The ChatContainer */}
       <div className="col-span-8 bg-gray-900 rounded-l-2xl">
         <ChatContainer
           messages={messages}
