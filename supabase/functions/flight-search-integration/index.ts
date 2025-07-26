@@ -205,9 +205,6 @@ function generateMockFlights(origin: string, destination: string, departureDate:
   }));
 }
 
-  }));
-}
-
 function buildKeilaFlightBookingUrl(origin: string, destination: string, departureDate: string, returnDate?: string) {
   // Platform's Expedia affiliate ID for all Keila Bot customers
   const keilaAffiliateId = "YOUR_KEILA_AFFILIATE_ID"; // Replace with actual affiliate ID
