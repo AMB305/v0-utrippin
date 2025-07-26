@@ -77,13 +77,45 @@ const AiTravel = () => {
           {!hasStartedChat ? (
             <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
               <AnimatedKeila />
-              <h1 className="text-2xl font-bold mt-4">Hi, I'm Keila!</h1>
-              <p className="text-blue-200/80 mt-2 mb-6">How can I help you plan your next trip?</p>
-              <div className="w-full max-w-sm space-y-3">
-                  <WelcomePromptCard icon={<Compass size={24} />} title="Plan a Full Trip" question="Plan a weekend getaway." onClick={handleWelcomePrompt} />
-                  <WelcomePromptCard icon={<Heart size={24} />} title="Romantic Getaway" question="Find a romantic getaway for two." onClick={handleWelcomePrompt} />
-                  <WelcomePromptCard icon={<Utensils size={24} />} title="Foodie Tour" question="Create a foodie tour." onClick={handleWelcomePrompt} />
-                  <WelcomePromptCard icon={<User size={24} />} title="Solo Adventure" question="Plan a solo adventure." onClick={handleWelcomePrompt} />
+              <h1 className="text-3xl font-bold mt-8 mb-2">Ready to explore the world?</h1>
+              <p className="text-gray-400 mb-8">Let's plan your dream trip! ✨</p>
+              
+              {/* Central Input */}
+              <div className="w-full max-w-md mb-8">
+                <div className="flex gap-2">
+                  <Input
+                    value={mobileInput}
+                    onChange={(e) => setMobileInput(e.target.value)}
+                    placeholder="Ask me anything about your trip..."
+                    className="flex-1 bg-gray-900 border-gray-700 text-white placeholder-gray-500 h-12 text-center rounded-full"
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(mobileInput)}
+                  />
+                  <Button onClick={() => handleSendMessage(mobileInput)} disabled={!mobileInput.trim() || loading} className="bg-blue-600 hover:bg-blue-700 text-white h-12 w-12 rounded-full">
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Prompt Chips */}
+              <div className="flex flex-wrap justify-center gap-2 max-w-lg">
+                <button onClick={() => handleWelcomePrompt("Create a new trip")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
+                  🗺️ Create a new trip
+                </button>
+                <button onClick={() => handleWelcomePrompt("Get inspired")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
+                  💡 Get inspired
+                </button>
+                <button onClick={() => handleWelcomePrompt("Inspire me where to go")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
+                  ✨ Inspire me where to go
+                </button>
+                <button onClick={() => handleWelcomePrompt("Plan a solo trip")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
+                  🧳 Solo trip
+                </button>
+                <button onClick={() => handleWelcomePrompt("Find a romantic getaway for two")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
+                  👫 Partner
+                </button>
+                <button onClick={() => handleWelcomePrompt("Plan a family vacation")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
+                  👨‍👩‍👧‍👦 Family
+                </button>
               </div>
             </div>
           ) : (
