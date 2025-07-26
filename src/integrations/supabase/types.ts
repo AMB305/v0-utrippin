@@ -2208,6 +2208,7 @@ export type Database = {
       users: {
         Row: {
           age: number | null
+          agoda_affiliate_id: string | null
           bio: string | null
           booking_affiliate_id: string | null
           created_at: string | null
@@ -2230,6 +2231,7 @@ export type Database = {
         }
         Insert: {
           age?: number | null
+          agoda_affiliate_id?: string | null
           bio?: string | null
           booking_affiliate_id?: string | null
           created_at?: string | null
@@ -2252,6 +2254,7 @@ export type Database = {
         }
         Update: {
           age?: number | null
+          agoda_affiliate_id?: string | null
           bio?: string | null
           booking_affiliate_id?: string | null
           created_at?: string | null

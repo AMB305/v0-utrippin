@@ -47,7 +47,7 @@ export class PersonalizationService {
       }
 
       // Check if user is an agent (has any affiliate IDs)
-      const isAgent = !!(profile?.expedia_affiliate_id || profile?.booking_affiliate_id || profile?.agoda_affiliate_id);
+      const isAgent = profile ? !!(profile.expedia_affiliate_id || profile.booking_affiliate_id || profile.agoda_affiliate_id) : false;
 
       return {
         profile,

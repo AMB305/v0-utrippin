@@ -84,6 +84,7 @@ import AiTravel from "./pages/AiTravel";
 import MyTrips from "./pages/MyTrips";
 import TripBoard from "./pages/TripBoard";
 import PublicTripView from "./pages/PublicTripView";
+import AgentProfilePage from "./pages/AgentProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -161,7 +162,8 @@ const App = () => (
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
                   <Route path="/image-generation" element={<ImageGeneration />} />
                   <Route path="/explore" element={<ExploreMerged />} />
-                  <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                   <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                   <Route path="/agent-profile" element={<ProtectedRoute><AgentProfilePage /></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
