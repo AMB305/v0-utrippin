@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Send } from "lucide-react";
+import { Send, Paperclip } from "lucide-react";
 
 interface SimpleChatInputProps {
   onSendMessage: (message: string) => void;
@@ -36,19 +36,20 @@ export const SimpleChatInput: React.FC<SimpleChatInputProps> = ({
     <div className="max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative">
+          <Paperclip className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={placeholder}
-            className="w-full px-6 py-4 bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-14"
+            className="w-full pl-12 pr-14 py-4 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300 transition-colors"
           />
           <button
             type="submit"
             disabled={!message.trim() || isLoading}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed rounded-xl transition-colors"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:cursor-not-allowed rounded-lg transition-colors"
           >
-            <Send className="h-4 w-4 text-white" />
+            <Send className="h-4 w-4 text-gray-600" />
           </button>
         </div>
       </form>
