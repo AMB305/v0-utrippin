@@ -22,7 +22,7 @@ export default function Hotels() {
   const isMobile = useIsMobile();
   
   // Use RateHawk integration for nearby hotels
-  const { data: nearbyHotels, isLoading: nearbyLoading } = useNearbyHotels("Bucharest, Romania");
+  const { data: nearbyHotels, isLoading: nearbyLoading } = useNearbyHotels("Miami Beach, Florida");
 
   const breadcrumbs = generateBreadcrumbSchema([
     { name: "Home", url: "https://utrippin.ai" },
@@ -97,7 +97,7 @@ export default function Hotels() {
             loading={nearbyLoading}
             onHotelSelect={handleHotelSelect}
             searchData={{
-              destination: "Bucharest, Romania",
+              destination: "Miami Beach, Florida",
               checkInDate: "May 7, 2025",
               checkOutDate: "May 9, 2025",
               adults: 2,

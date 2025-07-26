@@ -70,25 +70,25 @@ export function usePopularDestinations() {
       return [
         {
           id: '1',
-          name: 'Grand Hotel Bucuresti',
-          location: 'Nicolae Balcescu Boulevard 4, Romania',
-          address: 'Nicolae Balcescu Boulevard 4, Romania',
-          rating: 4.7,
-          price: 179,
-          image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300&fit=crop',
+          name: 'The Setai Miami Beach',
+          location: '2001 Collins Avenue, Miami Beach, Florida',
+          address: '2001 Collins Avenue, Miami Beach, Florida',
+          rating: 4.8,
+          price: 450,
+          image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop',
           amenities: ['wifi', 'beds', 'gym'],
-          locationTag: 'Romania'
+          locationTag: 'Florida'
         },
         {
           id: '2',
-          name: 'Azure Bay Resort',
-          location: 'Oceanview Drive 12, Constanta, Romania',
-          address: 'Oceanview Drive 12, Constanta, Romania',
-          rating: 4.7,
-          price: 179,
-          image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop',
+          name: 'W South Beach',
+          location: '2201 Collins Avenue, Miami Beach, Florida',
+          address: '2201 Collins Avenue, Miami Beach, Florida',
+          rating: 4.6,
+          price: 320,
+          image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop',
           amenities: ['wifi', 'beds', 'gym'],
-          locationTag: 'Romania'
+          locationTag: 'Florida'
         }
       ];
     },
@@ -117,18 +117,40 @@ export function useNearbyHotels(location: string) {
 
       if (error) {
         console.error('RateHawk nearby hotels error:', error);
-        // Return fallback data if API fails
+        // Return fallback Miami Beach data if API fails
         return [
           {
             id: '1',
-            name: 'Grand Hotel Bucuresti',
-            location: 'Nicolae Balcescu Boulevard 4, Romania',
-            address: 'Nicolae Balcescu Boulevard 4, Romania',
-            rating: 4.7,
-            price: 179,
-            image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300&fit=crop',
+            name: 'The Setai Miami Beach',
+            location: '2001 Collins Avenue, Miami Beach, Florida',
+            address: '2001 Collins Avenue, Miami Beach, Florida',
+            rating: 4.8,
+            price: 450,
+            image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop',
             amenities: ['wifi', 'beds', 'gym'],
-            locationTag: 'Romania'
+            locationTag: 'Florida'
+          },
+          {
+            id: '2',
+            name: 'W South Beach',
+            location: '2201 Collins Avenue, Miami Beach, Florida',
+            address: '2201 Collins Avenue, Miami Beach, Florida',
+            rating: 4.6,
+            price: 320,
+            image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop',
+            amenities: ['wifi', 'beds', 'gym'],
+            locationTag: 'Florida'
+          },
+          {
+            id: '3',
+            name: 'Edition Miami Beach',
+            location: '2901 Collins Avenue, Miami Beach, Florida',
+            address: '2901 Collins Avenue, Miami Beach, Florida',
+            rating: 4.7,
+            price: 380,
+            image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop',
+            amenities: ['wifi', 'beds', 'gym'],
+            locationTag: 'Florida'
           }
         ];
       }

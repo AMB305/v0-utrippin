@@ -7,7 +7,7 @@ interface MobileHeaderProps {
 }
 
 export function MobileHeader({ 
-  location = "Bucharest, Romania",
+  location = "Miami Beach, Florida",
   showNotificationBadge = true 
 }: MobileHeaderProps) {
   return (
