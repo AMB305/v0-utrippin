@@ -211,6 +211,7 @@ export const useChatAI = (trips: Trip[]) => {
     setLoading(false);
   };
 
+  // LAYER 3: UNIFIED STATE MANAGEMENT - Single source of truth
   const clearChat = () => {
     console.log("🧹 GLOBAL RESET: Clearing all chat data...");
     
@@ -219,14 +220,35 @@ export const useChatAI = (trips: Trip[]) => {
     setLoading(false);
     setIsFreshStart(true);
     
-    // Clear localStorage
-    localStorage.removeItem("chatHistory");
-    localStorage.removeItem("tripContext");
-    localStorage.removeItem("activePrompt");
-    localStorage.removeItem("sessionData");
-    localStorage.removeItem("chat_user_id");
-    localStorage.removeItem("lastChatResponse");
-    localStorage.removeItem("hasStartedChat");
+    // COMPREHENSIVE localStorage cleanup - prevent ghost messages
+    const chatKeys = [
+      "chatHistory",
+      "tripContext", 
+      "activePrompt",
+      "sessionData",
+      "chat_user_id",
+      "lastChatResponse",
+      "hasStartedChat",
+      "chatMessages",
+      "aiChatHistory",
+      "travelChatState",
+      "keilaChatData",
+      "chatSession",
+      "userMessages",
+      "conversationState"
+    ];
+    
+    chatKeys.forEach(key => {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key); // Also clear session storage
+    });
+    
+    // Clear any chat-related data that starts with common prefixes
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('chat_') || key.startsWith('travel_') || key.startsWith('ai_')) {
+        localStorage.removeItem(key);
+      }
+    });
     
     console.log("✅ GLOBAL RESET: Complete - all state and storage cleared");
   };
@@ -235,8 +257,21 @@ export const useChatAI = (trips: Trip[]) => {
   const resetSession = () => {
     console.log("🔄 FULL SESSION RESET: Starting complete reset...");
     clearChat();
+    
+    // Additional cleanup for persistent state issues
+    try {
+      // Clear any IndexedDB data related to chat
+      if ('indexedDB' in window) {
+        indexedDB.deleteDatabase('chatDB');
+      }
+    } catch (e) {
+      console.warn('Could not clear IndexedDB:', e);
+    }
+    
     // Force component re-mount by changing key or refreshing
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
 
   return { 

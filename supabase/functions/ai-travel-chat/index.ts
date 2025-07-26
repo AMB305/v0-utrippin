@@ -611,66 +611,27 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
         ]
       };
 
-      // ✅ CRITICAL VALIDATION: Only set isDetailedItinerary if we have real content
-      const hasValidItinerarySummary = 
-        typeof detailedItinerary.summary === 'string' && 
-        detailedItinerary.summary.trim().length >= 30;
-
-      const hasValidDays = 
-        Array.isArray(detailedItinerary.days) &&
-        detailedItinerary.days.length >= 2 &&
-        detailedItinerary.days.every((day: any) => 
-          typeof day.day === 'string' && 
-          Array.isArray(day.activities) &&
-          day.activities.length > 0 &&
-          day.activities.some((activity: string) => activity.trim().length > 0)
-        );
-
-      const hasCultureTips = 
-        Array.isArray(detailedItinerary.actionable_suggestions) &&
-        detailedItinerary.actionable_suggestions.length >= 2 &&
-        detailedItinerary.actionable_suggestions.every((tip: string) => tip.trim().length > 0);
-
-      const hasSuggestions = 
-        Array.isArray(detailedItinerary.follow_up_questions) &&
-        detailedItinerary.follow_up_questions.length >= 2;
-
-      // ✅ ONLY set true if all validation passes
-      const hasValidContent = hasValidItinerarySummary && hasValidDays && hasCultureTips && hasSuggestions;
-
-      console.log("AI Travel Chat - VALIDATION RESULTS:");
-      console.log("Summary OK:", hasValidItinerarySummary, `(length: ${detailedItinerary.summary?.length})`);
-      console.log("Days OK:", hasValidDays, `(count: ${detailedItinerary.days?.length})`);
-      console.log("Culture Tips OK:", hasCultureTips, `(count: ${detailedItinerary.actionable_suggestions?.length})`);
-      console.log("Suggestions OK:", hasSuggestions, `(count: ${detailedItinerary.follow_up_questions?.length})`);
-      console.log("Final isDetailedItinerary:", hasValidContent);
+      // LAYER 1: BULLETPROOF BACKEND VALIDATION
+      const hasValidContent = validateDetailedItinerary(detailedItinerary);
+      
+      console.log("AI Travel Chat - VALIDATION RESULT:", hasValidContent);
 
       if (!hasValidContent) {
-        // Return fallback content instead of broken itinerary
+        // FALLBACK: Return simple response instead of broken detailed itinerary
+        console.log("AI Travel Chat - Validation failed, returning simple response fallback");
         return new Response(JSON.stringify({
-          response: "I'm having trouble creating a complete itinerary right now. Here's some helpful information while I work on a better response!",
-          isDetailedItinerary: false,
-          fallbackContent: {
-            summary: `${tripDetails.destination || 'This destination'} offers amazing experiences for travelers. Perfect for exploring culture, food, and local attractions.`,
-            suggestions: [
-              "Research local customs and tipping practices",
-              "Download offline maps and translation apps", 
-              "Try authentic local cuisine from recommended spots",
-              "Book accommodations in safe, well-reviewed areas"
-            ],
-            culture_tips: [
-              "Learn a few basic phrases in the local language",
-              "Respect local dress codes and cultural norms",
-              "Use official transportation and tour guides",
-              "Keep copies of important documents secure"
-            ],
-            quick_replies: [
-              "Tell me more about nightlife",
-              "Show me local food spots",
-              "What's a good 3-day itinerary?",
-              "What's the transportation like?"
-            ]
-          }
+          response: `I'd love to help you plan your trip to ${tripDetails.destination || 'your destination'}! To create the perfect itinerary, could you tell me more about your travel dates, group size, and what interests you most?`,
+          isDetailedItinerary: false, // CRITICAL: Set to false when validation fails
+          quickReplies: [
+            "Tell me about local food",
+            "Show me attractions", 
+            "What's the nightlife like?",
+            "Plan a 3-day itinerary"
+          ],
+          callsToAction: [
+            { text: "Get Travel Inspiration", action: "CONTINUE_CHAT" },
+            { text: "Popular Destinations", action: "CONTINUE_CHAT" }
+          ]
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
@@ -725,6 +686,92 @@ Available trips: ${JSON.stringify(availableTrips, null, 2)}`;
     });
   }
 });
+
+// BULLETPROOF VALIDATION FUNCTION - Layer 1 Defense
+function validateDetailedItinerary(data: any): boolean {
+  console.log('Starting detailed itinerary validation for:', data);
+  
+  // Basic structure validation
+  if (!data || typeof data !== 'object') {
+    console.log('Validation failed: Invalid data structure');
+    return false;
+  }
+
+  // CRITICAL: Summary validation - must be meaningful, not error phrases
+  if (!data.summary || typeof data.summary !== 'string' || data.summary.length < 30) {
+    console.log('Validation failed: Invalid summary', { 
+      hasSummary: !!data.summary, 
+      summaryLength: data.summary?.length 
+    });
+    return false;
+  }
+
+  // Check for error phrases in summary
+  const errorPhrases = [
+    "i'm having trouble",
+    "could you tell me",
+    "could you provide", 
+    "i'd love to help you plan",
+    "here's some helpful information",
+    "i need more information",
+    "can you specify"
+  ];
+  
+  const summaryLower = data.summary.toLowerCase();
+  if (errorPhrases.some(phrase => summaryLower.includes(phrase))) {
+    console.log('Validation failed: Summary contains error phrases');
+    return false;
+  }
+
+  // Days validation - must have real content
+  if (!Array.isArray(data.days) || data.days.length === 0) {
+    console.log('Validation failed: Invalid days array');
+    return false;
+  }
+
+  // Validate each day has meaningful activities
+  for (const day of data.days) {
+    if (!day || typeof day !== 'object') {
+      console.log('Validation failed: Invalid day structure');
+      return false;
+    }
+
+    // Check for activities array (simplified validation)
+    if (!Array.isArray(day.activities) || day.activities.length === 0) {
+      console.log('Validation failed: Day has no activities', day);
+      return false;
+    }
+
+    // Check if activities are meaningful (not just empty strings)
+    const validActivities = day.activities.filter(activity => 
+      activity && typeof activity === 'string' && activity.trim().length > 5
+    );
+    
+    if (validActivities.length === 0) {
+      console.log('Validation failed: Day has no meaningful activities', day);
+      return false;
+    }
+  }
+
+  // Actionable suggestions validation
+  if (!Array.isArray(data.actionable_suggestions) || data.actionable_suggestions.length === 0) {
+    console.log('Validation failed: Invalid actionable_suggestions');
+    return false;
+  }
+
+  // Check suggestions are meaningful
+  const validSuggestions = data.actionable_suggestions.filter(suggestion => 
+    suggestion && typeof suggestion === 'string' && suggestion.trim().length > 10
+  );
+  
+  if (validSuggestions.length === 0) {
+    console.log('Validation failed: No meaningful suggestions');
+    return false;
+  }
+
+  console.log('Validation passed: All checks successful');
+  return true;
+}
 
 // Function to enhance itinerary with Expedia affiliate links
 async function enhanceItineraryWithAffiliateLinks(itinerary: any, destination: string, supabase: any) {

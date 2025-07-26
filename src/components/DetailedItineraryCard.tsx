@@ -64,35 +64,76 @@ interface DetailedItineraryCardProps {
   onFollowUpClick?: (question: string) => void;
 }
 
-// Validation function to check if itinerary has valid content
+// LAYER 2: BULLETPROOF VALIDATION - Never trust the backend
 const isValidItinerary = (itinerary?: DetailedItinerary): boolean => {
-  if (!itinerary) return false;
+  console.log('DetailedItineraryCard: Starting validation for:', itinerary);
   
-  // Check for placeholder/generic content
-  const invalidSummaries = [
-    "I'm having trouble processing",
-    "I'd love to help you plan",
-    "Could you provide more specific details",
-    "Here's some helpful information"
+  if (!itinerary) {
+    console.log('DetailedItineraryCard: No itinerary provided');
+    return false;
+  }
+  
+  // CRITICAL: Check for error phrases that indicate failed AI response
+  const errorPhrases = [
+    "i'm having trouble processing",
+    "i'd love to help you plan",
+    "could you provide more specific details", 
+    "here's some helpful information",
+    "i need more information",
+    "could you tell me",
+    "can you specify"
   ];
   
-  const hasInvalidSummary = invalidSummaries.some(phrase => 
-    itinerary.summary?.toLowerCase().includes(phrase.toLowerCase())
+  const summaryLower = itinerary.summary?.toLowerCase() || '';
+  const hasErrorPhrase = errorPhrases.some(phrase => 
+    summaryLower.includes(phrase.toLowerCase())
   );
   
-  if (hasInvalidSummary) return false;
+  if (hasErrorPhrase) {
+    console.log('DetailedItineraryCard: Summary contains error phrases');
+    return false;
+  }
   
-  // Basic content validation
-  const hasValidSummary = itinerary.summary && itinerary.summary.trim().length >= 30;
+  // Summary validation - must be meaningful content
+  const hasValidSummary = itinerary.summary && 
+    typeof itinerary.summary === 'string' && 
+    itinerary.summary.trim().length >= 30;
+  
+  if (!hasValidSummary) {
+    console.log('DetailedItineraryCard: Invalid summary', {
+      hasSummary: !!itinerary.summary,
+      summaryLength: itinerary.summary?.length
+    });
+    return false;
+  }
+  
+  // Recommendations validation - must have real content
   const hasValidRecommendations = Array.isArray(itinerary.recommendations) && 
     itinerary.recommendations.length > 0 &&
     itinerary.recommendations.some(rec => 
-      Array.isArray(rec.places) && rec.places.length > 0
+      rec && Array.isArray(rec.places) && rec.places.length > 0 &&
+      rec.places.some(place => place && place.name && place.name.trim().length > 0)
     );
-  const hasValidSuggestions = Array.isArray(itinerary.actionable_suggestions) && 
-    itinerary.actionable_suggestions.length > 0;
   
-  return hasValidSummary && hasValidRecommendations && hasValidSuggestions;
+  if (!hasValidRecommendations) {
+    console.log('DetailedItineraryCard: Invalid recommendations');
+    return false;
+  }
+  
+  // Actionable suggestions validation
+  const hasValidSuggestions = Array.isArray(itinerary.actionable_suggestions) && 
+    itinerary.actionable_suggestions.length > 0 &&
+    itinerary.actionable_suggestions.some(suggestion => 
+      suggestion && typeof suggestion === 'string' && suggestion.trim().length > 10
+    );
+  
+  if (!hasValidSuggestions) {
+    console.log('DetailedItineraryCard: Invalid suggestions');
+    return false;
+  }
+  
+  console.log('DetailedItineraryCard: Validation passed');
+  return true;
 };
 
 export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({ 
@@ -117,16 +158,23 @@ export const DetailedItineraryCard: React.FC<DetailedItineraryCardProps> = ({
     );
   }
 
+  // LAYER 2: FRONTEND VALIDATION FALLBACK - Same as PerfectTravelCard
   if (!itinerary || !isValidItinerary(itinerary)) {
+    console.warn('DetailedItineraryCard: Content validation failed, showing fallback');
+    
     return (
-      <Card className="bg-red-900/20 border-red-500/30 p-6">
-        <div className="flex items-center gap-3 text-red-400">
+      <Card className="bg-orange-900/20 border-orange-500/30 p-6">
+        <div className="flex items-center gap-3 text-orange-400">
           <AlertTriangle className="h-5 w-5" />
           <div>
-            <h3 className="font-semibold">Unable to generate detailed itinerary</h3>
-            <p className="text-sm text-red-300 mt-1">
-              Please try asking for a specific destination with travel dates and preferences for a complete itinerary.
+            <h3 className="font-semibold">Keila needs a bit more information</h3>
+            <p className="text-sm text-orange-300 mt-2 leading-relaxed">
+              To generate a detailed travel plan, please include:
+              <br />• Your destination • Travel dates • Number of travelers • Your interests
             </p>
+            <div className="mt-3 text-xs text-orange-200/80 italic">
+              Try: "Plan a 5-day trip to Tokyo for 2 people in March, interested in culture and food"
+            </div>
           </div>
         </div>
       </Card>
