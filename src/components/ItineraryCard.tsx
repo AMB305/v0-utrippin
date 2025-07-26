@@ -35,7 +35,7 @@ export const ItineraryCard: React.FC<ItineraryCardProps> = ({ itinerary }) => {
   }
 
   return (
-    <Card className="bg-white text-gray-900 w-full max-w-2xl mx-auto shadow-xl rounded-2xl">
+    <Card className="!bg-white !text-gray-900 w-full max-w-2xl mx-auto shadow-xl rounded-2xl border-0">
       <CardHeader className="p-6">
         <div className="flex items-center gap-2 text-gray-500 mb-2">
           <MapPin size={16} />
