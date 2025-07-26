@@ -17,8 +17,8 @@ import LoginCard from "@/components/LoginCard";
 // --- UI COMPONENTS ---
 
 const KeilaThinking = () => (
-  <div className="bg-gray-800 px-4 py-3 rounded-2xl max-w-[80%] border border-gray-700">
-    <p className="text-sm text-gray-400 italic">Keila is planning your trip...</p>
+  <div className="bg-white px-4 py-3 rounded-2xl max-w-[80%] shadow-md">
+    <p className="text-sm text-gray-500 italic">Keila is planning your trip...</p>
   </div>
 );
 
