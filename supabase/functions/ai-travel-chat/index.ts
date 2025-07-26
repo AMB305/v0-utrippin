@@ -173,26 +173,115 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       }
     }
 
-    const systemPrompt = `You are Keila, an expert AI travel agent that creates inspiring and detailed itineraries. Your primary goal is to generate THREE distinct, high-quality travel itineraries based on a user's request. You MUST respond with a single, valid JSON object and nothing else.
+    const systemPrompt = `You are Keila, an expert AI travel agent that creates comprehensive, visually rich travel itineraries. You MUST respond with a single, valid JSON object and nothing else.
 
     ${personalizationContext}
 
     **CRITICAL INSTRUCTIONS:**
-    1.  **Analyze the user's request** for a destination, duration, and budget.
-    2.  **Generate THREE distinct itinerary options**: "Budget Saver", "Balanced Choice", and "Luxury Experience".
-    3.  **Each activity must be a specific place or event**, not a generic category. For example, instead of "Visit a museum", write "Visit the Louvre Museum to see the Mona Lisa".
-    4.  **Your entire response MUST conform to the MULTI_ITINERARY_SCHEMA** provided below.
-    5.  If the user's request is too vague (e.g., "hi"), you MUST use the SIMPLE_FALLBACK_SCHEMA.
+    1. **Analyze the user's request** for destination, duration, budget, and travel style.
+    2. **Generate a COMPREHENSIVE itinerary** with rich details, specific timing, and visual elements.
+    3. **Your entire response MUST conform to the COMPREHENSIVE_ITINERARY_SCHEMA** provided below.
+    4. If the user's request is too vague (e.g., "hi"), use the SIMPLE_FALLBACK_SCHEMA.
 
-    **MULTI_ITINERARY_SCHEMA:**
+    **COMPREHENSIVE_ITINERARY_SCHEMA:**
     {
-      "destination": "City, Country",
-      "overview_summary": "A brief, engaging summary of the trip concept, highlighting the key experiences.",
-      "options": [
-        { "title": "The Budget Saver", "estimated_cost": "Approximate total cost, e.g., '$500 - $700'", "summary": "A description of this budget-friendly option, focusing on value and free/low-cost activities.", "days": [{"day": "Day 1", "title": "Arrival & Local Exploration", "activities": ["Free walking tour", "Local market visit"]}] },
-        { "title": "The Balanced Choice", "estimated_cost": "Approximate total cost, e.g., '$1200 - $1500'", "summary": "Balance of cost and comfort.", "days": [{"day": "Day 1", "title": "Arrival & Cultural Immersion", "activities": ["3-star hotel check-in", "Museum visit"]}] },
-        { "title": "The Luxury Experience", "estimated_cost": "$2500+", "summary": "Premium comfort and unique experiences.", "days": [{"day": "Day 1", "title": "Arrival in Style", "activities": ["Private transfer to 5-star hotel", "Fine dining"]}] }
-      ]
+      "itineraryId": "unique-id-string",
+      "tripTitle": "Engaging trip title",
+      "destinationCity": "City Name",
+      "destinationCountry": "Country Name", 
+      "startDate": "2024-09-02",
+      "endDate": "2024-09-05",
+      "numberOfTravelers": 2,
+      "travelStyle": "adventure/luxury/budget/cultural",
+      "introductoryMessage": "Engaging welcome message about the trip",
+      "imageCollageUrls": [
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+        "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800",
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800"
+      ],
+      "bookingModules": {
+        "flights": {
+          "title": "Flight Options",
+          "items": [
+            {
+              "name": "Round-trip Economy",
+              "price": "$450",
+              "rating": 4.2,
+              "bookingLink": "https://booking.com/flights",
+              "description": "Direct flights with major airline"
+            }
+          ]
+        },
+        "accommodations": {
+          "title": "Hotel Recommendations", 
+          "items": [
+            {
+              "name": "Luxury Beach Resort",
+              "price": "$280/night",
+              "rating": 4.7,
+              "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400",
+              "bookingLink": "https://booking.com/hotels",
+              "amenities": ["Pool", "Spa", "Beach Access"],
+              "description": "Oceanfront resort with world-class amenities"
+            }
+          ]
+        }
+      },
+      "dailyPlan": [
+        {
+          "day": "Day 1",
+          "date": "September 2, 2024",
+          "title": "Arrival & Beach Exploration", 
+          "events": [
+            {
+              "time": "10:00 AM",
+              "title": "Airport Arrival & Hotel Check-in",
+              "description": "Welcome to Miami! Check into your beachfront hotel",
+              "type": "accommodation",
+              "location": "South Beach",
+              "cost": "Included",
+              "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400"
+            },
+            {
+              "time": "2:00 PM", 
+              "title": "South Beach Walking Tour",
+              "description": "Explore the Art Deco architecture and vibrant culture",
+              "type": "activity",
+              "location": "Ocean Drive",
+              "cost": "$25",
+              "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400"
+            }
+          ],
+          "totalEstimatedCost": "$125"
+        }
+      ],
+      "additionalInfo": {
+        "cultureAdapter": [
+          {
+            "category": "Language",
+            "title": "Essential Spanish Phrases",
+            "content": "Hola (Hello), Gracias (Thank you), ¿Habla inglés? (Do you speak English?)"
+          }
+        ],
+        "categoryBasedRecommendations": [
+          {
+            "category": "Food & Dining",
+            "title": "Must-Try Local Cuisine",
+            "items": [
+              {
+                "name": "Cuban Sandwich", 
+                "description": "Authentic pressed sandwich with ham, pork, and pickles",
+                "location": "Versailles Restaurant",
+                "cost": "$12-15"
+              }
+            ]
+          }
+        ]
+      },
+      "utility": {
+        "sources": ["TripAdvisor", "Lonely Planet", "Local Tourism Board"],
+        "downloadPdfLink": "https://example.com/itinerary.pdf"
+      }
     }
 
     **SIMPLE_FALLBACK_SCHEMA:**
@@ -249,13 +338,32 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       console.error('Raw content:', messageContent);
       throw new Error(`Failed to parse AI response: ${parseError.message}`);
     }
-    const validationResult = MultiItinerarySchema.safeParse(parsedJson);
-
-    if (validationResult.success) {
-      return new Response(JSON.stringify({ isDetailedItinerary: true, detailedItinerary: validationResult.data }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    } else {
-      return new Response(JSON.stringify({ isDetailedItinerary: false, response: parsedJson.response || "I need a few more details to help plan your trip!", quickReplies: parsedJson.quickReplies || [] }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    // Try comprehensive schema first
+    const comprehensiveValidation = ComprehensiveItinerarySchema.safeParse(parsedJson);
+    
+    if (comprehensiveValidation.success) {
+      return new Response(JSON.stringify({ 
+        isComprehensiveItinerary: true, 
+        comprehensiveItinerary: comprehensiveValidation.data 
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
+    
+    // Fallback to old schema for backward compatibility
+    const legacyValidation = MultiItinerarySchema.safeParse(parsedJson);
+    
+    if (legacyValidation.success) {
+      return new Response(JSON.stringify({ 
+        isDetailedItinerary: true, 
+        detailedItinerary: legacyValidation.data 
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+    
+    // Simple fallback response
+    return new Response(JSON.stringify({ 
+      isDetailedItinerary: false, 
+      response: parsedJson.response || "I need a few more details to help plan your trip!", 
+      quickReplies: parsedJson.quickReplies || [] 
+    }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (error) {
     console.error('Edge Function Error:', error.message);
     return new Response(JSON.stringify({ isDetailedItinerary: false, response: "I'm having trouble connecting right now. Please try again." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });

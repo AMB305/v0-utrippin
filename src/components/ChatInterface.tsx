@@ -6,6 +6,7 @@ import { EnhancedMapComponent } from "./EnhancedMapComponent";
 import { TripSummaryCard } from "./TripSummaryCard";
 import { QuickReplyButtons } from "./QuickReplyButtons";
 import { ItineraryCard } from "./ItineraryCard";
+import { ComprehensiveItinerary } from "./comprehensive/ComprehensiveItinerary";
 
 interface DetailedItinerary {
   destination: string;
@@ -19,6 +20,87 @@ interface DetailedItinerary {
     activities: string[];
   }>;
   actionable_suggestions?: string[];
+}
+
+interface ComprehensiveItineraryData {
+  itineraryId: string;
+  tripTitle: string;
+  destinationCity: string;
+  destinationCountry: string;
+  startDate: string;
+  endDate: string;
+  numberOfTravelers: number;
+  travelStyle: string;
+  introductoryMessage: string;
+  imageCollageUrls: string[];
+  bookingModules: {
+    flights: {
+      title: string;
+      items: Array<{
+        name: string;
+        price: string;
+        rating?: number;
+        imageUrl?: string;
+        bookingLink: string;
+        agentUrl?: string;
+        amenities?: string[];
+        description?: string;
+      }>;
+      defaultUrl?: string;
+    };
+    accommodations: {
+      title: string;
+      items: Array<{
+        name: string;
+        price: string;
+        rating?: number;
+        imageUrl?: string;
+        bookingLink: string;
+        agentUrl?: string;
+        amenities?: string[];
+        description?: string;
+      }>;
+      defaultUrl?: string;
+    };
+  };
+  dailyPlan: Array<{
+    day: string;
+    date: string;
+    title: string;
+    events: Array<{
+      time: string;
+      title: string;
+      description?: string;
+      type: 'activity' | 'transport' | 'dining' | 'accommodation';
+      location?: string;
+      cost?: string;
+      imageUrl?: string;
+      bookingUrl?: string;
+    }>;
+    totalEstimatedCost?: string;
+  }>;
+  additionalInfo: {
+    cultureAdapter: Array<{
+      category: string;
+      title: string;
+      content: string;
+    }>;
+    categoryBasedRecommendations: Array<{
+      category: string;
+      title: string;
+      items: Array<{
+        name: string;
+        description: string;
+        imageUrl?: string;
+        location?: string;
+        cost?: string;
+      }>;
+    }>;
+  };
+  utility: {
+    sources: string[];
+    downloadPdfLink?: string;
+  };
 }
 
 interface ChatMessage {
@@ -38,6 +120,8 @@ interface ChatMessage {
   }>;
   quickReplies?: string[];
   detailedItinerary?: DetailedItinerary;
+  comprehensiveItinerary?: ComprehensiveItineraryData;
+  isComprehensiveItinerary?: boolean;
 }
 
 interface ChatInterfaceProps {
@@ -184,8 +268,14 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 <TypingIndicator />
               ) : (
                 <div className="space-y-4">
-                  {/* Detailed Itinerary Display */}
-                  {message.detailedItinerary ? (
+                  {/* Comprehensive Itinerary Display - NEW FORMAT */}
+                  {message.isComprehensiveItinerary && message.comprehensiveItinerary ? (
+                    <div className="bg-white rounded-lg overflow-hidden">
+                      <ComprehensiveItinerary data={message.comprehensiveItinerary} />
+                    </div>
+                  ) : 
+                  /* Legacy Detailed Itinerary Display */
+                  message.detailedItinerary ? (
                     <ItineraryCard itinerary={message.detailedItinerary} />
                   ) : (
                     message.response && (
