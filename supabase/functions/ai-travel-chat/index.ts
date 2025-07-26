@@ -198,12 +198,13 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
     **SIMPLE_FALLBACK_SCHEMA:**
     { "response": "A polite message asking for more information.", "quickReplies": ["Plan a 3-day trip"] }`;
 
-    // Validate API key
+    // Check API key and log its status
+    console.log('OpenRouter API key status:', openRouterApiKey ? 'Present' : 'Missing');
     if (!openRouterApiKey) {
-      console.error('OpenRouter API key not found');
+      console.error('OpenRouter API key not found in environment variables');
       return new Response(JSON.stringify({ 
         isDetailedItinerary: false, 
-        response: "Configuration error. Please contact support." 
+        response: "API configuration missing. Please check OpenRouter API key setup." 
       }), { 
         status: 500, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
