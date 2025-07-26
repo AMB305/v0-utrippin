@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { useChatAI } from "@/hooks/useChatAI";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Send, MessageSquare, LogIn, Compass, Heart, Utensils, User } from "lucide-react";
+import { Send, MessageSquare, LogIn, Compass, Heart, Utensils, User, Plus } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { ItineraryCard } from "@/components/ItineraryCard";
 import DesktopTravelPlanner from "@/components/DesktopTravelPlanner";
@@ -81,40 +81,48 @@ const AiTravel = () => {
               <p className="text-gray-400 mb-8">Let's plan your dream trip! ✨</p>
               
               {/* Central Input */}
-              <div className="w-full max-w-md mb-8">
-                <div className="flex gap-2">
-                  <Input
+              <div className="w-full max-w-2xl mb-8">
+                <div className="relative">
+                  <textarea
+                    rows={2}
                     value={mobileInput}
                     onChange={(e) => setMobileInput(e.target.value)}
-                    placeholder="Ask me anything about your trip..."
-                    className="flex-1 bg-gray-900 border-gray-700 text-white placeholder-gray-500 h-12 text-center rounded-full"
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(mobileInput)}
+                    placeholder="Ask me anything about your trip.."
+                    className="w-full bg-[#1e1e1e] text-white text-sm rounded-xl p-4 pl-12 pr-12 outline-none border border-pink-500/20 focus:border-pink-500 placeholder-gray-500 resize-none"
+                    onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSendMessage(mobileInput))}
                   />
-                  <Button onClick={() => handleSendMessage(mobileInput)} disabled={!mobileInput.trim() || loading} className="bg-blue-600 hover:bg-blue-700 text-white h-12 w-12 rounded-full">
-                    <Send className="h-4 w-4" />
-                  </Button>
+                  <button className="absolute bottom-3 left-3 text-white text-sm">
+                    <Plus className="h-4 w-4" />
+                  </button>
+                  <button 
+                    onClick={() => handleSendMessage(mobileInput)} 
+                    disabled={!mobileInput.trim() || loading} 
+                    className="absolute bottom-3 right-3 bg-blue-500 hover:bg-blue-600 p-2 rounded-full text-white text-xs disabled:opacity-50"
+                  >
+                    <Send className="h-3 w-3" />
+                  </button>
                 </div>
               </div>
 
               {/* Prompt Chips */}
-              <div className="flex flex-wrap justify-center gap-2 max-w-lg">
-                <button onClick={() => handleWelcomePrompt("Create a new trip")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
-                  🗺️ Create a new trip
+              <div className="flex flex-wrap justify-center gap-3 max-w-4xl">
+                <button onClick={() => handleWelcomePrompt("Create a new trip")} className="flex items-center gap-2 bg-[#1e1e1e] border border-green-500/30 hover:border-green-500 text-sm px-4 py-2 rounded-full transition">
+                  <span>🧳</span> Create a new trip
                 </button>
-                <button onClick={() => handleWelcomePrompt("Get inspired")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
-                  💡 Get inspired
+                <button onClick={() => handleWelcomePrompt("Get inspired")} className="flex items-center gap-2 bg-[#1e1e1e] border border-blue-500/30 hover:border-blue-500 text-sm px-4 py-2 rounded-full transition">
+                  <span>🌍</span> Get inspired
                 </button>
-                <button onClick={() => handleWelcomePrompt("Inspire me where to go")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
-                  ✨ Inspire me where to go
+                <button onClick={() => handleWelcomePrompt("Inspire me where to go")} className="flex items-center gap-2 bg-[#1e1e1e] border border-indigo-500/30 hover:border-indigo-500 text-sm px-4 py-2 rounded-full transition">
+                  <span>🗺️</span> Inspire me where to go
                 </button>
-                <button onClick={() => handleWelcomePrompt("Plan a solo trip")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
-                  🧳 Solo trip
+                <button onClick={() => handleWelcomePrompt("Plan a solo trip")} className="flex items-center gap-2 bg-[#1e1e1e] border border-yellow-500/30 hover:border-yellow-500 text-sm px-4 py-2 rounded-full transition">
+                  <span>🚴</span> Solo trip
                 </button>
-                <button onClick={() => handleWelcomePrompt("Find a romantic getaway for two")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
-                  👫 Partner
+                <button onClick={() => handleWelcomePrompt("Find a romantic getaway for two")} className="flex items-center gap-2 bg-[#1e1e1e] border border-pink-500/30 hover:border-pink-500 text-sm px-4 py-2 rounded-full transition">
+                  <span>💑</span> Partner
                 </button>
-                <button onClick={() => handleWelcomePrompt("Plan a family vacation")} className="bg-gray-800/50 border border-gray-600 rounded-full px-4 py-2 text-sm hover:bg-gray-700/50 transition-colors flex items-center gap-2">
-                  👨‍👩‍👧‍👦 Family
+                <button onClick={() => handleWelcomePrompt("Plan a family vacation")} className="flex items-center gap-2 bg-[#1e1e1e] border border-purple-500/30 hover:border-purple-500 text-sm px-4 py-2 rounded-full transition">
+                  <span>👨‍👩‍👧‍👦</span> Family
                 </button>
               </div>
             </div>

@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { AnimatedKeila } from '@/components/AnimatedKeila';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { MessageSquare, Compass, Heart, Utensils, User, Send } from 'lucide-react';
+import { MessageSquare, Compass, Heart, Utensils, User, Send, Plus } from 'lucide-react';
 
 interface DesktopTravelPlannerProps {
   onQuestionSelect: (question: string) => void;
@@ -50,39 +50,47 @@ const DesktopTravelPlanner: React.FC<DesktopTravelPlannerProps> = ({ onQuestionS
           
           {/* Central Input */}
           <div className="w-full max-w-2xl mb-12">
-            <div className="flex gap-3">
-              <Input
+            <div className="relative">
+              <textarea
+                rows={2}
                 value={desktopInput}
                 onChange={(e) => setDesktopInput(e.target.value)}
-                placeholder="Ask me anything about your trip..."
-                className="flex-1 bg-gray-900 border-gray-700 text-white placeholder-gray-500 h-14 text-lg px-6 rounded-full"
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(desktopInput)}
+                placeholder="Ask me anything about your trip.."
+                className="w-full bg-[#1e1e1e] text-white text-lg rounded-xl p-4 pl-12 pr-12 outline-none border border-pink-500/20 focus:border-pink-500 placeholder-gray-500 resize-none"
+                onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSendMessage(desktopInput))}
               />
-              <Button onClick={() => handleSendMessage(desktopInput)} disabled={!desktopInput.trim() || loading} className="bg-blue-600 hover:bg-blue-700 text-white h-14 w-14 rounded-full">
-                <Send className="h-5 w-5" />
-              </Button>
+              <button className="absolute bottom-3 left-3 text-white text-sm">
+                <Plus className="h-5 w-5" />
+              </button>
+              <button 
+                onClick={() => handleSendMessage(desktopInput)} 
+                disabled={!desktopInput.trim() || loading} 
+                className="absolute bottom-3 right-3 bg-blue-500 hover:bg-blue-600 p-2 rounded-full text-white disabled:opacity-50"
+              >
+                <Send className="h-4 w-4" />
+              </button>
             </div>
           </div>
 
           {/* Prompt Chips */}
           <div className="flex flex-wrap justify-center gap-3 max-w-4xl">
-            <button onClick={() => handleWelcomePrompt("Create a new trip")} className="bg-gray-800/50 border border-gray-600 rounded-full px-6 py-3 text-base hover:bg-gray-700/50 transition-colors flex items-center gap-3">
-              🗺️ Create a new trip
+            <button onClick={() => handleWelcomePrompt("Create a new trip")} className="flex items-center gap-2 bg-[#1e1e1e] border border-green-500/30 hover:border-green-500 text-base px-6 py-3 rounded-full transition">
+              <span>🧳</span> Create a new trip
             </button>
-            <button onClick={() => handleWelcomePrompt("Get inspired")} className="bg-gray-800/50 border border-gray-600 rounded-full px-6 py-3 text-base hover:bg-gray-700/50 transition-colors flex items-center gap-3">
-              💡 Get inspired
+            <button onClick={() => handleWelcomePrompt("Get inspired")} className="flex items-center gap-2 bg-[#1e1e1e] border border-blue-500/30 hover:border-blue-500 text-base px-6 py-3 rounded-full transition">
+              <span>🌍</span> Get inspired
             </button>
-            <button onClick={() => handleWelcomePrompt("Inspire me where to go")} className="bg-gray-800/50 border border-gray-600 rounded-full px-6 py-3 text-base hover:bg-gray-700/50 transition-colors flex items-center gap-3">
-              ✨ Inspire me where to go
+            <button onClick={() => handleWelcomePrompt("Inspire me where to go")} className="flex items-center gap-2 bg-[#1e1e1e] border border-indigo-500/30 hover:border-indigo-500 text-base px-6 py-3 rounded-full transition">
+              <span>🗺️</span> Inspire me where to go
             </button>
-            <button onClick={() => handleWelcomePrompt("Plan a solo trip")} className="bg-gray-800/50 border border-gray-600 rounded-full px-6 py-3 text-base hover:bg-gray-700/50 transition-colors flex items-center gap-3">
-              🧳 Solo trip
+            <button onClick={() => handleWelcomePrompt("Plan a solo trip")} className="flex items-center gap-2 bg-[#1e1e1e] border border-yellow-500/30 hover:border-yellow-500 text-base px-6 py-3 rounded-full transition">
+              <span>🚴</span> Solo trip
             </button>
-            <button onClick={() => handleWelcomePrompt("Find a romantic getaway for two")} className="bg-gray-800/50 border border-gray-600 rounded-full px-6 py-3 text-base hover:bg-gray-700/50 transition-colors flex items-center gap-3">
-              👫 Partner
+            <button onClick={() => handleWelcomePrompt("Find a romantic getaway for two")} className="flex items-center gap-2 bg-[#1e1e1e] border border-pink-500/30 hover:border-pink-500 text-base px-6 py-3 rounded-full transition">
+              <span>💑</span> Partner
             </button>
-            <button onClick={() => handleWelcomePrompt("Plan a family vacation")} className="bg-gray-800/50 border border-gray-600 rounded-full px-6 py-3 text-base hover:bg-gray-700/50 transition-colors flex items-center gap-3">
-              👨‍👩‍👧‍👦 Family
+            <button onClick={() => handleWelcomePrompt("Plan a family vacation")} className="flex items-center gap-2 bg-[#1e1e1e] border border-purple-500/30 hover:border-purple-500 text-base px-6 py-3 rounded-full transition">
+              <span>👨‍👩‍👧‍👦</span> Family
             </button>
           </div>
         </div>
