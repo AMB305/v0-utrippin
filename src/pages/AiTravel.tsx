@@ -191,25 +191,8 @@ const AiTravel = () => {
     },
   });
 
-  const { messages: mobileChatMessages, sendMessage, clearChat: clearMobileChat, resetSession, loading: mobileChatLoading, isFreshStart } = useChatAI([]);
+  const { messages: mobileChatMessages, sendMessage, resetSession, loading: mobileChatLoading } = useChatAI();
 
-  // Clear chat data on component mount only
-  useEffect(() => {
-    console.log("🏁 PAGE LOAD: Clearing chat state on mount");
-    // Clear all states on fresh page load
-    setHasStartedChat(false);
-    setLastChatResponse(null);
-    setShowAuthDialog(false);
-    setShowSaveTripDialog(false);
-    
-    // Clear localStorage
-    localStorage.removeItem("chatHistory");
-    localStorage.removeItem("tripContext");
-    localStorage.removeItem("activePrompt");
-    localStorage.removeItem("sessionData");
-    
-    console.log("✅ PAGE LOAD: Fresh state initialized");
-  }, []); // Empty dependency array to run only on mount
 
   // Enhanced message sending for desktop with budget information
   const sendEnhancedMessage = (message: string, includeBudget: boolean = true) => {
@@ -253,7 +236,7 @@ const AiTravel = () => {
       console.log('🚀 Starting fresh conversation with:', question);
       
       // Force complete reset
-      clearMobileChat();
+      resetSession();
       setLastChatResponse(null);
       setHasStartedChat(false);
       
@@ -278,8 +261,6 @@ const AiTravel = () => {
       if (lastMessage.response && !lastMessage.loading) {
         setLastChatResponse({
           response: lastMessage.response,
-          tripCards: lastMessage.tripCards,
-          recommendations: lastMessage.recommendations,
           mapLocation: lastMessage.mapLocation,
           quickReplies: lastMessage.quickReplies,
           callsToAction: lastMessage.callsToAction
@@ -598,16 +579,16 @@ const AiTravel = () => {
                                 <div className="bg-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
                                   <p className="text-sm leading-relaxed text-gray-200">{message.response}</p>
                                   {/* CTA Buttons */}
-                                  {message.callsToAction && (
-                                    <ChatCTAButtons 
-                                      ctas={message.callsToAction} 
-                                      onContinueChat={() => {
-                                        // Focus the input when "Continue Chat" is clicked
-                                        const input = document.querySelector('input[placeholder="Ask me anything..."]') as HTMLInputElement;
-                                        input?.focus();
-                                      }}
-                                    />
-                                  )}
+                                   {message.callsToAction && (
+                                     <ChatCTAButtons 
+                                       ctas={message.callsToAction.map(cta => ({ text: cta.action, action: cta.action }))} 
+                                       onContinueChat={() => {
+                                         // Focus the input when "Continue Chat" is clicked
+                                         const input = document.querySelector('input[placeholder="Ask me anything..."]') as HTMLInputElement;
+                                         input?.focus();
+                                       }}
+                                     />
+                                   )}
                                 </div>
                               )}
                             </div>
@@ -710,7 +691,7 @@ const AiTravel = () => {
           <DesktopTravelPlanner 
             onQuestionSelect={handleNewChatFromWelcome}
             hasStartedChat={hasStartedChat}
-            onClearChat={clearMobileChat}
+            onClearChat={resetSession}
             chatMessages={mobileChatMessages}
             isLoading={mobileChatLoading}
             onSendMessage={sendMessage}

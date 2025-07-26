@@ -7,10 +7,24 @@ export interface Message {
   files?: File[];
 }
 
+export interface ChatMessage {
+  id: string;
+  question?: string;
+  response?: string;
+  detailedItinerary?: any;
+  isDetailedItinerary?: boolean;
+  showMap?: boolean;
+  mapLocation?: string;
+  quickReplies?: string[];
+  callsToAction?: Array<{ label: string; action: string }>;
+  loading?: boolean;
+}
+
 interface ChatContextType {
-  messages: Message[];
-  addMessage: (message: Message) => void;
+  messages: ChatMessage[];
+  addMessage: (message: ChatMessage) => void;
+  updateMessage: (id: string, updates: Partial<ChatMessage>) => void;
   clearMessages: () => void;
 }
 
-export const ChatContext = createContext<ChatContextType | undefined>(undefined); 
+export const ChatContext = createContext<ChatContextType | undefined>(undefined);

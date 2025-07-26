@@ -5,7 +5,7 @@ import { useChatAI } from "@/hooks/useChatAI";
 
 export const ChatAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages: aiMessages, sendMessage, loading } = useChatAI([]);
+  const { messages: aiMessages, sendMessage, loading } = useChatAI();
 
   // Convert AI messages to display format
   const displayMessages = React.useMemo(() => {
