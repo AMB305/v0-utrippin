@@ -1,60 +1,37 @@
-// COPY AND REPLACE THE ENTIRE 'serve' FUNCTION WITH THIS
+// FILE: supabase/functions/ai-travel-chat/index.ts
 
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.3';
+import { z } from "https://deno.land/x/zod@v3.23.4/mod.ts";
+
+// NOTE: This assumes you have created the schemas.ts file in a location
+// accessible to your edge function. Adjust the import path if necessary.
+// You may need to copy the schemas.ts file into your supabase/functions/_shared directory.
+// For now, we will define it directly here to ensure zero external dependencies.
+
+const DaySchema = z.object({
+  day: z.string(),
+  title: z.string(),
+  activities: z.array(z.string())
+});
+
+const DetailedItinerarySchema = z.object({
+  destination: z.string(),
+  overview: z.object({
+    title: z.string(),
+    summary: z.string().min(50)
+  }),
+  days: z.array(DaySchema).min(1),
+  culture_tips: z.record(z.string(), z.string()).optional(),
+  actionable_suggestions: z.array(z.string()).optional()
+});
+
 
 const openRouterApiKey = Deno.env.get('OPENROUTER_API_KEY');
-const supabaseUrl = Deno.env.get('SUPABASE_URL');
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
 };
-
-// This is our single, authoritative validation function.
-function validateDetailedItinerary(itinerary) {
-  if (!itinerary || typeof itinerary !== 'object') {
-    console.log('Validation FAIL: Itinerary data is not an object.');
-    return false;
-  }
-
-  const { summary, days, culture_tips, actionable_suggestions } = itinerary;
-
-  // 1. Validate Summary: Must be a meaningful string, not a question or error.
-  const summaryLower = (summary || "").toLowerCase();
-  const errorPhrases = ["i'm having trouble", "could you tell me", "i'd love to help"];
-  if (!summary || summary.trim().length < 30 || errorPhrases.some(phrase => summaryLower.includes(phrase))) {
-    console.log('Validation FAIL: Summary is invalid.');
-    return false;
-  }
-
-  // 2. Validate Days: Must be a non-empty array of days with real activities.
-  if (!Array.isArray(days) || days.length === 0) {
-    console.log('Validation FAIL: Days array is missing or empty.');
-    return false;
-  }
-  const hasMeaningfulActivities = days.every(day =>
-    Array.isArray(day.activities) && day.activities.some(activity => typeof activity === 'string' && activity.trim().length > 5)
-  );
-  if (!hasMeaningfulActivities) {
-    console.log('Validation FAIL: A day is missing meaningful activities.');
-    return false;
-  }
-
-  // 3. Validate Tips/Suggestions: Must have at least one of these arrays with content.
-  const hasCultureTips = culture_tips && typeof culture_tips === 'object' && Object.keys(culture_tips).length > 0;
-  const hasSuggestions = Array.isArray(actionable_suggestions) && actionable_suggestions.some(s => typeof s === 'string' && s.trim().length > 10);
-  if (!hasCultureTips && !hasSuggestions) {
-    console.log('Validation FAIL: Missing both culture_tips and actionable_suggestions.');
-    return false;
-  }
-  
-  console.log('Validation PASS: Itinerary is valid.');
-  return true;
-}
-
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -62,83 +39,75 @@ serve(async (req) => {
   }
 
   try {
-    const requestBody = await req.json();
-    const { message } = requestBody;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-    
-    // NOTE: System prompt simplified for clarity. Your original prompt was very complex.
-    // This maintains the core requirement: return valid JSON only.
-    const systemPrompt = `You are Keila, an AI travel assistant. You MUST respond with VALID JSON ONLY. No text before or after the JSON object. Based on the user's request, provide a detailed trip itinerary using the specified JSON schema. If the user's request is too vague or is a simple greeting, respond with a simple text message asking for more details.`;
+    const { message } = await req.json();
+
+    const systemPrompt = `You are Keila, an expert travel AI. Your task is to generate a travel itinerary based on the user's request. You MUST respond with a single, valid JSON object and nothing else. Do not include any text, markdown, or explanations before or after the JSON.
+
+    If the user's request is specific enough to generate an itinerary (e.g., contains a destination and a timeframe), use the following JSON schema:
+    {
+      "destination": "City, Country",
+      "overview": {
+        "title": "A catchy and descriptive title for the trip",
+        "summary": "A detailed summary of the trip, at least 50 characters long."
+      },
+      "days": [
+        {
+          "day": "Day 1",
+          "title": "Arrival and Exploration",
+          "activities": ["Meaningful activity description 1", "Meaningful activity description 2"]
+        }
+      ],
+      "culture_tips": { "Tipping": "A useful tip about local tipping customs." },
+      "actionable_suggestions": ["A practical suggestion for the traveler."]
+    }
+
+    If you do not have enough information, you MUST use this simple schema instead:
+    {
+      "response": "A polite message asking for more information (e.g., dates, budget, interests).",
+      "quickReplies": ["Helpful suggestion 1", "Helpful suggestion 2"]
+    }`;
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${openRouterApiKey}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://utrippin.ai', // Or your actual site
-        'X-Title': 'Utrippin AI'
       },
       body: JSON.stringify({
         model: 'nousresearch/nous-hermes-2-mixtral-8x7b-dpo',
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: message }],
-        response_format: { type: "json_object" }, // Crucial for forcing JSON output
-        temperature: 0.7,
-        max_tokens: 4000
+        response_format: { type: "json_object" },
       })
     });
 
     if (!response.ok) {
-        throw new Error(`OpenRouter API error: ${response.statusText}`);
+      throw new Error(`API error: ${response.statusText}`);
     }
 
-    const aiData = await response.json();
-    const aiContent = aiData.choices[0].message.content;
-    let parsedResponse;
+    const aiJson = await response.json();
+    const aiContent = aiJson.choices[0].message.content;
+    const parsedJson = JSON.parse(aiContent);
 
-    try {
-        parsedResponse = JSON.parse(aiContent);
-    } catch (e) {
-        console.error("Fatal Error: AI returned invalid JSON.", aiContent);
-        // If the AI fails to return JSON, create a clean error response.
-        return new Response(JSON.stringify({
-          response: "I'm having a bit of trouble generating a full itinerary right now. Could you please try rephrasing your request?",
-          isDetailedItinerary: false,
-          quickReplies: ["Plan a 3-day trip to Miami", "Find a romantic getaway"]
-        }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-    
-    // --- The Single Point of Truth ---
-    // Immediately validate the detailedItinerary object after parsing.
-    const itineraryData = parsedResponse.detailedItinerary;
-    if (validateDetailedItinerary(itineraryData)) {
-      
-      // If VALID, structure and return the full itinerary.
-      console.log("Decision: Returning DETAILED itinerary.");
+    const validationResult = DetailedItinerarySchema.safeParse(parsedJson);
+
+    if (validationResult.success) {
       return new Response(JSON.stringify({
-        ...parsedResponse, // Pass through the full valid response from the AI
         isDetailedItinerary: true,
+        detailedItinerary: validationResult.data
       }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-
     } else {
-
-      // If INVALID, return a clean, simple fallback.
-      console.log("Decision: Returning SIMPLE fallback response.");
       return new Response(JSON.stringify({
-        response: parsedResponse.response || "I can help with that! To get started, could you tell me a bit more about the trip you have in mind?",
         isDetailedItinerary: false,
-        quickReplies: [
-            "Plan a weekend getaway",
-            "I need a family-friendly vacation",
-            "Show me budget travel options"
-        ]
+        response: parsedJson.response || "I need a few more details to help plan your trip!",
+        quickReplies: parsedJson.quickReplies || []
       }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-
   } catch (error) {
-    console.error('AI Travel Chat - Unhandled error in main function:', error);
-    return new Response(JSON.stringify({ error: "I'm having trouble processing your request right now. Please try again." }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    });
+    console.error('Edge Function Error:', error.message);
+    return new Response(JSON.stringify({
+      isDetailedItinerary: false,
+      response: "I'm having trouble connecting right now. Please try again.",
+      quickReplies: ["Try again"]
+    }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 });

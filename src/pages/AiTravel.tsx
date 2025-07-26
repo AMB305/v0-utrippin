@@ -47,14 +47,13 @@ import { KeilaThinking } from "@/components/KeilaThinking";
 import { ChatCTAButtons } from "@/components/ChatCTAButtons";
 import { SaveTripDialog } from "@/components/SaveTripDialog";
 import { AuthRequiredDialog } from "@/components/AuthRequiredDialog";
-import KeilaItineraryCard from "@/components/KeilaItineraryCard";
+import { ItineraryCard } from "@/components/ItineraryCard";
 import UtrippinLogo from "@/components/UtrippinLogo";
 import Header from "@/components/Header";
 import HereLocationAutocomplete from "@/components/HereLocationAutocomplete";
 import { AuthStatus } from "@/components/AuthStatus";
 import { EnhancedMapComponent } from "@/components/EnhancedMapComponent";
 import DesktopTravelPlanner from "@/components/DesktopTravelPlanner";
-import { DetailedItineraryCard } from "@/components/DetailedItineraryCard";
 import KeilaThinkingCard from "@/components/KeilaThinkingCard";
 import FeaturedTripCards from "@/components/FeaturedTripCards";
 
@@ -550,14 +549,10 @@ const AiTravel = () => {
                           <>
                             <div className="flex justify-start w-full">
                               {message.isDetailedItinerary && message.detailedItinerary ? (
-                                /* Rich Detailed Itinerary Card */
-                                <DetailedItineraryCard 
-                                  itinerary={message.detailedItinerary}
-                                  destination={message.mapLocation}
-                                  onFollowUpClick={(question) => handleMobileSubmit(question)}
-                                />
+                                // Render our new, reliable ItineraryCard
+                                <ItineraryCard itinerary={message.detailedItinerary} />
                               ) : (
-                                /* Simple Response */
+                                // Render the simple text response
                                 <div className="bg-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
                                   <p className="text-sm leading-relaxed text-gray-200">{message.response}</p>
                                   {/* CTA Buttons */}
@@ -574,36 +569,6 @@ const AiTravel = () => {
                                 </div>
                               )}
                             </div>
-                            
-                            {/* AUTO-GENERATE KEILA ITINERARY CARD after AI response */}
-                            {message.response && index === mobileChatMessages.length - 1 && !message.isDetailedItinerary && (
-                              <KeilaItineraryCard
-                                isLoading={false}
-                                destination={extractDestinationFromMessage(message.question, message.response)}
-                                dates="Flexible dates"
-                                summary={message.response}
-                                days={[
-                                  {
-                                    day: "Day 1",
-                                    activities: ["Arrival and check-in", "Explore local area", "Welcome dinner"]
-                                  },
-                                  {
-                                    day: "Day 2", 
-                                    activities: ["Morning sightseeing", "Cultural experiences", "Local cuisine"]
-                                  },
-                                  {
-                                    day: "Day 3",
-                                    activities: ["Adventure activities", "Shopping", "Farewell dinner"]
-                                  }
-                                ]}
-                                suggestions={[
-                                  "Bring comfortable walking shoes",
-                                  "Try local specialties and street food",
-                                  "Keep your passport and documents safe"
-                                ]}
-                                rating={4.8}
-                              />
-                            )}
                           </>
                         )}
                       </div>
