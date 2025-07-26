@@ -198,6 +198,20 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
     **SIMPLE_FALLBACK_SCHEMA:**
     { "response": "A polite message asking for more information.", "quickReplies": ["Plan a 3-day trip"] }`;
 
+    // Validate API key
+    if (!openRouterApiKey) {
+      console.error('OpenRouter API key not found');
+      return new Response(JSON.stringify({ 
+        isDetailedItinerary: false, 
+        response: "Configuration error. Please contact support." 
+      }), { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      });
+    }
+
+    console.log('Making OpenRouter API request for message:', message);
+
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${openRouterApiKey}`, 'Content-Type': 'application/json' },
@@ -208,10 +222,32 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       })
     });
 
-    if (!response.ok) throw new Error(`API error: ${response.statusText}`);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('OpenRouter API error:', response.status, errorText);
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
 
     const aiJson = await response.json();
-    const parsedJson = JSON.parse(aiJson.choices[0].message.content);
+    console.log('OpenRouter API response received');
+    
+    // Validate response structure
+    if (!aiJson.choices || !aiJson.choices[0] || !aiJson.choices[0].message || !aiJson.choices[0].message.content) {
+      console.error('Invalid API response structure:', aiJson);
+      throw new Error('Invalid API response structure');
+    }
+
+    const messageContent = aiJson.choices[0].message.content;
+    console.log('AI message content length:', messageContent.length);
+    
+    let parsedJson;
+    try {
+      parsedJson = JSON.parse(messageContent);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError.message);
+      console.error('Raw content:', messageContent);
+      throw new Error(`Failed to parse AI response: ${parseError.message}`);
+    }
     const validationResult = MultiItinerarySchema.safeParse(parsedJson);
 
     if (validationResult.success) {
