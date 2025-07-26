@@ -41,7 +41,9 @@ export default function Hotels() {
   });
 
   const handleSearch = (searchData: any) => {
-    console.log('Search data:', searchData);
+    console.log('Desktop search triggered:', searchData);
+    // For now, just trigger a re-fetch of nearby hotels with the search data
+    console.log('Search functionality triggered - should call RateHawk API');
     // Navigate to hotel search results or handle search
     const params = new URLSearchParams(searchData);
     navigate(`/hotels/search?${params.toString()}`);
@@ -187,7 +189,10 @@ export default function Hotels() {
                   className="pl-10 h-12 text-base bg-gray-50 border-gray-200"
                 />
               </div>
-              <Button className="h-12 text-base font-semibold bg-primary hover:bg-primary/90">
+              <Button 
+                onClick={() => handleSearch({ destination: 'Miami Beach, Florida' })}
+                className="h-12 text-base font-semibold bg-primary hover:bg-primary/90"
+              >
                 <Search className="mr-2" size={20} />
                 Search Hotels
               </Button>

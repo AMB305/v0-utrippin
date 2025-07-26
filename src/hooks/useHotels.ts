@@ -111,9 +111,11 @@ export function useNearbyHotels(location: string) {
         rooms: 1
       };
 
+      console.log('Making RateHawk API call with params:', searchParams);
       const { data, error } = await supabase.functions.invoke('ratehawk-hotel-search', {
         body: searchParams
       });
+      console.log('RateHawk API response:', { data, error });
 
       if (error) {
         console.error('RateHawk nearby hotels error:', error);
