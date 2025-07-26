@@ -46,16 +46,26 @@ const DesktopTravelPlanner: React.FC<DesktopTravelPlannerProps> = ({ onQuestionS
           </BlurFade>
         )}
         
-        <Button 
-          onClick={resetSession} 
-          variant="outline" 
-          className="mt-4 border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
-        >
-          <div className="flex items-center">
-            <MessageSquare className="mr-2 h-4 w-4" />
-            New Chat
-          </div>
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={resetSession} 
+            variant="ghost" 
+            size="sm"
+            className="text-gray-400 hover:text-white border-gray-600 hover:border-gray-500"
+          >
+            Clear Chat
+          </Button>
+          <Button 
+            onClick={resetSession} 
+            variant="outline" 
+            className="mt-4 border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
+          >
+            <div className="flex items-center">
+              <MessageSquare className="mr-2 h-4 w-4" />
+              New Chat
+            </div>
+          </Button>
+        </div>
       </div>
 
       {/* Right Panel - The "dumb" ChatContainer now receives state as props */}

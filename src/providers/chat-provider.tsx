@@ -21,7 +21,14 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const clearMessages = () => {
     console.log("GLOBAL STATE: Clearing all messages.");
     setMessages([]);
-    localStorage.removeItem("chatHistory"); // Clean up any old storage
+    // Clear any stored chat data
+    localStorage.removeItem("chatHistory");
+    localStorage.removeItem("chatSession");
+    localStorage.removeItem("aiTravelChat");
+    // Clear session storage as well
+    sessionStorage.removeItem("chatHistory");
+    sessionStorage.removeItem("chatSession");
+    sessionStorage.removeItem("aiTravelChat");
   };
 
   const value: ChatContextType = { messages, addMessage, updateMessage, clearMessages };

@@ -45,8 +45,38 @@ const AiTravel = () => {
   const hasStartedChat = messages.length > 0;
 
   useEffect(() => {
+    // Clear chat on component mount (page load/refresh)
     resetSession();
-  }, []);
+    
+    // Clear chat when user leaves the page or refreshes
+    const handleBeforeUnload = () => {
+      resetSession();
+    };
+    
+    const handleUnload = () => {
+      resetSession();
+    };
+    
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        resetSession();
+      }
+    };
+    
+    // Add event listeners for page unload/refresh
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('unload', handleUnload);
+    window.addEventListener('pagehide', handleUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Cleanup event listeners
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('unload', handleUnload);
+      window.removeEventListener('pagehide', handleUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [resetSession]);
 
   const handleSendMessage = (message: string) => {
     if (message.trim()) {
@@ -121,9 +151,19 @@ const AiTravel = () => {
           ) : (
             <>
               <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between bg-black flex-shrink-0">
-                <Button variant="ghost" size="icon" onClick={resetSession}>
-                  <ArrowLeft className="w-5 h-5 text-white" />
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="icon" onClick={resetSession}>
+                    <ArrowLeft className="w-5 h-5 text-white" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={resetSession}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    Clear Chat
+                  </Button>
+                </div>
                 <div className="flex items-center gap-2">
                   <img src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" alt="Keila Bot" className="w-8 h-8"/>
                   <h1 className="text-lg font-bold text-white">Keila</h1>
