@@ -29,7 +29,15 @@ export const useChatAI = () => {
     try {
       const functionName = comprehensive ? 'ai-comprehensive-itinerary' : 'ai-travel-chat';
       const { data, error } = await supabase.functions.invoke(functionName, {
-        body: { message, comprehensive, userId: user?.id },
+        body: { 
+          message, 
+          comprehensive, 
+          userId: user?.id,
+          conversationHistory: messages.map(msg => ({
+            question: msg.question,
+            response: msg.response
+          })).filter(msg => msg.response) // Only include completed messages
+        },
       });
 
       if (error) throw new Error(`AI Edge Function Error: ${error.message}`);

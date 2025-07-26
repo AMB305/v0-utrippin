@@ -96,7 +96,7 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
-    const { message, userId } = await req.json();
+    const { message, userId, conversationHistory = [] } = await req.json();
 
     // Add Supabase client for user data
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -173,18 +173,78 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       }
     }
 
+    // Extract travel information from conversation history and current message
+    const allMessages = [...conversationHistory.map(msg => `User: ${msg.question}\nKeila: ${msg.response}`), `User: ${message}`].join('\n\n');
+    
+    // Smart information extraction
+    const extractedInfo = {
+      destination: null,
+      dates: null,
+      duration: null,
+      budget: null,
+      travelers: null,
+      preferences: []
+    };
+
+    // Extract destination
+    const destinationMatch = allMessages.toLowerCase().match(/(?:to|visit|go to|travel to|trip to)\s+([a-z\s,]+?)(?:\s|$|for|in|during)/i) ||
+                           allMessages.match(/(japan|colombia?|paris|london|italy|spain|greece|thailand|bali|tokyo|[a-z]{3,})/i);
+    if (destinationMatch) extractedInfo.destination = destinationMatch[1];
+
+    // Extract dates and duration
+    const durationMatch = allMessages.match(/(\d+)\s*days?/i) || allMessages.match(/(\d+)\s*weeks?/i);
+    if (durationMatch) extractedInfo.duration = durationMatch[0];
+    
+    const dateMatch = allMessages.match(/(aug|august|sep|september|oct|october|nov|november|dec|december|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july)\s*(\d{1,2})?(?:\s*-\s*(\d{1,2}))?/i);
+    if (dateMatch) extractedInfo.dates = dateMatch[0];
+
+    // Extract budget
+    const budgetMatch = allMessages.match(/\$(\d+(?:,\d{3})*)/);
+    if (budgetMatch) extractedInfo.budget = budgetMatch[0];
+
+    // Extract traveler info
+    if (allMessages.toLowerCase().includes('solo')) extractedInfo.travelers = 'solo';
+    else if (allMessages.toLowerCase().includes('family')) extractedInfo.travelers = 'family';
+    else if (allMessages.toLowerCase().includes('couple')) extractedInfo.travelers = 'couple';
+
+    // Build conversation context
+    let conversationContext = '';
+    if (conversationHistory.length > 0) {
+      conversationContext = `
+**CONVERSATION HISTORY:**
+${conversationHistory.map(msg => `User: ${msg.question}\nKeila: ${msg.response}`).join('\n\n')}
+
+**EXTRACTED INFORMATION SO FAR:**
+- Destination: ${extractedInfo.destination || 'Not specified'}
+- Duration: ${extractedInfo.duration || 'Not specified'}  
+- Dates: ${extractedInfo.dates || 'Not specified'}
+- Budget: ${extractedInfo.budget || 'Not specified'}
+- Travelers: ${extractedInfo.travelers || 'Not specified'}
+
+**CRITICAL: DO NOT ask about information already provided above. NEVER repeat questions about details the user has already shared.**
+`;
+    }
+
+    // Determine if we have enough info for an itinerary
+    const hasEnoughInfo = extractedInfo.destination && (extractedInfo.duration || extractedInfo.dates) && extractedInfo.budget;
+
     const systemPrompt = `You are Keila, an expert AI travel agent that creates comprehensive, visually rich travel itineraries and engages in intelligent conversation. You MUST respond with a single, valid JSON object and nothing else.
 
     ${personalizationContext}
+    ${conversationContext}
 
     **CRITICAL INSTRUCTIONS:**
-    1. **Analyze the user's request** for destination, duration, budget, and travel style.
-    2. **INTELLIGENT CONVERSATION FLOW**: 
-       - If the request has sufficient detail (destination + dates OR specific activity), generate a COMPREHENSIVE itinerary
-       - If the request lacks key details, generate SMART CONTEXTUAL QUESTIONS that show understanding and guide toward itinerary creation
-       - NEVER give generic responses like "I need more details" - always ask specific, helpful questions
-    3. **Your entire response MUST conform to either COMPREHENSIVE_ITINERARY_SCHEMA or INTELLIGENT_QUESTIONING_SCHEMA**
-    4. **IMPORTANT: All booking links MUST use Expedia with camref=1101l5dQSW for affiliate tracking.**
+    1. **CONVERSATION MEMORY**: You can see the full conversation history above. NEVER ask about information already provided.
+    2. **INFORMATION DETECTION**: If user has provided destination, budget, and dates/duration, CREATE AN ITINERARY immediately.
+    3. **SMART QUESTIONING**: Only ask for missing information, never repeat previous questions.
+    4. **EXAMPLES OF SUFFICIENT INFO**: 
+       - "Japan, 3 days, $2000, solo" = CREATE ITINERARY
+       - "Tokyo August 1-3 for couple" = Ask only about budget
+       - "somewhere warm" = Ask about destination, dates, budget
+    5. **Your response MUST be either COMPREHENSIVE_ITINERARY_SCHEMA or INTELLIGENT_QUESTIONING_SCHEMA**
+    6. **All booking links MUST use Expedia with camref=1101l5dQSW for affiliate tracking.**
+
+    **SUFFICIENT INFO CHECK**: ${hasEnoughInfo ? 'USER HAS PROVIDED SUFFICIENT INFO - CREATE ITINERARY NOW' : 'More info needed - ask smart questions'}
 
     **INTELLIGENT QUESTIONING GUIDELINES:**
     - Analyze what the user DID provide and acknowledge it
@@ -336,9 +396,8 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       method: 'POST',
       headers: { 'Authorization': `Bearer ${openRouterApiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'openai/gpt-4o-mini',
+        model: 'anthropic/claude-3-haiku',
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: message }],
-        response_format: { type: "json_object" },
         max_tokens: 8000,
         temperature: 0.7,
       })
