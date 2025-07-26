@@ -5,21 +5,20 @@ import { TypingIndicator } from "./TypingIndicator";
 import { EnhancedMapComponent } from "./EnhancedMapComponent";
 import { TripSummaryCard } from "./TripSummaryCard";
 import { QuickReplyButtons } from "./QuickReplyButtons";
-import { DetailedItineraryDisplay } from "./DetailedItineraryDisplay";
+import { ItineraryCard } from "./ItineraryCard";
 
 interface DetailedItinerary {
-  title: string;
-  summary: string;
-  recommendations: Array<{
-    category_name: string;
-    places: Array<{
-      name: string;
-      description: string;
-      type: string;
-    }>;
+  destination: string;
+  overview: {
+    title: string;
+    summary: string;
+  };
+  days: Array<{
+    day: string;
+    title: string;
+    activities: string[];
   }>;
-  actionable_suggestions: string[];
-  follow_up_questions: string[];
+  actionable_suggestions?: string[];
 }
 
 interface ChatMessage {
@@ -187,7 +186,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 <div className="space-y-4">
                   {/* Detailed Itinerary Display */}
                   {message.detailedItinerary ? (
-                    <DetailedItineraryDisplay itinerary={message.detailedItinerary} />
+                    <ItineraryCard itinerary={message.detailedItinerary} />
                   ) : (
                     message.response && (
                       <p className="text-sm leading-relaxed text-slate-200">{message.response}</p>

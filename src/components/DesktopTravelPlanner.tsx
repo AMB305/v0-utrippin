@@ -2,7 +2,7 @@
 
 import React from 'react';
 // CORRECTED IMPORT: We are changing the import to correctly match the export.
-import { ChatContainer } from './custom/chat-container'; 
+import ChatContainer from './custom/ChatContainer';
 import { useChatAI } from '@/hooks/useChatAI';
 import { useAuth } from '@/hooks/useAuth';
 import { TextAnimate } from '@/components/magicui/text-animate';
@@ -11,8 +11,17 @@ import { MobileQuickQuestions } from '@/components/MobileQuickQuestions';
 import { Button } from './ui/button';
 import { MessageSquare } from 'lucide-react';
 
+interface DesktopTravelPlannerProps {
+  onQuestionSelect: (question: string) => void;
+  hasStartedChat?: boolean;
+  onClearChat?: () => void;
+  chatMessages?: any[];
+  isLoading?: boolean;
+  onSendMessage?: (message: string) => void;
+}
+
 // This is the "smart" component that controls the chat state.
-const DesktopTravelPlanner = ({ onQuestionSelect }) => {
+const DesktopTravelPlanner: React.FC<DesktopTravelPlannerProps> = ({ onQuestionSelect }) => {
   const { user } = useAuth();
   const { messages, sendMessage, loading, resetSession } = useChatAI();
   const hasStartedChat = messages.length > 0;

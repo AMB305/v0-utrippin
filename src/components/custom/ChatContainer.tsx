@@ -5,8 +5,27 @@ import { ItineraryCard } from '@/components/ItineraryCard';
 import { KeilaThinking } from '@/components/KeilaThinking';
 import { SimpleChatInput } from '@/components/SimpleChatInput';
 
+interface ChatMessage {
+  id: string;
+  question: string;
+  response?: string;
+  loading?: boolean;
+  showMap?: boolean;
+  mapLocation?: string;
+  isDetailedItinerary?: boolean;
+  detailedItinerary?: any;
+  quickReplies?: string[];
+  callsToAction?: any[];
+}
+
+interface ChatContainerProps {
+  messages: ChatMessage[];
+  isLoading: boolean;
+  onSendMessage: (message: string) => void;
+}
+
 // This is now a "dumb" component. It only displays what it's told.
-const ChatContainer = ({ messages, isLoading, onSendMessage }) => {
+const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading, onSendMessage }) => {
   return (
     <div className="flex flex-col h-full bg-gray-900 text-white">
       {/* Message Display Area */}
@@ -47,4 +66,5 @@ const ChatContainer = ({ messages, isLoading, onSendMessage }) => {
   );
 };
 
+export { ChatContainer };
 export default ChatContainer;

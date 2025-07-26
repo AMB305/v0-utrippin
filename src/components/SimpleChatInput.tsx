@@ -4,11 +4,13 @@ import { Send } from "lucide-react";
 interface SimpleChatInputProps {
   onSendMessage: (message: string) => void;
   placeholder?: string;
+  isLoading?: boolean;
 }
 
 export const SimpleChatInput: React.FC<SimpleChatInputProps> = ({
   onSendMessage,
-  placeholder = "Ask me to plan your next adventure..."
+  placeholder = "Ask me to plan your next adventure...",
+  isLoading = false
 }) => {
   const [message, setMessage] = useState("");
 
@@ -43,7 +45,7 @@ export const SimpleChatInput: React.FC<SimpleChatInputProps> = ({
           />
           <button
             type="submit"
-            disabled={!message.trim()}
+            disabled={!message.trim() || isLoading}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed rounded-xl transition-colors"
           >
             <Send className="h-4 w-4 text-white" />
