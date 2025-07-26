@@ -25,6 +25,12 @@ export default function Hotels() {
   const destinationParam = searchParams.get('destination');
   const isMobile = useIsMobile();
   
+  // Form state for desktop search
+  const [destination, setDestination] = useState('Miami Beach, Florida');
+  const [checkInDate, setCheckInDate] = useState('2025-05-07');
+  const [checkOutDate, setCheckOutDate] = useState('2025-05-09');
+  const [guests, setGuests] = useState('2 guests, 1 room');
+  
   // Use RateHawk integration for nearby hotels
   const { data: nearbyHotels, isLoading: nearbyLoading } = useNearbyHotels("Miami Beach, Florida");
 
@@ -40,11 +46,26 @@ export default function Hotels() {
     url: "https://utrippin.ai/hotels"
   });
 
-  const handleSearch = (searchData: any) => {
-    console.log('Desktop search triggered:', searchData);
-    // For now, just trigger a re-fetch of nearby hotels with the search data
-    console.log('Search functionality triggered - should call RateHawk API');
-    // Navigate to hotel search results or handle search
+  const handleSearch = () => {
+    // Parse guests string to extract adults and rooms
+    const guestsMatch = guests.match(/(\d+)\s+guests?/);
+    const roomsMatch = guests.match(/(\d+)\s+rooms?/);
+    
+    const adults = guestsMatch ? parseInt(guestsMatch[1]) : 2;
+    const rooms = roomsMatch ? parseInt(roomsMatch[1]) : 1;
+    
+    const searchData = {
+      destination,
+      checkInDate,
+      checkOutDate,
+      adults: adults.toString(),
+      children: '0',
+      rooms: rooms.toString()
+    };
+    
+    console.log('Desktop search triggered with full parameters:', searchData);
+    
+    // Navigate to hotel search results with all required parameters
     const params = new URLSearchParams(searchData);
     navigate(`/hotels/search?${params.toString()}`);
   };
@@ -169,7 +190,8 @@ export default function Hotels() {
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <Input 
                   placeholder="Miami Beach, Florida"
-                  defaultValue="Miami Beach, Florida"
+                  value={destination}
+                  onChange={(e) => setDestination(e.target.value)}
                   className="pl-10 h-12 text-base bg-gray-50 border-gray-200"
                 />
               </div>
@@ -177,20 +199,22 @@ export default function Hotels() {
                 <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <Input 
                   placeholder="Check-in - Check-out"
-                  defaultValue="May 7 - May 9, 2025"
-                  className="pl-10 h-12 text-base bg-gray-50 border-gray-200"
+                  value={`${checkInDate} - ${checkOutDate}`}
+                  readOnly
+                  className="pl-10 h-12 text-base bg-gray-50 border-gray-200 cursor-pointer"
                 />
               </div>
               <div className="relative">
                 <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <Input 
                   placeholder="Guests & Rooms"
-                  defaultValue="2 guests, 1 room"
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
                   className="pl-10 h-12 text-base bg-gray-50 border-gray-200"
                 />
               </div>
               <Button 
-                onClick={() => handleSearch({ destination: 'Miami Beach, Florida' })}
+                onClick={handleSearch}
                 className="h-12 text-base font-semibold bg-primary hover:bg-primary/90"
               >
                 <Search className="mr-2" size={20} />
