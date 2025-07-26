@@ -20,11 +20,6 @@ export interface TravelBuddyProfile {
   stripe_customer_id: string | null;
   subscription_status: string | null;
   created_at: string;
-  booking_affiliate_id?: string | null;
-  expedia_affiliate_id?: string | null;
-  hotels_affiliate_id?: string | null;
-  kayak_affiliate_id?: string | null;
-  priceline_affiliate_id?: string | null;
   compatibility_score?: number;
   mutual_destinations?: string[];
   distance?: number;
@@ -73,11 +68,6 @@ class TravelBuddyService {
           stripe_customer_id: null,
           subscription_status: null,
           created_at: new Date().toISOString(),
-          booking_affiliate_id: null,
-          expedia_affiliate_id: null,
-          hotels_affiliate_id: null,
-          kayak_affiliate_id: null,
-          priceline_affiliate_id: null,
           compatibility_score: item.compatibility_score
         }));
       } else {

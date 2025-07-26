@@ -174,41 +174,25 @@ function buildAffiliateUrls(searchParams: URLSearchParams, userAffiliateIds: any
   const guests = searchParams.get('guests');
   const rooms = searchParams.get('rooms');
 
-  // Default URLs for regular users
-  const defaultUrls = {
-    booking: `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(destination!)}&checkin=${checkin}&checkout=${checkout}&group_adults=${guests}&no_rooms=${rooms}`,
-    expedia: `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination!)}&startDate=${checkin}&endDate=${checkout}&rooms=${rooms}&adults=${guests}`,
-    hotels: `https://www.hotels.com/search.do?destination=${encodeURIComponent(destination!)}&startDate=${checkin}&endDate=${checkout}&rooms=${rooms}&adults=${guests}`
-  };
-
-  // If user is an agent and has affiliate IDs, use them
-  if (userRole === 'agent' && userAffiliateIds) {
-    const agentUrls: any = {};
+  // Default URLs
+  const defaultExpediaUrl = `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination!)}&startDate=${checkin}&endDate=${checkout}&rooms=${rooms}&adults=${guests}`;
+  
+  // If user is an agent and has Expedia affiliate ID, use it with pre-filled info
+  if (userRole === 'agent' && userAffiliateIds?.expedia_affiliate_id) {
+    const agentExpediaUrl = `${defaultExpediaUrl}&affid=${userAffiliateIds.expedia_affiliate_id}&c=travel_agent&mcid=${userAffiliateIds.expedia_affiliate_id}`;
     
-    if (userAffiliateIds.booking_affiliate_id) {
-      agentUrls.booking = `${defaultUrls.booking}&aid=${userAffiliateIds.booking_affiliate_id}`;
-    }
-    
-    if (userAffiliateIds.expedia_affiliate_id) {
-      agentUrls.expedia = `${defaultUrls.expedia}&affid=${userAffiliateIds.expedia_affiliate_id}`;
-    }
-    
-    if (userAffiliateIds.hotels_affiliate_id) {
-      agentUrls.hotels = `${defaultUrls.hotels}&affiliate=${userAffiliateIds.hotels_affiliate_id}`;
-    }
-
     return {
-      primary: agentUrls.booking || agentUrls.expedia || agentUrls.hotels || defaultUrls.booking,
-      agent: agentUrls.booking || agentUrls.expedia || agentUrls.hotels
+      primary: agentExpediaUrl,
+      agent: agentExpediaUrl
     };
   }
 
   return {
-    primary: defaultUrls.booking,
+    primary: defaultExpediaUrl,
     agent: null
   };
 }
 
 function buildDefaultHotelUrl(destination: string, checkIn: string, checkOut: string, guests: number, rooms: number) {
-  return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(destination)}&checkin=${checkIn}&checkout=${checkOut}&group_adults=${guests}&no_rooms=${rooms}`;
+  return `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination)}&startDate=${checkIn}&endDate=${checkOut}&rooms=${rooms}&adults=${guests}`;
 }

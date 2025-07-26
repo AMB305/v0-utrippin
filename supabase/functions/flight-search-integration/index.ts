@@ -70,12 +70,11 @@ serve(async (req) => {
         price: flight.price,
         rating: flight.rating || 4.2,
         imageUrl: flight.airlineLogoUrl,
-        bookingLink: flight.bookingUrl,
-        agentUrl: userRole === 'agent' ? flight.agentUrl : undefined,
+        bookingLink: buildFlightBookingUrl(flight, userRole, userId),
         amenities: flight.amenities,
         description: `${flight.duration} • ${flight.stops === 0 ? 'Direct' : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`}`
       })),
-      defaultUrl: `https://www.skyscanner.com/flights/${origin}/${destination}/${departureDate}${returnDate ? `/${returnDate}` : ''}`
+      defaultUrl: buildDefaultFlightUrl(origin, destination, departureDate, returnDate)
     };
 
     return new Response(
@@ -212,4 +211,32 @@ function generateMockFlights(origin: string, destination: string, departureDate:
     amenities: ['Carry-on included', index === 2 ? 'Premium seat' : 'Standard seat'],
     rating: 4.2 + Math.random() * 0.6
   }));
+}
+
+async function buildFlightBookingUrl(flight: any, userRole: string, userId?: string) {
+  // Default Expedia flight search URL
+  const defaultUrl = `https://www.expedia.com/Flights-Search?trip=roundtrip&leg1=from:${flight.origin || 'NYC'},to:${flight.destination || 'LAX'},departure:${flight.departureDate || '2024-03-01'}&passengers=adults:1&options=cabinclass:economy`;
+  
+  if (userRole === 'agent' && userId) {
+    try {
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
+      const { data: userData } = await supabase
+        .from('users')
+        .select('expedia_affiliate_id')
+        .eq('id', userId)
+        .single();
+      
+      if (userData?.expedia_affiliate_id) {
+        return `${defaultUrl}&affid=${userData.expedia_affiliate_id}&c=travel_agent`;
+      }
+    } catch (error) {
+      console.error('Error getting affiliate ID:', error);
+    }
+  }
+  
+  return defaultUrl;
+}
+
+function buildDefaultFlightUrl(origin: string, destination: string, departureDate: string, returnDate?: string) {
+  return `https://www.expedia.com/Flights-Search?trip=${returnDate ? 'roundtrip' : 'oneway'}&leg1=from:${origin},to:${destination},departure:${departureDate}${returnDate ? `&leg2=from:${destination},to:${origin},departure:${returnDate}` : ''}&passengers=adults:1&options=cabinclass:economy`;
 }
