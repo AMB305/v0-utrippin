@@ -12,6 +12,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, MapPin, Star, Wifi, Car, Waves } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { MobileHeader } from '@/components/mobile/MobileHeader';
+import { SearchWidget } from '@/components/mobile/SearchWidget';
+import { QuickDestinations } from '@/components/mobile/QuickDestinations';
+import { MobileHotelResults } from '@/components/mobile/MobileHotelResults';
+import { BottomNavigation } from '@/components/mobile/BottomNavigation';
 
 type BookingStep = 'search' | 'details' | 'booking' | 'confirmation';
 
@@ -25,6 +31,7 @@ export default function HotelSearch() {
   const [bookingData, setBookingData] = useState<any>(null);
   const [currentStep, setCurrentStep] = useState<BookingStep>('search');
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const searchData = {
     destination: searchParams.get('destination') || '',
@@ -335,6 +342,57 @@ export default function HotelSearch() {
     }
   };
 
+  // Mobile layout
+  if (isMobile) {
+    return (
+      <div className="mobile-container">
+        {currentStep === 'search' && (
+          <>
+            <MobileHeader />
+            <SearchWidget />
+            <QuickDestinations />
+            <MobileHotelResults
+              hotels={hotels}
+              loading={loading}
+              onHotelSelect={handleHotelSelect}
+              searchData={searchData}
+            />
+            <BottomNavigation />
+          </>
+        )}
+        
+        {currentStep === 'details' && (
+          <HotelDetailsModal
+            hotel={hotelDetails}
+            isOpen={true}
+            onClose={() => setCurrentStep('search')}
+            onBook={handleBookHotel}
+            checkIn={searchData.checkInDate}
+            checkOut={searchData.checkOutDate}
+            guests={`${searchData.adults + searchData.children} guests, ${searchData.rooms} room${searchData.rooms > 1 ? 's' : ''}`}
+          />
+        )}
+
+        {currentStep === 'booking' && (
+          <HotelBookingForm
+            hotel={selectedHotel}
+            prebookId={prebookData?.data?.book_hash}
+            onBookingComplete={handleBookingComplete}
+            onBack={() => setCurrentStep('details')}
+          />
+        )}
+
+        {currentStep === 'confirmation' && (
+          <BookingConfirmation
+            booking={bookingData}
+            onNewSearch={handleNewSearch}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Desktop layout (unchanged)
   return (
     <div className="min-h-screen bg-background">
       <Header />

@@ -84,6 +84,17 @@ export default {
 					gray: 'hsl(var(--travel-gray))',
 					light: 'hsl(var(--travel-light))'
 				},
+				// Mobile dark theme colors for hotel search
+				mobile: {
+					dark: '#1a1a1c',
+					'card-bg': '#1c1c1e',
+					'dark-grey': '#2c2c2e',
+					'primary-teal': '#00bcd4',
+					'text-primary': '#ffffff',
+					'text-secondary': '#bdbdbd',
+					'border-color': '#4a4a4c',
+					'section-bg': '#1a1a1c'
+				},
 				tinderOrange: '#FF5864',
 				uttippPurple: '#8A2BE2',
 				sunsetYellow: '#FFB400',

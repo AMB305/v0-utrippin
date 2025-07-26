@@ -19,6 +19,30 @@
   display: none;  /* Safari and Chrome */
 }
 
+/* Mobile-specific utilities */
+.mobile-container {
+  @apply min-h-screen bg-mobile-dark text-mobile-text-primary;
+}
+
+.mobile-card {
+  @apply bg-mobile-card-bg rounded-2xl overflow-hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.teal-button {
+  @apply bg-mobile-primary-teal text-white px-4 py-2 rounded-xl font-medium;
+  transition: all 0.2s ease;
+}
+
+.teal-button:hover {
+  @apply scale-105;
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+}
+
+.bottom-nav {
+  @apply fixed bottom-0 left-0 right-0 bg-mobile-card-bg border-t border-mobile-border-color;
+}
+
 /* Modern, lovable design system with warmth and delight */
 
 @layer base {
