@@ -7,11 +7,42 @@ import { useNavigate } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { generateBreadcrumbSchema, generateTravelServiceSchema } from "@/utils/structuredData";
 import { BackToTop } from '@/components/BackToTop';
+import { useIsMobile } from "@/hooks/use-mobile";
+import { MobileHeader } from "@/components/mobile/MobileHeader";
+import { SearchWidget } from "@/components/mobile/SearchWidget";
+import { QuickDestinations } from "@/components/mobile/QuickDestinations";
+import { MobileHotelResults } from "@/components/mobile/MobileHotelResults";
+import { BottomNavigation } from "@/components/mobile/BottomNavigation";
 
 export default function Hotels() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const destinationParam = searchParams.get('destination');
+  const isMobile = useIsMobile();
+  const [hotels, setHotels] = useState([
+    {
+      id: 1,
+      name: 'Azure Bay Resort',
+      location: 'Oceanview Drive 12, Constanta, Romania',
+      address: 'Oceanview Drive 12, Constanta, Romania',
+      rating: 4.7,
+      price: 179,
+      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop',
+      amenities: ['wifi', 'beds', 'gym'],
+      locationTag: 'Romania'
+    },
+    {
+      id: 2,
+      name: 'Grand Hotel Bucuresti',
+      location: 'Nicolae Balcescu Boulevard 4, Romania',
+      address: 'Nicolae Balcescu Boulevard 4, Romania',
+      rating: 4.7,
+      price: 179,
+      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300&fit=crop',
+      amenities: ['wifi', 'beds', 'gym'],
+      locationTag: 'Romania'
+    }
+  ]);
 
   const breadcrumbs = generateBreadcrumbSchema([
     { name: "Home", url: "https://utrippin.ai" },
@@ -25,6 +56,84 @@ export default function Hotels() {
     url: "https://utrippin.ai/hotels"
   });
 
+  const handleSearch = (searchData: any) => {
+    console.log('Search data:', searchData);
+    // Navigate to hotel search results or handle search
+    const params = new URLSearchParams(searchData);
+    navigate(`/hotels/search?${params.toString()}`);
+  };
+
+  const handleHotelSelect = (hotel: any) => {
+    console.log('Selected hotel:', hotel);
+    // Navigate to hotel details
+  };
+
+  // Mobile Layout
+  if (isMobile) {
+    return (
+      <div className="min-h-screen bg-mobile-dark">
+        <SEOHead 
+          title="AI Hotel Search & Black-Owned Stays | Utrippin.ai"
+          description="Discover culturally rich accommodations with The Melanin Compass. Find Black-owned hotels, boutique stays, and budget-friendly options with our AI Traveler assistant."
+          canonical="https://utrippin.ai/hotels"
+          keywords="AI hotel search, black-owned hotels, cultural accommodations, melanin compass, boutique hotels, AI traveler, diverse travel"
+          structuredData={{
+            "@context": "https://schema.org",
+            "@graph": [
+              breadcrumbs,
+              hotelServiceSchema,
+              {
+                "@type": "WebPage",
+                "@id": "https://utrippin.ai/hotels#webpage",
+                "url": "https://utrippin.ai/hotels",
+                "name": "AI Hotel Search & Black-Owned Stays | Utrippin.ai",
+                "description": "Discover culturally rich accommodations with The Melanin Compass. Find Black-owned hotels, boutique stays, and budget-friendly options with our AI Traveler assistant.",
+                "inLanguage": "en-US"
+              }
+            ]
+          }}
+        />
+        
+        {/* Mobile Header */}
+        <MobileHeader />
+        
+        {/* Mobile Search Widget */}
+        <div className="px-4 py-6">
+          <SearchWidget onSearch={handleSearch} />
+        </div>
+        
+        {/* Quick Destinations */}
+        <QuickDestinations destinations={['Roma', 'Berlin', 'New York', 'Paris', 'Tokyo']} />
+        
+        {/* Nearby Hotels Section */}
+        <div className="px-4 py-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-mobile-text-primary text-lg font-semibold">Nearby Hotels</h2>
+            <button className="text-mobile-primary-teal text-sm font-medium">See All</button>
+          </div>
+          
+          <MobileHotelResults 
+            hotels={hotels}
+            loading={false}
+            onHotelSelect={handleHotelSelect}
+            searchData={{
+              destination: "Bucharest, Romania",
+              checkInDate: "May 7, 2025",
+              checkOutDate: "May 9, 2025",
+              adults: 2,
+              children: 0,
+              rooms: 1
+            }}
+          />
+        </div>
+        
+        {/* Bottom Navigation */}
+        <BottomNavigation />
+      </div>
+    );
+  }
+
+  // Desktop Layout (unchanged)
   return (
     <div className="min-h-screen bg-background">
       <SEOHead 
