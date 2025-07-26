@@ -96,8 +96,86 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
-    const { message } = await req.json();
+    const { message, userId } = await req.json();
+
+    // Add Supabase client for user data
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Fetch user profile and preferences for personalization
+    let personalizationContext = "";
+    
+    if (userId) {
+      try {
+        // Get user profile data
+        const { data: profile } = await supabase
+          .from('users')
+          .select(`
+            email,
+            age,
+            bio,
+            location,
+            travel_style,
+            interests,
+            preferred_destinations,
+            languages_spoken,
+            expedia_affiliate_id,
+            booking_affiliate_id,
+            agoda_affiliate_id
+          `)
+          .eq('id', userId)
+          .single();
+        
+        // Get travel preferences
+        const { data: preferences } = await supabase
+          .from('travel_preferences')
+          .select('*')
+          .eq('user_id', userId)
+          .single();
+        
+        // Check if user is an agent
+        const isAgent = !!(profile?.expedia_affiliate_id || profile?.booking_affiliate_id || profile?.agoda_affiliate_id);
+        
+        // Build personalization context
+        if (profile) {
+          personalizationContext = `
+**USER PROFILE FOR PERSONALIZATION:**
+- Age: ${profile.age || 'Not specified'}
+- Location: ${profile.location || 'Not specified'}
+- Travel Style: ${profile.travel_style || 'Not specified'}
+- Interests: ${profile.interests?.join(', ') || 'Not specified'}
+- Preferred Destinations: ${profile.preferred_destinations?.join(', ') || 'Not specified'}
+- Languages: ${profile.languages_spoken?.join(', ') || 'Not specified'}
+${isAgent ? '- **AGENT USER**: This user is a travel agent. Tailor suggestions with commission optimization in mind.' : ''}
+
+**TRAVEL PREFERENCES:**
+${preferences ? `
+- Budget Range: $${preferences.budget_range_min}-$${preferences.budget_range_max}
+- Accommodation Types: ${preferences.accommodation_type?.join(', ') || 'Not specified'}
+- Preferred Activities: ${preferences.preferred_activities?.join(', ') || 'Not specified'}
+- Travel Pace: ${preferences.travel_pace || 'Not specified'}
+- Group Size Preference: ${preferences.group_size_preference || 'Not specified'}
+- Dietary Restrictions: ${preferences.dietary_restrictions?.join(', ') || 'None'}
+` : '- No specific preferences set'}
+
+**PERSONALIZATION INSTRUCTIONS:**
+- Tailor itineraries to match the user's travel style and interests
+- Consider their age and location when suggesting activities
+- Respect budget preferences if specified
+- Include activities that match their preferred pace
+${isAgent ? '- For agents: Subtly favor destinations/activities with good affiliate opportunities' : ''}
+          `;
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    }
+
     const systemPrompt = `You are Keila, an expert AI travel agent that creates inspiring and detailed itineraries. Your primary goal is to generate THREE distinct, high-quality travel itineraries based on a user's request. You MUST respond with a single, valid JSON object and nothing else.
+
+    ${personalizationContext}
 
     **CRITICAL INSTRUCTIONS:**
     1.  **Analyze the user's request** for a destination, duration, and budget.

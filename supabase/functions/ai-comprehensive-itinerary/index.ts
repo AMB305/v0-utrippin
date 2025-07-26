@@ -232,10 +232,94 @@ serve(async (req) => {
       });
     }
 
+    // Fetch user profile and preferences for personalization
+    let userProfile = null;
+    let travelPreferences = null;
+    let isAgent = false;
+    let personalizationContext = "";
+    
+    if (userId) {
+      try {
+        // Get user profile data
+        const { data: profile } = await supabase
+          .from('users')
+          .select(`
+            email,
+            age,
+            bio,
+            location,
+            travel_style,
+            interests,
+            preferred_destinations,
+            languages_spoken,
+            expedia_affiliate_id,
+            booking_affiliate_id,
+            agoda_affiliate_id
+          `)
+          .eq('id', userId)
+          .single();
+        
+        userProfile = profile;
+        
+        // Get travel preferences
+        const { data: preferences } = await supabase
+          .from('travel_preferences')
+          .select('*')
+          .eq('user_id', userId)
+          .single();
+        
+        travelPreferences = preferences;
+        
+        // Check if user is an agent (has any affiliate IDs)
+        isAgent = !!(profile?.expedia_affiliate_id || profile?.booking_affiliate_id || profile?.agoda_affiliate_id);
+        
+        // Build personalization context
+        if (profile) {
+          personalizationContext = `
+**USER PROFILE FOR PERSONALIZATION:**
+- Age: ${profile.age || 'Not specified'}
+- Location: ${profile.location || 'Not specified'}
+- Travel Style: ${profile.travel_style || 'Not specified'}
+- Interests: ${profile.interests?.join(', ') || 'Not specified'}
+- Preferred Destinations: ${profile.preferred_destinations?.join(', ') || 'Not specified'}
+- Languages: ${profile.languages_spoken?.join(', ') || 'Not specified'}
+- Bio: ${profile.bio || 'Not specified'}
+${isAgent ? '- **AGENT USER**: This user is a travel agent. Include subtle commission-optimized suggestions and add agent branding options.' : ''}
+
+**TRAVEL PREFERENCES:**
+${preferences ? `
+- Budget Range: $${preferences.budget_range_min}-$${preferences.budget_range_max}
+- Accommodation Types: ${preferences.accommodation_type?.join(', ') || 'Not specified'}
+- Preferred Activities: ${preferences.preferred_activities?.join(', ') || 'Not specified'}
+- Travel Pace: ${preferences.travel_pace || 'Not specified'}
+- Group Size Preference: ${preferences.group_size_preference || 'Not specified'}
+- Dietary Restrictions: ${preferences.dietary_restrictions?.join(', ') || 'None'}
+- Accessibility Needs: ${preferences.accessibility_needs?.join(', ') || 'None'}
+` : '- No specific preferences set'}
+
+**PERSONALIZATION INSTRUCTIONS:**
+- Tailor the itinerary to match the user's travel style and interests
+- Consider their age and location when suggesting activities
+- Respect budget preferences if specified
+- Include activities that match their preferred pace
+- Consider dietary restrictions in restaurant recommendations
+- If they have accessibility needs, ensure all recommendations are accessible
+${isAgent ? '- For agents: Include premium booking options that typically offer higher commissions' : ''}
+${isAgent ? '- For agents: Add subtle professional touches that can be branded for their clients' : ''}
+          `;
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        // Continue without personalization if profile fetch fails
+      }
+    }
+
     // Generate unique itinerary ID
     const itineraryId = `itinerary_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     const systemPrompt = `You are Keila, an expert AI travel agent that creates comprehensive, detailed itineraries. You MUST respond with a single, valid JSON object that conforms EXACTLY to the COMPREHENSIVE_ITINERARY_SCHEMA below.
+
+    ${personalizationContext}
 
     **CRITICAL INSTRUCTIONS:**
     1. Analyze the user's request for destination, duration, travelers, and preferences
@@ -244,6 +328,7 @@ serve(async (req) => {
     4. Provide detailed culture tips and recommendations
     5. Use the itineraryId: "${itineraryId}"
     6. Set imageCollageUrls to ["PLACEHOLDER"] - these will be replaced with real images
+    7. **PERSONALIZE** the itinerary based on the user profile above (if provided)
 
     **COMPREHENSIVE_ITINERARY_SCHEMA:**
     {
