@@ -14,6 +14,7 @@ import { QuickDestinations } from "@/components/mobile/QuickDestinations";
 import { MobileHotelResults } from "@/components/mobile/MobileHotelResults";
 import { BottomNavigation } from "@/components/mobile/BottomNavigation";
 import { useNearbyHotels } from "@/hooks/useHotels";
+import { HotelCardDesktop } from "@/components/HotelCardDesktop";
 
 export default function Hotels() {
   const [searchParams] = useSearchParams();
@@ -113,7 +114,7 @@ export default function Hotels() {
     );
   }
 
-  // Desktop Layout (unchanged)
+  // Desktop Layout
   return (
     <div className="min-h-screen bg-background">
       <SEOHead 
@@ -139,87 +140,172 @@ export default function Hotels() {
       />
       <Header />
       
-      {/* Hero Section with Hotel Widget */}
-      <HeroHotelWidget />
-      
-      {/* Clean white background for content below */}
-      <div className="bg-white min-h-screen">
-        {/* Main Content Container */}
-        <div className="container mx-auto px-6 py-8">
-          {/* Popular Hotel Destinations Section */}
-          <div className="mt-16">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Popular hotel destinations</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { 
-                  name: 'New York', 
-                  country: 'United States',
-                  image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=400&h=300&fit=crop',
-                  price: 'from $150/night'
-                },
-                { 
-                  name: 'London', 
-                  country: 'United Kingdom',
-                  image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=300&fit=crop',
-                  price: 'from $180/night'
-                },
-                { 
-                  name: 'Tokyo', 
-                  country: 'Japan',
-                  image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop',
-                  price: 'from $120/night'
-                },
-                { 
-                  name: 'Paris', 
-                  country: 'France',
-                  image: 'https://images.unsplash.com/photo-1431274172761-fca41d930114?w=400&h=300&fit=crop',
-                  price: 'from $160/night'
-                },
-                { 
-                  name: 'Dubai', 
-                  country: 'UAE',
-                  image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&h=300&fit=crop',
-                  price: 'from $200/night'
-                },
-                { 
-                  name: 'Sydney', 
-                  country: 'Australia',
-                  image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-                  price: 'from $140/night'
-                },
-                { 
-                  name: 'Barcelona', 
-                  country: 'Spain',
-                  image: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=400&h=300&fit=crop',
-                  price: 'from $110/night'
-                },
-                { 
-                  name: 'Rome', 
-                  country: 'Italy',
-                  image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&h=300&fit=crop',
-                  price: 'from $130/night'
-                }
-              ].map((destination, index) => (
-                <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
-                  <img 
-                    src={destination.image} 
-                    alt={destination.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 text-lg">{destination.name}</h3>
-                    <p className="text-gray-500 text-sm">{destination.country}</p>
-                    <p className="text-blue-600 font-medium mt-2">{destination.price}</p>
-                  </div>
-                </div>
+      {/* Main Desktop Layout */}
+      <main className="flex h-screen pt-20">
+        {/* Left Panel: Filters & Search */}
+        <aside className="w-96 flex-shrink-0 bg-card border-r border-border p-6 overflow-y-auto">
+          <h2 className="text-2xl font-bold mb-6 text-foreground">Find Your Perfect Stay</h2>
+
+          {/* Search Form */}
+          <div className="space-y-4 mb-8">
+            {/* Destination Input */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Miami Beach, Florida"
+                defaultValue="Miami Beach, Florida"
+                className="w-full p-4 bg-muted rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+
+            {/* Date Inputs */}
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                type="text"
+                placeholder="Check-in"
+                defaultValue="May 7, 2025"
+                className="p-4 bg-muted rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+              />
+              <input
+                type="text"
+                placeholder="Check-out"
+                defaultValue="May 9, 2025"
+                className="p-4 bg-muted rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+
+            {/* Guests & Rooms */}
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                type="text"
+                placeholder="Guests"
+                defaultValue="2 guests"
+                className="p-4 bg-muted rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+              />
+              <input
+                type="text"
+                placeholder="Rooms"
+                defaultValue="1 room"
+                className="p-4 bg-muted rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+
+            <button className="w-full bg-primary text-primary-foreground font-semibold rounded-xl py-4 hover:bg-primary/90 transition-colors">
+              Search Hotels
+            </button>
+          </div>
+
+          {/* Property Type Filters */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4 text-foreground">Property Type</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {['Hotel', 'Villa', 'House', 'Apartment'].map((type) => (
+                <button
+                  key={type}
+                  className="p-3 bg-muted rounded-xl border border-border hover:border-primary text-foreground hover:bg-muted/80 transition-colors"
+                >
+                  {type}
+                </button>
               ))}
             </div>
           </div>
-        </div>
-      </div>
-      
-      <Footer />
+
+          {/* Price Range */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4 text-foreground">Price Range</h3>
+            <div className="px-3">
+              <div className="flex justify-between mb-2 text-sm text-muted-foreground">
+                <span>$50</span>
+                <span>$1000+</span>
+              </div>
+              <div className="h-2 bg-muted rounded-full relative">
+                <div className="absolute left-1/4 right-1/3 h-full bg-primary rounded-full"></div>
+                <div className="absolute left-1/4 w-4 h-4 bg-primary rounded-full -mt-1"></div>
+                <div className="absolute right-1/3 w-4 h-4 bg-primary rounded-full -mt-1"></div>
+              </div>
+              <div className="text-center mt-2 text-sm text-foreground">$100 - $500</div>
+            </div>
+          </div>
+
+          {/* Amenities */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4 text-foreground">Amenities</h3>
+            <div className="space-y-3">
+              {['Free WiFi', 'Swimming Pool', 'Fitness Center', 'Parking', 'Pet Friendly', 'Spa'].map((amenity) => (
+                <label key={amenity} className="flex items-center space-x-3 cursor-pointer">
+                  <input type="checkbox" className="w-4 h-4 text-primary bg-muted border-border rounded focus:ring-primary" />
+                  <span className="text-foreground">{amenity}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Popular Destinations */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-foreground">Popular Destinations</h3>
+            <div className="flex flex-wrap gap-2">
+              {['Roma', 'Berlin', 'New York', 'Paris', 'Tokyo'].map((destination) => (
+                <button
+                  key={destination}
+                  className="px-4 py-2 bg-muted text-foreground rounded-full border border-border hover:border-primary transition-colors"
+                >
+                  {destination}
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* Right Panel: Map & Hotel Listings */}
+        <section className="flex-1 flex flex-col">
+          {/* Map Section */}
+          <div className="h-96 bg-muted border-b border-border relative">
+            <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+              <div className="text-center">
+                <div className="text-4xl mb-2">🗺️</div>
+                <p>Interactive Map of Miami Beach Hotels</p>
+                <p className="text-sm mt-1">(Mapbox integration placeholder)</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Hotel Listings */}
+          <div className="flex-1 p-6 overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">Hotels in Miami Beach, Florida</h2>
+                <p className="text-muted-foreground text-sm mt-1">
+                  May 7, 2025 → May 9, 2025 • 2 guests, 1 room
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  {nearbyLoading ? 'Searching for hotels...' : `${nearbyHotels?.length || 0} hotels found`}
+                </p>
+              </div>
+              <button className="text-primary hover:text-primary/80 font-medium">See All</button>
+            </div>
+
+            {/* Hotel Cards */}
+            <div className="space-y-6">
+              {nearbyLoading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                  <p className="text-muted-foreground">Loading hotels...</p>
+                </div>
+              ) : nearbyHotels && nearbyHotels.length > 0 ? (
+                nearbyHotels.map((hotel) => (
+                  <HotelCardDesktop key={hotel.id} hotel={hotel} onHotelSelect={handleHotelSelect} />
+                ))
+              ) : (
+                <div className="text-center py-12 text-muted-foreground">
+                  <div className="text-4xl mb-4">🏨</div>
+                  <p>No hotels found. Try adjusting your search criteria.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      </main>
+
       <BackToTop />
     </div>
   );
