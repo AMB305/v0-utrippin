@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import ChatContainer from './custom/ChatContainer';
 import { useAuth } from '@/hooks/useAuth';
 import { CategoryFilter } from './CategoryFilter';
+import { TopFilterBar } from './TopFilterBar';
 import { Button } from './ui/button';
 import { MessageSquare } from 'lucide-react';
 import { AnimatedKeila } from './AnimatedKeila';
@@ -44,42 +45,49 @@ const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, c
     }
   };
 
+  const handleCreateTripWithAI = () => {
+    onQuestionSelect("Help me plan my next adventure!");
+  };
+
   return (
-    <div className="hidden lg:flex flex-col h-screen bg-white">
-      {/* Top Category Filter */}
-      <CategoryFilter 
-        selectedCategory={selectedCategory}
-        onCategorySelect={handleCategorySelect}
-      />
-      
-      {/* Header with New Chat Button */}
-      <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">AI Travel Planner</h1>
-          <p className="text-gray-600">Welcome, {user?.email || 'Traveler'}. Let Keila help you plan your trip.</p>
-        </div>
-        <Button onClick={onClearChat} variant="outline" className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white">
-          <MessageSquare className="mr-2 h-4 w-4" />
-          New Chat
-        </Button>
+    <div className="hidden lg:flex flex-col min-h-screen bg-gray-50 font-sans">
+      {/* Top Filter Bar */}
+      <div className="bg-white p-4">
+        <TopFilterBar onCreateTripWithAI={handleCreateTripWithAI} />
+        
+        {/* Category Tabs */}
+        <CategoryFilter 
+          selectedCategory={selectedCategory}
+          onCategorySelect={handleCategorySelect}
+        />
       </div>
 
-      {/* Main Chat Interface */}
-      <div className="flex-1 bg-white">
+      {/* Main Content Area */}
+      <div className="flex-1 p-4">
         {hasStartedChat ? (
-          <ChatContainer
-            messages={chatMessages}
-            isLoading={isLoading}
-            onSendMessage={onSendMessage}
-          />
+          <div className="bg-white rounded-lg shadow-sm h-full">
+            <div className="flex justify-between items-center p-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold">Chat with Keila</h2>
+              <Button onClick={onClearChat} variant="outline" className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                New Chat
+              </Button>
+            </div>
+            <ChatContainer
+              messages={chatMessages}
+              isLoading={isLoading}
+              onSendMessage={onSendMessage}
+            />
+          </div>
         ) : (
-          <div className="flex flex-col h-full">
-            <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
+          <div className="flex flex-col items-center justify-center h-full">
+            {/* Keila Greeting Section */}
+            <div className="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto text-center">
               <AnimatedKeila />
               <h1 className="text-3xl font-bold mt-4 text-gray-900">Hi, I'm Keila!</h1>
-              <p className="text-gray-500 mt-2 mb-8">Select a category above to start planning your trip, or ask me anything!</p>
-            </div>
-            <div className="p-6">
+              <p className="text-gray-600 mt-2 mb-8">Select a category above to start planning your trip, or ask me anything!</p>
+              
+              {/* Chat Input */}
               <SimpleChatInput
                 onSendMessage={onSendMessage}
                 placeholder="Ask me to plan your next adventure..."

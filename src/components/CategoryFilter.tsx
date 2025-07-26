@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from './ui/button';
 
 interface CategoryFilterProps {
   selectedCategory: string;
@@ -32,20 +31,21 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   onCategorySelect 
 }) => {
   return (
-    <div className="w-full bg-white border-b border-gray-200 px-6 py-4">
-      <div className="flex flex-wrap gap-2 justify-center">
-        {categories.map((category) => (
-          <Button
-            key={category}
-            variant={selectedCategory === category ? "default" : "outline"}
-            size="sm"
-            onClick={() => onCategorySelect(category)}
-            className="text-sm font-medium"
-          >
-            {category}
-          </Button>
-        ))}
-      </div>
+    <div className="flex items-center gap-6 mb-8 overflow-x-auto px-4">
+      {categories.map((category) => (
+        <div
+          key={category}
+          onClick={() => onCategorySelect(category)}
+          className={`flex flex-col items-center text-sm cursor-pointer px-2 py-1 whitespace-nowrap ${
+            selectedCategory === category 
+              ? "text-blue-600 border-b-2 border-blue-600" 
+              : "text-gray-600 hover:text-black transition-colors"
+          }`}
+        >
+          <div className="w-6 h-6 bg-gray-200 rounded-full mb-1" />
+          {category}
+        </div>
+      ))}
     </div>
   );
 };
