@@ -201,57 +201,57 @@ export default function Hotels() {
       
       {/* Hero Section - CONTENT DYNAMICALLY POPULATED BASED ON currentDestination */}
       <section 
-        className="relative h-[500px] flex items-center justify-center text-center bg-cover bg-center"
+        className="relative h-[350px] flex items-center justify-center text-center bg-cover bg-center"
         style={{ 
-          backgroundImage: "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&h=500&fit=crop&q=80')"
+          backgroundImage: "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&h=350&fit=crop&q=80')"
           // TODO: Background image should also be dynamic based on destination
         }}
       >
-        <div className="relative z-10 max-w-4xl mx-auto px-6">
+        <div className="relative z-10 max-w-4xl mx-auto px-4">
           {/* DYNAMIC HERO TITLE - Changes based on destination in production */}
-          <h1 className="text-5xl font-bold text-white mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
             Find Your Perfect Stay in Miami Beach, Florida
           </h1>
           {/* DYNAMIC HERO DESCRIPTION - Changes based on destination in production */}
-          <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-gray-200 mb-6 max-w-2xl mx-auto">
             Discover luxury oceanfront resorts, charming Art Deco boutique hotels, and family-friendly accommodations in Florida's most vibrant beach destination.
           </p>
 
           {/* Hero Search Form */}
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-2xl max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <Input 
                   placeholder="Miami Beach, Florida"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  className="pl-10 h-12 text-base bg-gray-50 border-gray-200"
+                  className="pl-10 h-10 text-sm bg-gray-50 border-gray-200"
                 />
               </div>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <Input 
                   placeholder="Check-in - Check-out"
                   value={`${checkInDate} - ${checkOutDate}`}
                   readOnly
-                  className="pl-10 h-12 text-base bg-gray-50 border-gray-200 cursor-pointer"
+                  className="pl-10 h-10 text-sm bg-gray-50 border-gray-200 cursor-pointer"
                 />
               </div>
               <div className="relative">
-                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <Input 
                   placeholder="Guests & Rooms"
                   value={guests}
                   onChange={(e) => setGuests(e.target.value)}
-                  className="pl-10 h-12 text-base bg-gray-50 border-gray-200"
+                  className="pl-10 h-10 text-sm bg-gray-50 border-gray-200"
                 />
               </div>
               <Button 
                 onClick={handleSearch}
-                className="h-12 text-base font-semibold bg-primary hover:bg-primary/90"
+                className="h-10 text-sm font-semibold bg-primary hover:bg-primary/90"
               >
-                <Search className="mr-2" size={20} />
+                <Search className="mr-2" size={18} />
                 Search Hotels
               </Button>
             </div>
@@ -260,20 +260,20 @@ export default function Hotels() {
       </section>
 
       {/* Main Content Area - Split Layout */}
-      <main className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           
           {/* Left Sidebar - Filters & SEO Content */}
           <aside className="lg:col-span-1 space-y-8">
             
             {/* Quick Filters */}
-            <div className="bg-card rounded-2xl p-6 border border-border">
-              <h3 className="text-xl font-semibold mb-6 text-foreground">Refine Your Search</h3>
+            <div className="bg-card rounded-xl p-4 border border-border">
+              <h3 className="text-lg font-semibold mb-4 text-foreground">Refine Your Search</h3>
               
               {/* Property Type */}
-              <div className="mb-6">
-                <h4 className="font-medium mb-3 text-foreground">Property Type</h4>
-                <div className="grid grid-cols-1 gap-2">
+              <div className="mb-4">
+                <h4 className="font-medium mb-2 text-foreground text-sm">Property Type</h4>
+                <div className="grid grid-cols-1 gap-1">
                   {[
                     { name: 'Hotel', icon: Hotel },
                     { name: 'Resort', icon: Palmtree },
@@ -291,9 +291,9 @@ export default function Hotels() {
                     <Button
                       key={type.name}
                       variant="outline"
-                      className="justify-start gap-2 h-10 text-sm"
+                      className="justify-start gap-2 h-8 text-xs"
                     >
-                      <type.icon size={16} />
+                      <type.icon size={14} />
                       {type.name}
                     </Button>
                   ))}
@@ -301,27 +301,27 @@ export default function Hotels() {
               </div>
 
               {/* Star Rating */}
-              <div className="mb-6">
-                <h4 className="font-medium mb-3 text-foreground">Star Rating</h4>
-                <div className="space-y-2">
+              <div className="mb-4">
+                <h4 className="font-medium mb-2 text-foreground text-sm">Star Rating</h4>
+                <div className="space-y-1">
                   {[5, 4, 3, 2].map((stars) => (
                     <label key={stars} className="flex items-center space-x-2 cursor-pointer">
-                      <input type="checkbox" className="rounded border-gray-300" />
+                      <input type="checkbox" className="rounded border-gray-300 scale-75" />
                       <div className="flex">
                         {Array.from({ length: stars }).map((_, i) => (
-                          <Star key={i} size={16} className="text-yellow-400 fill-current" />
+                          <Star key={i} size={14} className="text-yellow-400 fill-current" />
                         ))}
                       </div>
-                      <span className="text-sm">& up</span>
+                      <span className="text-xs">& up</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               {/* Price Range */}
-              <div className="mb-6">
-                <h4 className="font-medium mb-3 text-foreground">Price Range</h4>
-                <div className="space-y-2">
+              <div className="mb-4">
+                <h4 className="font-medium mb-2 text-foreground text-sm">Price Range</h4>
+                <div className="space-y-1">
                   {[
                     { label: 'Under $100', range: '$0 - $100' },
                     { label: '$100 - $250', range: '$100 - $250' },
@@ -329,8 +329,8 @@ export default function Hotels() {
                     { label: 'Over $500', range: '$500+' }
                   ].map((price) => (
                     <label key={price.label} className="flex items-center space-x-2 cursor-pointer">
-                      <input type="checkbox" className="rounded border-gray-300" />
-                      <span className="text-sm">{price.label}</span>
+                      <input type="checkbox" className="rounded border-gray-300 scale-75" />
+                      <span className="text-xs">{price.label}</span>
                     </label>
                   ))}
                 </div>
@@ -338,8 +338,8 @@ export default function Hotels() {
 
               {/* Amenities */}
               <div>
-                <h4 className="font-medium mb-3 text-foreground">Popular Amenities</h4>
-                <div className="space-y-2">
+                <h4 className="font-medium mb-2 text-foreground text-sm">Popular Amenities</h4>
+                <div className="space-y-1">
                   {[
                     { name: 'Free WiFi', icon: Wifi },
                     { name: 'Pool', icon: Hotel },
@@ -349,9 +349,9 @@ export default function Hotels() {
                     { name: 'Spa', icon: Hotel }
                   ].map((amenity) => (
                     <label key={amenity.name} className="flex items-center space-x-2 cursor-pointer">
-                      <input type="checkbox" className="rounded border-gray-300" />
-                      <amenity.icon size={16} className="text-gray-400" />
-                      <span className="text-sm">{amenity.name}</span>
+                      <input type="checkbox" className="rounded border-gray-300 scale-75" />
+                      <amenity.icon size={14} className="text-gray-400" />
+                      <span className="text-xs">{amenity.name}</span>
                     </label>
                   ))}
                 </div>
