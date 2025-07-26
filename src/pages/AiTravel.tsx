@@ -16,6 +16,7 @@ import { ItineraryCard } from "@/components/ItineraryCard";
 import DesktopTravelPlanner from "@/components/DesktopTravelPlanner";
 import { Link } from "react-router-dom";
 import { AuthStatus } from "@/components/AuthStatus";
+import LoginCard from "@/components/LoginCard";
 
 // Simple loading component
 const KeilaThinking = () => (
@@ -24,33 +25,6 @@ const KeilaThinking = () => (
   </div>
 );
 
-// --- NEW REDESIGNED AUTH WALL ---
-const AuthWall = () => (
-  <div className="flex items-center justify-center h-full w-full bg-gradient-to-br from-gray-900 via-purple-950 to-black">
-    <div className="relative bg-black/30 backdrop-blur-sm border border-purple-500/20 rounded-xl p-8 max-w-md w-full text-center shadow-2xl shadow-purple-500/10">
-      {/* Keila Bot peeking from the top */}
-      <div className="absolute -top-16 left-1/2 -translate-x-1/2">
-        <img 
-          src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
-          alt="Keila Bot" 
-          className="w-24 h-24 drop-shadow-lg"
-        />
-      </div>
-      
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold text-white mb-2">
-          Let's plan your perfect Staycation or Vacation Together!
-        </h2>
-        <p className="text-gray-400 mb-6">
-          Sign in or create your free account to get started with your personal AI travel assistant.
-        </p>
-        <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700 text-white w-full">
-          <Link to="/auth">Continue</Link>
-        </Button>
-      </div>
-    </div>
-  </div>
-);
 
 const AiTravel = () => {
   const [mobileInput, setMobileInput] = useState("");
@@ -82,7 +56,7 @@ const AiTravel = () => {
   }
 
   if (!user) {
-    return <AuthWall />;
+    return <LoginCard />;
   }
 
   return (
