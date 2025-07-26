@@ -17,7 +17,8 @@ import { useNearbyHotels } from "@/hooks/useHotels";
 import { HotelCardDesktop } from "@/components/HotelCardDesktop";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MapPin, Calendar, Users, Hotel, Star, Wifi, Car, Dumbbell, Search, Palmtree, Home, Building, Sparkles, Coffee, TreePine, Crown } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import { MapPin, Calendar, Users, Hotel, Star, Wifi, Car, Dumbbell, Search, Palmtree, Home, Building, Sparkles, Coffee, TreePine, Crown, ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function Hotels() {
   const [searchParams] = useSearchParams();
@@ -33,6 +34,36 @@ export default function Hotels() {
   
   // Use RateHawk integration for nearby hotels
   const { data: nearbyHotels, isLoading: nearbyLoading } = useNearbyHotels("Miami Beach, Florida");
+
+  // Dummy data for carousel sections (Miami Beach-focused for demo)
+  const dealsData = [
+    { id: 'deal_001', name: 'Save 20% at The Setai!', address: '2001 Collins Avenue', price: 360, imageUrl: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=250&fit=crop&q=80', originalPrice: 450, discount: '20%' },
+    { id: 'deal_002', name: 'Last Minute at Eden Roc', address: '4525 Collins Avenue', price: 280, imageUrl: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=250&fit=crop&q=80', originalPrice: 350, discount: '20%' },
+    { id: 'deal_003', name: 'Weekend at Cadillac Hotel', address: '3925 Collins Avenue', price: 230, imageUrl: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&h=250&fit=crop&q=80', originalPrice: 290, discount: '20%' },
+    { id: 'deal_004', name: 'Fontainebleau Flash Sale', address: '4441 Collins Avenue', price: 300, imageUrl: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400&h=250&fit=crop&q=80', originalPrice: 380, discount: '21%' },
+  ];
+
+  const popularDestinations = [
+    { id: 'dest_ny', name: 'New York', imageUrl: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=300&h=200&fit=crop&q=80', hotelsCount: '1500+ hotels' },
+    { id: 'dest_la', name: 'Los Angeles', imageUrl: 'https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da?w=300&h=200&fit=crop&q=80', hotelsCount: '1200+ hotels' },
+    { id: 'dest_sf', name: 'San Francisco', imageUrl: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=300&h=200&fit=crop&q=80', hotelsCount: '800+ hotels' },
+    { id: 'dest_chi', name: 'Chicago', imageUrl: 'https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?w=300&h=200&fit=crop&q=80', hotelsCount: '900+ hotels' },
+    { id: 'dest_lon', name: 'London', imageUrl: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=300&h=200&fit=crop&q=80', hotelsCount: '2000+ hotels' },
+  ];
+
+  const uniqueStays = [
+    { id: 'unique_001', name: 'Boutique Art Hotel', address: 'South Beach', imageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=250&fit=crop&q=80', description: 'Experience art and culture in a vibrant setting.' },
+    { id: 'unique_002', name: 'Waterfront Villa', address: 'Miami Beach', imageUrl: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=250&fit=crop&q=80', description: 'Private villa with stunning bay views.' },
+    { id: 'unique_003', name: 'Designer Loft', address: 'Mid-Beach', imageUrl: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=250&fit=crop&q=80', description: 'Modern loft living with urban amenities.' },
+  ];
+
+  // Embla carousel hooks for each carousel
+  const [dealsEmblaRef, dealsEmblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
+  const [popularEmblaRef, popularEmblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
+  const [uniqueEmblaRef, uniqueEmblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
+
+  const scrollPrev = (api: any) => api && api.scrollPrev();
+  const scrollNext = (api: any) => api && api.scrollNext();
 
   const breadcrumbs = generateBreadcrumbSchema([
     { name: "Home", url: "https://utrippin.ai" },
@@ -429,6 +460,131 @@ export default function Hotels() {
           </div>
         </div>
       </main>
+
+      {/* Dynamic Carousel Sections for Discovery & SEO */}
+      
+      {/* Section 1: Top Deals for a Last-Minute Getaway */}
+      <section className="py-12 bg-muted/20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-foreground">Top Deals for a Last-Minute Getaway in Miami Beach</h2>
+            <div className="flex space-x-2">
+              <Button variant="ghost" size="icon" onClick={() => scrollPrev(dealsEmblaApi)}>
+                <ArrowLeft size={20} />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => scrollNext(dealsEmblaApi)}>
+                <ArrowRight size={20} />
+              </Button>
+            </div>
+          </div>
+          
+          <div className="overflow-hidden" ref={dealsEmblaRef}>
+            <div className="flex gap-6">
+              {dealsData.map((deal) => (
+                <div key={deal.id} className="flex-shrink-0 w-80">
+                  <div className="bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg transition-shadow">
+                    <img 
+                      src={deal.imageUrl} 
+                      alt={deal.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-6">
+                      <div className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full inline-block mb-3">
+                        {deal.discount} OFF
+                      </div>
+                      <h3 className="text-lg font-semibold text-foreground mb-2">{deal.name}</h3>
+                      <p className="text-muted-foreground text-sm mb-4">{deal.address}</p>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <span className="text-2xl font-bold text-foreground">${deal.price}</span>
+                          <span className="text-sm line-through text-muted-foreground ml-2">${deal.originalPrice}</span>
+                        </div>
+                        <Button size="sm">View Deal</Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 2: Explore Stays in Popular Destinations */}
+      <section className="py-12">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-foreground">Explore Stays in Popular Destinations</h2>
+            <div className="flex space-x-2">
+              <Button variant="ghost" size="icon" onClick={() => scrollPrev(popularEmblaApi)}>
+                <ArrowLeft size={20} />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => scrollNext(popularEmblaApi)}>
+                <ArrowRight size={20} />
+              </Button>
+            </div>
+          </div>
+          
+          <div className="overflow-hidden" ref={popularEmblaRef}>
+            <div className="flex gap-6">
+              {popularDestinations.map((destination) => (
+                <div key={destination.id} className="flex-shrink-0 w-64">
+                  <div className="bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg transition-shadow cursor-pointer">
+                    <img 
+                      src={destination.imageUrl} 
+                      alt={destination.name}
+                      className="w-full h-40 object-cover"
+                    />
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold text-foreground mb-1">{destination.name}</h3>
+                      <p className="text-muted-foreground text-sm">{destination.hotelsCount}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3: Explore These Unique Stays */}
+      <section className="py-12 bg-muted/20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-foreground">Explore These Unique Stays in Miami Beach</h2>
+            <div className="flex space-x-2">
+              <Button variant="ghost" size="icon" onClick={() => scrollPrev(uniqueEmblaApi)}>
+                <ArrowLeft size={20} />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => scrollNext(uniqueEmblaApi)}>
+                <ArrowRight size={20} />
+              </Button>
+            </div>
+          </div>
+          
+          <div className="overflow-hidden" ref={uniqueEmblaRef}>
+            <div className="flex gap-6">
+              {uniqueStays.map((stay) => (
+                <div key={stay.id} className="flex-shrink-0 w-80">
+                  <div className="bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg transition-shadow">
+                    <img 
+                      src={stay.imageUrl} 
+                      alt={stay.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-6">
+                      <h3 className="text-lg font-semibold text-foreground mb-2">{stay.name}</h3>
+                      <p className="text-muted-foreground text-sm mb-2">{stay.address}</p>
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{stay.description}</p>
+                      <Button size="sm" className="w-full">Explore</Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Featured Hotels Section */}
       <section className="bg-muted/30 py-16">
