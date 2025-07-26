@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useChatAI } from "@/hooks/useChatAI";
-import { useIsMobile } from "@/hooks/use-is-mobile";
+import { useIsMobile } from "@/hooks/use-mobile"; // CORRECTED IMPORT PATH
 import { 
   Send, 
   Menu,
