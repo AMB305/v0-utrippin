@@ -32,8 +32,10 @@ const ChatContainer = () => {
             {!message.loading && (message.response || message.detailedItinerary) && (
               <div className="flex justify-start">
                 {message.isDetailedItinerary && message.detailedItinerary ? (
+                  // We are now using our new, reliable ItineraryCard
                   <ItineraryCard itinerary={message.detailedItinerary} />
                 ) : (
+                  // This handles the simple text responses
                   <div className="bg-gray-800 px-4 py-2 rounded-lg max-w-[80%]">
                     <p className="text-sm">{message.response}</p>
                   </div>
@@ -42,6 +44,7 @@ const ChatContainer = () => {
             )}
           </React.Fragment>
         ))}
+        {/* Show a loading indicator when the AI is thinking */}
         {loading && (
           <div className="flex justify-start">
             <KeilaThinking />
