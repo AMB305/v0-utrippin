@@ -7,17 +7,17 @@ import { Separator } from '@/components/ui/separator';
 import { MapPin, Check, DollarSign, Gem, ShieldCheck } from 'lucide-react';
 
 const ItineraryOption = ({ option }) => (
-  <Card className="bg-white text-gray-900 border-none shadow-none">
+  <Card className="!bg-white !text-black border-none shadow-none" style={{ backgroundColor: 'white', color: 'black' }}>
     <CardHeader className="p-0">
-      <CardDescription className="text-gray-600">{option.summary}</CardDescription>
+      <CardDescription className="!text-gray-600" style={{ color: '#6b7280' }}>{option.summary}</CardDescription>
     </CardHeader>
     <CardContent className="p-0 mt-4">
       {option.days.map((day, index) => (
         <div key={index} className="mb-4">
-          <h4 className="font-semibold text-gray-800 mb-2">{day.day}: {day.title}</h4>
+          <h4 className="font-semibold !text-black mb-2" style={{ color: 'black' }}>{day.day}: {day.title}</h4>
           <ul className="list-none space-y-1">
             {day.activities.map((activity, actIndex) => (
-              <li key={actIndex} className="flex items-start text-gray-600 text-sm">
+              <li key={actIndex} className="flex items-start !text-gray-600 text-sm" style={{ color: '#6b7280' }}>
                 <Check size={16} className="mr-2 mt-1 text-green-500 flex-shrink-0" />
                 <span>{activity}</span>
               </li>
@@ -35,17 +35,17 @@ export const ItineraryCard = ({ itinerary }) => {
   }
 
   return (
-    <div className="bg-gray-50 rounded-2xl p-6 w-full max-w-3xl mx-auto shadow-lg">
+    <div className="!bg-white !text-black rounded-2xl p-6 w-full max-w-3xl mx-auto border border-gray-200" style={{ backgroundColor: 'white', color: 'black' }}>
       <div className="mb-4">
-        <div className="flex items-center gap-2 text-gray-500 mb-2">
+        <div className="flex items-center gap-2 !text-gray-600 mb-2" style={{ color: '#6b7280' }}>
           <MapPin size={16} />
           <span className="font-medium">{itinerary.destination}</span>
         </div>
-        <h2 className="text-3xl font-bold text-gray-900">{itinerary.overview_summary}</h2>
+        <h2 className="text-3xl font-bold !text-black" style={{ color: 'black' }}>{itinerary.overview_summary}</h2>
       </div>
       
       <Tabs defaultValue={itinerary.options[1].title} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-gray-200">
+        <TabsList className="grid w-full grid-cols-3 !bg-gray-100" style={{ backgroundColor: '#f3f4f6' }}>
           <TabsTrigger value={itinerary.options[0].title}>
             <DollarSign className="w-4 h-4 mr-2" /> {itinerary.options[0].title}
           </TabsTrigger>
