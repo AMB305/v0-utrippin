@@ -129,8 +129,10 @@ const AiTravel = () => {
                   <h1 className="text-lg font-bold text-white">Keila</h1>
                 </div>
                 <Button variant="outline" size="sm" className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white" onClick={resetSession}>
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  New Chat
+                  <div className="flex items-center">
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    New Chat
+                  </div>
                 </Button>
               </div>
 
