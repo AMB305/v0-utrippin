@@ -497,49 +497,31 @@ const AiTravel = () => {
             ) : (
               // Chat Interface
               <div className="flex flex-col h-dvh bg-black">
-                {/* Chat Header with Keila branding */}
+                {/* Corrected Chat Header Code */}
+
                 <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between bg-black flex-shrink-0">
-                  <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="icon" onClick={() => setHasStartedChat(false)}>
-                      <ArrowLeft className="w-5 h-5 text-white" />
-                    </Button>
-                    <div className="flex items-center gap-2">
-                      <img 
-                        src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
-                        alt="Keila Bot" 
-                        className="w-8 h-8"
-                      />
-                      <h1 className="text-lg font-bold text-white">
-                        Let's Go!
-                      </h1>
-                    </div>
-                  </div>
+                  {/* Back button to return to the welcome screen */}
+                  <Button variant="ghost" size="icon" onClick={() => setHasStartedChat(false)}>
+                    <ArrowLeft className="w-5 h-5 text-white" />
+                  </Button>
+                  
+                  {/* Keila Branding */}
                   <div className="flex items-center gap-2">
+                    <img src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" alt="Keila Bot" className="w-8 h-8"/>
+                    <h1 className="text-lg font-bold text-white">Let's Go!</h1>
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-2">
+                    {/* This is the "New Chat" button, now visible and functional. */}
                     <Button 
-                      variant="ghost" 
+                      variant="outline" 
                       size="sm" 
-                      className="flex items-center gap-1 border border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
-                      onClick={() => window.location.href = '/'}
+                      className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
+                      onClick={resetSession}
                     >
-                      <Home className="h-4 w-4" />
-                      Home
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="flex items-center gap-1 border border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
-                      onClick={() => {
-                        console.log("🔴 NEW CHAT: User clicked New Chat button");
-                        resetSession(); // Use global reset function
-                      }}
-                    >
-                      <MessageSquare className="h-4 w-4" />
+                      <MessageSquare className="h-4 w-4 mr-1" />
                       New Chat
-                    </Button>
-                    <Button variant="outline" size="sm" className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white"
-                      onClick={handleSaveTrip}
-                    >
-                      Save Trip
                     </Button>
                   </div>
                 </div>
