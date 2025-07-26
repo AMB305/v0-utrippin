@@ -66,5 +66,4 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading, onSe
   );
 };
 
-export { ChatContainer };
 export default ChatContainer;
