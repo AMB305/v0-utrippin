@@ -51,7 +51,6 @@ export const useChatAI = () => {
   };
 
   const resetSession = () => {
-    console.log("Calling resetSession, which will clear the global context.");
     clearMessages();
   };
 
