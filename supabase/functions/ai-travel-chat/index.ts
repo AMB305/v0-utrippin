@@ -181,7 +181,8 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
     1. **Analyze the user's request** for destination, duration, budget, and travel style.
     2. **Generate a COMPREHENSIVE itinerary** with rich details, specific timing, and visual elements.
     3. **Your entire response MUST conform to the COMPREHENSIVE_ITINERARY_SCHEMA** provided below.
-    4. If the user's request is too vague (e.g., "hi"), use the SIMPLE_FALLBACK_SCHEMA.
+    4. **IMPORTANT: All booking links MUST use Expedia with camref=1101l5dQSW for affiliate tracking.**
+    5. If the user's request is too vague (e.g., "hi"), use the SIMPLE_FALLBACK_SCHEMA.
 
     **COMPREHENSIVE_ITINERARY_SCHEMA:**
     {
@@ -207,7 +208,7 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
               "name": "Round-trip Economy",
               "price": "$450",
               "rating": 4.2,
-              "bookingLink": "https://booking.com/flights",
+              "bookingLink": "https://www.expedia.com/Flights-Search?trip=roundtrip&leg1=from:ORIGIN,to:DESTINATION,departure:DATE&passengers=adults:2&camref=1101l5dQSW",
               "description": "Direct flights with major airline"
             }
           ]
@@ -220,7 +221,7 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
               "price": "$280/night",
               "rating": 4.7,
               "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400",
-              "bookingLink": "https://booking.com/hotels",
+              "bookingLink": "https://www.expedia.com/Hotel-Search?destination=DESTINATION&startDate=CHECKIN&endDate=CHECKOUT&adults=2&camref=1101l5dQSW",
               "amenities": ["Pool", "Spa", "Beach Access"],
               "description": "Oceanfront resort with world-class amenities"
             }
@@ -309,6 +310,8 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
         model: 'nousresearch/nous-hermes-2-mixtral-8x7b-dpo',
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: message }],
         response_format: { type: "json_object" },
+        max_tokens: 8000,
+        temperature: 0.8,
       })
     });
 
@@ -335,8 +338,36 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       parsedJson = JSON.parse(messageContent);
     } catch (parseError) {
       console.error('JSON parse error:', parseError.message);
-      console.error('Raw content:', messageContent);
-      throw new Error(`Failed to parse AI response: ${parseError.message}`);
+      console.error('Raw content (first 1000 chars):', messageContent.substring(0, 1000));
+      
+      // Try to fix common JSON truncation issues
+      let fixedContent = messageContent;
+      if (!fixedContent.trim().endsWith('}')) {
+        // Find the last complete object by counting braces
+        let braceCount = 0;
+        let lastValidIndex = -1;
+        for (let i = 0; i < fixedContent.length; i++) {
+          if (fixedContent[i] === '{') braceCount++;
+          if (fixedContent[i] === '}') {
+            braceCount--;
+            if (braceCount === 0) lastValidIndex = i;
+          }
+        }
+        if (lastValidIndex > -1) {
+          fixedContent = fixedContent.substring(0, lastValidIndex + 1);
+          console.log('Attempting to fix truncated JSON...');
+          try {
+            parsedJson = JSON.parse(fixedContent);
+            console.log('Successfully parsed fixed JSON');
+          } catch (fixError) {
+            throw new Error(`Failed to parse AI response even after fix attempt: ${parseError.message}`);
+          }
+        } else {
+          throw new Error(`Failed to parse AI response: ${parseError.message}`);
+        }
+      } else {
+        throw new Error(`Failed to parse AI response: ${parseError.message}`);
+      }
     }
     // Try comprehensive schema first
     const comprehensiveValidation = ComprehensiveItinerarySchema.safeParse(parsedJson);

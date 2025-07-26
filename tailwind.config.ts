@@ -105,13 +105,16 @@ export default {
 				'gradient-warm': 'var(--gradient-warm)',
 				'gradient-cool': 'var(--gradient-cool)',
 				'gradient-card': 'var(--gradient-card)',
-				'gradient-overlay': 'var(--gradient-overlay)'
+				'gradient-overlay': 'var(--gradient-overlay)',
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-subtle': 'var(--gradient-subtle)'
 			},
 			boxShadow: {
 				'soft': 'var(--shadow-soft)',
 				'medium': 'var(--shadow-medium)',
 				'large': 'var(--shadow-large)',
 				'glow': 'var(--shadow-glow)',
+				'elegant': 'var(--shadow-elegant)',
 				'2xl-soft': '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)'
 			},
 			transitionTimingFunction: {
