@@ -14,7 +14,7 @@ export function SearchWidget({ onSearch }: SearchWidgetProps) {
   const [destination, setDestination] = useState('');
   const [activePropertyType, setActivePropertyType] = useState('Hotel');
   
-  const propertyTypes = ['Hotel', 'Villa', 'House', 'House'];
+  const propertyTypes = ['Hotel', 'Villa', 'House', 'Apartment'];
   
   const handleSearch = () => {
     const searchData = {

@@ -13,36 +13,16 @@ import { SearchWidget } from "@/components/mobile/SearchWidget";
 import { QuickDestinations } from "@/components/mobile/QuickDestinations";
 import { MobileHotelResults } from "@/components/mobile/MobileHotelResults";
 import { BottomNavigation } from "@/components/mobile/BottomNavigation";
+import { useNearbyHotels } from "@/hooks/useHotels";
 
 export default function Hotels() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const destinationParam = searchParams.get('destination');
   const isMobile = useIsMobile();
-  const [hotels, setHotels] = useState([
-    {
-      id: 1,
-      name: 'Azure Bay Resort',
-      location: 'Oceanview Drive 12, Constanta, Romania',
-      address: 'Oceanview Drive 12, Constanta, Romania',
-      rating: 4.7,
-      price: 179,
-      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop',
-      amenities: ['wifi', 'beds', 'gym'],
-      locationTag: 'Romania'
-    },
-    {
-      id: 2,
-      name: 'Grand Hotel Bucuresti',
-      location: 'Nicolae Balcescu Boulevard 4, Romania',
-      address: 'Nicolae Balcescu Boulevard 4, Romania',
-      rating: 4.7,
-      price: 179,
-      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300&fit=crop',
-      amenities: ['wifi', 'beds', 'gym'],
-      locationTag: 'Romania'
-    }
-  ]);
+  
+  // Use RateHawk integration for nearby hotels
+  const { data: nearbyHotels, isLoading: nearbyLoading } = useNearbyHotels("Bucharest, Romania");
 
   const breadcrumbs = generateBreadcrumbSchema([
     { name: "Home", url: "https://utrippin.ai" },
@@ -113,8 +93,8 @@ export default function Hotels() {
           </div>
           
           <MobileHotelResults 
-            hotels={hotels}
-            loading={false}
+            hotels={nearbyHotels || []}
+            loading={nearbyLoading}
             onHotelSelect={handleHotelSelect}
             searchData={{
               destination: "Bucharest, Romania",
