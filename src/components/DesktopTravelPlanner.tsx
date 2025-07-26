@@ -7,6 +7,7 @@ import { CategoryFilter } from './CategoryFilter';
 import { Button } from './ui/button';
 import { MessageSquare } from 'lucide-react';
 import { AnimatedKeila } from './AnimatedKeila';
+import { SimpleChatInput } from './SimpleChatInput';
 
 const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, chatMessages, isLoading, onSendMessage }) => {
   const { user } = useAuth();
@@ -72,10 +73,19 @@ const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, c
             onSendMessage={onSendMessage}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center px-6">
-            <AnimatedKeila />
-            <h1 className="text-3xl font-bold mt-4 text-gray-900">Hi, I'm Keila!</h1>
-            <p className="text-gray-500 mt-2">Select a category above to start planning your trip, or ask me anything!</p>
+          <div className="flex flex-col h-full">
+            <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
+              <AnimatedKeila />
+              <h1 className="text-3xl font-bold mt-4 text-gray-900">Hi, I'm Keila!</h1>
+              <p className="text-gray-500 mt-2 mb-8">Select a category above to start planning your trip, or ask me anything!</p>
+            </div>
+            <div className="p-6">
+              <SimpleChatInput
+                onSendMessage={onSendMessage}
+                placeholder="Ask me to plan your next adventure..."
+                isLoading={isLoading}
+              />
+            </div>
           </div>
         )}
       </div>
