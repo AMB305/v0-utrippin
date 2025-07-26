@@ -33,24 +33,16 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Get user data for agent-specific features
-    let userRole = 'user';
+    // Get user data (optional - for any user-specific features)
+    let userRole = 'customer';
     if (userId) {
-      const { data: userData } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      // Check if user has agent role for any agent-specific features
+      const { data: roles } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId);
       
-      if (userData) {
-        // Check if user has agent role
-        const { data: roles } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', userId);
-        
-        userRole = roles?.some(r => r.role === 'agent') ? 'agent' : 'user';
-      }
+      userRole = roles?.some(r => r.role === 'agent') ? 'agent' : 'customer';
     }
 
     // Search for flights using Duffel API
@@ -70,7 +62,7 @@ serve(async (req) => {
         price: flight.price,
         rating: flight.rating || 4.2,
         imageUrl: flight.airlineLogoUrl,
-        bookingLink: buildFlightBookingUrl(flight, userRole, userId),
+        bookingLink: buildKeilaFlightBookingUrl(origin, destination, departureDate, returnDate),
         amenities: flight.amenities,
         description: `${flight.duration} • ${flight.stops === 0 ? 'Direct' : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`}`
       })),
@@ -213,30 +205,22 @@ function generateMockFlights(origin: string, destination: string, departureDate:
   }));
 }
 
+  }));
+}
+
+function buildKeilaFlightBookingUrl(origin: string, destination: string, departureDate: string, returnDate?: string) {
+  // Platform's Expedia affiliate ID for all Keila Bot customers
+  const keilaAffiliateId = "YOUR_KEILA_AFFILIATE_ID"; // Replace with actual affiliate ID
+  
+  return `https://www.expedia.com/Flights-Search?trip=${returnDate ? 'roundtrip' : 'oneway'}&leg1=from:${origin},to:${destination},departure:${departureDate}${returnDate ? `&leg2=from:${destination},to:${origin},departure:${returnDate}` : ''}&passengers=adults:1&options=cabinclass:economy&affid=${keilaAffiliateId}&c=keila_bot`;
+}
+
 async function buildFlightBookingUrl(flight: any, userRole: string, userId?: string) {
-  // Default Expedia flight search URL
-  const defaultUrl = `https://www.expedia.com/Flights-Search?trip=roundtrip&leg1=from:${flight.origin || 'NYC'},to:${flight.destination || 'LAX'},departure:${flight.departureDate || '2024-03-01'}&passengers=adults:1&options=cabinclass:economy`;
-  
-  if (userRole === 'agent' && userId) {
-    try {
-      const supabase = createClient(supabaseUrl, supabaseServiceKey);
-      const { data: userData } = await supabase
-        .from('users')
-        .select('expedia_affiliate_id')
-        .eq('id', userId)
-        .single();
-      
-      if (userData?.expedia_affiliate_id) {
-        return `${defaultUrl}&affid=${userData.expedia_affiliate_id}&c=travel_agent`;
-      }
-    } catch (error) {
-      console.error('Error getting affiliate ID:', error);
-    }
-  }
-  
-  return defaultUrl;
+  // This function is no longer used - keeping for backward compatibility
+  return buildKeilaFlightBookingUrl(flight.origin || 'NYC', flight.destination || 'LAX', flight.departureDate || '2024-03-01', flight.returnDate);
 }
 
 function buildDefaultFlightUrl(origin: string, destination: string, departureDate: string, returnDate?: string) {
-  return `https://www.expedia.com/Flights-Search?trip=${returnDate ? 'roundtrip' : 'oneway'}&leg1=from:${origin},to:${destination},departure:${departureDate}${returnDate ? `&leg2=from:${destination},to:${origin},departure:${returnDate}` : ''}&passengers=adults:1&options=cabinclass:economy`;
+  const keilaAffiliateId = "YOUR_KEILA_AFFILIATE_ID";
+  return `https://www.expedia.com/Flights-Search?trip=${returnDate ? 'roundtrip' : 'oneway'}&leg1=from:${origin},to:${destination},departure:${departureDate}${returnDate ? `&leg2=from:${destination},to:${origin},departure:${returnDate}` : ''}&passengers=adults:1&options=cabinclass:economy&affid=${keilaAffiliateId}&c=keila_bot`;
 }

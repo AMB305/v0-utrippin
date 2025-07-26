@@ -32,44 +32,26 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Get user data and affiliate IDs
-    let userAffiliateIds = null;
-    let userRole = 'user';
+    // Get user data (optional - for any user-specific features)
+    let userRole = 'customer';
     
     if (userId) {
-      const { data: userData } = await supabase
-        .from('users')
-        .select(`
-          booking_affiliate_id,
-          expedia_affiliate_id,
-          hotels_affiliate_id,
-          kayak_affiliate_id,
-          priceline_affiliate_id
-        `)
-        .eq('id', userId)
-        .single();
+      // Check if user has agent role for any agent-specific features
+      const { data: roles } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId);
       
-      if (userData) {
-        userAffiliateIds = userData;
-        
-        // Check if user has agent role
-        const { data: roles } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', userId);
-        
-        userRole = roles?.some(r => r.role === 'agent') ? 'agent' : 'user';
-      }
+      userRole = roles?.some(r => r.role === 'agent') ? 'agent' : 'customer';
     }
 
-    // Generate hotel options with affiliate URLs
+    // Generate hotel options with affiliate URLs for ALL customers
     const hotelModule = await generateHotelOptions({
       destination,
       checkIn,
       checkOut,
       guests,
       rooms,
-      userAffiliateIds,
       userRole
     });
 
@@ -104,7 +86,6 @@ async function generateHotelOptions({
   checkOut,
   guests,
   rooms,
-  userAffiliateIds,
   userRole
 }: {
   destination: string;
@@ -112,7 +93,6 @@ async function generateHotelOptions({
   checkOut: string;
   guests: number;
   rooms: number;
-  userAffiliateIds: any;
   userRole: string;
 }) {
   const hotels = [
@@ -150,15 +130,15 @@ async function generateHotelOptions({
         rooms: rooms.toString()
       });
 
-      const bookingUrls = buildAffiliateUrls(searchParams, userAffiliateIds, userRole);
+      // ALL customers get affiliate URLs when booking from Keila Bot
+      const bookingUrl = buildKeilaAffiliateUrl(searchParams);
 
       return {
         name: hotel.name,
         price: `$${hotel.basePrice}/night`,
         rating: hotel.rating,
         imageUrl: `https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=250&fit=crop`,
-        bookingLink: bookingUrls.primary,
-        agentUrl: userRole === 'agent' && bookingUrls.agent ? bookingUrls.agent : undefined,
+        bookingLink: bookingUrl,
         amenities: hotel.amenities,
         description: hotel.description
       };
@@ -167,32 +147,20 @@ async function generateHotelOptions({
   };
 }
 
-function buildAffiliateUrls(searchParams: URLSearchParams, userAffiliateIds: any, userRole: string) {
+function buildKeilaAffiliateUrl(searchParams: URLSearchParams) {
   const destination = searchParams.get('destination');
   const checkin = searchParams.get('checkin');
   const checkout = searchParams.get('checkout');
   const guests = searchParams.get('guests');
   const rooms = searchParams.get('rooms');
 
-  // Default URLs
-  const defaultExpediaUrl = `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination!)}&startDate=${checkin}&endDate=${checkout}&rooms=${rooms}&adults=${guests}`;
+  // Platform's Expedia affiliate ID for all Keila Bot customers
+  const keilaAffiliateId = "YOUR_KEILA_AFFILIATE_ID"; // Replace with actual affiliate ID
   
-  // If user is an agent and has Expedia affiliate ID, use it with pre-filled info
-  if (userRole === 'agent' && userAffiliateIds?.expedia_affiliate_id) {
-    const agentExpediaUrl = `${defaultExpediaUrl}&affid=${userAffiliateIds.expedia_affiliate_id}&c=travel_agent&mcid=${userAffiliateIds.expedia_affiliate_id}`;
-    
-    return {
-      primary: agentExpediaUrl,
-      agent: agentExpediaUrl
-    };
-  }
-
-  return {
-    primary: defaultExpediaUrl,
-    agent: null
-  };
+  return `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination!)}&startDate=${checkin}&endDate=${checkout}&rooms=${rooms}&adults=${guests}&affid=${keilaAffiliateId}&c=keila_bot&mcid=keila_travel`;
 }
 
 function buildDefaultHotelUrl(destination: string, checkIn: string, checkOut: string, guests: number, rooms: number) {
-  return `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination)}&startDate=${checkIn}&endDate=${checkOut}&rooms=${rooms}&adults=${guests}`;
+  const keilaAffiliateId = "YOUR_KEILA_AFFILIATE_ID";
+  return `https://www.expedia.com/Hotels-Search?destination=${encodeURIComponent(destination)}&startDate=${checkIn}&endDate=${checkOut}&rooms=${rooms}&adults=${guests}&affid=${keilaAffiliateId}&c=keila_bot`;
 }
