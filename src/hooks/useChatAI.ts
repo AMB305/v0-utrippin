@@ -3,9 +3,12 @@
 import { useContext, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { ChatContext, ChatContextType } from '@/contexts/chat-context';
+import { useAuth } from '@/hooks/useAuth';
 
 export const useChatAI = () => {
   const context = useContext(ChatContext);
+  const { user } = useAuth();
+  
   if (!context) {
     throw new Error('useChatAI must be used within a ChatProvider');
   }
@@ -26,7 +29,7 @@ export const useChatAI = () => {
     try {
       const functionName = comprehensive ? 'ai-comprehensive-itinerary' : 'ai-travel-chat';
       const { data, error } = await supabase.functions.invoke(functionName, {
-        body: { message, comprehensive },
+        body: { message, comprehensive, userId: user?.id },
       });
 
       if (error) throw new Error(`AI Edge Function Error: ${error.message}`);

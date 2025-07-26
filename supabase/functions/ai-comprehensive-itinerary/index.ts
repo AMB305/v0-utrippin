@@ -1,6 +1,7 @@
 // supabase/functions/ai-comprehensive-itinerary/index.ts
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { z } from "https://deno.land/x/zod@v3.23.4/mod.ts";
 
 // Comprehensive schema definitions
@@ -88,6 +89,10 @@ const openRouterApiKey = Deno.env.get('OPENROUTER_API_KEY');
 const pexelsApiKey = Deno.env.get('PEXELS_API_KEY');
 const pixabayApiKey = Deno.env.get('PIXABAY_API_KEY');
 
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -159,13 +164,64 @@ async function generateImageCollage(destination: string, country: string): Promi
   return images.slice(0, 6);
 }
 
+// Booking integration function
+async function integrateBookingData(itinerary: any, userId?: string) {
+  const projectUrl = supabaseUrl.replace('https://', '').replace('.supabase.co', '');
+  
+  // Determine date range from daily plan or use start/end dates
+  const checkIn = itinerary.startDate;
+  const checkOut = itinerary.endDate;
+  const departureDate = itinerary.startDate;
+  const returnDate = itinerary.endDate;
+
+  // Integrate flight data
+  try {
+    const flightResponse = await supabase.functions.invoke('flight-search-integration', {
+      body: {
+        origin: 'NYC', // Default origin - could be extracted from user request
+        destination: itinerary.destinationCity,
+        departureDate,
+        returnDate,
+        passengers: itinerary.numberOfTravelers,
+        userId
+      }
+    });
+
+    if (flightResponse.data?.flightModule) {
+      itinerary.bookingModules.flights = flightResponse.data.flightModule;
+    }
+  } catch (error) {
+    console.error('Flight integration error:', error);
+  }
+
+  // Integrate hotel data
+  try {
+    const hotelResponse = await supabase.functions.invoke('hotel-affiliate-integration', {
+      body: {
+        destination: itinerary.destinationCity,
+        checkIn,
+        checkOut,
+        guests: itinerary.numberOfTravelers,
+        rooms: Math.ceil(itinerary.numberOfTravelers / 2),
+        userId
+      }
+    });
+
+    if (hotelResponse.data?.hotelModule) {
+      itinerary.bookingModules.accommodations = hotelResponse.data.hotelModule;
+    }
+  } catch (error) {
+    console.error('Hotel integration error:', error);
+  }
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { message, comprehensive = false } = await req.json();
+    const { message, comprehensive = false, userId } = await req.json();
 
     if (!comprehensive) {
       return new Response(JSON.stringify({ 
@@ -320,6 +376,14 @@ serve(async (req) => {
     } catch (error) {
       console.error('Image generation failed:', error);
       // Keep placeholder images if generation fails
+    }
+
+    // Integrate real booking data
+    try {
+      await integrateBookingData(itinerary, userId);
+    } catch (error) {
+      console.error('Booking integration failed:', error);
+      // Keep mock booking data if integration fails
     }
 
     return new Response(

@@ -4,7 +4,27 @@ import { Database } from '@/integrations/supabase/types';
 type User = Database['public']['Tables']['users']['Row'];
 type TravelBuddyMatch = Database['public']['Tables']['travel_buddy_matches']['Row'];
 
-export interface TravelBuddyProfile extends User {
+export interface TravelBuddyProfile {
+  id: string;
+  email: string;
+  age: number | null;
+  bio: string | null;
+  location: string | null;
+  profile_photo_url: string | null;
+  preferred_destinations: string[] | null;
+  travel_style: string | null;
+  interests: string[] | null;
+  languages_spoken: string[] | null;
+  public_profile: boolean | null;
+  verified: boolean | null;
+  stripe_customer_id: string | null;
+  subscription_status: string | null;
+  created_at: string;
+  booking_affiliate_id?: string | null;
+  expedia_affiliate_id?: string | null;
+  hotels_affiliate_id?: string | null;
+  kayak_affiliate_id?: string | null;
+  priceline_affiliate_id?: string | null;
   compatibility_score?: number;
   mutual_destinations?: string[];
   distance?: number;
@@ -47,13 +67,18 @@ class TravelBuddyService {
           preferred_destinations: item.preferred_destinations,
           travel_style: item.travel_style,
           interests: item.interests,
-          compatibility_score: item.compatibility_score,
-          created_at: new Date().toISOString(),
           languages_spoken: null,
           public_profile: true,
           verified: false,
           stripe_customer_id: null,
-          subscription_status: null
+          subscription_status: null,
+          created_at: new Date().toISOString(),
+          booking_affiliate_id: null,
+          expedia_affiliate_id: null,
+          hotels_affiliate_id: null,
+          kayak_affiliate_id: null,
+          priceline_affiliate_id: null,
+          compatibility_score: item.compatibility_score
         }));
       } else {
         // Guest browsing - get public profiles with basic filtering

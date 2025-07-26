@@ -2209,13 +2209,18 @@ export type Database = {
         Row: {
           age: number | null
           bio: string | null
+          booking_affiliate_id: string | null
           created_at: string | null
           email: string
+          expedia_affiliate_id: string | null
+          hotels_affiliate_id: string | null
           id: string
           interests: string[] | null
+          kayak_affiliate_id: string | null
           languages_spoken: string[] | null
           location: string | null
           preferred_destinations: string[] | null
+          priceline_affiliate_id: string | null
           profile_photo_url: string | null
           public_profile: boolean | null
           stripe_customer_id: string | null
@@ -2226,13 +2231,18 @@ export type Database = {
         Insert: {
           age?: number | null
           bio?: string | null
+          booking_affiliate_id?: string | null
           created_at?: string | null
           email: string
+          expedia_affiliate_id?: string | null
+          hotels_affiliate_id?: string | null
           id?: string
           interests?: string[] | null
+          kayak_affiliate_id?: string | null
           languages_spoken?: string[] | null
           location?: string | null
           preferred_destinations?: string[] | null
+          priceline_affiliate_id?: string | null
           profile_photo_url?: string | null
           public_profile?: boolean | null
           stripe_customer_id?: string | null
@@ -2243,13 +2253,18 @@ export type Database = {
         Update: {
           age?: number | null
           bio?: string | null
+          booking_affiliate_id?: string | null
           created_at?: string | null
           email?: string
+          expedia_affiliate_id?: string | null
+          hotels_affiliate_id?: string | null
           id?: string
           interests?: string[] | null
+          kayak_affiliate_id?: string | null
           languages_spoken?: string[] | null
           location?: string | null
           preferred_destinations?: string[] | null
+          priceline_affiliate_id?: string | null
           profile_photo_url?: string | null
           public_profile?: boolean | null
           stripe_customer_id?: string | null

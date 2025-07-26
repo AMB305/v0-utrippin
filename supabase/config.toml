@@ -3,6 +3,12 @@ project_id = "ytraidksgwxttjeevjuc"
 [functions.ai-comprehensive-itinerary]
 verify_jwt = false
 
+[functions.flight-search-integration]
+verify_jwt = false
+
+[functions.hotel-affiliate-integration]
+verify_jwt = false
+
 [functions.pixabay-images]
 verify_jwt = false
 
