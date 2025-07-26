@@ -35,7 +35,7 @@ export const ItineraryCard = ({ itinerary }) => {
   }
 
   return (
-    <div className="!bg-white !text-black rounded-2xl p-6 w-full max-w-3xl mx-auto border border-gray-200" style={{ backgroundColor: 'white', color: 'black' }}>
+    <div className="bg-white text-black rounded-2xl p-6 w-full max-w-3xl mx-auto border border-gray-200 shadow-none" style={{ backgroundColor: '#ffffff !important', color: '#000000 !important', boxShadow: 'none !important' }}>
       <div className="mb-4">
         <div className="flex items-center gap-2 !text-gray-600 mb-2" style={{ color: '#6b7280' }}>
           <MapPin size={16} />
