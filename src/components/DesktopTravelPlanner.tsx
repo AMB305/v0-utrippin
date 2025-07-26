@@ -1,42 +1,70 @@
 // src/components/DesktopTravelPlanner.tsx
 
-import React from 'react';
+import React, { useState } from 'react';
 import ChatContainer from './custom/ChatContainer';
 import { useAuth } from '@/hooks/useAuth';
-import { MobileQuickQuestions } from '@/components/MobileQuickQuestions';
+import { CategoryFilter } from './CategoryFilter';
 import { Button } from './ui/button';
 import { MessageSquare } from 'lucide-react';
 import { AnimatedKeila } from './AnimatedKeila';
 
 const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, chatMessages, isLoading, onSendMessage }) => {
   const { user } = useAuth();
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    if (category !== 'All') {
+      // Generate category-specific travel question
+      const categoryQuestions = {
+        Religious: "I'm interested in religious and spiritual travel experiences",
+        Cultural: "I want to explore cultural attractions and experiences",
+        Nature: "I'm looking for nature-based travel destinations",
+        Food: "I want to discover amazing food experiences while traveling",
+        Festivals: "I'm interested in festivals and cultural events",
+        Historical: "I want to explore historical sites and landmarks",
+        Shopping: "I'm looking for great shopping destinations",
+        Beaches: "I want to find beautiful beach destinations",
+        Mountains: "I'm interested in mountain destinations and activities",
+        Outdoors: "I want outdoor adventure travel experiences",
+        Nightlife: "I'm looking for destinations with great nightlife",
+        Luxury: "I want luxury travel experiences and accommodations",
+        Wellness: "I'm interested in wellness and spa travel",
+        Romance: "I'm planning a romantic getaway",
+        NightSkies: "I want to see amazing night skies and stargazing",
+        Sports: "I'm interested in sports-related travel",
+        Offbeat: "I want unique and offbeat travel experiences"
+      };
+      
+      const question = categoryQuestions[category];
+      if (question) {
+        onQuestionSelect(question);
+      }
+    }
+  };
 
   return (
-    <div className="hidden lg:grid grid-cols-12 h-screen bg-gray-100 text-black">
-      {/* Left Panel - Dark Sidebar */}
-      <div className="col-span-4 p-8 flex flex-col justify-between bg-black text-white">
+    <div className="hidden lg:flex flex-col h-screen bg-white">
+      {/* Top Category Filter */}
+      <CategoryFilter 
+        selectedCategory={selectedCategory}
+        onCategorySelect={handleCategorySelect}
+      />
+      
+      {/* Header with New Chat Button */}
+      <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
         <div>
-          <h1 className="text-3xl font-bold mb-4">AI Travel Planner</h1>
-          <p className="text-gray-400">
-            Welcome, {user?.email || 'Traveler'}. Let Keila help you.
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900">AI Travel Planner</h1>
+          <p className="text-gray-600">Welcome, {user?.email || 'Traveler'}. Let Keila help you plan your trip.</p>
         </div>
-        
-        {!hasStartedChat && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4 text-white">Get Started</h2>
-            <MobileQuickQuestions onQuestionSelect={onQuestionSelect} />
-          </div>
-        )}
-        
-        <Button onClick={onClearChat} variant="outline" className="mt-4 bg-transparent border-red-500 text-red-400 hover:bg-red-500 hover:text-white">
+        <Button onClick={onClearChat} variant="outline" className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white">
           <MessageSquare className="mr-2 h-4 w-4" />
           New Chat
         </Button>
       </div>
 
-      {/* Right Panel - WHITE Chat Interface */}
-      <div className="col-span-8 bg-white">
+      {/* Main Chat Interface */}
+      <div className="flex-1 bg-white">
         {hasStartedChat ? (
           <ChatContainer
             messages={chatMessages}
@@ -44,10 +72,10 @@ const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, c
             onSendMessage={onSendMessage}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center">
+          <div className="flex flex-col items-center justify-center h-full text-center px-6">
             <AnimatedKeila />
             <h1 className="text-3xl font-bold mt-4 text-gray-900">Hi, I'm Keila!</h1>
-            <p className="text-gray-500 mt-2">Select a prompt on the left to start planning.</p>
+            <p className="text-gray-500 mt-2">Select a category above to start planning your trip, or ask me anything!</p>
           </div>
         )}
       </div>
