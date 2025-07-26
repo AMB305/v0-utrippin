@@ -1,5 +1,6 @@
 import React from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { AITravelSelectorMobile } from '@/components/AITravelSelectorMobile';
 
 interface UnifiedBookingSheetProps {
   isOpen: boolean;
@@ -15,7 +16,11 @@ const UnifiedBookingSheet: React.FC<UnifiedBookingSheetProps> = ({ isOpen, onClo
           <SheetTitle>Book Your Trip</SheetTitle>
         </SheetHeader>
         <div className="py-4">
-          <p>Booking form for {initialTab} coming soon...</p>
+          {initialTab === 'ai' ? (
+            <AITravelSelectorMobile />
+          ) : (
+            <p>Booking form for {initialTab} coming soon...</p>
+          )}
         </div>
       </SheetContent>
     </Sheet>
