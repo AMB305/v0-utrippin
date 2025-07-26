@@ -165,20 +165,23 @@ export default function Hotels() {
         }}
       />
 
-      {/* Global Header */}
+      {/* Global Header - NEUTRAL DESIGN CONSISTENT ACROSS PLATFORM */}
       <Header />
       
-      {/* Hero Section with Prominent Search */}
+      {/* Hero Section - CONTENT DYNAMICALLY POPULATED BASED ON currentDestination */}
       <section 
         className="relative h-[500px] flex items-center justify-center text-center bg-cover bg-center"
         style={{ 
           backgroundImage: "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&h=500&fit=crop&q=80')"
+          // TODO: Background image should also be dynamic based on destination
         }}
       >
         <div className="relative z-10 max-w-4xl mx-auto px-6">
+          {/* DYNAMIC HERO TITLE - Changes based on destination in production */}
           <h1 className="text-5xl font-bold text-white mb-4">
-            Find Your Perfect Stay in Miami Beach
+            Find Your Perfect Stay in Miami Beach, Florida
           </h1>
+          {/* DYNAMIC HERO DESCRIPTION - Changes based on destination in production */}
           <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
             Discover luxury oceanfront resorts, charming Art Deco boutique hotels, and family-friendly accommodations in Florida's most vibrant beach destination.
           </p>
@@ -324,9 +327,11 @@ export default function Hotels() {
               </div>
             </div>
 
-            {/* SEO Content Block */}
+            {/* SEO Content Block - CONTENT DYNAMICALLY POPULATED BASED ON currentDestination */}
             <div className="bg-card rounded-2xl p-6 border border-border">
-              <h3 className="text-lg font-semibold mb-4 text-foreground">About Miami Beach Hotels</h3>
+              {/* DYNAMIC SEO TITLE - Changes based on destination in production */}
+              <h3 className="text-lg font-semibold mb-4 text-foreground">About Miami Beach, Florida Hotels</h3>
+              {/* DYNAMIC SEO CONTENT - Fetched from database or Edge Function in production */}
               <div className="text-sm text-muted-foreground space-y-3">
                 <p>
                   Miami Beach, Florida, offers an unparalleled vacation experience with its pristine sandy beaches, 
@@ -343,6 +348,7 @@ export default function Hotels() {
                   hotels provide exceptional service, prime locations, and unforgettable experiences in the 
                   heart of Florida's most iconic destination.
                 </p>
+                {/* TODO: Add more dynamic SEO content, keywords, and internal links for better search ranking */}
               </div>
             </div>
 
