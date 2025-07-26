@@ -6,25 +6,30 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { useChatAI } from "@/hooks/useChatAI";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Send, Menu, ArrowLeft, MessageSquare } from "lucide-react";
+import { Send, MessageSquare, LogIn, Compass, Heart, Utensils, User } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
-import { TextAnimate } from "@/components/magicui/text-animate";
-import { BlurFade } from "@/components/magicui/blur-fade";
-import { MobileQuickQuestions } from "@/components/MobileQuickQuestions";
 import { ItineraryCard } from "@/components/ItineraryCard";
 import DesktopTravelPlanner from "@/components/DesktopTravelPlanner";
 import { Link } from "react-router-dom";
-import { AuthStatus } from "@/components/AuthStatus";
+import { AnimatedKeila } from "@/components/AnimatedKeila";
 import LoginCard from "@/components/LoginCard";
 
-// Simple loading component
+// --- UI COMPONENTS ---
+
 const KeilaThinking = () => (
-  <div className="bg-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
-    <p className="text-sm text-gray-400 italic">Keila is planning...</p>
+  <div className="bg-gray-800 px-4 py-3 rounded-2xl max-w-[80%] border border-gray-700">
+    <p className="text-sm text-gray-400 italic">Keila is planning your trip...</p>
   </div>
 );
 
+const WelcomePromptCard = ({ icon, title, question, onClick }: { icon: React.ReactNode; title: string; question: string; onClick: (question: string) => void }) => (
+    <button onClick={() => onClick(question)} className="bg-blue-900/40 border border-blue-500/30 rounded-lg p-4 text-left w-full hover:bg-blue-800/50 transition-colors flex items-center gap-4">
+        <div className="text-blue-400">{icon}</div>
+        <span className="font-semibold">{title}</span>
+    </button>
+);
+
+// --- MAIN PAGE COMPONENT ---
 
 const AiTravel = () => {
   const [mobileInput, setMobileInput] = useState("");
@@ -35,8 +40,8 @@ const AiTravel = () => {
   const hasStartedChat = messages.length > 0;
 
   useEffect(() => {
-    resetSession();
-  }, []);
+    if (user) resetSession();
+  }, [user]);
 
   const handleSendMessage = (message: string) => {
     if (message.trim()) sendMessage(message);
@@ -70,33 +75,25 @@ const AiTravel = () => {
       {isMobile ? (
         <div className="flex flex-col h-dvh bg-black text-white">
           {!hasStartedChat ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-6">
-              <BlurFade delay={0.1} inView>
-                <div className="flex items-center gap-2 mb-6">
-                  <img src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" alt="Keila Bot" className="w-14 h-14 animate-float"/>
-                  <TextAnimate animation="blurInUp" delay={0.3} by="character" once as="h1" className="text-xl font-bold bg-gradient-to-r from-purple-400 to-orange-400 bg-clip-text text-transparent">
-                    Hi! I'm Keila
-                  </TextAnimate>
-                </div>
-              </BlurFade>
-              <BlurFade delay={0.7} inView>
-                <MobileQuickQuestions onQuestionSelect={handleWelcomePrompt} />
-              </BlurFade>
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+              <AnimatedKeila />
+              <h1 className="text-2xl font-bold mt-4">Hi, I'm Keila!</h1>
+              <p className="text-blue-200/80 mt-2 mb-6">How can I help you plan your next trip?</p>
+              <div className="w-full max-w-sm space-y-3">
+                  <WelcomePromptCard icon={<Compass size={24} />} title="Plan a Full Trip" question="Plan a weekend getaway." onClick={handleWelcomePrompt} />
+                  <WelcomePromptCard icon={<Heart size={24} />} title="Romantic Getaway" question="Find a romantic getaway for two." onClick={handleWelcomePrompt} />
+                  <WelcomePromptCard icon={<Utensils size={24} />} title="Foodie Tour" question="Create a foodie tour." onClick={handleWelcomePrompt} />
+                  <WelcomePromptCard icon={<User size={24} />} title="Solo Adventure" question="Plan a solo adventure." onClick={handleWelcomePrompt} />
+              </div>
             </div>
           ) : (
             <>
               <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between bg-black flex-shrink-0">
-                <Button variant="ghost" size="icon" onClick={resetSession}>
-                  <ArrowLeft className="w-5 h-5 text-white" />
-                </Button>
-                <div className="flex items-center gap-2">
-                  <img src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" alt="Keila Bot" className="w-8 h-8"/>
-                  <h1 className="text-lg font-bold text-white">Keila</h1>
-                </div>
-                <Button variant="outline" size="sm" className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white" onClick={resetSession}>
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  New Chat
-                </Button>
+                  <h1 className="text-lg font-bold text-white">Chat with Keila</h1>
+                  <Button variant="outline" size="sm" className="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white" onClick={resetSession}>
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      New Chat
+                  </Button>
               </div>
 
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -116,7 +113,7 @@ const AiTravel = () => {
                         {message.isDetailedItinerary && message.detailedItinerary ? (
                           <ItineraryCard itinerary={message.detailedItinerary} />
                         ) : (
-                          <div className="bg-gray-900 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-800">
+                          <div className="bg-gray-800 px-4 py-2 rounded-2xl max-w-[80%] border border-gray-700">
                             <p className="text-sm text-gray-200">{message.response}</p>
                           </div>
                         )}
@@ -134,7 +131,7 @@ const AiTravel = () => {
                 value={mobileInput}
                 onChange={(e) => setMobileInput(e.target.value)}
                 placeholder="Ask Keila to plan a trip..."
-                className="flex-1 bg-gray-900 border-gray-800 text-white placeholder-gray-500"
+                className="flex-1 bg-gray-900 border-gray-700 text-white placeholder-gray-500"
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(mobileInput)}
               />
               <Button onClick={() => handleSendMessage(mobileInput)} disabled={!mobileInput.trim() || loading} className="bg-blue-600 hover:bg-blue-700 text-white">
@@ -146,11 +143,6 @@ const AiTravel = () => {
       ) : (
         <DesktopTravelPlanner 
           onQuestionSelect={handleWelcomePrompt}
-          hasStartedChat={hasStartedChat}
-          onClearChat={resetSession}
-          chatMessages={messages}
-          isLoading={loading}
-          onSendMessage={sendMessage}
         />
       )}
     </>
