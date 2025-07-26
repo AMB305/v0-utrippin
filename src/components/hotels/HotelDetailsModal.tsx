@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X, MapPin, Star, Wifi, Car, Coffee, Utensils, Dumbbell, Waves } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { HotelPolicyDisplay } from './HotelPolicyDisplay';
 
 interface Hotel {
   id: string;
@@ -22,7 +23,27 @@ interface Hotel {
     check_in: string;
     check_out: string;
     cancellation: string;
+    metapolicy_struct?: any;
+    metapolicy_extra_info?: any;
   };
+  cancellation_penalties?: {
+    policies?: Array<{
+      charge_type: string;
+      charge_amount: number;
+      currency: string;
+      from_date: string;
+      to_date: string;
+      description: string;
+    }>;
+  };
+  taxes_and_fees?: Array<{
+    name: string;
+    amount: number;
+    currency: string;
+    included_by_supplier: boolean;
+    per_night?: boolean;
+    per_person?: boolean;
+  }>;
   description: string;
 }
 
@@ -138,23 +159,12 @@ export function HotelDetailsModal({
           </div>
         </div>
 
-        {/* Policies */}
+        {/* RateHawk Policies Display */}
         <div className="px-6 pb-4">
-          <h3 className="text-lg font-semibold mb-3">Hotel Policies</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <span className="font-medium text-gray-900">Check-in:</span>
-              <p className="text-gray-600">{hotel.policies?.check_in || 'Not available'}</p>
-            </div>
-            <div>
-              <span className="font-medium text-gray-900">Check-out:</span>
-              <p className="text-gray-600">{hotel.policies?.check_out || 'Not available'}</p>
-            </div>
-            <div>
-              <span className="font-medium text-gray-900">Cancellation:</span>
-              <p className="text-gray-600">{hotel.policies?.cancellation || 'Contact hotel for details'}</p>
-            </div>
-          </div>
+          <HotelPolicyDisplay 
+            policies={hotel.policies}
+            taxes_and_fees={hotel.taxes_and_fees}
+          />
         </div>
 
         {/* Booking Details */}

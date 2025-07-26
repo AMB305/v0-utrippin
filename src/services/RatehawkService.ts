@@ -443,7 +443,8 @@ export class RatehawkService {
   static async cancelBooking(bookingId: string, reason?: string): Promise<any> {
     const { data, error } = await supabase.functions.invoke('ratehawk-hotel-cancel', {
       body: {
-        reservationId: bookingId
+        order_id: bookingId,
+        reason
       }
     });
 
@@ -455,13 +456,48 @@ export class RatehawkService {
   }
 
   /**
+   * Check booking status
+   */
+  static async checkBookingStatus(orderId: string): Promise<any> {
+    const { data, error } = await supabase.functions.invoke('ratehawk-booking-status', {
+      body: {
+        order_id: orderId
+      }
+    });
+
+    if (error) {
+      throw new Error(`Booking status check failed: ${error.message}`);
+    }
+
+    return data;
+  }
+
+  /**
+   * Get hotel dump data for mapping
+   */
+  static async getHotelDump(dumpType: 'full' | 'incremental', lastSyncDate?: string): Promise<any> {
+    const { data, error } = await supabase.functions.invoke('ratehawk-hotel-dump', {
+      body: {
+        dump_type: dumpType,
+        last_sync_date: lastSyncDate
+      }
+    });
+
+    if (error) {
+      throw new Error(`Hotel dump failed: ${error.message}`);
+    }
+
+    return data;
+  }
+
+  /**
    * Transform Ratehawk hotel data to app format
    */
-  static transformHotelData(ratehawkHotel: RatehawkHotel) {
+  static transformHotelData(ratehawkHotel: any) {
     return {
-      id: ratehawkHotel.id,
+      id: ratehawkHotel.id || ratehawkHotel.hid,
       name: ratehawkHotel.name,
-      starRating: ratehawkHotel.stars || 4,
+      starRating: ratehawkHotel.stars || ratehawkHotel.star_rating || 4,
       images: ratehawkHotel.images || [],
       amenities: ratehawkHotel.amenities || [],
       pricePerNight: ratehawkHotel.price?.amount || 120,
@@ -471,7 +507,14 @@ export class RatehawkService {
       reviewCount: 1200, // Mock review count
       freeCancellation: true,
       payAtProperty: false,
-      breakfastIncluded: false
+      breakfastIncluded: false,
+      // Preserve RateHawk certification fields
+      policies: ratehawkHotel.policies || {},
+      metapolicy_struct: ratehawkHotel.policies?.metapolicy_struct,
+      metapolicy_extra_info: ratehawkHotel.policies?.metapolicy_extra_info,
+      cancellation_penalties: ratehawkHotel.cancellation_penalties,
+      taxes_and_fees: ratehawkHotel.taxes_and_fees,
+      hid: ratehawkHotel.hid // RateHawk hotel ID for mapping
     };
   }
 
