@@ -17,7 +17,7 @@ import { useNearbyHotels } from "@/hooks/useHotels";
 import { HotelCardDesktop } from "@/components/HotelCardDesktop";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MapPin, Calendar, Users, Hotel, Star, Wifi, Car, Dumbbell, Search } from "lucide-react";
+import { MapPin, Calendar, Users, Hotel, Star, Wifi, Car, Dumbbell, Search, Palmtree, Home, Building, Sparkles, Coffee, TreePine, Crown } from "lucide-react";
 
 export default function Hotels() {
   const [searchParams] = useSearchParams();
@@ -239,17 +239,25 @@ export default function Hotels() {
               {/* Property Type */}
               <div className="mb-6">
                 <h4 className="font-medium mb-3 text-foreground">Property Type</h4>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2">
                   {[
                     { name: 'Hotel', icon: Hotel },
-                    { name: 'Resort', icon: Hotel },
-                    { name: 'Villa', icon: Hotel },
-                    { name: 'Apartment', icon: Hotel }
+                    { name: 'Resort', icon: Palmtree },
+                    { name: 'Villa', icon: Home },
+                    { name: 'Apartment', icon: Building },
+                    { name: 'Boutique Hotel', icon: Sparkles },
+                    { name: 'Motel', icon: Car },
+                    { name: 'Bed & Breakfast', icon: Coffee },
+                    { name: 'Hostel', icon: Users },
+                    { name: 'Guesthouse', icon: Home },
+                    { name: 'Lodge', icon: TreePine },
+                    { name: 'Inn', icon: MapPin },
+                    { name: 'All-Inclusive Resort', icon: Crown }
                   ].map((type) => (
                     <Button
                       key={type.name}
                       variant="outline"
-                      className="justify-start gap-2 h-10"
+                      className="justify-start gap-2 h-10 text-sm"
                     >
                       <type.icon size={16} />
                       {type.name}
