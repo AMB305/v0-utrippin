@@ -45,6 +45,9 @@ interface Hotel {
     per_person?: boolean;
   }>;
   description: string;
+  freeCancellation?: boolean;
+  payAtProperty?: boolean;
+  currency?: string;
 }
 
 interface HotelDetailsModalProps {
@@ -177,9 +180,32 @@ export function HotelDetailsModal({
                 <p className="text-sm text-gray-600">{guests}</p>
               </div>
               <div className="text-right">
-                <Badge variant="secondary" className="mb-2">Free Cancellation</Badge>
-                <p className="text-2xl font-bold text-primary">Test Rate</p>
-                <p className="text-sm text-gray-600">total for stay</p>
+                {hotel.freeCancellation && (
+                  <Badge variant="secondary" className="mb-2">Free Cancellation</Badge>
+                )}
+                {hotel.payAtProperty && (
+                  <Badge variant="outline" className="mb-2 ml-1">Pay at Property</Badge>
+                )}
+                <div className="space-y-1">
+                  <p className="text-2xl font-bold text-primary">
+                    ${((hotel as any).pricePerNight || 299)} {hotel.currency || 'USD'}
+                  </p>
+                  <p className="text-sm text-gray-600">per night</p>
+                  
+                  {/* Non-included fees display */}
+                  {hotel.taxes_and_fees && hotel.taxes_and_fees.filter(fee => !fee.included_by_supplier).length > 0 && (
+                    <div className="text-xs text-orange-600 mt-1">
+                      <p className="font-medium">Additional fees (pay at hotel):</p>
+                      {hotel.taxes_and_fees
+                        .filter(fee => !fee.included_by_supplier)
+                        .map((fee, index) => (
+                          <p key={index}>
+                            {fee.name}: ${fee.amount} {fee.currency}
+                          </p>
+                        ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <Button 
