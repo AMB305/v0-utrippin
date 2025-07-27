@@ -104,6 +104,23 @@ serve(async (req) => {
     const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Get or create user conversation memory
+    let conversationMemory = null;
+    let storedExtractedInfo = {};
+    
+    if (userId) {
+      const { data: existingConversation } = await supabase
+        .from('user_conversations')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (existingConversation) {
+        conversationMemory = existingConversation;
+        storedExtractedInfo = existingConversation.extracted_info || {};
+      }
+    }
+
     // Fetch user profile and preferences for personalization
     let personalizationContext = "";
     
@@ -126,14 +143,14 @@ serve(async (req) => {
             agoda_affiliate_id
           `)
           .eq('id', userId)
-          .single();
+          .maybeSingle();
         
         // Get travel preferences
         const { data: preferences } = await supabase
           .from('travel_preferences')
           .select('*')
           .eq('user_id', userId)
-          .single();
+          .maybeSingle();
         
         // Check if user is an agent
         const isAgent = !!(profile?.expedia_affiliate_id || profile?.booking_affiliate_id || profile?.agoda_affiliate_id);
@@ -173,52 +190,62 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       }
     }
 
-    // Extract travel information from conversation history and current message
-    const allMessages = [...conversationHistory.map(msg => `User: ${msg.question}\nKeila: ${msg.response}`), `User: ${message}`].join('\n\n');
+    // Use stored memory + current conversation for extraction
+    const storedMessages = conversationMemory?.messages || [];
+    const allMessageHistory = [...storedMessages, ...conversationHistory.map(msg => ({ role: 'user', content: msg.question }), { role: 'assistant', content: msg.response }).flat(), { role: 'user', content: message }];
+    const allMessages = allMessageHistory.map(msg => msg.content).join('\n\n');
     
-    // Smart information extraction
+    // Smart information extraction - merge with stored info
     const extractedInfo = {
-      destination: null,
-      dates: null,
-      duration: null,
-      budget: null,
-      travelers: null,
-      preferences: []
+      destination: storedExtractedInfo.destination || null,
+      dates: storedExtractedInfo.dates || null,
+      duration: storedExtractedInfo.duration || null,
+      budget: storedExtractedInfo.budget || null,
+      travelers: storedExtractedInfo.travelers || null,
+      preferences: storedExtractedInfo.preferences || []
     };
 
     // Extract destination - Enhanced patterns  
     const destinationMatch = allMessages.toLowerCase().match(/(?:to|visit|go to|travel to|trip to)\s+([a-z\s,]+?)(?:\s+with|\s|$|for|in|during)/i) ||
                            allMessages.match(/(japan|colombia?|paris|london|italy|spain|greece|thailand|bali|tokyo|mexico|[a-z]{3,})/i);
-    if (destinationMatch) extractedInfo.destination = destinationMatch[1].trim();
+    if (destinationMatch && !extractedInfo.destination) {
+      extractedInfo.destination = destinationMatch[1].trim();
+    }
 
     // Extract dates and duration
     const durationMatch = allMessages.match(/(\d+)\s*days?/i) || allMessages.match(/(\d+)\s*weeks?/i);
-    if (durationMatch) extractedInfo.duration = durationMatch[0];
+    if (durationMatch && !extractedInfo.duration) {
+      extractedInfo.duration = durationMatch[0];
+    }
     
     const dateMatch = allMessages.match(/(aug|august|sep|september|oct|october|nov|november|dec|december|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july)\s*(\d{1,2})?(?:\s*-\s*(\d{1,2}))?/i);
-    if (dateMatch) extractedInfo.dates = dateMatch[0];
+    if (dateMatch && !extractedInfo.dates) {
+      extractedInfo.dates = dateMatch[0];
+    }
 
     // Extract budget - Enhanced to catch various formats
     const budgetMatch = allMessages.match(/\$(\d+(?:,\d{3})*)/) || 
                        allMessages.match(/(?:I have|budget of?|around|about)\s*\$?(\d+(?:,\d{3})*)/i) ||
                        allMessages.match(/(\d+(?:,\d{3})*)\s*(?:dollars?|usd|budget)/i) ||
                        allMessages.match(/\b(\d{3,5})\b/); // Fallback for standalone numbers like "2000"
-    if (budgetMatch) {
+    if (budgetMatch && !extractedInfo.budget) {
       const amount = budgetMatch[1] || budgetMatch[0];
       extractedInfo.budget = amount.includes('$') ? amount : `$${amount}`;
     }
 
     // Extract traveler info
-    if (allMessages.toLowerCase().includes('solo')) extractedInfo.travelers = 'solo';
-    else if (allMessages.toLowerCase().includes('family')) extractedInfo.travelers = 'family';
-    else if (allMessages.toLowerCase().includes('couple')) extractedInfo.travelers = 'couple';
+    if (!extractedInfo.travelers) {
+      if (allMessages.toLowerCase().includes('solo')) extractedInfo.travelers = 'solo';
+      else if (allMessages.toLowerCase().includes('family')) extractedInfo.travelers = 'family';
+      else if (allMessages.toLowerCase().includes('couple')) extractedInfo.travelers = 'couple';
+    }
 
     // Build conversation context
     let conversationContext = '';
-    if (conversationHistory.length > 0) {
+    if (allMessageHistory.length > 0) {
       conversationContext = `
 **CONVERSATION HISTORY:**
-${conversationHistory.map(msg => `User: ${msg.question}\nKeila: ${msg.response}`).join('\n\n')}
+${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Keila'}: ${msg.content}`).join('\n\n')}
 
 **EXTRACTED INFORMATION SO FAR:**
 - Destination: ${extractedInfo.destination || 'Not specified'}
@@ -463,6 +490,33 @@ ${conversationHistory.map(msg => `User: ${msg.question}\nKeila: ${msg.response}`
         throw new Error(`Failed to parse AI response: ${parseError.message}`);
       }
     }
+    
+    // Update conversation memory with new message and extracted info
+    if (userId) {
+      const newMessages = [...(conversationMemory?.messages || []), { role: 'user', content: message }, { role: 'assistant', content: messageContent }];
+      
+      if (conversationMemory) {
+        // Update existing conversation
+        await supabase
+          .from('user_conversations')
+          .update({
+            messages: newMessages,
+            extracted_info: extractedInfo,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', conversationMemory.id);
+      } else {
+        // Create new conversation
+        await supabase
+          .from('user_conversations')
+          .insert({
+            user_id: userId,
+            messages: newMessages,
+            extracted_info: extractedInfo
+          });
+      }
+    }
+
     // Try comprehensive schema first
     const comprehensiveValidation = ComprehensiveItinerarySchema.safeParse(parsedJson);
     

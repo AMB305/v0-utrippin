@@ -27,16 +27,13 @@ export const useChatAI = () => {
     });
 
     try {
-      const functionName = comprehensive ? 'ai-comprehensive-itinerary' : 'ai-travel-chat';
-      const { data, error } = await supabase.functions.invoke(functionName, {
+      // Use only ai-travel-chat with the new memory system
+      const { data, error } = await supabase.functions.invoke('ai-travel-chat', {
         body: { 
           message, 
           comprehensive, 
-          userId: user?.id,
-          conversationHistory: messages.map(msg => ({
-            question: msg.question,
-            response: msg.response
-          })).filter(msg => msg.response) // Only include completed messages
+          userId: user?.id
+          // No longer sending conversationHistory - using persistent memory instead
         },
       });
 
@@ -70,8 +67,21 @@ export const useChatAI = () => {
     return sendMessage(message, true);
   };
 
-  const resetSession = () => {
+  const resetSession = async () => {
     clearMessages();
+    
+    // Clear conversation memory from database
+    if (user?.id) {
+      try {
+        await supabase
+          .from('user_conversations')
+          .delete()
+          .eq('user_id', user.id);
+        console.log('Conversation memory cleared');
+      } catch (error) {
+        console.error('Error clearing conversation memory:', error);
+      }
+    }
   };
 
   return {
