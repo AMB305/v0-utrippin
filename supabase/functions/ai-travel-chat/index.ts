@@ -96,7 +96,17 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
-    const { message, userId, conversationHistory = [] } = await req.json();
+    const { message: userPrompt, userId, conversationHistory = [] } = await req.json();
+    
+    if (!userPrompt) {
+      console.error("No message provided in request body");
+      return new Response(JSON.stringify({ error: "Sorry, something went wrong reading your message." }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    const message = userPrompt; // rename for clarity
 
     // Add Supabase client for user data
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -107,6 +117,7 @@ serve(async (req) => {
     // Get or create user conversation memory
     let conversationMemory = null;
     let storedExtractedInfo = {};
+    let retryCount = 0;
     
     if (userId) {
       const { data: existingConversation } = await supabase
@@ -118,6 +129,7 @@ serve(async (req) => {
       if (existingConversation) {
         conversationMemory = existingConversation;
         storedExtractedInfo = existingConversation.extracted_info || {};
+        retryCount = existingConversation.retry_count || 0;
       }
     }
 
@@ -224,9 +236,13 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       }
     }
 
-    // Extract dates and duration - Fixed to catch "5 days" and "Aug 1-6"
+    // Extract dates and duration - Enhanced patterns
     if (!extractedInfo.duration) {
+      // Expanded duration patterns to catch "for a week", "2 weeks", etc.
       const durationPatterns = [
+        /\bfor\s+(\d{1,2})\s*(days?|weeks?)\b/gi,
+        /\b(\d+)\s*(days?|weeks?)\b/gi,
+        /\bfor\s+a\s+(week|month)\b/gi,
         /for\s+(\d+)\s+(days?|nights?|weeks?)/i,  // "for 5 days" - prioritize this pattern
         /(\d+)[-\s]*(days?|nights?|weeks?)/i      // "5 days" or "5-days"
       ];
@@ -234,24 +250,37 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       for (const pattern of durationPatterns) {
         const match = allMessages.match(pattern);
         if (match) {
-          extractedInfo.duration = `${match[1]} ${match[2]}`;
+          extractedInfo.duration = match[0];
           break;
         }
       }
     }
     
     if (!extractedInfo.dates) {
+      const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+      const monthRegex = new RegExp(`\\b(${monthNames.join("|")})\\b`, "i");
+      
+      // Enhanced date patterns
       const datePatterns = [
         /(aug|august|sep|september|oct|october|nov|november|dec|december|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july)\s*(\d{1,2})(?:\s*[-–]\s*(\d{1,2}))?/i,
         /(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/,  // 8/1 or 8/1/24
         /(\d{1,2})[-–](\d{1,2})/  // 1-6 or 1–6
       ];
       
-      for (const pattern of datePatterns) {
-        const match = allMessages.match(pattern);
-        if (match) {
-          extractedInfo.dates = match[0];
-          break;
+      // Check for month name mentions
+      if (monthRegex.test(allMessages)) {
+        const monthMatch = allMessages.match(monthRegex);
+        if (monthMatch) {
+          extractedInfo.dates = monthMatch[0];
+        }
+      } else {
+        // Use existing patterns
+        for (const pattern of datePatterns) {
+          const match = allMessages.match(pattern);
+          if (match) {
+            extractedInfo.dates = match[0];
+            break;
+          }
         }
       }
     }
@@ -305,15 +334,21 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     console.log('Message:', message);
     console.log('All Messages:', allMessages);
     console.log('Extracted Info:', extractedInfo);
+    console.log('Retry Count:', retryCount);
     
     // Ensure trip duration OR date is known before attempting itinerary
     const hasDatesOrDuration = extractedInfo.duration || extractedInfo.dates;
     const hasEnoughInfo = extractedInfo.destination && extractedInfo.budget && hasDatesOrDuration;
     
+    // Force-break logic: if we have destination + budget and have retried 3+ times, push ahead
+    const shouldForceItinerary = !!(extractedInfo.destination && extractedInfo.budget && retryCount >= 3);
+    
     console.log('Has enough info?', hasEnoughInfo);
+    console.log('Should force itinerary?', shouldForceItinerary);
     console.log('- Destination:', extractedInfo.destination);
     console.log('- Budget:', extractedInfo.budget);
     console.log('- Duration/Dates:', extractedInfo.duration, extractedInfo.dates);
+    console.log('- Retry count:', retryCount);
 
     const systemPrompt = `You are Keila, an expert AI travel agent that creates comprehensive, visually rich travel itineraries and engages in intelligent conversation. You MUST respond with a single, valid JSON object and nothing else.
 
@@ -335,7 +370,7 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     5. **Your response MUST be either COMPREHENSIVE_ITINERARY_SCHEMA or INTELLIGENT_QUESTIONING_SCHEMA**
     6. **All booking links MUST use Expedia with camref=1101l5dQSW for affiliate tracking.**
 
-    **SUFFICIENT INFO CHECK**: ${hasEnoughInfo ? 'USER HAS PROVIDED SUFFICIENT INFO - CREATE COMPREHENSIVE ITINERARY IMMEDIATELY. DO NOT ASK MORE QUESTIONS.' : 'More info needed - ask smart questions but do not repeat already answered ones'}
+    **SUFFICIENT INFO CHECK**: ${hasEnoughInfo || shouldForceItinerary ? 'USER HAS PROVIDED SUFFICIENT INFO - CREATE COMPREHENSIVE ITINERARY IMMEDIATELY. DO NOT ASK MORE QUESTIONS.' : 'More info needed - ask smart questions but do not repeat already answered ones'}
 
     **INTELLIGENT QUESTIONING GUIDELINES:**
     - Analyze what the user DID provide and acknowledge it
@@ -571,6 +606,9 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     if (userId) {
       const newMessages = [...(conversationMemory?.messages || []), { role: 'user', content: message }, { role: 'assistant', content: messageContent }];
       
+      // Increment retry count if we're still asking questions (not generating itinerary)
+      const newRetryCount = (hasEnoughInfo || shouldForceItinerary) ? 0 : retryCount + 1;
+      
       if (conversationMemory) {
         // Update existing conversation
         await supabase
@@ -578,6 +616,7 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
           .update({
             messages: newMessages,
             extracted_info: extractedInfo,
+            retry_count: newRetryCount,
             updated_at: new Date().toISOString()
           })
           .eq('id', conversationMemory.id);
@@ -588,7 +627,8 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
           .insert({
             user_id: userId,
             messages: newMessages,
-            extracted_info: extractedInfo
+            extracted_info: extractedInfo,
+            retry_count: newRetryCount
           });
       }
     }
