@@ -198,9 +198,15 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
     const dateMatch = allMessages.match(/(aug|august|sep|september|oct|october|nov|november|dec|december|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july)\s*(\d{1,2})?(?:\s*-\s*(\d{1,2}))?/i);
     if (dateMatch) extractedInfo.dates = dateMatch[0];
 
-    // Extract budget
-    const budgetMatch = allMessages.match(/\$(\d+(?:,\d{3})*)/);
-    if (budgetMatch) extractedInfo.budget = budgetMatch[0];
+    // Extract budget - Enhanced to catch various formats
+    const budgetMatch = allMessages.match(/\$(\d+(?:,\d{3})*)/) || 
+                       allMessages.match(/(?:I have|budget of?|around|about)\s*\$?(\d+(?:,\d{3})*)/i) ||
+                       allMessages.match(/(\d+(?:,\d{3})*)\s*(?:dollars?|usd|budget)/i) ||
+                       allMessages.match(/\b(\d{3,5})\b/); // Fallback for standalone numbers like "2000"
+    if (budgetMatch) {
+      const amount = budgetMatch[1] || budgetMatch[0];
+      extractedInfo.budget = amount.includes('$') ? amount : `$${amount}`;
+    }
 
     // Extract traveler info
     if (allMessages.toLowerCase().includes('solo')) extractedInfo.travelers = 'solo';
