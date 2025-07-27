@@ -205,31 +205,38 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       preferences: storedExtractedInfo.preferences || []
     };
 
-    // Extract destination - Simplified and more accurate
-    const knownLocations = ['paris', 'tokyo', 'cancun', 'london', 'barcelona', 'dubai', 'japan', 'colombia', 'italy', 'spain', 'greece', 'thailand', 'bali', 'mexico', 'miami', 'new york', 'los angeles', 'rome', 'amsterdam', 'berlin', 'prague', 'budapest'];
-    
+    // Extract destination - Fixed to catch "Plan me a trip to Cancun"
     if (!extractedInfo.destination) {
-      // Check for known locations first
-      const cityMatch = knownLocations.find(loc => allMessages.toLowerCase().includes(loc));
-      if (cityMatch) {
-        extractedInfo.destination = cityMatch.charAt(0).toUpperCase() + cityMatch.slice(1);
+      // First try to extract from trip-related phrases  
+      const tripPattern = /(?:plan.*?trip to|trip to|go to|visit|travel to)\s+([a-zA-Z\s]+?)(?:\s+for|\s+in|\s+with|\s*\$|\s*\d|$)/i;
+      const destinationMatch = allMessages.match(tripPattern);
+      
+      if (destinationMatch) {
+        const dest = destinationMatch[1].trim();
+        extractedInfo.destination = dest.charAt(0).toUpperCase() + dest.slice(1);
       } else {
-        // Try to extract from trip-related phrases
-        const destinationMatch = allMessages.match(/(?:trip to|go to|visit|travel to|plan.*to)\s+([a-zA-Z\s]+?)(?:\s+for|\s+in|\s+with|\s*[,$]|\s*\d|\s*$)/i);
-        if (destinationMatch) {
-          const dest = destinationMatch[1].trim();
-          if (dest.length > 2 && dest.length < 30) {
-            extractedInfo.destination = dest.charAt(0).toUpperCase() + dest.slice(1);
-          }
+        // Fallback to known locations
+        const knownLocations = ['paris', 'tokyo', 'cancun', 'london', 'barcelona', 'dubai', 'japan', 'colombia', 'italy', 'spain', 'greece', 'thailand', 'bali', 'mexico', 'miami', 'new york', 'los angeles', 'rome', 'amsterdam', 'berlin', 'prague', 'budapest'];
+        const cityMatch = knownLocations.find(loc => allMessages.toLowerCase().includes(loc));
+        if (cityMatch) {
+          extractedInfo.destination = cityMatch.charAt(0).toUpperCase() + cityMatch.slice(1);
         }
       }
     }
 
-    // Extract dates and duration - More accurate
+    // Extract dates and duration - Fixed to catch "5 days" and "Aug 1-6"
     if (!extractedInfo.duration) {
-      const durationMatch = allMessages.match(/(\d+)[-\s]*(days?|nights?|week)/i);
-      if (durationMatch) {
-        extractedInfo.duration = `${durationMatch[1]} ${durationMatch[2]}`;
+      const durationPatterns = [
+        /for\s+(\d+)\s+(days?|nights?|weeks?)/i,  // "for 5 days" - prioritize this pattern
+        /(\d+)[-\s]*(days?|nights?|weeks?)/i      // "5 days" or "5-days"
+      ];
+      
+      for (const pattern of durationPatterns) {
+        const match = allMessages.match(pattern);
+        if (match) {
+          extractedInfo.duration = `${match[1]} ${match[2]}`;
+          break;
+        }
       }
     }
     
@@ -237,7 +244,7 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       const datePatterns = [
         /(aug|august|sep|september|oct|october|nov|november|dec|december|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july)\s*(\d{1,2})(?:\s*[-–]\s*(\d{1,2}))?/i,
         /(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/,  // 8/1 or 8/1/24
-        /(\d{1,2})-(\d{1,2})/  // 1-6
+        /(\d{1,2})[-–](\d{1,2})/  // 1-6 or 1–6
       ];
       
       for (const pattern of datePatterns) {
@@ -249,11 +256,11 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       }
     }
 
-    // Extract budget - Simplified and more accurate
+    // Extract budget - Fixed to catch "$5000" in the test case
     if (!extractedInfo.budget) {
       const budgetPatterns = [
-        /\$(\d+(?:,\d{3})*)/,  // $5000 or $5,000
-        /for\s+\$?(\d+(?:,\d{3})*)/i,  // for $5000 or for 5000
+        /for\s+\$(\d+(?:,\d{3})*)/i,  // "for $5000" - prioritize this pattern
+        /\$(\d+(?:,\d{3})*)/,  // $5000 or $5,000  
         /budget.*?(\d+(?:,\d{3})*)/i,  // budget 5000
         /(\d{4,})/  // standalone 4+ digit numbers like 5000
       ];
