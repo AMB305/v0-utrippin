@@ -13,13 +13,19 @@ interface MobileTravelInterfaceProps {
   onCategorySelect?: (category: string) => void;
   onDestinationClick?: (destination: string) => void;
   onChatStart?: () => void;
+  onSendMessage?: (message: string) => void;
+  messages?: any[];
+  isLoading?: boolean;
 }
 
 export const MobileTravelInterface: React.FC<MobileTravelInterfaceProps> = ({
   onSearch,
   onCategorySelect,
   onDestinationClick,
-  onChatStart
+  onChatStart,
+  onSendMessage,
+  messages,
+  isLoading
 }) => {
   return (
     <div className="min-h-screen bg-mobile-dark relative">
@@ -50,7 +56,12 @@ export const MobileTravelInterface: React.FC<MobileTravelInterfaceProps> = ({
       <MobileTravelNavigation />
 
       {/* Keila Chat Bot - Bottom Right */}
-      <KeilaChatBot onChatStart={onChatStart} />
+      <KeilaChatBot 
+        onChatStart={onChatStart}
+        onSendMessage={onSendMessage}
+        messages={messages}
+        isLoading={isLoading}
+      />
     </div>
   );
 };

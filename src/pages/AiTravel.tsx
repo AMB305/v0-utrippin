@@ -100,6 +100,9 @@ const AiTravel = () => {
           onCategorySelect={handleMobileCategorySelect}
           onDestinationClick={handleMobileDestinationClick}
           onChatStart={handleMobileChatStart}
+          onSendMessage={sendMessage}
+          messages={messages}
+          isLoading={loading}
         />
       </>
     );

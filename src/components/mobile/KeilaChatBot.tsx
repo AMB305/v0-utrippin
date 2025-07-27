@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, X } from 'lucide-react';
 import { AnimatedKeila } from '@/components/AnimatedKeila';
+import { MobileChatInterface } from './MobileChatInterface';
 
 interface KeilaChatBotProps {
   onChatStart?: () => void;
+  onSendMessage?: (message: string) => void;
+  messages?: any[];
+  isLoading?: boolean;
 }
 
-export const KeilaChatBot: React.FC<KeilaChatBotProps> = ({ onChatStart }) => {
+export const KeilaChatBot: React.FC<KeilaChatBotProps> = ({ 
+  onChatStart, 
+  onSendMessage, 
+  messages = [], 
+  isLoading = false 
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPeriodicPopup, setShowPeriodicPopup] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Periodic popup every 15 seconds
   useEffect(() => {
@@ -25,10 +35,19 @@ export const KeilaChatBot: React.FC<KeilaChatBotProps> = ({ onChatStart }) => {
 
   const handleChatClick = () => {
     setShowPeriodicPopup(false); // Hide popup when clicked
+    setIsChatOpen(true);
     if (onChatStart) {
       onChatStart();
-    } else {
-      setIsExpanded(!isExpanded);
+    }
+  };
+
+  const handleChatClose = () => {
+    setIsChatOpen(false);
+  };
+
+  const handleSendMessage = (message: string) => {
+    if (onSendMessage) {
+      onSendMessage(message);
     }
   };
 
@@ -80,7 +99,7 @@ export const KeilaChatBot: React.FC<KeilaChatBotProps> = ({ onChatStart }) => {
         {/* Keila Face */}
         <div className="w-16 h-16 relative z-10">
           <img 
-            src="/lovable-uploads/0c600adc-df9a-43e1-b83e-e90ae7766dfd.png" 
+            src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
             alt="Keila" 
             className="w-full h-full animate-bounce drop-shadow-lg" 
           />
@@ -91,6 +110,15 @@ export const KeilaChatBot: React.FC<KeilaChatBotProps> = ({ onChatStart }) => {
           <MessageCircle className="w-6 h-6 text-white" />
         </div>
       </button>
+
+      {/* Mobile Chat Interface */}
+      <MobileChatInterface
+        isOpen={isChatOpen}
+        onClose={handleChatClose}
+        onSendMessage={handleSendMessage}
+        messages={messages}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
