@@ -77,6 +77,12 @@ const CategoryRecommendationSchema = z.object({
   }))
 });
 
+const CustomizationCallToActionSchema = z.object({
+  title: z.string(),
+  message: z.string(),
+  quickReplies: z.array(z.string())
+});
+
 export const ComprehensiveItinerarySchema = z.object({
   itineraryId: z.string(),
   tripTitle: z.string(),
@@ -100,7 +106,8 @@ export const ComprehensiveItinerarySchema = z.object({
   utility: z.object({
     sources: z.array(z.string()),
     downloadPdfLink: z.string().optional()
-  })
+  }),
+  customizationCallToAction: CustomizationCallToActionSchema.optional()
 });
 
 export type DetailedItinerary = z.infer<typeof MultiItinerarySchema>;
@@ -110,3 +117,4 @@ export type DayPlan = z.infer<typeof DayPlanSchema>;
 export type Event = z.infer<typeof EventSchema>;
 export type CultureTip = z.infer<typeof CultureTipSchema>;
 export type CategoryRecommendation = z.infer<typeof CategoryRecommendationSchema>;
+export type CustomizationCallToAction = z.infer<typeof CustomizationCallToActionSchema>;

@@ -63,6 +63,12 @@ const CategoryRecommendationSchema = z.object({
   }))
 });
 
+const CustomizationCallToActionSchema = z.object({
+  title: z.string(),
+  message: z.string(),
+  quickReplies: z.array(z.string())
+});
+
 const ComprehensiveItinerarySchema = z.object({
   itineraryId: z.string(),
   tripTitle: z.string(),
@@ -86,7 +92,8 @@ const ComprehensiveItinerarySchema = z.object({
   utility: z.object({
     sources: z.array(z.string()),
     downloadPdfLink: z.string().optional()
-  })
+  }),
+  customizationCallToAction: CustomizationCallToActionSchema.optional()
 });
 
 const openRouterApiKey = Deno.env.get('OPENROUTER_API_KEY');
@@ -336,12 +343,29 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     console.log('Extracted Info:', extractedInfo);
     console.log('Retry Count:', retryCount);
     
-    // Ensure trip duration OR date is known before attempting itinerary
-    const hasDatesOrDuration = extractedInfo.duration || extractedInfo.dates;
-    const hasEnoughInfo = extractedInfo.destination && extractedInfo.budget && hasDatesOrDuration;
+    // NEW UX FLOW: Use smart defaults and always generate itinerary if destination is provided
+    const fallbackDefaults = (input) => {
+      const today = new Date();
+      const futureDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+      
+      return {
+        destination: extractedInfo.destination || "Cancun",
+        budget: extractedInfo.budget || "$2000", 
+        travelers: extractedInfo.travelers || "1",
+        duration: extractedInfo.duration || "5 days",
+        dates: extractedInfo.dates || futureDate.toISOString().split('T')[0]
+      };
+    };
     
-    // Force-break logic: if we have destination + budget and have retried 3+ times, push ahead
-    const shouldForceItinerary = !!(extractedInfo.destination && extractedInfo.budget && retryCount >= 3);
+    // Apply smart defaults when we have at least a destination
+    const smartDefaults = fallbackDefaults(message);
+    
+    // NEW LOGIC: Generate itinerary if we have destination OR if user asks for trip planning
+    const hasTripPlanningIntent = /plan.*trip|trip to|travel to|vacation|holiday|itinerary|visit/i.test(message);
+    const hasEnoughInfo = extractedInfo.destination || hasTripPlanningIntent;
+    
+    // Always force itinerary when we detect trip planning intent
+    const shouldForceItinerary = hasEnoughInfo;
     
     console.log('Has enough info?', hasEnoughInfo);
     console.log('Should force itinerary?', shouldForceItinerary);
@@ -350,11 +374,19 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     console.log('- Duration/Dates:', extractedInfo.duration, extractedInfo.dates);
     console.log('- Retry count:', retryCount);
 
-    const systemPrompt = `You are Keila, an expert AI travel agent that creates comprehensive, visually rich travel itineraries and engages in intelligent conversation. You MUST respond with a single, valid JSON object and nothing else.
+    const systemPrompt = `You are Keila, an expert AI travel planner for Utrippin. 
+    Always respond with a full itinerary, even if the user's input is vague or incomplete. 
+    Use your best assumptions. Then ask follow-up questions to help refine the plan.
 
-    **NEW MODE**: Answer direct travel-related questions directly, THEN ask about trip planning if relevant.
-    If a user asks "What are the best beaches in Greece?" answer directly, THEN ask about trip planning.
-    Use JSON format always. Return follow-up quick replies if relevant.
+    **CRITICAL: ALWAYS GENERATE FULL ITINERARY FIRST** - Never ask questions before providing value.
+    When someone says "Plan me a trip to Cancun", immediately create a comprehensive itinerary using smart defaults.
+    
+    **SMART DEFAULTS TO USE:**
+    - Destination: ${smartDefaults.destination}
+    - Budget: ${smartDefaults.budget} 
+    - Duration: ${smartDefaults.duration}
+    - Dates: ${smartDefaults.dates}
+    - Travelers: ${smartDefaults.travelers} person(s)
 
     ${personalizationContext}
     ${conversationContext}
@@ -370,7 +402,7 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     5. **Your response MUST be either COMPREHENSIVE_ITINERARY_SCHEMA or INTELLIGENT_QUESTIONING_SCHEMA**
     6. **All booking links MUST use Expedia with camref=1101l5dQSW for affiliate tracking.**
 
-    **SUFFICIENT INFO CHECK**: ${hasEnoughInfo || shouldForceItinerary ? 'USER HAS PROVIDED SUFFICIENT INFO - CREATE COMPREHENSIVE ITINERARY IMMEDIATELY. DO NOT ASK MORE QUESTIONS.' : 'More info needed - ask smart questions but do not repeat already answered ones'}
+    **SUFFICIENT INFO CHECK**: ${hasEnoughInfo || shouldForceItinerary ? 'CREATE COMPREHENSIVE ITINERARY IMMEDIATELY using the smart defaults above. Include customization options at the end.' : 'More info needed - ask smart questions but do not repeat already answered ones'}
 
     **INTELLIGENT QUESTIONING GUIDELINES:**
     - Analyze what the user DID provide and acknowledge it
@@ -478,6 +510,11 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
       "utility": {
         "sources": ["TripAdvisor", "Lonely Planet", "Local Tourism Board"],
         "downloadPdfLink": "https://example.com/itinerary.pdf"
+      },
+      "customizationCallToAction": {
+        "title": "✨ Want to customize this trip?",
+        "message": "Would you like to:\n\n🗓️ Choose specific dates\n👫 Add more travelers\n📍 Change focus (family, nightlife, food, beaches)\n📤 Download or share with a friend or agent\n✏️ Customize the activities\n\nType what you'd like to do next!",
+        "quickReplies": ["Set specific dates", "Add travelers", "Focus on nightlife", "Download trip", "Customize activities"]
       }
     }
 

@@ -61,6 +61,7 @@ export const MobileTravelInterface: React.FC<MobileTravelInterfaceProps> = ({
         onSendMessage={onSendMessage}
         messages={messages}
         isLoading={isLoading}
+        onQuickReply={onSendMessage}
       />
     </div>
   );

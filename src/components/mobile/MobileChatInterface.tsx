@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, RefreshCw, Camera, Globe, MapPin, Mic, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ComprehensiveItineraryDisplay } from '@/components/comprehensive-itinerary/ComprehensiveItineraryDisplay';
 
 interface MobileChatInterfaceProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface MobileChatInterfaceProps {
   onSendMessage: (message: string) => void;
   messages: any[];
   isLoading: boolean;
+  onQuickReply?: (reply: string) => void;
 }
 
 export const MobileChatInterface: React.FC<MobileChatInterfaceProps> = ({
@@ -15,34 +17,35 @@ export const MobileChatInterface: React.FC<MobileChatInterfaceProps> = ({
   onClose,
   onSendMessage,
   messages,
-  isLoading
+  isLoading,
+  onQuickReply
 }) => {
   const [inputMessage, setInputMessage] = useState('');
 
   const suggestionCards = [
     {
-      icon: '✈️',
-      category: 'Flights',
-      question: 'Can you show me the earliest flights departing from Shanghai to Hong Kong no...',
+      icon: '🏖️',
+      category: 'Beach Vacation',
+      question: 'Plan me a trip to Cancun',
       color: 'bg-blue-50 border-blue-200'
     },
     {
-      icon: '🏨',
-      category: 'Hotels',
-      question: 'Which hotels in Macau have a great view of the city?',
-      color: 'bg-red-50 border-red-200'
+      icon: '🏔️',
+      category: 'Adventure',
+      question: 'Plan a mountain adventure in Colorado for 5 days',
+      color: 'bg-green-50 border-green-200'
     },
     {
-      icon: '💡',
-      category: 'Inspiration',
-      question: 'Can I use my mobile phone abroad without roaming charges?',
+      icon: '🍜',
+      category: 'Food & Culture',
+      question: 'Plan a culinary trip to Tokyo on a $3000 budget',
       color: 'bg-orange-50 border-orange-200'
     },
     {
-      icon: '💡',
-      category: 'Inspiration',
-      question: 'How can I make the most of a long layover at an airport?',
-      color: 'bg-orange-50 border-orange-200'
+      icon: '🏰',
+      category: 'Europe',
+      question: 'Plan a romantic trip to Paris for my anniversary',
+      color: 'bg-purple-50 border-purple-200'
     }
   ];
 
@@ -149,11 +152,41 @@ export const MobileChatInterface: React.FC<MobileChatInterfaceProps> = ({
                   </div>
                 </div>
 
+                {/* Comprehensive Itinerary */}
+                {message.comprehensiveItinerary && (
+                  <div className="w-full">
+                    <ComprehensiveItineraryDisplay 
+                      itinerary={message.comprehensiveItinerary}
+                      onBack={() => {
+                        // Could implement navigation back to chat
+                      }}
+                      onQuickReply={onQuickReply}
+                    />
+                  </div>
+                )}
+
                 {/* AI Response */}
-                {message.response && (
+                {message.response && !message.comprehensiveItinerary && (
                   <div className="flex justify-start">
                     <div className="bg-gray-100 rounded-lg p-3 max-w-[80%]">
-                      <p className="text-sm text-gray-800">{message.response}</p>
+                      <p className="text-sm text-gray-800 whitespace-pre-line">{message.response}</p>
+                      
+                      {/* Quick Replies */}
+                      {message.quickReplies && message.quickReplies.length > 0 && (
+                        <div className="mt-3 space-y-2">
+                          {message.quickReplies.map((reply: string, replyIndex: number) => (
+                            <Button
+                              key={replyIndex}
+                              variant="outline"
+                              size="sm"
+                              className="mr-2 mb-2 text-xs"
+                              onClick={() => onQuickReply ? onQuickReply(reply) : onSendMessage(reply)}
+                            >
+                              {reply}
+                            </Button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

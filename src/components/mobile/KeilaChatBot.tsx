@@ -8,13 +8,15 @@ interface KeilaChatBotProps {
   onSendMessage?: (message: string) => void;
   messages?: any[];
   isLoading?: boolean;
+  onQuickReply?: (reply: string) => void;
 }
 
 export const KeilaChatBot: React.FC<KeilaChatBotProps> = ({ 
   onChatStart, 
   onSendMessage, 
   messages = [], 
-  isLoading = false 
+  isLoading = false,
+  onQuickReply
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPeriodicPopup, setShowPeriodicPopup] = useState(false);
@@ -118,6 +120,7 @@ export const KeilaChatBot: React.FC<KeilaChatBotProps> = ({
         onSendMessage={handleSendMessage}
         messages={messages}
         isLoading={isLoading}
+        onQuickReply={onQuickReply}
       />
     </div>
   );
