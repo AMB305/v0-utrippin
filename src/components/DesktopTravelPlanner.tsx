@@ -54,7 +54,7 @@ const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, c
   };
 
   return (
-    <div className="hidden lg:flex flex-col min-h-screen bg-gray-50 font-sans">
+    <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
       {/* Top Filter Bar */}
       <div className="bg-white p-4">
         <TopFilterBar onCreateTripWithAI={handleCreateTripWithAI} />
