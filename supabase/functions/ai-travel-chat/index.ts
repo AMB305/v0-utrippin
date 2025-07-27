@@ -205,15 +205,24 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       preferences: storedExtractedInfo.preferences || []
     };
 
-    // Extract destination - Enhanced patterns  
+    // Extract destination - Enhanced patterns with known locations
+    const knownLocations = ['paris', 'tokyo', 'cancun', 'london', 'barcelona', 'dubai', 'japan', 'colombia', 'italy', 'spain', 'greece', 'thailand', 'bali', 'mexico', 'miami', 'new york', 'los angeles'];
     const destinationMatch = allMessages.toLowerCase().match(/(?:to|visit|go to|travel to|trip to)\s+([a-z\s,]+?)(?:\s+with|\s|$|for|in|during)/i) ||
                            allMessages.match(/(japan|colombia?|paris|london|italy|spain|greece|thailand|bali|tokyo|mexico|[a-z]{3,})/i);
-    if (destinationMatch && !extractedInfo.destination) {
-      extractedInfo.destination = destinationMatch[1].trim();
+    const cityMatch = knownLocations.find(loc => allMessages.toLowerCase().includes(loc));
+    const fallbackDestination = null; // do not assume destination if uncertain
+    
+    if (!extractedInfo.destination) {
+      if (cityMatch) {
+        extractedInfo.destination = cityMatch;
+      } else if (destinationMatch) {
+        extractedInfo.destination = destinationMatch[1]?.trim() || fallbackDestination;
+      }
     }
 
-    // Extract dates and duration
-    const durationMatch = allMessages.match(/(\d+)\s*days?/i) || allMessages.match(/(\d+)\s*weeks?/i);
+    // Extract dates and duration - Improved detection
+    const durationMatch = allMessages.match(/(\d+)[-\s]*(days?|nights?)/i);
+    const tripDuration = durationMatch ? parseInt(durationMatch[1]) : null;
     if (durationMatch && !extractedInfo.duration) {
       extractedInfo.duration = durationMatch[0];
     }
@@ -233,11 +242,11 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       extractedInfo.budget = amount.includes('$') ? amount : `$${amount}`;
     }
 
-    // Extract traveler info
+    // Extract traveler info - Improved detection
     if (!extractedInfo.travelers) {
-      if (allMessages.toLowerCase().includes('solo')) extractedInfo.travelers = 'solo';
-      else if (allMessages.toLowerCase().includes('family')) extractedInfo.travelers = 'family';
-      else if (allMessages.toLowerCase().includes('couple')) extractedInfo.travelers = 'couple';
+      if (allMessages.match(/(alone|myself|solo)/i)) extractedInfo.travelers = 'solo';
+      else if (allMessages.match(/(wife|husband|partner|girlfriend|boyfriend)/i)) extractedInfo.travelers = 'couple';
+      else if (allMessages.match(/(family|kids|children)/i)) extractedInfo.travelers = 'family';
     }
 
     // Build conversation context
@@ -258,10 +267,15 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
 `;
     }
 
-    // Determine if we have enough info for an itinerary - Relaxed requirements
-    const hasEnoughInfo = extractedInfo.destination && extractedInfo.budget;
+    // Ensure trip duration OR date is known before attempting itinerary
+    const hasDatesOrDuration = extractedInfo.duration || extractedInfo.dates;
+    const hasEnoughInfo = extractedInfo.destination && extractedInfo.budget && hasDatesOrDuration;
 
     const systemPrompt = `You are Keila, an expert AI travel agent that creates comprehensive, visually rich travel itineraries and engages in intelligent conversation. You MUST respond with a single, valid JSON object and nothing else.
+
+    **NEW MODE**: Answer direct travel-related questions directly, THEN ask about trip planning if relevant.
+    If a user asks "What are the best beaches in Greece?" answer directly, THEN ask about trip planning.
+    Use JSON format always. Return follow-up quick replies if relevant.
 
     ${personalizationContext}
     ${conversationContext}
@@ -408,7 +422,13 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     {
       "response": "I love helping people escape to warm, sunny destinations! ☀️ Let me ask a few questions to find your perfect warm-weather getaway:\n\n🗓️ When are you planning to travel? This helps me recommend the best destinations for that time of year.\n✈️ How far are you willing to travel - thinking domestic US, Caribbean, or maybe somewhere more exotic?\n🏖️ Are you dreaming of beaches, or would you also consider warm desert destinations or tropical cities?\n💰 What's your rough budget range per person?\n\nWith these details, I can suggest some incredible warm destinations and create a detailed itinerary!",
       "quickReplies": ["Beach vacation in Caribbean", "Warm US destination", "I have 2 weeks and flexible budget"]
-    }`;
+    }
+    
+    **IMPORTANT FAILSAFE:**
+    - Never ask the same question twice if the user has already answered it.
+    - Always return valid JSON with either a 'response' and 'quickReplies', or a full 'comprehensiveItinerary' object.
+    - Never include markdown, HTML, or plain text outside of the JSON block.
+    `;
 
     // Check API key and log its status
     console.log('OpenRouter API key status:', openRouterApiKey ? 'Present' : 'Missing');
@@ -456,39 +476,19 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     
     let parsedJson;
     try {
-      parsedJson = JSON.parse(messageContent);
+      const lastBrace = messageContent.lastIndexOf('}');
+      const fixedJson = messageContent.slice(0, lastBrace + 1);
+      parsedJson = JSON.parse(fixedJson);
     } catch (parseError) {
       console.error('JSON parse error:', parseError.message);
       console.error('Raw content (first 1000 chars):', messageContent.substring(0, 1000));
       
-      // Try to fix common JSON truncation issues
-      let fixedContent = messageContent;
-      if (!fixedContent.trim().endsWith('}')) {
-        // Find the last complete object by counting braces
-        let braceCount = 0;
-        let lastValidIndex = -1;
-        for (let i = 0; i < fixedContent.length; i++) {
-          if (fixedContent[i] === '{') braceCount++;
-          if (fixedContent[i] === '}') {
-            braceCount--;
-            if (braceCount === 0) lastValidIndex = i;
-          }
-        }
-        if (lastValidIndex > -1) {
-          fixedContent = fixedContent.substring(0, lastValidIndex + 1);
-          console.log('Attempting to fix truncated JSON...');
-          try {
-            parsedJson = JSON.parse(fixedContent);
-            console.log('Successfully parsed fixed JSON');
-          } catch (fixError) {
-            throw new Error(`Failed to parse AI response even after fix attempt: ${parseError.message}`);
-          }
-        } else {
-          throw new Error(`Failed to parse AI response: ${parseError.message}`);
-        }
-      } else {
-        throw new Error(`Failed to parse AI response: ${parseError.message}`);
-      }
+      // Fallback with intelligent response
+      return new Response(JSON.stringify({
+        isDetailedItinerary: false,
+        response: "I need just a bit more info to complete your trip plan. Could you confirm your destination or dates?",
+        quickReplies: ["📍 Paris", "📅 Next Month", "💰 Budget: $2000"]
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     
     // Update conversation memory with new message and extracted info
@@ -517,7 +517,7 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
       }
     }
 
-    // Try comprehensive schema first
+    // Validate against schemas with improved fallback
     const comprehensiveValidation = ComprehensiveItinerarySchema.safeParse(parsedJson);
     
     if (comprehensiveValidation.success) {
@@ -537,11 +537,22 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
       }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     
-    // Simple fallback response
+    // Enhanced fallback for structured responses
+    if (parsedJson.response || parsedJson.quickReplies) {
+      return new Response(JSON.stringify({
+        isDetailedItinerary: false,
+        response: parsedJson.response || "I'd love to help you plan your trip! Let me ask a few questions.",
+        quickReplies: parsedJson.quickReplies || ["📍 Choose destination", "📅 Pick dates", "💰 Set budget"],
+        showMap: parsedJson.showMap || false,
+        mapLocation: parsedJson.mapLocation || null
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+    
+    // Final fallback
     return new Response(JSON.stringify({ 
       isDetailedItinerary: false, 
-      response: parsedJson.response || "I need a few more details to help plan your trip!", 
-      quickReplies: parsedJson.quickReplies || [] 
+      response: "I need just a bit more info to complete your trip plan. Could you confirm your destination or dates?",
+      quickReplies: ["📍 Paris", "📅 Next Month", "💰 Budget: $2000"]
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (error) {
     console.error('Edge Function Error:', error.message);
