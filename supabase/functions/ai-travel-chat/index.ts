@@ -186,10 +186,10 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       preferences: []
     };
 
-    // Extract destination
-    const destinationMatch = allMessages.toLowerCase().match(/(?:to|visit|go to|travel to|trip to)\s+([a-z\s,]+?)(?:\s|$|for|in|during)/i) ||
-                           allMessages.match(/(japan|colombia?|paris|london|italy|spain|greece|thailand|bali|tokyo|[a-z]{3,})/i);
-    if (destinationMatch) extractedInfo.destination = destinationMatch[1];
+    // Extract destination - Enhanced patterns  
+    const destinationMatch = allMessages.toLowerCase().match(/(?:to|visit|go to|travel to|trip to)\s+([a-z\s,]+?)(?:\s+with|\s|$|for|in|during)/i) ||
+                           allMessages.match(/(japan|colombia?|paris|london|italy|spain|greece|thailand|bali|tokyo|mexico|[a-z]{3,})/i);
+    if (destinationMatch) extractedInfo.destination = destinationMatch[1].trim();
 
     // Extract dates and duration
     const durationMatch = allMessages.match(/(\d+)\s*days?/i) || allMessages.match(/(\d+)\s*weeks?/i);
@@ -231,8 +231,8 @@ ${conversationHistory.map(msg => `User: ${msg.question}\nKeila: ${msg.response}`
 `;
     }
 
-    // Determine if we have enough info for an itinerary
-    const hasEnoughInfo = extractedInfo.destination && (extractedInfo.duration || extractedInfo.dates) && extractedInfo.budget;
+    // Determine if we have enough info for an itinerary - Relaxed requirements
+    const hasEnoughInfo = extractedInfo.destination && extractedInfo.budget;
 
     const systemPrompt = `You are Keila, an expert AI travel agent that creates comprehensive, visually rich travel itineraries and engages in intelligent conversation. You MUST respond with a single, valid JSON object and nothing else.
 
