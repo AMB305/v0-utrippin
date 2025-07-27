@@ -19,61 +19,44 @@ const KeilaThinking = () => (
 );
 
 const AiTravel = () => {
-  const { user, loading: authLoading } = useAuth();
-  const { messages, sendMessage, resetSession, loading } = useChatAI();
-  const hasStartedChat = messages.length > 0;
+  console.log('AiTravel component starting to render...');
+  
+  try {
+    const { user, loading: authLoading } = useAuth();
+    console.log('useAuth hook succeeded:', { user: !!user, authLoading });
+    
+    if (authLoading) {
+      console.log('Auth still loading...');
+      return <div className="flex items-center justify-center h-dvh bg-black text-white">Loading...</div>;
+    }
 
-  useEffect(() => {
-    if (user) resetSession();
-  }, [user]);
+    if (!user) {
+      console.log('No user found, showing LoginCard');
+      return <LoginCard />;
+    }
 
-  useEffect(() => {
-    console.log('AiTravel component - authLoading:', authLoading, 'user:', user?.email || 'no user');
-  }, [authLoading, user]);
-
-  const handleSendMessage = (message) => sendMessage(message);
-
-  console.log('AiTravel rendering - authLoading:', authLoading, 'user:', !!user);
-
-  if (authLoading) {
-    console.log('AiTravel: Still loading auth...');
-    return <div className="flex items-center justify-center h-dvh bg-black text-white">Loading...</div>;
-  }
-
-  if (!user) {
-    console.log('AiTravel: No user, showing LoginCard');
-    return <LoginCard />;
-  }
-
-  console.log('AiTravel: User authenticated, rendering DesktopTravelPlanner');
-
-  return (
-    <>
-      <SEOHead title="AI Travel Planner | Utrippin" description="Your personal AI travel assistant, Keila." canonical="https://utrippin.ai/ai-travel" />
-      <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
-        <div className="bg-white p-4">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold">AI Travel Planner</h1>
-            <p>Debug: User is authenticated</p>
-            <p>Messages: {messages.length}</p>
-            <p>Loading: {loading ? 'true' : 'false'}</p>
-          </div>
-        </div>
-        <div className="flex-1 p-4">
-          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-            <h2 className="text-xl font-bold">Hi, I'm Keila!</h2>
-            <p>Your AI travel assistant</p>
-            <button 
-              onClick={() => handleSendMessage("Hello Keila")}
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Test Message
-            </button>
-          </div>
+    console.log('User authenticated, rendering simple debug UI');
+    return (
+      <div className="flex items-center justify-center h-dvh bg-green-500 text-white">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">AI Travel - DEBUG MODE</h1>
+          <p>User is authenticated: {user.email}</p>
+          <p>Component is rendering successfully!</p>
         </div>
       </div>
-    </>
-  );
+    );
+    
+  } catch (error) {
+    console.error('Error in AiTravel component:', error);
+    return (
+      <div className="flex items-center justify-center h-dvh bg-red-500 text-white">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">ERROR</h1>
+          <p>Component failed to render: {error.message}</p>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default AiTravel;
