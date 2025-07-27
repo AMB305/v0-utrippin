@@ -205,41 +205,67 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
       preferences: storedExtractedInfo.preferences || []
     };
 
-    // Extract destination - Enhanced patterns with known locations
-    const knownLocations = ['paris', 'tokyo', 'cancun', 'london', 'barcelona', 'dubai', 'japan', 'colombia', 'italy', 'spain', 'greece', 'thailand', 'bali', 'mexico', 'miami', 'new york', 'los angeles'];
-    const destinationMatch = allMessages.toLowerCase().match(/(?:to|visit|go to|travel to|trip to)\s+([a-z\s,]+?)(?:\s+with|\s|$|for|in|during)/i) ||
-                           allMessages.match(/(japan|colombia?|paris|london|italy|spain|greece|thailand|bali|tokyo|mexico|[a-z]{3,})/i);
-    const cityMatch = knownLocations.find(loc => allMessages.toLowerCase().includes(loc));
-    const fallbackDestination = null; // do not assume destination if uncertain
+    // Extract destination - Simplified and more accurate
+    const knownLocations = ['paris', 'tokyo', 'cancun', 'london', 'barcelona', 'dubai', 'japan', 'colombia', 'italy', 'spain', 'greece', 'thailand', 'bali', 'mexico', 'miami', 'new york', 'los angeles', 'rome', 'amsterdam', 'berlin', 'prague', 'budapest'];
     
     if (!extractedInfo.destination) {
+      // Check for known locations first
+      const cityMatch = knownLocations.find(loc => allMessages.toLowerCase().includes(loc));
       if (cityMatch) {
-        extractedInfo.destination = cityMatch;
-      } else if (destinationMatch) {
-        extractedInfo.destination = destinationMatch[1]?.trim() || fallbackDestination;
+        extractedInfo.destination = cityMatch.charAt(0).toUpperCase() + cityMatch.slice(1);
+      } else {
+        // Try to extract from trip-related phrases
+        const destinationMatch = allMessages.match(/(?:trip to|go to|visit|travel to|plan.*to)\s+([a-zA-Z\s]+?)(?:\s+for|\s+in|\s+with|\s*[,$]|\s*\d|\s*$)/i);
+        if (destinationMatch) {
+          const dest = destinationMatch[1].trim();
+          if (dest.length > 2 && dest.length < 30) {
+            extractedInfo.destination = dest.charAt(0).toUpperCase() + dest.slice(1);
+          }
+        }
       }
     }
 
-    // Extract dates and duration - Improved detection
-    const durationMatch = allMessages.match(/(\d+)[-\s]*(days?|nights?)/i);
-    const tripDuration = durationMatch ? parseInt(durationMatch[1]) : null;
-    if (durationMatch && !extractedInfo.duration) {
-      extractedInfo.duration = durationMatch[0];
+    // Extract dates and duration - More accurate
+    if (!extractedInfo.duration) {
+      const durationMatch = allMessages.match(/(\d+)[-\s]*(days?|nights?|week)/i);
+      if (durationMatch) {
+        extractedInfo.duration = `${durationMatch[1]} ${durationMatch[2]}`;
+      }
     }
     
-    const dateMatch = allMessages.match(/(aug|august|sep|september|oct|october|nov|november|dec|december|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july)\s*(\d{1,2})?(?:\s*-\s*(\d{1,2}))?/i);
-    if (dateMatch && !extractedInfo.dates) {
-      extractedInfo.dates = dateMatch[0];
+    if (!extractedInfo.dates) {
+      const datePatterns = [
+        /(aug|august|sep|september|oct|october|nov|november|dec|december|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july)\s*(\d{1,2})(?:\s*[-–]\s*(\d{1,2}))?/i,
+        /(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/,  // 8/1 or 8/1/24
+        /(\d{1,2})-(\d{1,2})/  // 1-6
+      ];
+      
+      for (const pattern of datePatterns) {
+        const match = allMessages.match(pattern);
+        if (match) {
+          extractedInfo.dates = match[0];
+          break;
+        }
+      }
     }
 
-    // Extract budget - Enhanced to catch various formats
-    const budgetMatch = allMessages.match(/\$(\d+(?:,\d{3})*)/) || 
-                       allMessages.match(/(?:I have|budget of?|around|about)\s*\$?(\d+(?:,\d{3})*)/i) ||
-                       allMessages.match(/(\d+(?:,\d{3})*)\s*(?:dollars?|usd|budget)/i) ||
-                       allMessages.match(/\b(\d{3,5})\b/); // Fallback for standalone numbers like "2000"
-    if (budgetMatch && !extractedInfo.budget) {
-      const amount = budgetMatch[1] || budgetMatch[0];
-      extractedInfo.budget = amount.includes('$') ? amount : `$${amount}`;
+    // Extract budget - Simplified and more accurate
+    if (!extractedInfo.budget) {
+      const budgetPatterns = [
+        /\$(\d+(?:,\d{3})*)/,  // $5000 or $5,000
+        /for\s+\$?(\d+(?:,\d{3})*)/i,  // for $5000 or for 5000
+        /budget.*?(\d+(?:,\d{3})*)/i,  // budget 5000
+        /(\d{4,})/  // standalone 4+ digit numbers like 5000
+      ];
+      
+      for (const pattern of budgetPatterns) {
+        const match = allMessages.match(pattern);
+        if (match) {
+          const amount = match[1];
+          extractedInfo.budget = `$${amount.replace(/,/g, '')}`;
+          break;
+        }
+      }
     }
 
     // Extract traveler info - Improved detection
@@ -267,9 +293,20 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
 `;
     }
 
+    // Debug logging for extraction
+    console.log('=== EXTRACTION DEBUG ===');
+    console.log('Message:', message);
+    console.log('All Messages:', allMessages);
+    console.log('Extracted Info:', extractedInfo);
+    
     // Ensure trip duration OR date is known before attempting itinerary
     const hasDatesOrDuration = extractedInfo.duration || extractedInfo.dates;
     const hasEnoughInfo = extractedInfo.destination && extractedInfo.budget && hasDatesOrDuration;
+    
+    console.log('Has enough info?', hasEnoughInfo);
+    console.log('- Destination:', extractedInfo.destination);
+    console.log('- Budget:', extractedInfo.budget);
+    console.log('- Duration/Dates:', extractedInfo.duration, extractedInfo.dates);
 
     const systemPrompt = `You are Keila, an expert AI travel agent that creates comprehensive, visually rich travel itineraries and engages in intelligent conversation. You MUST respond with a single, valid JSON object and nothing else.
 
@@ -291,7 +328,7 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     5. **Your response MUST be either COMPREHENSIVE_ITINERARY_SCHEMA or INTELLIGENT_QUESTIONING_SCHEMA**
     6. **All booking links MUST use Expedia with camref=1101l5dQSW for affiliate tracking.**
 
-    **SUFFICIENT INFO CHECK**: ${hasEnoughInfo ? 'USER HAS PROVIDED SUFFICIENT INFO - CREATE ITINERARY NOW' : 'More info needed - ask smart questions'}
+    **SUFFICIENT INFO CHECK**: ${hasEnoughInfo ? 'USER HAS PROVIDED SUFFICIENT INFO - CREATE COMPREHENSIVE ITINERARY IMMEDIATELY. DO NOT ASK MORE QUESTIONS.' : 'More info needed - ask smart questions but do not repeat already answered ones'}
 
     **INTELLIGENT QUESTIONING GUIDELINES:**
     - Analyze what the user DID provide and acknowledge it
@@ -426,8 +463,10 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     
     **IMPORTANT FAILSAFE:**
     - Never ask the same question twice if the user has already answered it.
-    - Always return valid JSON with either a 'response' and 'quickReplies', or a full 'comprehensiveItinerary' object.
+    - If hasEnoughInfo is true, you MUST create a comprehensive itinerary using COMPREHENSIVE_ITINERARY_SCHEMA
+    - Always return valid JSON with either a response and quickReplies, or a full comprehensiveItinerary object.
     - Never include markdown, HTML, or plain text outside of the JSON block.
+    - STOP REPEATING QUESTIONS when user has given destination, budget, and duration/dates.
     `;
 
     // Check API key and log its status
@@ -474,21 +513,51 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     const messageContent = aiJson.choices[0].message.content;
     console.log('AI message content length:', messageContent.length);
     
+    // Enhanced JSON parsing with better error handling
     let parsedJson;
     try {
-      const lastBrace = messageContent.lastIndexOf('}');
-      const fixedJson = messageContent.slice(0, lastBrace + 1);
-      parsedJson = JSON.parse(fixedJson);
+      // Clean up the response - remove any markdown code blocks
+      let cleanedContent = messageContent.trim();
+      if (cleanedContent.startsWith('```json')) {
+        cleanedContent = cleanedContent.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      }
+      if (cleanedContent.startsWith('```')) {
+        cleanedContent = cleanedContent.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      }
+      
+      // Try to find JSON boundaries if response has extra text
+      const firstBrace = cleanedContent.indexOf('{');
+      const lastBrace = cleanedContent.lastIndexOf('}');
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        cleanedContent = cleanedContent.slice(firstBrace, lastBrace + 1);
+      }
+      
+      console.log('Cleaned AI content for parsing:', cleanedContent.substring(0, 500));
+      parsedJson = JSON.parse(cleanedContent);
+      
     } catch (parseError) {
       console.error('JSON parse error:', parseError.message);
       console.error('Raw content (first 1000 chars):', messageContent.substring(0, 1000));
       
-      // Fallback with intelligent response
+      // If we have enough info but got bad JSON, force a simple response
+      if (hasEnoughInfo) {
+        return new Response(JSON.stringify({
+          response: `Great! I have all the details for your trip to ${extractedInfo.destination}. Let me create your detailed itinerary now. This may take a moment...`,
+          quickReplies: ["Show me the itinerary", "Modify preferences", "Start over"],
+          showMap: true,
+          mapLocation: extractedInfo.destination
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
       return new Response(JSON.stringify({
-        isDetailedItinerary: false,
-        response: "I need just a bit more info to complete your trip plan. Could you confirm your destination or dates?",
-        quickReplies: ["📍 Paris", "📅 Next Month", "💰 Budget: $2000"]
-      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        response: "I need a bit more information to plan your perfect trip. Could you tell me your destination, budget, and travel dates?",
+        quickReplies: ["📍 Choose destination", "💰 Set budget", "📅 Pick dates"],
+        showMap: false
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
     
     // Update conversation memory with new message and extracted info
