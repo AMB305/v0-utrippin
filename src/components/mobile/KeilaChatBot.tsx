@@ -75,22 +75,19 @@ export const KeilaChatBot: React.FC<KeilaChatBotProps> = ({ onChatStart }) => {
       {/* Chat Button with Keila Face */}
       <button
         onClick={handleChatClick}
-        className="w-14 h-14 bg-travel-blue hover:bg-travel-blue-dark rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 group relative overflow-hidden"
+        className="w-16 h-16 flex items-center justify-center transition-all duration-300 hover:scale-110 group relative"
       >
         {/* Keila Face */}
-        <div className="w-10 h-10 relative z-10">
+        <div className="w-16 h-16 relative z-10">
           <img 
             src="/lovable-uploads/0c600adc-df9a-43e1-b83e-e90ae7766dfd.png" 
             alt="Keila" 
-            className="w-full h-full rounded-full animate-bounce" 
+            className="w-full h-full animate-bounce drop-shadow-lg" 
           />
         </div>
         
-        {/* Pulse Animation */}
-        <div className="absolute inset-0 rounded-full bg-travel-blue animate-ping opacity-25" />
-        
         {/* Chat Icon Overlay (visible on hover) */}
-        <div className="absolute inset-0 rounded-full bg-travel-blue-dark flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute inset-0 rounded-full bg-travel-blue/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
           <MessageCircle className="w-6 h-6 text-white" />
         </div>
       </button>
