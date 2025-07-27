@@ -47,24 +47,33 @@ const AiTravel = () => {
 
   console.log('AiTravel: User authenticated, rendering DesktopTravelPlanner');
 
-  try {
-    return (
-      <>
-        <SEOHead title="AI Travel Planner | Utrippin" description="Your personal AI travel assistant, Keila." canonical="https://utrippin.ai/ai-travel" />
-        <DesktopTravelPlanner
-          hasStartedChat={hasStartedChat}
-          onClearChat={resetSession}
-          chatMessages={messages}
-          isLoading={loading}
-          onSendMessage={handleSendMessage}
-          onQuestionSelect={handleSendMessage}
-        />
-      </>
-    );
-  } catch (error) {
-    console.error('Error rendering AiTravel:', error);
-    return <div className="flex items-center justify-center h-dvh bg-red-500 text-white">Error loading page: {error.message}</div>;
-  }
+  return (
+    <>
+      <SEOHead title="AI Travel Planner | Utrippin" description="Your personal AI travel assistant, Keila." canonical="https://utrippin.ai/ai-travel" />
+      <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+        <div className="bg-white p-4">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold">AI Travel Planner</h1>
+            <p>Debug: User is authenticated</p>
+            <p>Messages: {messages.length}</p>
+            <p>Loading: {loading ? 'true' : 'false'}</p>
+          </div>
+        </div>
+        <div className="flex-1 p-4">
+          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+            <h2 className="text-xl font-bold">Hi, I'm Keila!</h2>
+            <p>Your AI travel assistant</p>
+            <button 
+              onClick={() => handleSendMessage("Hello Keila")}
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Test Message
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default AiTravel;
