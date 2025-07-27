@@ -20,16 +20,37 @@ const KeilaThinking = () => (
 
 const AiTravel = () => {
   const { user, loading: authLoading } = useAuth();
+  
+  // Mobile debugging
+  console.log('AiTravel - Mobile Debug:', {
+    authLoading,
+    user: user ? 'exists' : 'null',
+    userAgent: navigator.userAgent,
+    isMobile: window.innerWidth < 768
+  });
+
   const { messages, sendMessage, resetSession, loading } = useChatAI();
   const hasStartedChat = messages.length > 0;
 
   useEffect(() => {
+    console.log('AiTravel useEffect - user changed:', user ? 'exists' : 'null');
     if (user) resetSession();
   }, [user]);
 
   const handleSendMessage = (message) => sendMessage(message);
 
+  // Add timeout fallback for mobile
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (authLoading) {
+        console.error('Mobile: Auth loading timeout after 10 seconds');
+      }
+    }, 10000);
+    return () => clearTimeout(timeout);
+  }, [authLoading]);
+
   if (authLoading) {
+    console.log('AiTravel - Showing loading screen, authLoading:', authLoading);
     return <div className="flex items-center justify-center h-dvh bg-black text-white">Loading...</div>;
   }
 
