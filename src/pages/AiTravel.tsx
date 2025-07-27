@@ -27,9 +27,14 @@ const AiTravel = () => {
     if (user) resetSession();
   }, [user]);
 
+  useEffect(() => {
+    console.log('AiTravel component - authLoading:', authLoading, 'user:', user?.email || 'no user');
+  }, [authLoading, user]);
+
   const handleSendMessage = (message) => sendMessage(message);
 
   if (authLoading) {
+    console.log('AiTravel: Still loading auth...');
     return <div className="flex items-center justify-center h-dvh bg-black text-white">Loading...</div>;
   }
 
