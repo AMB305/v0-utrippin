@@ -19,44 +19,37 @@ const KeilaThinking = () => (
 );
 
 const AiTravel = () => {
-  console.log('AiTravel component starting to render...');
-  
-  try {
-    const { user, loading: authLoading } = useAuth();
-    console.log('useAuth hook succeeded:', { user: !!user, authLoading });
-    
-    if (authLoading) {
-      console.log('Auth still loading...');
-      return <div className="flex items-center justify-center h-dvh bg-black text-white">Loading...</div>;
-    }
+  const { user, loading: authLoading } = useAuth();
+  const { messages, sendMessage, resetSession, loading } = useChatAI();
+  const hasStartedChat = messages.length > 0;
 
-    if (!user) {
-      console.log('No user found, showing LoginCard');
-      return <LoginCard />;
-    }
+  useEffect(() => {
+    if (user) resetSession();
+  }, [user]);
 
-    console.log('User authenticated, rendering simple debug UI');
-    return (
-      <div className="flex items-center justify-center h-dvh bg-green-500 text-white">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">AI Travel - DEBUG MODE</h1>
-          <p>User is authenticated: {user.email}</p>
-          <p>Component is rendering successfully!</p>
-        </div>
-      </div>
-    );
-    
-  } catch (error) {
-    console.error('Error in AiTravel component:', error);
-    return (
-      <div className="flex items-center justify-center h-dvh bg-red-500 text-white">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">ERROR</h1>
-          <p>Component failed to render: {error.message}</p>
-        </div>
-      </div>
-    );
+  const handleSendMessage = (message) => sendMessage(message);
+
+  if (authLoading) {
+    return <div className="flex items-center justify-center h-dvh bg-black text-white">Loading...</div>;
   }
+
+  if (!user) {
+    return <LoginCard />;
+  }
+
+  return (
+    <>
+      <SEOHead title="AI Travel Planner | Utrippin" description="Your personal AI travel assistant, Keila." canonical="https://utrippin.ai/ai-travel" />
+      <DesktopTravelPlanner
+        hasStartedChat={hasStartedChat}
+        onClearChat={resetSession}
+        chatMessages={messages}
+        isLoading={loading}
+        onSendMessage={handleSendMessage}
+        onQuestionSelect={handleSendMessage}
+      />
+    </>
+  );
 };
 
 export default AiTravel;
