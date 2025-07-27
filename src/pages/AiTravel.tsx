@@ -33,28 +33,38 @@ const AiTravel = () => {
 
   const handleSendMessage = (message) => sendMessage(message);
 
+  console.log('AiTravel rendering - authLoading:', authLoading, 'user:', !!user);
+
   if (authLoading) {
     console.log('AiTravel: Still loading auth...');
     return <div className="flex items-center justify-center h-dvh bg-black text-white">Loading...</div>;
   }
 
   if (!user) {
+    console.log('AiTravel: No user, showing LoginCard');
     return <LoginCard />;
   }
 
-  return (
-    <>
-      <SEOHead title="AI Travel Planner | Utrippin" description="Your personal AI travel assistant, Keila." canonical="https://utrippin.ai/ai-travel" />
-      <DesktopTravelPlanner
-        hasStartedChat={hasStartedChat}
-        onClearChat={resetSession}
-        chatMessages={messages}
-        isLoading={loading}
-        onSendMessage={handleSendMessage}
-        onQuestionSelect={handleSendMessage}
-      />
-    </>
-  );
+  console.log('AiTravel: User authenticated, rendering DesktopTravelPlanner');
+
+  try {
+    return (
+      <>
+        <SEOHead title="AI Travel Planner | Utrippin" description="Your personal AI travel assistant, Keila." canonical="https://utrippin.ai/ai-travel" />
+        <DesktopTravelPlanner
+          hasStartedChat={hasStartedChat}
+          onClearChat={resetSession}
+          chatMessages={messages}
+          isLoading={loading}
+          onSendMessage={handleSendMessage}
+          onQuestionSelect={handleSendMessage}
+        />
+      </>
+    );
+  } catch (error) {
+    console.error('Error rendering AiTravel:', error);
+    return <div className="flex items-center justify-center h-dvh bg-red-500 text-white">Error loading page: {error.message}</div>;
+  }
 };
 
 export default AiTravel;
