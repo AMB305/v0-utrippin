@@ -128,30 +128,20 @@ export default function HotelSearch() {
   };
 
   const handleBookHotel = async (hotel: any) => {
-    setLoading(true);
+    // Navigate to the hotel booking page with proper parameters
+    const params = new URLSearchParams({
+      destination: searchData.destination,
+      checkInDate: searchData.checkInDate,
+      checkOutDate: searchData.checkOutDate,
+      adults: searchData.adults.toString(),
+      children: searchData.children.toString(),
+      rooms: searchData.rooms.toString(),
+      hotelId: hotel.id
+    });
     
-    try {
-      // Prebook the hotel
-      const prebook = await RatehawkService.prebookHotel({
-        hotelId: hotel.id,
-        checkIn: searchData.checkInDate,
-        checkOut: searchData.checkOutDate,
-        adults: searchData.adults,
-        children: []
-      });
-
-      setPrebookData(prebook);
-      setCurrentStep('booking');
-    } catch (error) {
-      console.error('Prebook error:', error);
-      toast({
-        title: "Booking Error", 
-        description: "Unable to proceed with booking. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+    console.log('🧪 NAVIGATING TO BOOKING with params:', Object.fromEntries(params.entries()));
+    
+    window.location.href = `/hotel-booking?${params.toString()}`;
   };
 
   const handleBookingComplete = (booking: any) => {

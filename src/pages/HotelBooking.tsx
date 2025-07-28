@@ -40,7 +40,7 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
   const [isMultiRoom, setIsMultiRoom] = useState(false);
   
   // Add prebook functionality
-  const handlePrebook = async (hotel: any) => {
+  const handlePrebook = async (hotel: any, multiRoom: boolean = false) => {
     setHotelLoading(true);
     try {
       const searchData = {
@@ -49,14 +49,34 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
         rooms: parseInt(searchParams.get('rooms') || '1')
       };
       
+      console.log('🧪 PREBOOK DEBUG:', {
+        multiRoom,
+        searchData,
+        roomsParam: searchParams.get('rooms')
+      });
+      
       const mockBookHash = `bh-${Date.now()}-${hotel.id}`;
+      
+      // Create rooms array for multi-room bookings
+      let roomsArray = undefined;
+      if (multiRoom) {
+        const totalAdults = searchData.adults;
+        const totalRooms = searchData.rooms;
+        const adultsPerRoom = Math.floor(totalAdults / totalRooms);
+        const extraAdults = totalAdults % totalRooms;
+        
+        roomsArray = Array.from({ length: totalRooms }, (_, index) => ({
+          adults: adultsPerRoom + (index < extraAdults ? 1 : 0),
+          children: []
+        }));
+        
+        console.log('🧪 Generated rooms array:', roomsArray);
+      }
+      
       const { data, error } = await supabase.functions.invoke('ratehawk-hotel-prebook', {
         body: { 
           book_hash: mockBookHash,
-          rooms: isMultiRoom ? [
-            { adults: 2, children: [] },
-            { adults: 2, children: [] }
-          ] : undefined
+          rooms: roomsArray
         }
       });
 
@@ -67,7 +87,7 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
       
       toast({
         title: "Room Pre-booked",
-        description: isMultiRoom ? `${searchData.rooms} rooms reserved for 30 minutes` : "Room reserved for 30 minutes",
+        description: multiRoom ? `${searchData.rooms} rooms reserved for 30 minutes` : "Room reserved for 30 minutes",
       });
     } catch (error) {
       console.error('❌ Prebook failed:', error);
@@ -95,20 +115,29 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
   } = useHotelBooking();
 
   useEffect(() => {
+    // Check if this is a multi-room booking FIRST
+    const rooms = parseInt(searchParams.get('rooms') || '1');
+    const multiRoom = rooms > 1;
+    setIsMultiRoom(multiRoom);
+    
+    console.log('🧪 BOOKING DEBUG - URL Params:', {
+      rooms,
+      multiRoom,
+      adults: searchParams.get('adults'),
+      children: searchParams.get('children'),
+      allParams: Object.fromEntries(searchParams.entries())
+    });
+    
     // In real implementation, fetch hotel details by hotelId
     // For now, using mock data
     setTimeout(() => {
       setSelectedHotel(mockHotel);
-      setHotelLoading(false);
-      
-      // Check if this is a multi-room booking
-      const rooms = parseInt(searchParams.get('rooms') || '1');
-      setIsMultiRoom(rooms > 1);
       
       // Auto-trigger prebook when hotel loads
       if (mockHotel) {
-        handlePrebook(mockHotel);
+        handlePrebook(mockHotel, multiRoom);
       }
+      setHotelLoading(false);
     }, 1000);
   }, [hotelId, searchParams]);
 
@@ -300,10 +329,17 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
               <MultiRoomBookingForm
                 hotel={selectedHotel}
                 prebookId={prebookId}
-                rooms={Array.from({ length: parseInt(searchParams.get('rooms') || '2') }, () => ({ 
-                  adults: Math.floor(parseInt(searchParams.get('adults') || '4') / parseInt(searchParams.get('rooms') || '2')), 
-                  children: [] 
-                }))}
+                rooms={(() => {
+                  const totalAdults = parseInt(searchParams.get('adults') || '4');
+                  const totalRooms = parseInt(searchParams.get('rooms') || '2');
+                  const adultsPerRoom = Math.floor(totalAdults / totalRooms);
+                  const extraAdults = totalAdults % totalRooms;
+                  
+                  return Array.from({ length: totalRooms }, (_, index) => ({
+                    adults: adultsPerRoom + (index < extraAdults ? 1 : 0),
+                    children: []
+                  }));
+                })()}
                 onBookingComplete={(booking) => {
                   toast({
                     title: "Booking Successful!",

@@ -215,11 +215,14 @@ export function HotelDetailsModal({
               </div>
             </div>
             <Button 
-              onClick={() => onBook(hotel)} 
+              onClick={() => {
+                console.log('🧪 HOTEL MODAL - Booking with searchData:', searchData);
+                onBook(hotel);
+              }} 
               className="w-full"
               size="lg"
             >
-              Continue to Booking
+              Continue to Booking {searchData && searchData.rooms > 1 ? `(${searchData.rooms} rooms)` : ''}
             </Button>
           </div>
         </div>
