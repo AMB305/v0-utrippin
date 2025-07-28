@@ -34,10 +34,11 @@ const AiTravel = () => {
   const { messages, sendMessage, resetSession, loading } = useChatAI();
   const hasStartedChat = messages.length > 0;
 
+  // Only reset session on initial load, not on every user change
   useEffect(() => {
-    console.log('AiTravel useEffect - user changed:', user ? 'exists' : 'null');
-    if (user) resetSession();
-  }, [user]);
+    console.log('AiTravel useEffect - initial load');
+    // Don't reset session on user changes to prevent chat wipe
+  }, []); // Empty dependency array for initial load only
 
   const handleSendMessage = (message: string) => sendMessage(message);
 

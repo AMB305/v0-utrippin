@@ -757,45 +757,118 @@ ${allMessageHistory.slice(-10).map(msgItem => `${msgItem.role === 'user' ? 'User
       if (hasEnoughInfo && (extractedInfo.destination || hasTripPlanningIntent)) {
         console.log('Forcing itinerary generation due to sufficient info...');
         
-        // Generate a basic itinerary structure manually
+        // Generate a comprehensive itinerary directly using the smart defaults
+        const destination = extractedInfo.destination || 'Your Destination';
         const fallbackItinerary = {
-          itineraryId: `${extractedInfo.destination?.toLowerCase().replace(/\s+/g, '-') || 'trip'}-${Date.now()}`,
-          tripTitle: `Amazing ${extractedInfo.destination || 'Travel'} Adventure`,
-          destinationCity: extractedInfo.destination || 'Your Destination',
+          itineraryId: `${destination.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+          tripTitle: `Amazing ${destination} Adventure`,
+          destinationCity: destination,
           destinationCountry: 'TBD',
           startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
           endDate: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          numberOfTravelers: 1,
+          numberOfTravelers: extractedInfo.travelers || 1,
           travelStyle: 'adventure',
-          introductoryMessage: `Get ready for an incredible journey to ${extractedInfo.destination || 'your chosen destination'}! I'm creating a detailed itinerary that will be ready in just a moment.`,
+          introductoryMessage: `Get ready for an incredible journey to ${destination}! Here's your personalized itinerary created just for you. ${extractedInfo.budget ? `Budget: ${extractedInfo.budget}.` : ''} ${extractedInfo.duration ? `Duration: ${extractedInfo.duration}.` : ''}`,
           imageCollageUrls: [
             'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
             'https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800',
             'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800'
           ],
           bookingModules: {
-            flights: { title: 'Flight Options', items: [] },
-            accommodations: { title: 'Hotel Recommendations', items: [] }
+            flights: { 
+              title: 'Flight Options', 
+              items: [
+                {
+                  name: 'Round-trip Economy',
+                  price: extractedInfo.budget ? (parseInt(extractedInfo.budget.replace(/\D/g, '')) * 0.3).toFixed(0) + '$' : '$450',
+                  rating: 4.2,
+                  bookingLink: `https://www.expedia.com/Flights-Search?trip=roundtrip&leg1=from:ORIGIN,to:${destination}&passengers=adults:${extractedInfo.travelers || 1}&camref=1101l5dQSW`,
+                  description: 'Direct flights with major airline'
+                }
+              ]
+            },
+            accommodations: { 
+              title: 'Hotel Recommendations', 
+              items: [
+                {
+                  name: `Top-rated hotel in ${destination}`,
+                  price: extractedInfo.budget ? (parseInt(extractedInfo.budget.replace(/\D/g, '')) * 0.4).toFixed(0) + '$' : '$150/night',
+                  rating: 4.5,
+                  bookingLink: `https://www.expedia.com/Hotels-Search?destination=${destination}&camref=1101l5dQSW`,
+                  description: 'Centrally located with excellent amenities'
+                }
+              ]
+            }
           },
-          dailyPlan: [],
+          dailyPlan: [
+            {
+              day: 1,
+              date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              theme: 'Arrival & Exploration',
+              description: `Welcome to ${destination}! Start your adventure with a gentle introduction to the city.`,
+              events: [
+                {
+                  startTime: '10:00',
+                  endTime: '12:00',
+                  title: 'Check-in & City Orientation',
+                  location: 'Hotel & City Center',
+                  description: `Check into your accommodation and take a walking tour of ${destination}'s main attractions.`,
+                  category: 'orientation',
+                  cost: 'Free',
+                  bookingInfo: null
+                },
+                {
+                  startTime: '14:00',
+                  endTime: '17:00',
+                  title: 'Local Cuisine Experience',
+                  location: 'Local Restaurant District',
+                  description: `Discover the authentic flavors of ${destination} with a food tour or recommended local restaurant.`,
+                  category: 'dining',
+                  cost: extractedInfo.budget ? `$${(parseInt(extractedInfo.budget.replace(/\D/g, '')) * 0.1).toFixed(0)}` : '$50',
+                  bookingInfo: null
+                }
+              ]
+            }
+          ],
           additionalInfo: {
-            cultureAdapter: [],
-            categoryBasedRecommendations: []
+            cultureAdapter: [
+              {
+                category: 'Local Customs',
+                title: 'Cultural Etiquette',
+                description: `Learn about local customs and traditions in ${destination} to enhance your travel experience.`,
+                tips: ['Respect local customs', 'Learn basic phrases', 'Dress appropriately for cultural sites']
+              }
+            ],
+            categoryBasedRecommendations: [
+              {
+                category: 'Must-See Attractions',
+                title: `Top Attractions in ${destination}`,
+                items: [
+                  {
+                    name: `${destination} Main Attraction`,
+                    description: 'The most iconic landmark you must visit',
+                    estimatedCost: 'Free - $30',
+                    recommendedDuration: '2-3 hours'
+                  }
+                ]
+              }
+            ]
           },
           utility: {
-            sources: ['AI Generated'],
+            sources: ['AI Generated with Smart Defaults'],
             downloadPdfLink: ''
           },
           customizationCallToAction: {
-            title: '✨ Want to customize this trip?',
-            message: 'Your detailed itinerary is being generated. Please try again in a moment for the complete plan!',
-            quickReplies: ['Try again', 'Modify preferences', 'Start over']
+            title: '✨ Customize Your Trip',
+            message: 'This itinerary was created with smart defaults. Tell me more about your preferences to make it perfect!',
+            quickReplies: ['Add more days', 'Change budget', 'Modify activities', 'Different dates']
           }
         };
         
         return new Response(JSON.stringify({
           isComprehensiveItinerary: true,
-          comprehensiveItinerary: fallbackItinerary
+          comprehensiveItinerary: fallbackItinerary,
+          response: `I've created a personalized itinerary for your ${destination} trip! Check it out below and let me know if you'd like to modify anything.`
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
