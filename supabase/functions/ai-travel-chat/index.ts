@@ -236,8 +236,20 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
 
     // Use stored memory + current conversation for extraction
     const storedMessages = conversationMemory?.messages || [];
-    const allMessageHistory = [...storedMessages, ...conversationHistory.map(msg => ({ role: 'user', content: msg.question }), { role: 'assistant', content: msg.response }).flat(), { role: 'user', content: message }];
-    const allMessages = allMessageHistory.map(msg => msg.content).join('\n\n');
+    
+    // Fix conversation history handling
+    const conversationHistoryFlat = conversationHistory.flatMap(chatMsg => [
+      { role: 'user', content: chatMsg.question },
+      ...(chatMsg.response ? [{ role: 'assistant', content: chatMsg.response }] : [])
+    ]);
+    
+    const allMessageHistory = [
+      ...storedMessages, 
+      ...conversationHistoryFlat, 
+      { role: 'user', content: message }
+    ];
+    
+    const allMessages = allMessageHistory.map(msgItem => msgItem.content).join('\n\n');
     
     // Smart information extraction - merge with stored info
     const extractedInfo = {
@@ -348,7 +360,7 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
     if (allMessageHistory.length > 0) {
       conversationContext = `
 **CONVERSATION HISTORY:**
-${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Keila'}: ${msg.content}`).join('\n\n')}
+${allMessageHistory.slice(-10).map(msgItem => `${msgItem.role === 'user' ? 'User' : 'Keila'}: ${msgItem.content}`).join('\n\n')}
 
 **EXTRACTED INFORMATION SO FAR:**
 - Destination: ${extractedInfo.destination || 'Not specified'}
