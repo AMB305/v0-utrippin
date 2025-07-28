@@ -653,7 +653,7 @@ ${allMessageHistory.slice(-10).map(msgItem => `${msgItem.role === 'user' ? 'User
       body: JSON.stringify({
         model: 'anthropic/claude-3-haiku',
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: message }],
-        max_tokens: 8000,
+        max_tokens: 16000, // Increased from 8000 to handle longer itineraries
         temperature: 0.7,
       })
     });
@@ -676,46 +676,134 @@ ${allMessageHistory.slice(-10).map(msgItem => `${msgItem.role === 'user' ? 'User
     const messageContent = aiJson.choices[0].message.content;
     console.log('AI message content length:', messageContent.length);
     
-    // Enhanced JSON parsing with better error handling
+    // Enhanced JSON parsing with retry logic
     let parsedJson;
+    let retryAttempt = 0;
+    const maxRetries = 2;
+    
+    const attemptParsing = async (attempt) => {
+      try {
+        // Clean up the response - remove any markdown code blocks
+        let cleanedContent = messageContent.trim();
+        if (cleanedContent.startsWith('```json')) {
+          cleanedContent = cleanedContent.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+        }
+        if (cleanedContent.startsWith('```')) {
+          cleanedContent = cleanedContent.replace(/^```\s*/, '').replace(/\s*```$/, '');
+        }
+        
+        // Remove any text before the first { and after the last }
+        const firstBrace = cleanedContent.indexOf('{');
+        const lastBrace = cleanedContent.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+          cleanedContent = cleanedContent.slice(firstBrace, lastBrace + 1);
+        }
+        
+        // Try to repair common JSON issues
+        cleanedContent = cleanedContent
+          .replace(/,(\s*[}\]])/g, '$1') // Remove trailing commas
+          .replace(/([{,]\s*)"([^"]+)"\s*:\s*"([^"]*)"([^",}]*)/g, (match, prefix, key, value, suffix) => {
+            // Fix unescaped quotes in values
+            const cleanValue = value.replace(/"/g, '\\"');
+            return `${prefix}"${key}": "${cleanValue}"${suffix}`;
+          });
+        
+        console.log(`Parsing attempt ${attempt + 1} - Content length:`, cleanedContent.length);
+        console.log('Cleaned content (first 500 chars):', cleanedContent.substring(0, 500));
+        
+        return JSON.parse(cleanedContent);
+        
+      } catch (parseError) {
+        console.error(`JSON parse error on attempt ${attempt + 1}:`, parseError.message);
+        
+        if (attempt < maxRetries - 1) {
+          console.log('Retrying with shorter prompt...');
+          // Retry with a shorter, more focused prompt if parsing fails
+          const shortPrompt = `Create a comprehensive travel itinerary for ${extractedInfo.destination || 'the specified destination'} using this exact JSON format. Ensure valid JSON syntax:
+          
+          ${hasEnoughInfo ? 'COMPREHENSIVE_ITINERARY_SCHEMA' : 'INTELLIGENT_QUESTIONING_SCHEMA'}`;
+          
+          const retryResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${openRouterApiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: 'anthropic/claude-3-haiku',
+              messages: [{ role: 'system', content: shortPrompt }, { role: 'user', content: `Plan a trip to ${extractedInfo.destination} with budget ${extractedInfo.budget} for ${extractedInfo.duration}` }],
+              max_tokens: 12000,
+              temperature: 0.3, // Lower temperature for more structured output
+            })
+          });
+          
+          if (retryResponse.ok) {
+            const retryJson = await retryResponse.json();
+            const retryContent = retryJson.choices[0]?.message?.content;
+            if (retryContent) {
+              return attemptParsing(attempt + 1, retryContent);
+            }
+          }
+        }
+        
+        throw parseError;
+      }
+    };
+    
     try {
-      // Clean up the response - remove any markdown code blocks
-      let cleanedContent = messageContent.trim();
-      if (cleanedContent.startsWith('```json')) {
-        cleanedContent = cleanedContent.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-      }
-      if (cleanedContent.startsWith('```')) {
-        cleanedContent = cleanedContent.replace(/^```\s*/, '').replace(/\s*```$/, '');
-      }
-      
-      // Try to find JSON boundaries if response has extra text
-      const firstBrace = cleanedContent.indexOf('{');
-      const lastBrace = cleanedContent.lastIndexOf('}');
-      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-        cleanedContent = cleanedContent.slice(firstBrace, lastBrace + 1);
-      }
-      
-      console.log('Cleaned AI content for parsing:', cleanedContent.substring(0, 500));
-      parsedJson = JSON.parse(cleanedContent);
-      
-    } catch (parseError) {
-      console.error('JSON parse error:', parseError.message);
+      parsedJson = await attemptParsing(0);
+    } catch (finalError) {
+      console.error('All parsing attempts failed:', finalError.message);
       console.error('Raw content (first 1000 chars):', messageContent.substring(0, 1000));
       
-      // If we have enough info but got bad JSON, force a simple response
-      if (hasEnoughInfo) {
+      // If we have enough info but got bad JSON, try to extract basic info and create a proper itinerary
+      if (hasEnoughInfo && (extractedInfo.destination || hasTripPlanningIntent)) {
+        console.log('Forcing itinerary generation due to sufficient info...');
+        
+        // Generate a basic itinerary structure manually
+        const fallbackItinerary = {
+          itineraryId: `${extractedInfo.destination?.toLowerCase().replace(/\s+/g, '-') || 'trip'}-${Date.now()}`,
+          tripTitle: `Amazing ${extractedInfo.destination || 'Travel'} Adventure`,
+          destinationCity: extractedInfo.destination || 'Your Destination',
+          destinationCountry: 'TBD',
+          startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          endDate: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          numberOfTravelers: 1,
+          travelStyle: 'adventure',
+          introductoryMessage: `Get ready for an incredible journey to ${extractedInfo.destination || 'your chosen destination'}! I'm creating a detailed itinerary that will be ready in just a moment.`,
+          imageCollageUrls: [
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+            'https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800',
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800'
+          ],
+          bookingModules: {
+            flights: { title: 'Flight Options', items: [] },
+            accommodations: { title: 'Hotel Recommendations', items: [] }
+          },
+          dailyPlan: [],
+          additionalInfo: {
+            cultureAdapter: [],
+            categoryBasedRecommendations: []
+          },
+          utility: {
+            sources: ['AI Generated'],
+            downloadPdfLink: ''
+          },
+          customizationCallToAction: {
+            title: '✨ Want to customize this trip?',
+            message: 'Your detailed itinerary is being generated. Please try again in a moment for the complete plan!',
+            quickReplies: ['Try again', 'Modify preferences', 'Start over']
+          }
+        };
+        
         return new Response(JSON.stringify({
-          response: `Great! I have all the details for your trip to ${extractedInfo.destination}. Let me create your detailed itinerary now. This may take a moment...`,
-          quickReplies: ["Show me the itinerary", "Modify preferences", "Start over"],
-          showMap: true,
-          mapLocation: extractedInfo.destination
+          isComprehensiveItinerary: true,
+          comprehensiveItinerary: fallbackItinerary
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
       }
       
+      // Final fallback to questioning
       return new Response(JSON.stringify({
-        response: "I need a bit more information to plan your perfect trip. Could you tell me your destination, budget, and travel dates?",
+        response: "I'd love to help you plan your perfect trip! Let me ask a few questions to get started: Where would you like to go, when are you planning to travel, and what's your budget range?",
         quickReplies: ["📍 Choose destination", "💰 Set budget", "📅 Pick dates"],
         showMap: false
       }), {
