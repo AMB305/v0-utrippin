@@ -1,8 +1,23 @@
 import { useState } from 'react';
 
 export const useHotelBooking = () => {
-  const [bookingData, setBookingData] = useState(null);
-  const [searchData, setSearchData] = useState(null);
+  const [bookingData, setBookingData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    arrivalTime: '',
+    roomPreference: '',
+    specialRequests: ''
+  });
+  const [searchData, setSearchData] = useState({
+    destination: '',
+    checkInDate: '',
+    checkOutDate: '',
+    adults: 1,
+    children: 0,
+    rooms: 1
+  });
   const [hotelId, setHotelId] = useState(null);
   const [rateKey, setRateKey] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -36,6 +51,26 @@ export const useHotelBooking = () => {
     }
   };
 
+  const populateSearchDataFromUrl = (searchParams: URLSearchParams) => {
+    const newSearchData = {
+      destination: searchParams.get('destination') || '',
+      checkInDate: searchParams.get('checkInDate') || '',
+      checkOutDate: searchParams.get('checkOutDate') || '',
+      adults: parseInt(searchParams.get('adults') || '1'),
+      children: parseInt(searchParams.get('children') || '0'),
+      rooms: parseInt(searchParams.get('rooms') || '1')
+    };
+    setSearchData(newSearchData);
+    
+    // Also set the hotel ID
+    const urlHotelId = searchParams.get('hotelId');
+    if (urlHotelId) {
+      setHotelId(urlHotelId);
+    }
+    
+    console.log('🔄 Search data populated from URL:', newSearchData);
+  };
+
   const getDurationInNights = (checkIn?: string | Date, checkOut?: string | Date) => {
     // Use provided dates or searchData
     const startDate = checkIn || searchData?.checkInDate;
@@ -54,12 +89,16 @@ export const useHotelBooking = () => {
     bookingData,
     setBookingData,
     searchData,
+    setSearchData,
     hotelId,
+    setHotelId,
     rateKey,
+    setRateKey,
     loading,
     rateCheckLoading,
     createBooking,
     checkRatesBeforeBooking,
-    getDurationInNights
+    getDurationInNights,
+    populateSearchDataFromUrl
   };
 };

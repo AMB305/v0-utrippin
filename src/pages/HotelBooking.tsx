@@ -111,10 +111,14 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
     rateCheckLoading,
     createBooking,
     checkRatesBeforeBooking,
-    getDurationInNights
+    getDurationInNights,
+    populateSearchDataFromUrl
   } = useHotelBooking();
 
   useEffect(() => {
+    // Populate search data from URL parameters
+    populateSearchDataFromUrl(searchParams);
+    
     // Check if this is a multi-room booking FIRST
     const rooms = parseInt(searchParams.get('rooms') || '1');
     const multiRoom = rooms > 1;
@@ -153,12 +157,12 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
       }
       setHotelLoading(false);
     }, 1000);
-  }, [hotelId, searchParams, handlePrebook]);
+  }, [searchParams]);
 
   const calculateTotalPrice = () => {
     if (!selectedHotel) return 0;
     const nights = getDurationInNights();
-    const basePrice = selectedHotel.pricePerNight * nights * searchData.guests.rooms;
+    const basePrice = selectedHotel.pricePerNight * nights * searchData.rooms;
     const taxes = basePrice * 0.12; // 12% taxes
     return basePrice + taxes;
   };
@@ -302,24 +306,24 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
                   <div>
                     <Label className="text-sm font-medium">Check-in</Label>
                     <div className="mt-1">
-                      <p className="font-medium">{searchData.checkInDate?.toLocaleDateString('en-US', { 
+                      <p className="font-medium">{searchData.checkInDate ? new Date(searchData.checkInDate).toLocaleDateString('en-US', { 
                         weekday: 'long', 
                         year: 'numeric', 
                         month: 'long', 
                         day: 'numeric' 
-                      })}</p>
+                      }) : 'No check-in date selected'}</p>
                       <p className="text-sm text-muted-foreground">After 3:00 PM</p>
                     </div>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">Check-out</Label>
                     <div className="mt-1">
-                      <p className="font-medium">{searchData.checkOutDate?.toLocaleDateString('en-US', { 
+                      <p className="font-medium">{searchData.checkOutDate ? new Date(searchData.checkOutDate).toLocaleDateString('en-US', { 
                         weekday: 'long', 
                         year: 'numeric', 
                         month: 'long', 
                         day: 'numeric' 
-                      })}</p>
+                      }) : 'No check-out date selected'}</p>
                       <p className="text-sm text-muted-foreground">Before 11:00 AM</p>
                     </div>
                   </div>
@@ -331,7 +335,7 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
                       <span className="font-medium">Duration:</span> {getDurationInNights()} night{getDurationInNights() > 1 ? 's' : ''}
                     </p>
                     <p className="text-sm">
-                      <span className="font-medium">Guests:</span> {searchData.guests.adults + searchData.guests.children} guest{searchData.guests.adults + searchData.guests.children > 1 ? 's' : ''} in {searchData.guests.rooms} room{searchData.guests.rooms > 1 ? 's' : ''}
+                      <span className="font-medium">Guests:</span> {searchData.adults + searchData.children} guest{searchData.adults + searchData.children > 1 ? 's' : ''} in {searchData.rooms} room{searchData.rooms > 1 ? 's' : ''}
                     </p>
                   </div>
                 </div>
@@ -479,12 +483,12 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Room rate ({getDurationInNights()} nights)</span>
-                    <span>${selectedHotel.pricePerNight * getDurationInNights() * searchData.guests.rooms}</span>
+                    <span>${selectedHotel.pricePerNight * getDurationInNights() * searchData.rooms}</span>
                   </div>
                   
                   <div className="flex justify-between text-sm">
                     <span>Taxes & fees</span>
-                    <span>${Math.round(selectedHotel.pricePerNight * getDurationInNights() * searchData.guests.rooms * 0.12)}</span>
+                    <span>${Math.round(selectedHotel.pricePerNight * getDurationInNights() * searchData.rooms * 0.12)}</span>
                   </div>
                 </div>
                 
