@@ -362,6 +362,15 @@ export class RatehawkService {
       const hotel = data.status === 'ok' ? data.data : data;
       console.log('✅ Processed hotel data:', hotel);
       
+      // CRITICAL: Ensure hotel ID is preserved
+      if (!hotel.id && !hotel.hid) {
+        console.warn('⚠️ Hotel data missing ID, injecting from request:', hotelId);
+        hotel.id = hotelId;
+        hotel.hid = hotelId;
+      }
+      
+      console.log('🧪 Final hotel object ID check:', { id: hotel.id, hid: hotel.hid });
+      
       // Inject fallback policies if missing
       if (!hotel.policies) {
         hotel.policies = {

@@ -107,12 +107,16 @@ export default function HotelSearch() {
   };
 
   const handleHotelSelect = async (hotel: any) => {
+    console.log('🧪 HOTEL SELECT DEBUG - Selected hotel:', hotel);
     setSelectedHotel(hotel);
     setLoading(true);
 
     try {
       // Get hotel details
+      console.log('🧪 Calling getHotelInfo with hotel.id:', hotel.id);
       const details = await RatehawkService.getHotelInfo(hotel.id);
+      console.log('🧪 HOTEL DETAILS RECEIVED:', details);
+      console.log('🧪 Hotel details has id?', details?.id);
       setHotelDetails(details);
       setCurrentStep('details');
     } catch (error) {
@@ -128,6 +132,10 @@ export default function HotelSearch() {
   };
 
   const handleBookHotel = async (hotel: any) => {
+    console.log('🧪 HANDLE BOOK HOTEL DEBUG - hotel object:', hotel);
+    console.log('🧪 Hotel ID check:', hotel?.id);
+    console.log('🧪 Hotel properties:', Object.keys(hotel || {}));
+    
     // Navigate to the hotel booking page with proper parameters
     const params = new URLSearchParams({
       destination: searchData.destination,
@@ -136,7 +144,7 @@ export default function HotelSearch() {
       adults: searchData.adults.toString(),
       children: searchData.children.toString(),
       rooms: searchData.rooms.toString(),
-      hotelId: hotel.id
+      hotelId: hotel.id || hotel.hid || 'fallback-hotel-id'
     });
     
     console.log('🧪 NAVIGATING TO BOOKING with params:', Object.fromEntries(params.entries()));
