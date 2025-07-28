@@ -68,7 +68,7 @@ const AiTravel = () => {
 
   const handleMobileChatStart = () => {
     if (!hasStartedChat) {
-      sendMessage("Hi Keila! I'd like to plan a trip. Can you help me?");
+      sendMessage("Keila, can you help me plan a trip?");
     }
   };
 

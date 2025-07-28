@@ -645,6 +645,19 @@ ${allMessageHistory.slice(-10).map(msgItem => `${msgItem.role === 'user' ? 'User
       });
     }
 
+    // Check if this is the basic greeting asking for help planning a trip
+    const isBasicGreeting = message.toLowerCase().includes('can you help me plan') && 
+                          (!extractedInfo.destination && !extractedInfo.dates && !extractedInfo.budget);
+    
+    if (isBasicGreeting) {
+      console.log('Basic greeting detected, asking for destination...');
+      return new Response(JSON.stringify({
+        response: "Sure! Tell me where you want to go and I'll help you plan an amazing trip."
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     console.log('Making OpenRouter API request for message:', message);
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
