@@ -42,7 +42,32 @@ const DayPlanSchema = z.object({
   date: z.string(),
   title: z.string(),
   events: z.array(EventSchema),
-  totalEstimatedCost: z.string().optional()
+  totalEstimatedCost: z.string().optional(),
+  niceToKnow: z.object({
+    freeThingsToDo: z.array(z.string()),
+    walkability: z.string(),
+    transportation: z.string(),
+    foodOptions: z.object({
+      budget: z.string(),
+      splurge: z.string()
+    }),
+    mallOptions: z.array(z.string()),
+    kidsActivities: z.array(z.string()),
+    nightlife: z.array(z.string()),
+    bestBreakfast: z.string(),
+    beaches: z.array(z.string()),
+    bestCoffeeShop: z.string(),
+    drugStores: z.array(z.string()),
+    tours: z.array(z.string()),
+    parks: z.array(z.string()),
+    fishingSpots: z.array(z.string()),
+    horsebackRiding: z.string(),
+    sportingEvents: z.string(),
+    groceryStores: z.array(z.string()),
+    scenicRoutes: z.string(),
+    hospital: z.string(),
+    nailSalon: z.string()
+  }).optional()
 });
 
 const CultureTipSchema = z.object({
@@ -388,6 +413,28 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     - Dates: ${smartDefaults.dates}
     - Travelers: ${smartDefaults.travelers} person(s)
 
+    **CRITICAL: Each day MUST include comprehensive "Nice to Know" section with ALL categories:**
+    - Free things to do
+    - Walkability assessment 
+    - Transportation options with costs
+    - Food options (budget & splurge dining with cost ranges)
+    - Mall/shopping options
+    - Kids activities (always list them)
+    - Best nightlife (bars, clubs, dancing)
+    - Best breakfast places
+    - Beaches in the area
+    - Best coffee shops
+    - Drug stores (CVS, Target, Walmart equivalents)
+    - Tours available with prices
+    - Parks and recreational areas
+    - Fishing spots
+    - Horseback riding options
+    - Sporting events (check local teams)
+    - Grocery stores
+    - Scenic routes for tourists
+    - Nearest hospital/medical
+    - Nail salon recommendations
+
     ${personalizationContext}
     ${conversationContext}
 
@@ -456,34 +503,59 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
           ]
         }
       },
-      "dailyPlan": [
-        {
-          "day": "Day 1",
-          "date": "September 2, 2024",
-          "title": "Arrival & Beach Exploration", 
-          "events": [
-            {
-              "time": "10:00 AM",
-              "title": "Airport Arrival & Hotel Check-in",
-              "description": "Welcome to Miami! Check into your beachfront hotel",
-              "type": "accommodation",
-              "location": "South Beach",
-              "cost": "Included",
-              "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400"
-            },
-            {
-              "time": "2:00 PM", 
-              "title": "South Beach Walking Tour",
-              "description": "Explore the Art Deco architecture and vibrant culture",
-              "type": "activity",
-              "location": "Ocean Drive",
-              "cost": "$25",
-              "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400"
-            }
-          ],
-          "totalEstimatedCost": "$125"
-        }
-      ],
+       "dailyPlan": [
+         {
+           "day": "Day 1",
+           "date": "September 2, 2024",
+           "title": "Arrival & Beach Exploration", 
+           "events": [
+             {
+               "time": "10:00 AM",
+               "title": "Airport Arrival & Hotel Check-in",
+               "description": "Welcome to Miami! Check into your beachfront hotel",
+               "type": "accommodation",
+               "location": "South Beach",
+               "cost": "Included",
+               "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400"
+             },
+             {
+               "time": "2:00 PM", 
+               "title": "South Beach Walking Tour",
+               "description": "Explore the Art Deco architecture and vibrant culture",
+               "type": "activity",
+               "location": "Ocean Drive",
+               "cost": "$25",
+               "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400"
+             }
+           ],
+           "totalEstimatedCost": "$125",
+           "niceToKnow": {
+             "freeThingsToDo": ["Beach walks", "Art Deco District viewing", "Lincoln Road people watching"],
+             "walkability": "Excellent sidewalks in South Beach, very pedestrian-friendly",
+             "transportation": "Metro: $2.25, Taxi: $8-15 local rides, Uber/Lyft available",
+             "foodOptions": {
+               "budget": "Joe's Stone Crab ($), Burger & Beer Joint ($)",
+               "splurge": "Prime 112 ($$$), Nobu Miami ($$$$)"
+             },
+             "mallOptions": ["Lincoln Road Mall (outdoor)", "Aventura Mall (20 min drive)"],
+             "kidsActivities": ["Miami Seaquarium", "Jungle Island", "Miami Children's Museum"],
+             "nightlife": ["LIV at Fontainebleau", "Story Nightclub", "Mango's Tropical Cafe"],
+             "bestBreakfast": "Yardbird Southern Table & Bar, News Cafe",
+             "beaches": ["South Beach", "Mid Beach", "North Beach"],
+             "bestCoffeeShop": "Panther Coffee, Joe & The Juice",
+             "drugStores": ["CVS Pharmacy (multiple locations)", "Walgreens", "Publix Pharmacy"],
+             "tours": ["Art Deco Walking Tour (~$25)", "Miami Vice Boat Tour (~$40)"],
+             "parks": ["Lummus Park", "South Pointe Park"],
+             "fishingSpots": ["South Pointe Pier", "Miami Beach Marina"],
+             "horsebackRiding": "Tropical Trail Rides (~$75 per ride)",
+             "sportingEvents": "Check Miami Heat (basketball) or Miami Dolphins (football) schedules",
+             "groceryStores": ["Publix", "Whole Foods Market", "Fresh Market"],
+             "scenicRoutes": "Ocean Drive, Collins Avenue waterfront drive",
+             "hospital": "Mount Sinai Medical Center",
+             "nailSalon": "Tenoverten (Lincoln Road), Polish Bar"
+           }
+         }
+       ],
       "additionalInfo": {
         "cultureAdapter": [
           {
