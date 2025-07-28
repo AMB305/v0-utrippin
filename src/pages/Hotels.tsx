@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DateRangePicker } from "@/components/hotels/DateRangePicker";
 import { GuestRoomSelector } from "@/components/hotels/GuestRoomSelector";
+import { MultiRoomGuestSelector, MultiRoomConfig } from "@/components/hotels/MultiRoomGuestSelector";
 import useEmblaCarousel from "embla-carousel-react";
 import { MapPin, Calendar, Users, Hotel, Star, Wifi, Car, Dumbbell, Search, Palmtree, Home, Building, Sparkles, Coffee, TreePine, Crown, ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -39,6 +40,12 @@ export default function Hotels() {
     children: [],
     rooms: 1
   });
+  
+  const [multiRoomConfig, setMultiRoomConfig] = useState<MultiRoomConfig>({
+    rooms: [{ adults: 2, children: [] }]
+  });
+  
+  const [isMultiRoom, setIsMultiRoom] = useState(false);
   
   // Use RateHawk integration for nearby hotels
   const { data: nearbyHotels, isLoading: nearbyLoading } = useNearbyHotels("Miami Beach, Florida");
@@ -85,6 +92,32 @@ export default function Hotels() {
     url: "https://utrippin.ai/hotels"
   });
 
+  // Sync multi-room config with single room config
+  const handleGuestConfigChange = (config: any) => {
+    setGuestConfig(config);
+    setMultiRoomConfig({
+      rooms: Array.from({ length: config.rooms }, (_, i) => 
+        i === 0 
+          ? { adults: config.adults, children: config.children }
+          : { adults: 2, children: [] }
+      )
+    });
+    setIsMultiRoom(config.rooms > 1);
+  };
+
+  const handleMultiRoomConfigChange = (config: MultiRoomConfig) => {
+    setMultiRoomConfig(config);
+    // Update guest config for backward compatibility
+    const totalAdults = config.rooms.reduce((sum, room) => sum + room.adults, 0);
+    const totalChildren = config.rooms.reduce((sum, room) => sum + room.children.length, 0);
+    setGuestConfig({
+      adults: totalAdults,
+      children: config.rooms[0]?.children || [],
+      rooms: config.rooms.length
+    });
+    setIsMultiRoom(config.rooms.length > 1);
+  };
+
   const handleSearch = () => {
     const searchData = {
       destination,
@@ -92,10 +125,14 @@ export default function Hotels() {
       checkOutDate: dateRange.checkOut?.toISOString().split('T')[0] || '2025-05-09',
       adults: guestConfig.adults.toString(),
       children: guestConfig.children.length.toString(),
-      rooms: guestConfig.rooms.toString()
+      rooms: guestConfig.rooms.toString(),
+      multiRoom: isMultiRoom ? JSON.stringify(multiRoomConfig) : undefined
     };
     
-    console.log('Desktop search triggered with full parameters:', searchData);
+    console.log('Desktop search triggered with full parameters:', searchData, {
+      isMultiRoom,
+      multiRoomConfig
+    });
     
     // Navigate to hotel search results with all required parameters
     const params = new URLSearchParams(searchData);
@@ -235,11 +272,19 @@ export default function Hotels() {
                 onChange={setDateRange}
                 className="h-10 text-sm bg-gray-50 border-gray-200"
               />
-              <GuestRoomSelector
-                value={guestConfig}
-                onChange={setGuestConfig}
-                className="h-10 text-sm bg-gray-50 border-gray-200"
-              />
+              {isMultiRoom ? (
+                <MultiRoomGuestSelector
+                  value={multiRoomConfig}
+                  onChange={handleMultiRoomConfigChange}
+                  className="h-10 text-sm bg-gray-50 border-gray-200"
+                />
+              ) : (
+                <GuestRoomSelector
+                  value={guestConfig}
+                  onChange={handleGuestConfigChange}
+                  className="h-10 text-sm bg-gray-50 border-gray-200"
+                />
+              )}
               <Button 
                 onClick={handleSearch}
                 className="h-10 text-sm font-semibold bg-primary hover:bg-primary/90"
