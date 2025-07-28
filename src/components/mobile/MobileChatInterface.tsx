@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, RefreshCw, Camera, Globe, MapPin, Mic, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ComprehensiveItineraryDisplay } from '@/components/comprehensive-itinerary/ComprehensiveItineraryDisplay';
+import { MobileItineraryDisplay } from './MobileItineraryDisplay';
 
 interface MobileChatInterfaceProps {
   isOpen: boolean;
@@ -68,9 +68,9 @@ export const MobileChatInterface: React.FC<MobileChatInterfaceProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col">
+    <div className="fixed inset-0 bg-white z-50 flex flex-col w-full h-full h-[100dvh] overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+      <div className="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8">
             <img 
@@ -92,7 +92,7 @@ export const MobileChatInterface: React.FC<MobileChatInterfaceProps> = ({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 w-full">
         {messages.length === 0 ? (
           <>
             {/* Greeting */}
@@ -155,11 +155,8 @@ export const MobileChatInterface: React.FC<MobileChatInterfaceProps> = ({
                 {/* Comprehensive Itinerary */}
                 {message.comprehensiveItinerary && (
                   <div className="w-full">
-                    <ComprehensiveItineraryDisplay 
+                    <MobileItineraryDisplay 
                       itinerary={message.comprehensiveItinerary}
-                      onBack={() => {
-                        // Could implement navigation back to chat
-                      }}
                       onQuickReply={onQuickReply}
                     />
                   </div>
@@ -210,7 +207,7 @@ export const MobileChatInterface: React.FC<MobileChatInterfaceProps> = ({
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-gray-200 p-4">
+      <div className="border-t border-gray-200 p-4 flex-shrink-0 w-full">
         <div className="flex items-center gap-2">
           <div className="flex-1 relative">
             <input
@@ -234,7 +231,7 @@ export const MobileChatInterface: React.FC<MobileChatInterfaceProps> = ({
             onClick={handleSendMessage}
             disabled={!inputMessage.trim() || isLoading}
             size="sm"
-            className="rounded-full w-10 h-10 p-0"
+            className="rounded-full w-10 h-10 p-0 flex-shrink-0"
           >
             <Send className="w-4 h-4" />
           </Button>
