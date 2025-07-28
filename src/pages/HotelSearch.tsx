@@ -107,17 +107,22 @@ export default function HotelSearch() {
   };
 
   const handleHotelSelect = async (hotel: any) => {
-    console.log('🧪 HOTEL SELECT DEBUG - Selected hotel:', hotel);
     setSelectedHotel(hotel);
     setLoading(true);
 
     try {
-      // Get hotel details
-      console.log('🧪 Calling getHotelInfo with hotel.id:', hotel.id);
+      // Get hotel details and preserve original hotel data
       const details = await RatehawkService.getHotelInfo(hotel.id);
-      console.log('🧪 HOTEL DETAILS RECEIVED:', details);
-      console.log('🧪 Hotel details has id?', details?.id);
-      setHotelDetails(details);
+      // Ensure the details object has the hotel ID from the original search result
+      const hotelDetailsWithId = {
+        ...details,
+        id: details.id || hotel.id,
+        hid: details.hid || hotel.hid || hotel.id,
+        // Preserve other essential fields from original search result
+        name: details.name || hotel.name,
+        star_rating: details.star_rating || hotel.star_rating
+      };
+      setHotelDetails(hotelDetailsWithId);
       setCurrentStep('details');
     } catch (error) {
       console.error('Failed to load hotel details:', error);
@@ -132,9 +137,13 @@ export default function HotelSearch() {
   };
 
   const handleBookHotel = async (hotel: any) => {
-    console.log('🧪 HANDLE BOOK HOTEL DEBUG - hotel object:', hotel);
-    console.log('🧪 Hotel ID check:', hotel?.id);
-    console.log('🧪 Hotel properties:', Object.keys(hotel || {}));
+    // Ensure we have a valid hotel ID
+    const hotelId = hotel.id || hotel.hid || selectedHotel?.id || selectedHotel?.hid;
+    
+    if (!hotelId) {
+      console.error('❌ No valid hotel ID found for booking');
+      return;
+    }
     
     // Navigate to the hotel booking page with proper parameters
     const params = new URLSearchParams({
@@ -144,10 +153,8 @@ export default function HotelSearch() {
       adults: searchData.adults.toString(),
       children: searchData.children.toString(),
       rooms: searchData.rooms.toString(),
-      hotelId: hotel.id || hotel.hid || 'fallback-hotel-id'
+      hotelId: hotelId
     });
-    
-    console.log('🧪 NAVIGATING TO BOOKING with params:', Object.fromEntries(params.entries()));
     
     window.location.href = `/hotel-booking?${params.toString()}`;
   };
