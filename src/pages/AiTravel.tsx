@@ -39,7 +39,7 @@ const AiTravel = () => {
     if (user) resetSession();
   }, [user]);
 
-  const handleSendMessage = (message) => sendMessage(message);
+  const handleSendMessage = (message: string) => sendMessage(message);
 
   const handleMobileSearch = (query: string) => {
     sendMessage(`I want to plan a trip to ${query}`);
