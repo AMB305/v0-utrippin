@@ -17,6 +17,8 @@ import { useNearbyHotels } from "@/hooks/useHotels";
 import { HotelCardDesktop } from "@/components/HotelCardDesktop";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DateRangePicker } from "@/components/hotels/DateRangePicker";
+import { GuestRoomSelector } from "@/components/hotels/GuestRoomSelector";
 import useEmblaCarousel from "embla-carousel-react";
 import { MapPin, Calendar, Users, Hotel, Star, Wifi, Car, Dumbbell, Search, Palmtree, Home, Building, Sparkles, Coffee, TreePine, Crown, ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -28,9 +30,15 @@ export default function Hotels() {
   
   // Form state for desktop search
   const [destination, setDestination] = useState('Miami Beach, Florida');
-  const [checkInDate, setCheckInDate] = useState('2025-05-07');
-  const [checkOutDate, setCheckOutDate] = useState('2025-05-09');
-  const [guests, setGuests] = useState('2 guests, 1 room');
+  const [dateRange, setDateRange] = useState({
+    checkIn: new Date('2025-05-07'),
+    checkOut: new Date('2025-05-09')
+  });
+  const [guestConfig, setGuestConfig] = useState({
+    adults: 2,
+    children: [],
+    rooms: 1
+  });
   
   // Use RateHawk integration for nearby hotels
   const { data: nearbyHotels, isLoading: nearbyLoading } = useNearbyHotels("Miami Beach, Florida");
@@ -78,20 +86,13 @@ export default function Hotels() {
   });
 
   const handleSearch = () => {
-    // Parse guests string to extract adults and rooms
-    const guestsMatch = guests.match(/(\d+)\s+guests?/);
-    const roomsMatch = guests.match(/(\d+)\s+rooms?/);
-    
-    const adults = guestsMatch ? parseInt(guestsMatch[1]) : 2;
-    const rooms = roomsMatch ? parseInt(roomsMatch[1]) : 1;
-    
     const searchData = {
       destination,
-      checkInDate,
-      checkOutDate,
-      adults: adults.toString(),
-      children: '0',
-      rooms: rooms.toString()
+      checkInDate: dateRange.checkIn?.toISOString().split('T')[0] || '2025-05-07',
+      checkOutDate: dateRange.checkOut?.toISOString().split('T')[0] || '2025-05-09',
+      adults: guestConfig.adults.toString(),
+      children: guestConfig.children.length.toString(),
+      rooms: guestConfig.rooms.toString()
     };
     
     console.log('Desktop search triggered with full parameters:', searchData);
@@ -229,24 +230,16 @@ export default function Hotels() {
                   className="pl-10 h-10 text-sm bg-gray-50 border-gray-200"
                 />
               </div>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <Input 
-                  placeholder="Check-in - Check-out"
-                  value={`${checkInDate} - ${checkOutDate}`}
-                  readOnly
-                  className="pl-10 h-10 text-sm bg-gray-50 border-gray-200 cursor-pointer"
-                />
-              </div>
-              <div className="relative">
-                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <Input 
-                  placeholder="Guests & Rooms"
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  className="pl-10 h-10 text-sm bg-gray-50 border-gray-200"
-                />
-              </div>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                className="h-10 text-sm bg-gray-50 border-gray-200"
+              />
+              <GuestRoomSelector
+                value={guestConfig}
+                onChange={setGuestConfig}
+                className="h-10 text-sm bg-gray-50 border-gray-200"
+              />
               <Button 
                 onClick={handleSearch}
                 className="h-10 text-sm font-semibold bg-primary hover:bg-primary/90"
