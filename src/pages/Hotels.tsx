@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DateRangePicker } from "@/components/hotels/DateRangePicker";
 import { GuestRoomSelector } from "@/components/hotels/GuestRoomSelector";
-import { MultiRoomGuestSelector, MultiRoomConfig } from "@/components/hotels/MultiRoomGuestSelector";
+import { MultiRoomConfig } from "@/components/hotels/MultiRoomGuestSelector";
 import useEmblaCarousel from "embla-carousel-react";
 import { MapPin, Calendar, Users, Hotel, Star, Wifi, Car, Dumbbell, Search, Palmtree, Home, Building, Sparkles, Coffee, TreePine, Crown, ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -272,19 +272,12 @@ export default function Hotels() {
                 onChange={setDateRange}
                 className="h-10 text-sm bg-gray-50 border-gray-200"
               />
-              {isMultiRoom ? (
-                <MultiRoomGuestSelector
-                  value={multiRoomConfig}
-                  onChange={handleMultiRoomConfigChange}
-                  className="h-10 text-sm bg-gray-50 border-gray-200"
-                />
-              ) : (
-                <GuestRoomSelector
-                  value={guestConfig}
-                  onChange={handleGuestConfigChange}
-                  className="h-10 text-sm bg-gray-50 border-gray-200"
-                />
-              )}
+              <GuestRoomSelector
+                value={guestConfig}
+                onChange={handleGuestConfigChange}
+                onMultiRoomChange={handleMultiRoomConfigChange}
+                className="h-10 text-sm bg-gray-50 border-gray-200"
+              />
               <Button 
                 onClick={handleSearch}
                 className="h-10 text-sm font-semibold bg-primary hover:bg-primary/90"

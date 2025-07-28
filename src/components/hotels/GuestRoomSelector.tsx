@@ -15,14 +15,44 @@ interface GuestConfig {
   rooms: number;
 }
 
+interface RoomConfig {
+  adults: number;
+  children: number[];
+}
+
+interface MultiRoomConfig {
+  rooms: RoomConfig[];
+}
+
 interface GuestRoomSelectorProps {
   value: GuestConfig;
   onChange: (config: GuestConfig) => void;
+  onMultiRoomChange?: (config: MultiRoomConfig) => void;
   className?: string;
 }
 
-export function GuestRoomSelector({ value, onChange, className }: GuestRoomSelectorProps) {
+export function GuestRoomSelector({ value, onChange, onMultiRoomChange, className }: GuestRoomSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [multiRoomConfig, setMultiRoomConfig] = useState<MultiRoomConfig>({
+    rooms: [{ adults: value.adults, children: value.children }]
+  });
+
+  // Sync multi-room config when value changes
+  React.useEffect(() => {
+    if (value.rooms === 1) {
+      setMultiRoomConfig({
+        rooms: [{ adults: value.adults, children: value.children }]
+      });
+    } else {
+      // Initialize multi-room config with current data
+      const rooms = Array.from({ length: value.rooms }, (_, i) => 
+        i === 0 
+          ? { adults: value.adults, children: value.children }
+          : multiRoomConfig.rooms[i] || { adults: 2, children: [] }
+      );
+      setMultiRoomConfig({ rooms });
+    }
+  }, [value.rooms]);
 
   const updateAdults = (increment: boolean) => {
     const newAdults = increment ? value.adults + 1 : Math.max(1, value.adults - 1);
@@ -48,6 +78,60 @@ export function GuestRoomSelector({ value, onChange, className }: GuestRoomSelec
   const updateRooms = (increment: boolean) => {
     const newRooms = increment ? value.rooms + 1 : Math.max(1, value.rooms - 1);
     onChange({ ...value, rooms: newRooms });
+    
+    // Update multi-room config
+    if (newRooms > 1) {
+      const rooms = Array.from({ length: newRooms }, (_, i) => 
+        multiRoomConfig.rooms[i] || { adults: 2, children: [] }
+      );
+      const updatedConfig = { rooms };
+      setMultiRoomConfig(updatedConfig);
+      onMultiRoomChange?.(updatedConfig);
+    }
+  };
+
+  const updateMultiRoomAdults = (roomIndex: number, increment: boolean) => {
+    const rooms = [...multiRoomConfig.rooms];
+    const currentAdults = rooms[roomIndex].adults;
+    rooms[roomIndex] = {
+      ...rooms[roomIndex],
+      adults: increment ? currentAdults + 1 : Math.max(1, currentAdults - 1)
+    };
+    const updatedConfig = { rooms };
+    setMultiRoomConfig(updatedConfig);
+    onMultiRoomChange?.(updatedConfig);
+    
+    // Update main config with totals
+    const totalAdults = rooms.reduce((sum, room) => sum + room.adults, 0);
+    onChange({ ...value, adults: totalAdults });
+  };
+
+  const updateMultiRoomChildren = (roomIndex: number, increment: boolean) => {
+    const rooms = [...multiRoomConfig.rooms];
+    if (increment) {
+      rooms[roomIndex] = {
+        ...rooms[roomIndex],
+        children: [...rooms[roomIndex].children, 12]
+      };
+    } else if (rooms[roomIndex].children.length > 0) {
+      const newChildren = [...rooms[roomIndex].children];
+      newChildren.pop();
+      rooms[roomIndex] = {
+        ...rooms[roomIndex],
+        children: newChildren
+      };
+    }
+    const updatedConfig = { rooms };
+    setMultiRoomConfig(updatedConfig);
+    onMultiRoomChange?.(updatedConfig);
+  };
+
+  const updateMultiRoomChildAge = (roomIndex: number, childIndex: number, age: number) => {
+    const rooms = [...multiRoomConfig.rooms];
+    rooms[roomIndex].children[childIndex] = Math.max(0, Math.min(17, age));
+    const updatedConfig = { rooms };
+    setMultiRoomConfig(updatedConfig);
+    onMultiRoomChange?.(updatedConfig);
   };
 
   const getDisplayText = () => {
@@ -72,88 +156,182 @@ export function GuestRoomSelector({ value, onChange, className }: GuestRoomSelec
       </PopoverTrigger>
       <PopoverContent className="w-80 p-4" align="start">
         <div className="space-y-4">
-          {/* Adults */}
-          <div className="flex items-center justify-between">
-            <div>
-              <Label className="font-medium">Adults</Label>
-              <p className="text-sm text-muted-foreground">Age 18+</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => updateAdults(false)}
-                disabled={value.adults <= 1}
-                className="h-8 w-8 p-0"
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-              <span className="w-8 text-center">{value.adults}</span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => updateAdults(true)}
-                disabled={value.adults >= 8}
-                className="h-8 w-8 p-0"
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Children */}
-          <div className="flex items-center justify-between">
-            <div>
-              <Label className="font-medium">Children</Label>
-              <p className="text-sm text-muted-foreground">Age 0-17</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => updateChildren(false)}
-                disabled={value.children.length === 0}
-                className="h-8 w-8 p-0"
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-              <span className="w-8 text-center">{value.children.length}</span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => updateChildren(true)}
-                disabled={value.children.length >= 4}
-                className="h-8 w-8 p-0"
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Children Ages */}
-          {value.children.length > 0 && (
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Children's Ages</Label>
-              <div className="grid grid-cols-2 gap-2">
-                {value.children.map((age, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <Label className="text-xs w-12">Child {index + 1}:</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      max="17"
-                      value={age}
-                      onChange={(e) => updateChildAge(index, parseInt(e.target.value) || 0)}
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                ))}
+          {value.rooms === 1 ? (
+            // Single Room Mode
+            <>
+              {/* Adults */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label className="font-medium">Adults</Label>
+                  <p className="text-sm text-muted-foreground">Age 18+</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => updateAdults(false)}
+                    disabled={value.adults <= 1}
+                    className="h-8 w-8 p-0"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="w-8 text-center">{value.adults}</span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => updateAdults(true)}
+                    disabled={value.adults >= 8}
+                    className="h-8 w-8 p-0"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
+
+              {/* Children */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label className="font-medium">Children</Label>
+                  <p className="text-sm text-muted-foreground">Age 0-17</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => updateChildren(false)}
+                    disabled={value.children.length === 0}
+                    className="h-8 w-8 p-0"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="w-8 text-center">{value.children.length}</span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => updateChildren(true)}
+                    disabled={value.children.length >= 4}
+                    className="h-8 w-8 p-0"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Children Ages */}
+              {value.children.length > 0 && (
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Children's Ages</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {value.children.map((age, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <Label className="text-xs w-12">Child {index + 1}:</Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          max="17"
+                          value={age}
+                          onChange={(e) => updateChildAge(index, parseInt(e.target.value) || 0)}
+                          className="h-8 text-sm"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            // Multi-Room Mode
+            <div className="space-y-4 max-h-80 overflow-y-auto">
+              {multiRoomConfig.rooms.map((room, roomIndex) => (
+                <div key={roomIndex} className="border rounded-lg p-3 space-y-3">
+                  <Label className="font-medium text-sm">Room {roomIndex + 1}</Label>
+                  
+                  {/* Adults per room */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-sm">Adults</Label>
+                      <p className="text-xs text-muted-foreground">Age 18+</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateMultiRoomAdults(roomIndex, false)}
+                        disabled={room.adults <= 1}
+                        className="h-7 w-7 p-0"
+                      >
+                        <Minus className="h-3 w-3" />
+                      </Button>
+                      <span className="w-6 text-center text-sm">{room.adults}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateMultiRoomAdults(roomIndex, true)}
+                        disabled={room.adults >= 8}
+                        className="h-7 w-7 p-0"
+                      >
+                        <Plus className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Children per room */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-sm">Children</Label>
+                      <p className="text-xs text-muted-foreground">Age 0-17</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateMultiRoomChildren(roomIndex, false)}
+                        disabled={room.children.length === 0}
+                        className="h-7 w-7 p-0"
+                      >
+                        <Minus className="h-3 w-3" />
+                      </Button>
+                      <span className="w-6 text-center text-sm">{room.children.length}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateMultiRoomChildren(roomIndex, true)}
+                        disabled={room.children.length >= 4}
+                        className="h-7 w-7 p-0"
+                      >
+                        <Plus className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Children Ages per room */}
+                  {room.children.length > 0 && (
+                    <div className="space-y-2">
+                      <Label className="text-xs font-medium">Children's Ages</Label>
+                      <div className="grid grid-cols-2 gap-1">
+                        {room.children.map((age, childIndex) => (
+                          <div key={childIndex} className="flex items-center space-x-1">
+                            <Label className="text-xs w-8">#{childIndex + 1}:</Label>
+                            <Input
+                              type="number"
+                              min="0"
+                              max="17"
+                              value={age}
+                              onChange={(e) => updateMultiRoomChildAge(roomIndex, childIndex, parseInt(e.target.value) || 0)}
+                              className="h-6 text-xs"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           )}
 
           {/* Rooms */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between border-t pt-3">
             <div>
               <Label className="font-medium">Rooms</Label>
               <p className="text-sm text-muted-foreground">Separate rooms</p>
