@@ -137,26 +137,52 @@ export default function HotelSearch() {
   };
 
   const handleBookHotel = async (hotel: any) => {
-    // Ensure we have a valid hotel ID
-    const hotelId = hotel.id || hotel.hid || selectedHotel?.id || selectedHotel?.hid;
+    console.log('🏨 Starting booking process for hotel:', hotel);
+    
+    // Ensure we have a valid hotel ID - use multiple fallbacks
+    const hotelId = hotel?.id || hotel?.hid || selectedHotel?.id || selectedHotel?.hid;
+    
+    console.log('🔍 Hotel ID resolution:', {
+      'hotel.id': hotel?.id,
+      'hotel.hid': hotel?.hid,
+      'selectedHotel.id': selectedHotel?.id,
+      'selectedHotel.hid': selectedHotel?.hid,
+      'finalHotelId': hotelId
+    });
     
     if (!hotelId) {
       console.error('❌ No valid hotel ID found for booking');
+      toast({
+        title: "Error",
+        description: "Unable to find hotel information for booking",
+        variant: "destructive"
+      });
       return;
     }
     
-    // Navigate to the hotel booking page with proper parameters
-    const params = new URLSearchParams({
-      destination: searchData.destination,
-      checkInDate: searchData.checkInDate,
-      checkOutDate: searchData.checkOutDate,
-      adults: searchData.adults.toString(),
-      children: searchData.children.toString(),
-      rooms: searchData.rooms.toString(),
-      hotelId: hotelId
-    });
-    
-    window.location.href = `/hotel-booking?${params.toString()}`;
+    try {
+      // Navigate to the hotel booking page with proper parameters
+      const params = new URLSearchParams({
+        destination: searchData.destination,
+        checkInDate: searchData.checkInDate,
+        checkOutDate: searchData.checkOutDate,
+        adults: searchData.adults.toString(),
+        children: searchData.children.toString(),
+        rooms: searchData.rooms.toString(),
+        hotelId: hotelId
+      });
+      
+      console.log('🚀 Navigating to booking with params:', Object.fromEntries(params.entries()));
+      
+      window.location.href = `/hotel-booking?${params.toString()}`;
+    } catch (error) {
+      console.error('❌ Failed to navigate to booking:', error);
+      toast({
+        title: "Error",
+        description: "Failed to navigate to booking page",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleBookingComplete = (booking: any) => {
@@ -376,7 +402,7 @@ export default function HotelSearch() {
             onBook={handleBookHotel}
             checkIn={searchData.checkInDate}
             checkOut={searchData.checkOutDate}
-            guests={`${searchData.adults + searchData.children} guests, ${searchData.rooms > 1 ? 's' : ''}`}
+            guests={`${searchData.adults + searchData.children} guests, ${searchData.rooms} room${searchData.rooms > 1 ? 's' : ''}`}
             searchData={searchData}
           />
         )}

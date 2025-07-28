@@ -118,28 +118,42 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
     // Check if this is a multi-room booking FIRST
     const rooms = parseInt(searchParams.get('rooms') || '1');
     const multiRoom = rooms > 1;
+    const urlHotelId = searchParams.get('hotelId');
+    
     setIsMultiRoom(multiRoom);
     
-    console.log('🧪 BOOKING DEBUG - URL Params:', {
+    console.log('🏨 BOOKING PAGE DEBUG - URL Params:', {
       rooms,
       multiRoom,
+      hotelId: urlHotelId,
       adults: searchParams.get('adults'),
       children: searchParams.get('children'),
       allParams: Object.fromEntries(searchParams.entries())
     });
     
-    // In real implementation, fetch hotel details by hotelId
-    // For now, using mock data
+    if (!urlHotelId) {
+      console.error('❌ No hotel ID found in URL parameters');
+      setHotelLoading(false);
+      return;
+    }
+    
+    // Use mock hotel for now, but preserve the hotel ID from URL
+    const hotelWithId = {
+      ...mockHotel,
+      id: urlHotelId,
+      hid: urlHotelId
+    };
+    
     setTimeout(() => {
-      setSelectedHotel(mockHotel);
+      setSelectedHotel(hotelWithId);
       
       // Auto-trigger prebook when hotel loads
-      if (mockHotel) {
-        handlePrebook(mockHotel, multiRoom);
+      if (hotelWithId) {
+        handlePrebook(hotelWithId, multiRoom);
       }
       setHotelLoading(false);
     }, 1000);
-  }, [hotelId, searchParams]);
+  }, [hotelId, searchParams, handlePrebook]);
 
   const calculateTotalPrice = () => {
     if (!selectedHotel) return 0;
