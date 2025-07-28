@@ -123,6 +123,7 @@ export function MultiRoomBookingForm({
       });
 
       // Call Ratehawk booking API with multi-room data
+      console.log(`🏨 Multi-room booking: ${rooms.length} rooms, Prebook ID: ${prebookId}`);
       const { data, error } = await supabase.functions.invoke('ratehawk-hotel-book', {
         body: {
           book_hash: prebookId,

@@ -11,6 +11,10 @@ const RATEHAWK_BASE_URL = 'https://api-sandbox.emergingtravel.com/v1';
 
 interface RatehawkPrebookRequest {
   book_hash: string;
+  rooms?: Array<{
+    adults: number;
+    children: number[];
+  }>;
 }
 
 interface RatehawkPrebookResponse {
@@ -35,7 +39,7 @@ serve(async (req) => {
   }
 
   try {
-    const { book_hash }: RatehawkPrebookRequest = await req.json();
+    const { book_hash, rooms }: RatehawkPrebookRequest = await req.json();
 
     if (!book_hash) {
       return new Response(
@@ -68,10 +72,13 @@ serve(async (req) => {
 
       console.log(`✅ Prebook success - Hash: ${data.data.book_hash}`);
       console.log(`Ratehawk Prebook - Hotel: ${data.data.hotel_id}, expires: ${data.data.expires_at}`);
+      if (rooms && rooms.length > 1) {
+        console.log(`Multi-room prebook - ${rooms.length} rooms configured`);
+      }
       
       // Log certification data
       console.log('🧪 RATEHAWK CERTIFICATION LOG - ratehawk-hotel-prebook:');
-      console.log('Request:', JSON.stringify({ book_hash }, null, 2));
+      console.log('Request:', JSON.stringify({ book_hash, rooms }, null, 2));
       console.log('Response:', JSON.stringify(data, null, 2));
       console.log('Authentication: API Keys Present');
 
@@ -105,10 +112,13 @@ serve(async (req) => {
       };
 
       console.log(`✅ Mock Prebook success - Hash: ${mockResponse.data.book_hash}`);
+      if (rooms && rooms.length > 1) {
+        console.log(`Multi-room mock prebook - ${rooms.length} rooms configured`);
+      }
       
       // Log certification data with mock response
       console.log('🧪 RATEHAWK CERTIFICATION LOG - ratehawk-hotel-prebook:');
-      console.log('Request:', JSON.stringify({ book_hash }, null, 2));
+      console.log('Request:', JSON.stringify({ book_hash, rooms }, null, 2));
       console.log('Response:', JSON.stringify(mockResponse, null, 2));
       console.log('Authentication: Using mock data due to API error');
 

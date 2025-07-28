@@ -58,6 +58,11 @@ interface HotelDetailsModalProps {
   checkIn: string;
   checkOut: string;
   guests: string;
+  searchData?: {
+    rooms: number;
+    adults: number;
+    children: number;
+  };
 }
 
 const amenityIcons: { [key: string]: React.ComponentType<any> } = {
@@ -79,7 +84,8 @@ export function HotelDetailsModal({
   onBook, 
   checkIn, 
   checkOut, 
-  guests 
+  guests,
+  searchData
 }: HotelDetailsModalProps) {
   const [selectedImage, setSelectedImage] = useState(0);
 

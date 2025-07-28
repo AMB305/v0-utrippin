@@ -316,6 +316,7 @@ export default function HotelSearch() {
             checkIn={searchData.checkInDate}
             checkOut={searchData.checkOutDate}
             guests={`${searchData.adults + searchData.children} guests, ${searchData.rooms} room${searchData.rooms > 1 ? 's' : ''}`}
+            searchData={searchData}
           />
         );
 
@@ -333,6 +334,7 @@ export default function HotelSearch() {
         return (
           <BookingConfirmation
             booking={bookingData}
+            hotel={hotelDetails}
             onNewSearch={handleNewSearch}
           />
         );
@@ -369,7 +371,8 @@ export default function HotelSearch() {
             onBook={handleBookHotel}
             checkIn={searchData.checkInDate}
             checkOut={searchData.checkOutDate}
-            guests={`${searchData.adults + searchData.children} guests, ${searchData.rooms} room${searchData.rooms > 1 ? 's' : ''}`}
+            guests={`${searchData.adults + searchData.children} guests, ${searchData.rooms > 1 ? 's' : ''}`}
+            searchData={searchData}
           />
         )}
 
@@ -385,6 +388,7 @@ export default function HotelSearch() {
         {currentStep === 'confirmation' && (
           <BookingConfirmation
             booking={bookingData}
+            hotel={hotelDetails}
             onNewSearch={handleNewSearch}
           />
         )}

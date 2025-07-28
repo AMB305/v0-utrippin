@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Building2, Calendar, Star, CreditCard, CheckCircle, Shield, Info, MapPin, Loader2, RefreshCw } from "lucide-react";
 import { useHotelBooking } from "@/hooks/useHotelBooking";
 import { useToast } from "@/hooks/use-toast";
+import { MultiRoomBookingForm } from "@/components/hotels/MultiRoomBookingForm";
+import { supabase } from "@/integrations/supabase/client";
 
 // Mock hotel data - in real implementation, this would come from API
 const mockHotel = {
@@ -32,8 +34,52 @@ const HotelBooking = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null);
+const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null);
   const [hotelLoading, setHotelLoading] = useState(true);
+  const [prebookId, setPrebookId] = useState<string | null>(null);
+  const [isMultiRoom, setIsMultiRoom] = useState(false);
+  
+  // Add prebook functionality
+  const handlePrebook = async (hotel: any) => {
+    setHotelLoading(true);
+    try {
+      const searchData = {
+        adults: parseInt(searchParams.get('adults') || '2'),
+        children: parseInt(searchParams.get('children') || '0'),
+        rooms: parseInt(searchParams.get('rooms') || '1')
+      };
+      
+      const mockBookHash = `bh-${Date.now()}-${hotel.id}`;
+      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-prebook', {
+        body: { 
+          book_hash: mockBookHash,
+          rooms: isMultiRoom ? [
+            { adults: 2, children: [] },
+            { adults: 2, children: [] }
+          ] : undefined
+        }
+      });
+
+      if (error) throw error;
+      
+      setPrebookId(data.data.book_hash);
+      console.log('✅ Prebook successful:', data.data.book_hash);
+      
+      toast({
+        title: "Room Pre-booked",
+        description: isMultiRoom ? `${searchData.rooms} rooms reserved for 30 minutes` : "Room reserved for 30 minutes",
+      });
+    } catch (error) {
+      console.error('❌ Prebook failed:', error);
+      toast({
+        title: "Prebook Failed",
+        description: "Could not reserve the room(s). Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setHotelLoading(false);
+    }
+  };
   
   const {
     bookingData,
@@ -54,8 +100,17 @@ const HotelBooking = () => {
     setTimeout(() => {
       setSelectedHotel(mockHotel);
       setHotelLoading(false);
+      
+      // Check if this is a multi-room booking
+      const rooms = parseInt(searchParams.get('rooms') || '1');
+      setIsMultiRoom(rooms > 1);
+      
+      // Auto-trigger prebook when hotel loads
+      if (mockHotel) {
+        handlePrebook(mockHotel);
+      }
     }, 1000);
-  }, [hotelId]);
+  }, [hotelId, searchParams]);
 
   const calculateTotalPrice = () => {
     if (!selectedHotel) return 0;
@@ -240,56 +295,74 @@ const HotelBooking = () => {
               </CardContent>
             </Card>
 
-            {/* Guest Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Guest Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="firstName">First Name *</Label>
-                    <Input
-                      id="firstName"
-                      value={bookingData.firstName}
-                      onChange={(e) => setBookingData(prev => ({ ...prev, firstName: e.target.value }))}
-                      placeholder="Enter first name"
-                    />
+            {/* Guest Information - Switch between single and multi-room forms */}
+            {isMultiRoom && prebookId ? (
+              <MultiRoomBookingForm
+                hotel={selectedHotel}
+                prebookId={prebookId}
+                rooms={Array.from({ length: parseInt(searchParams.get('rooms') || '2') }, () => ({ 
+                  adults: Math.floor(parseInt(searchParams.get('adults') || '4') / parseInt(searchParams.get('rooms') || '2')), 
+                  children: [] 
+                }))}
+                onBookingComplete={(booking) => {
+                  toast({
+                    title: "Booking Successful!",
+                    description: `Your multi-room reservation has been confirmed. Order ID: ${booking.data?.order_id}`,
+                  });
+                }}
+                onBack={() => navigate('/hotels')}
+              />
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Guest Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="firstName">First Name *</Label>
+                      <Input
+                        id="firstName"
+                        value={bookingData.firstName}
+                        onChange={(e) => setBookingData(prev => ({ ...prev, firstName: e.target.value }))}
+                        placeholder="Enter first name"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="lastName">Last Name *</Label>
+                      <Input
+                        id="lastName"
+                        value={bookingData.lastName}
+                        onChange={(e) => setBookingData(prev => ({ ...prev, lastName: e.target.value }))}
+                        placeholder="Enter last name"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="lastName">Last Name *</Label>
-                    <Input
-                      id="lastName"
-                      value={bookingData.lastName}
-                      onChange={(e) => setBookingData(prev => ({ ...prev, lastName: e.target.value }))}
-                      placeholder="Enter last name"
-                    />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="email">Email Address *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={bookingData.email}
+                        onChange={(e) => setBookingData(prev => ({ ...prev, email: e.target.value }))}
+                        placeholder="Enter email address"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone">Phone Number *</Label>
+                      <Input
+                        id="phone"
+                        value={bookingData.phone}
+                        onChange={(e) => setBookingData(prev => ({ ...prev, phone: e.target.value }))}
+                        placeholder="Enter phone number"
+                      />
+                    </div>
                   </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="email">Email Address *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={bookingData.email}
-                      onChange={(e) => setBookingData(prev => ({ ...prev, email: e.target.value }))}
-                      placeholder="Enter email address"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">Phone Number *</Label>
-                    <Input
-                      id="phone"
-                      value={bookingData.phone}
-                      onChange={(e) => setBookingData(prev => ({ ...prev, phone: e.target.value }))}
-                      placeholder="Enter phone number"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Additional Preferences */}
             <Card>
@@ -389,21 +462,23 @@ const HotelBooking = () => {
                   </div>
                 </div>
                 
-                <Button 
-                  onClick={createBooking}
-                  className="w-full"
-                  size="lg"
-                  disabled={loading || !bookingData.firstName || !bookingData.lastName || !bookingData.email || !bookingData.phone}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Processing Booking...
-                    </>
-                  ) : (
-                    'Complete Booking'
-                  )}
-                </Button>
+                {!isMultiRoom && (
+                  <Button 
+                    onClick={createBooking}
+                    className="w-full"
+                    size="lg"
+                    disabled={loading || !bookingData.firstName || !bookingData.lastName || !bookingData.email || !bookingData.phone}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Processing Booking...
+                      </>
+                    ) : (
+                      'Complete Booking'
+                    )}
+                  </Button>
+                )}
                 
                 <p className="text-xs text-muted-foreground text-center">
                   By booking, you agree to our terms and conditions and the hotel's policies
