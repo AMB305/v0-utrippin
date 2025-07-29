@@ -30,7 +30,7 @@ const SwipeToTravelHero = () => {
     setSheetOpen(true);
   };
 
-  const handleFlightsClick = () => handleBookingClick('flights');
+  const handleFlightsClick = () => navigate('/flights');
 
   const handleShareClick = async () => {
     const shareData = {

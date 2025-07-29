@@ -30,8 +30,8 @@ const EnhancedHeroSection = () => {
   }, [nextVideoIndex, videoUrls.length, videosLoading]);
 
   const handlePlanYourTrip = () => {
-    console.log("🗺️ Plan Your Trip button clicked - navigating to /ai-travel");
-    navigate('/ai-travel');
+    console.log("🗺️ Book Now button clicked - navigating to /flights");
+    navigate('/flights');
   };
 
   // Show the full component with fallback background while videos load
