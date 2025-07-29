@@ -173,18 +173,18 @@ const HotelSearchBar = ({ onSearch, loading = false, initialData, compact = fals
   }
 
   return (
-    <Card className="w-full max-w-6xl mx-auto shadow-lg">
-      <CardContent className="p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-10 gap-3 items-center">
+    <Card className="w-full max-w-7xl mx-auto shadow-lg">
+      <CardContent className="p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
           {/* Destination */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-4">
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
                 placeholder="Where to?"
                 value={searchData.destination}
                 onChange={(e) => setSearchData(prev => ({ ...prev, destination: e.target.value }))}
-                className="pl-10 h-14 text-base border-0 bg-muted/30 rounded-xl focus:ring-2 focus:ring-primary"
+                className="pl-10 h-16 text-base border-0 bg-muted/30 rounded-xl focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -195,14 +195,14 @@ const HotelSearchBar = ({ onSearch, loading = false, initialData, compact = fals
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full h-14 justify-start text-left font-normal border-0 bg-muted/30 rounded-xl focus:ring-2 focus:ring-primary"
+                  className="w-full h-16 justify-start text-left font-normal border-0 bg-muted/30 rounded-xl focus:ring-2 focus:ring-primary"
                 >
-                  <CalendarIcon className="mr-3 h-5 w-5 text-muted-foreground" />
-                  <div className="flex flex-col items-start">
-                    <span className="text-xs text-muted-foreground">Dates</span>
+                  <CalendarIcon className="mr-3 h-5 w-5 text-muted-foreground flex-shrink-0" />
+                  <div className="flex flex-col items-start min-w-0 flex-1">
+                    <span className="text-xs text-muted-foreground mb-1">Dates</span>
                     {searchData.checkInDate && searchData.checkOutDate ? (
-                      <span className="text-sm font-medium">
-                        {format(searchData.checkInDate, "MMM dd")} - {format(searchData.checkOutDate, "MMM dd")}
+                      <span className="text-sm font-medium truncate w-full">
+                        {format(searchData.checkInDate, "MMM dd")} - {format(searchData.checkOutDate, "MMM dd, yyyy")}
                       </span>
                     ) : (
                       <span className="text-sm text-muted-foreground">Select dates</span>
@@ -240,17 +240,17 @@ const HotelSearchBar = ({ onSearch, loading = false, initialData, compact = fals
           </div>
 
           {/* Travelers */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full h-14 justify-start text-left font-normal border-0 bg-muted/30 rounded-xl focus:ring-2 focus:ring-primary"
+                  className="w-full h-16 justify-start text-left font-normal border-0 bg-muted/30 rounded-xl focus:ring-2 focus:ring-primary"
                 >
                   <Users className="mr-3 h-5 w-5 text-muted-foreground flex-shrink-0" />
-                  <div className="flex flex-col items-start min-w-0">
-                    <span className="text-xs text-muted-foreground">Travelers</span>
-                    <span className="text-sm font-medium truncate">{getGuestSummary()}</span>
+                  <div className="flex flex-col items-start min-w-0 flex-1">
+                    <span className="text-xs text-muted-foreground mb-1">Travelers</span>
+                    <span className="text-sm font-medium truncate w-full">{getGuestSummary()}</span>
                   </div>
                 </Button>
               </PopoverTrigger>
@@ -337,7 +337,7 @@ const HotelSearchBar = ({ onSearch, loading = false, initialData, compact = fals
             <Button 
               onClick={handleSearch}
               disabled={loading}
-              className="w-full h-14 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-base px-8"
+              className="w-full h-16 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-base px-8"
               size="lg"
             >
               <Search className="w-5 h-5 mr-2" />
