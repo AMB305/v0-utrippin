@@ -15,14 +15,11 @@ class UserService {
       if (authError) throw authError;
       if (!user) return null;
 
-      // Use maybeSingle() to avoid errors when user doesn't exist
+      // First try to get user data without profile join to avoid schema issues
       const { data: userData, error: userError } = await supabase
         .from('users')
-        .select(`
-          *,
-          profile:profiles(*)
-        `)
-        .eq('id', user.id)  // Use user.id instead of email for better consistency
+        .select('*')
+        .eq('id', user.id)
         .maybeSingle();
 
       if (userError) {
@@ -38,10 +35,7 @@ class UserService {
         
         const { data: retryData } = await supabase
           .from('users')
-          .select(`
-            *,
-            profile:profiles(*)
-          `)
+          .select('*')
           .eq('id', user.id)
           .maybeSingle();
           
@@ -72,16 +66,10 @@ class UserService {
           };
         }
         
-        return {
-          ...retryData,
-          profile: Array.isArray(retryData.profile) ? retryData.profile[0] : retryData.profile
-        };
+        return retryData;
       }
 
-      return {
-        ...userData,
-        profile: Array.isArray(userData.profile) ? userData.profile[0] : userData.profile
-      };
+      return userData;
     } catch (error) {
       console.error('Error fetching current user:', error);
       return null;
