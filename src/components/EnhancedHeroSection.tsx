@@ -1,19 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
+import { useVideoConfig } from "@/hooks/useVideoConfig";
 
 const EnhancedHeroSection = () => {
   const navigate = useNavigate();
-  
-  // Video URLs for rotation
-  const videoUrls = [
-    "https://utrippin.s3.us-east-2.amazonaws.com/famous-white-houses-in-fira-santorini-island-gree-2023-11-27-05-01-35-utc.mp4",
-    "https://utrippin.s3.us-east-2.amazonaws.com/herd-of-elephants-approaching-a-waterhole-bank-in-2025-04-25-17-59-46-utc.mp4",
-    "https://utrippin.s3.us-east-2.amazonaws.com/high-angle-footage-of-times-square-at-night-4k-2025-06-09-04-38-32-utc+(1).mp4",
-    "https://utrippin.s3.us-east-2.amazonaws.com/tropical-rainforest-sea-beach-serene-cloudy-sky-tr-2024-02-12-19-16-44-utc+(2).mp4",
-    "https://utrippin.s3.us-east-2.amazonaws.com/aerial-view-reveal-epic-white-water-rafting-in-cos-2023-11-27-04-54-26-utc.mp4",
-    "https://utrippin.s3.us-east-2.amazonaws.com/an-asian-woman-on-a-swing-on-the-beach-in-phuket-t-2024-02-12-20-30-43-utc.mp4"
-  ];
+  const { videos: videoUrls, loading: videosLoading } = useVideoConfig('desktop');
   
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [nextVideoIndex, setNextVideoIndex] = useState(1);
@@ -21,6 +13,9 @@ const EnhancedHeroSection = () => {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   
   useEffect(() => {
+    // Don't start interval until videos are loaded
+    if (videosLoading || videoUrls.length === 0) return;
+    
     const interval = setInterval(() => {
       setIsTransitioning(true);
       
@@ -32,12 +27,34 @@ const EnhancedHeroSection = () => {
     }, 3500); // 3.5 seconds between transitions
     
     return () => clearInterval(interval);
-  }, [nextVideoIndex, videoUrls.length]);
+  }, [nextVideoIndex, videoUrls.length, videosLoading]);
 
   const handlePlanYourTrip = () => {
     console.log("🗺️ Plan Your Trip button clicked - navigating to /ai-travel");
     navigate('/ai-travel');
   };
+
+  // Show loading state or don't render until videos are loaded
+  if (videosLoading || videoUrls.length === 0) {
+    return (
+      <div className="hero-section-set relative h-screen overflow-hidden hidden lg:block bg-black">
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="text-center text-white px-4 max-w-4xl mx-auto">
+            <h1 className="font-montserrat font-medium mb-8 sm:mb-12 leading-tight tracking-wide text-center" style={{ color: 'white', fontSize: '20pt' }}>
+              YOUR WORLD<br />
+              WITHIN REACH
+            </h1>
+            <button 
+              onClick={handlePlanYourTrip}
+              className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-8 py-3 text-sm font-medium tracking-widest uppercase transition-all duration-300"
+            >
+              Book Flight Now
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="hero-section-set relative h-screen overflow-hidden hidden lg:block">
