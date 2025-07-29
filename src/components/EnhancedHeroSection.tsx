@@ -30,8 +30,8 @@ const EnhancedHeroSection = () => {
   }, [nextVideoIndex, videoUrls.length, videosLoading]);
 
   const handlePlanYourTrip = () => {
-    console.log("🗺️ Plan Your Trip button clicked - navigating to /ai-travel");
-    navigate('/ai-travel');
+    console.log("🗺️ Book Now button clicked - navigating to /melanin");
+    navigate('/melanin');
   };
 
   // Show the full component with fallback background while videos load
@@ -49,8 +49,7 @@ const EnhancedHeroSection = () => {
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="text-center text-white px-4 max-w-4xl mx-auto">
             <h1 className="font-montserrat font-medium mb-8 sm:mb-12 leading-tight tracking-wide text-center" style={{ color: 'white', background: 'none', WebkitTextFillColor: 'white', backgroundClip: 'unset', fontSize: '20pt' }}>
-              YOUR WORLD<br />
-              WITHIN REACH
+              EMPOWER YOURSELF
             </h1>
             
             <button 
@@ -108,8 +107,7 @@ const EnhancedHeroSection = () => {
       <div className="relative z-10 h-full flex items-center justify-center">
         <div className="text-center text-white px-4 max-w-4xl mx-auto">
           <h1 className="font-montserrat font-medium mb-8 sm:mb-12 leading-tight tracking-wide text-center" style={{ color: 'white', background: 'none', WebkitTextFillColor: 'white', backgroundClip: 'unset', fontSize: '20pt' }}>
-            YOUR WORLD<br />
-            WITHIN REACH
+            EMPOWER YOURSELF
           </h1>
           
           <button 

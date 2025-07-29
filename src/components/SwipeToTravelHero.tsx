@@ -30,7 +30,10 @@ const SwipeToTravelHero = () => {
     setSheetOpen(true);
   };
 
-  const handleFlightsClick = () => handleBookingClick('flights');
+  const handleFlightsClick = () => {
+    console.log("✈️ Book Now button clicked - navigating to /melanin");
+    navigate('/melanin');
+  };
 
   const handleShareClick = async () => {
     const shareData = {
@@ -69,8 +72,7 @@ const SwipeToTravelHero = () => {
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="text-center text-white px-4 max-w-4xl mx-auto">
             <h1 className="font-montserrat font-medium mb-8 leading-tight tracking-wide text-center" style={{ color: 'white', fontSize: '16pt' }}>
-              YOUR WORLD<br />
-              WITHIN REACH
+              EMPOWER YOURSELF
             </h1>
             <button 
               onClick={handleFlightsClick}
@@ -122,8 +124,7 @@ const SwipeToTravelHero = () => {
       <div className="relative z-10 h-full flex items-center justify-center">
         <div className="text-center text-white px-4 max-w-4xl mx-auto">
           <h1 className="font-montserrat font-medium mb-8 leading-tight tracking-wide text-center" style={{ color: 'white', background: 'none', WebkitTextFillColor: 'white', backgroundClip: 'unset', fontSize: '16pt' }}>
-            YOUR WORLD<br />
-            WITHIN REACH
+            EMPOWER YOURSELF
           </h1>
           
           <button 
