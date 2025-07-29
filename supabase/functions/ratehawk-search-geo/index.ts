@@ -1,5 +1,5 @@
-// RateHawk Region Search API Integration
-// Implements /api/b2b/v3/search/serp/ with region parameter for certification
+// RateHawk Geo Search API Integration
+// Implements /api/b2b/v3/search/serp/ with geo parameter for certification
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -11,8 +11,9 @@ const corsHeaders = {
 const RATEHAWK_API_KEY = Deno.env.get('RATEHAWK_API_KEY');
 const RATEHAWK_BASE_URL = 'https://api.ratehawk.com/api/b2b/v3';
 
-interface RegionSearchRequest {
-  region_id: string;
+interface GeoSearchRequest {
+  latitude: number;
+  longitude: number;
   checkin: string;
   checkout: string;
   guests: Array<{
@@ -21,6 +22,7 @@ interface RegionSearchRequest {
   }>;
   currency?: string;
   language?: string;
+  radius?: number; // km radius for geo search
 }
 
 interface RatehawkHotel {
@@ -42,41 +44,41 @@ interface RatehawkHotel {
 }
 
 // Mock data for certification
-const mockRegionData: RatehawkHotel[] = [
+const mockGeoData: RatehawkHotel[] = [
   {
-    hotel_id: "region_test_001",
-    name: "Regional Grand Hotel",
+    hotel_id: "geo_test_001",
+    name: "Grand Geographic Hotel",
     star_rating: 4,
     location: {
-      latitude: 51.5074,
-      longitude: -0.1278,
-      address: "123 Regional St, London, UK"
+      latitude: 40.7128,
+      longitude: -74.0060,
+      address: "123 Main St, New York, NY"
     },
     rates: [
       {
-        rate_key: "region_rate_001",
-        total_amount: 199.99,
+        rate_key: "geo_rate_001",
+        total_amount: 299.99,
         currency: "USD",
-        room_name: "Standard Regional Room",
-        cancellation_policy: "Free cancellation until 48h before check-in"
+        room_name: "Deluxe City View",
+        cancellation_policy: "Free cancellation until 24h before check-in"
       }
     ]
   },
   {
-    hotel_id: "region_test_002",
-    name: "Area Luxury Resort",
+    hotel_id: "geo_test_002", 
+    name: "Location Prime Resort",
     star_rating: 5,
     location: {
-      latitude: 51.5155,
-      longitude: -0.0922,
-      address: "456 District Ave, London, UK"
+      latitude: 40.7589,
+      longitude: -73.9851,
+      address: "456 Park Ave, New York, NY"
     },
     rates: [
       {
-        rate_key: "region_rate_002",
-        total_amount: 349.99,
+        rate_key: "geo_rate_002",
+        total_amount: 459.99,
         currency: "USD",
-        room_name: "Regional Suite",
+        room_name: "Executive Suite",
         cancellation_policy: "Non-refundable"
       }
     ]
@@ -90,20 +92,22 @@ serve(async (req) => {
   }
 
   try {
-    console.log('RateHawk Region Search - Request received');
+    console.log('RateHawk Geo Search - Request received');
     
-    const requestData: RegionSearchRequest = await req.json();
-    console.log('Region search parameters:', {
-      region_id: requestData.region_id,
+    const requestData: GeoSearchRequest = await req.json();
+    console.log('Geo search parameters:', {
+      latitude: requestData.latitude,
+      longitude: requestData.longitude,
       checkin: requestData.checkin,
       checkout: requestData.checkout,
-      guests: requestData.guests
+      guests: requestData.guests,
+      radius: requestData.radius || 10
     });
 
     // Validate required parameters
-    const requiredFields = ['region_id', 'checkin', 'checkout', 'guests'];
+    const requiredFields = ['latitude', 'longitude', 'checkin', 'checkout', 'guests'];
     for (const field of requiredFields) {
-      if (!requestData[field as keyof RegionSearchRequest]) {
+      if (!requestData[field as keyof GeoSearchRequest]) {
         console.error(`Missing required field: ${field}`);
         return new Response(
           JSON.stringify({ error: `Missing required field: ${field}` }),
@@ -116,10 +120,12 @@ serve(async (req) => {
     }
 
     // Log certification data
-    console.log('RateHawk Region Search Certification Data:', {
+    console.log('RateHawk Geo Search Certification Data:', {
       endpoint: '/api/b2b/v3/search/serp/',
-      search_type: 'region',
-      region_id: requestData.region_id,
+      search_type: 'geo',
+      latitude: requestData.latitude,
+      longitude: requestData.longitude,
+      radius_km: requestData.radius || 10,
       checkin_date: requestData.checkin,
       checkout_date: requestData.checkout,
       guest_count: requestData.guests.reduce((total, room) => total + room.adults, 0),
@@ -132,8 +138,10 @@ serve(async (req) => {
       try {
         // Prepare RateHawk API request body
         const ratehawkRequest = {
-          region: {
-            region_id: requestData.region_id
+          geo: {
+            latitude: requestData.latitude,
+            longitude: requestData.longitude,
+            radius: requestData.radius || 10
           },
           checkin: requestData.checkin,
           checkout: requestData.checkout,
@@ -142,7 +150,7 @@ serve(async (req) => {
           language: requestData.language || 'en'
         };
 
-        console.log('Calling RateHawk /search/serp/ region endpoint');
+        console.log('Calling RateHawk /search/serp/ geo endpoint');
         const response = await fetch(`${RATEHAWK_BASE_URL}/search/serp/`, {
           method: 'POST',
           headers: {
@@ -162,22 +170,22 @@ serve(async (req) => {
           responseData = {
             status: 'success',
             data: {
-              hotels: mockRegionData,
-              search_type: 'region',
+              hotels: mockGeoData,
+              search_type: 'geo',
               certification_mode: true,
               api_error: true
             }
           };
         } else {
           const ratehawkResponse = await response.json();
-          console.log('RateHawk region search successful');
+          console.log('RateHawk geo search successful');
           
           // Ensure test hotel is included for certification
           responseData = {
             status: 'success',
             data: {
-              hotels: [...(ratehawkResponse.hotels || []), ...mockRegionData],
-              search_type: 'region',
+              hotels: [...(ratehawkResponse.hotels || []), ...mockGeoData],
+              search_type: 'geo',
               certification_mode: false
             }
           };
@@ -190,8 +198,8 @@ serve(async (req) => {
         responseData = {
           status: 'success',
           data: {
-            hotels: mockRegionData,
-            search_type: 'region',
+            hotels: mockGeoData,
+            search_type: 'geo',
             certification_mode: true,
             network_error: true
           }
@@ -202,22 +210,22 @@ serve(async (req) => {
       responseData = {
         status: 'success',
         data: {
-          hotels: mockRegionData,
-          search_type: 'region',
+          hotels: mockGeoData,
+          search_type: 'geo',
           certification_mode: true,
           mock_data: true
         }
       };
     }
 
-    console.log(`RateHawk Region Search completed - Found ${responseData.data.hotels.length} hotels`);
+    console.log(`RateHawk Geo Search completed - Found ${responseData.data.hotels.length} hotels`);
 
     return new Response(JSON.stringify(responseData), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    console.error('Error in ratehawk-search-region:', error);
+    console.error('Error in ratehawk-search-geo:', error);
     return new Response(
       JSON.stringify({ 
         error: 'Internal server error',

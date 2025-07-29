@@ -56,3 +56,9 @@ verify_jwt = false
 
 [functions.ratehawk-hotel-cancel]
 verify_jwt = false
+
+[functions.ratehawk-search-region]
+verify_jwt = false
+
+[functions.ratehawk-search-geo]
+verify_jwt = false
