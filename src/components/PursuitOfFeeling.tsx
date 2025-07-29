@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const PursuitOfFeeling = () => {
+  const navigate = useNavigate();
   return (
     <section className="pursuit-section-set py-10 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
@@ -38,6 +40,7 @@ const PursuitOfFeeling = () => {
             </div>
 
             <Button 
+              onClick={() => navigate('/melanin')}
               className="bg-black text-white hover:bg-gray-800 px-8 py-3 text-sm font-medium tracking-wide uppercase"
             >
               FIND OUT MORE
