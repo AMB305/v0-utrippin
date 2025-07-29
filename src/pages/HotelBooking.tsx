@@ -447,6 +447,8 @@ const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
                     title: "Booking Successful!",
                     description: `Your multi-room reservation has been confirmed. Order ID: ${booking.data?.order_id}`,
                   });
+                  // Navigate to confirmation page with booking details
+                  navigate(`/hotels/confirmation?bookingId=${booking.data?.order_id || 'unknown'}&hotelId=${selectedHotel.hotel_id}`);
                 }}
                 onBack={() => navigate('/hotels')}
               />
