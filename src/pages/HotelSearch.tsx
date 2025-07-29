@@ -174,7 +174,7 @@ export default function HotelSearch() {
       
       console.log('🚀 Navigating to booking with params:', Object.fromEntries(params.entries()));
       
-      window.location.href = `/hotel-booking?${params.toString()}`;
+      window.location.href = `/hotels/booking?${params.toString()}`;
     } catch (error) {
       console.error('❌ Failed to navigate to booking:', error);
       toast({
