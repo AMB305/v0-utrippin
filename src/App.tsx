@@ -36,6 +36,7 @@ import Hotels from "./pages/Hotels";
 import HotelSearch from "./pages/HotelSearch";
 import HotelResults from "./pages/HotelResults";
 import HotelBooking from "./pages/HotelBooking";
+import HotelBookingConfirmation from "./pages/HotelBookingConfirmation";
 import Packages from "./pages/Packages";
 import PackageResults from "./pages/PackageResults";
 import PackageBooking from "./pages/PackageBooking";
@@ -125,6 +126,7 @@ const App = () => (
                   <Route path="/hotels/miami" element={<HotelsMiami />} />
                   <Route path="/hotels/results" element={<HotelResults />} />
                   <Route path="/hotels/booking" element={<HotelBooking />} />
+                  <Route path="/hotels/confirmation" element={<HotelBookingConfirmation />} />
                   <Route path="/packages" element={<Packages />} />
                   <Route path="/packages/results" element={<PackageResults />} />
                   <Route path="/packages/booking" element={<PackageBooking />} />

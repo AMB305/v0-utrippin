@@ -609,6 +609,8 @@ const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
                           title: "Booking Successful!",
                           description: `Your reservation has been confirmed. Order ID: ${result.data?.order_id}`,
                         });
+                        // Navigate to confirmation page with booking details
+                        navigate(`/hotels/confirmation?bookingId=${result.data?.order_id || 'unknown'}&hotelId=${selectedHotel.hotel_id}`);
                       } else {
                         toast({
                           title: "Booking Failed",
