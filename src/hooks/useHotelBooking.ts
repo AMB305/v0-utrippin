@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useHotelBooking = () => {
   const [bookingData, setBookingData] = useState({
@@ -23,12 +24,40 @@ export const useHotelBooking = () => {
   const [loading, setLoading] = useState(false);
   const [rateCheckLoading, setRateCheckLoading] = useState(false);
 
-  const createBooking = async (bookingData: any) => {
+  const createBooking = async () => {
     setLoading(true);
     try {
-      // Placeholder implementation
-      console.log('Creating booking:', bookingData);
-      return { success: true };
+      console.log('🔍 Starting booking with user data:', bookingData);
+      console.log('🔍 Prebook ID:', rateKey);
+      
+      if (!rateKey) {
+        throw new Error('No prebook ID available. Please try the prebook step again.');
+      }
+
+      if (!bookingData.firstName || !bookingData.lastName || !bookingData.email || !bookingData.phone) {
+        throw new Error('Please fill in all required booking information.');
+      }
+
+      // Call Ratehawk booking API with real user data
+      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-book', {
+        body: {
+          book_hash: rateKey,
+          user: {
+            email: bookingData.email,
+            phone: bookingData.phone,
+            firstName: bookingData.firstName,
+            lastName: bookingData.lastName
+          }
+        }
+      });
+
+      if (error) {
+        console.error('❌ Booking error:', error);
+        throw new Error(error.message);
+      }
+
+      console.log('✅ Booking successful:', data);
+      return { success: true, data };
     } catch (error) {
       console.error('Booking error:', error);
       return { success: false, error };

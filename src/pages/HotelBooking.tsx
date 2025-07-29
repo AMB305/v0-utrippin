@@ -100,6 +100,7 @@ const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
 
       if (error) throw error;
       
+      setRateKey(data.data.book_hash);
       setPrebookId(data.data.book_hash);
       console.log('✅ Prebook successful:', data.data.book_hash);
       
@@ -125,6 +126,7 @@ const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
     searchData,
     hotelId,
     rateKey,
+    setRateKey,
     loading,
     rateCheckLoading,
     createBooking,
@@ -600,7 +602,21 @@ const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
                 
                 {!isMultiRoom && (
                   <Button 
-                    onClick={createBooking}
+                    onClick={async () => {
+                      const result = await createBooking();
+                      if (result.success) {
+                        toast({
+                          title: "Booking Successful!",
+                          description: `Your reservation has been confirmed. Order ID: ${result.data?.order_id}`,
+                        });
+                      } else {
+                        toast({
+                          title: "Booking Failed",
+                          description: result.error?.message || "Something went wrong. Please try again.",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
                     className="w-full"
                     size="lg"
                     disabled={loading || !bookingData.firstName || !bookingData.lastName || !bookingData.email || !bookingData.phone}
