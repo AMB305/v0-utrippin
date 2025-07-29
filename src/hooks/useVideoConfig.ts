@@ -9,10 +9,10 @@ const BASE_VIDEO_URL = 'https://utrippin.s3.us-east-2.amazonaws.com/';
 
 // Fallback videos in case JSON fails to load
 const FALLBACK_VIDEOS = [
-  "santorini-houses.mp4",
-  "elephants-waterhole.mp4",
-  "times-square-night.mp4",
-  "tropical-rainforest-sea.mp4"
+  "famous-white-houses-in-fira-santorini-island-gree-2023-11-27-05-01-35-utc.mp4",
+  "herd-of-elephants-approaching-a-waterhole-bank-in-2025-04-25-17-59-46-utc.mp4",
+  "beautiful-northern-lights.mp4",
+  "cute-lion-cub-on-african.mp4"
 ];
 
 export const useVideoConfig = (type: 'desktop' | 'mobile' = 'desktop') => {
