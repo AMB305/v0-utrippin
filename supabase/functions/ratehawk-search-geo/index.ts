@@ -26,7 +26,7 @@ interface GeoSearchRequest {
 }
 
 interface RatehawkHotel {
-  hotel_id: string;
+  id: string;
   name: string;
   star_rating: number;
   location: {
@@ -46,7 +46,7 @@ interface RatehawkHotel {
 // Mock data for certification - RateHawk Test Hotels
 const mockGeoData: RatehawkHotel[] = [
   {
-    hotel_id: "ratehawk_test_miami_geo_001",
+    id: "ratehawk_test_miami_geo_001",
     name: "RateHawk Test Hotel South Beach (Test Hotel)",
     star_rating: 4,
     location: {
@@ -65,7 +65,7 @@ const mockGeoData: RatehawkHotel[] = [
     ]
   },
   {
-    hotel_id: "ratehawk_test_miami_geo_002", 
+    id: "ratehawk_test_miami_geo_002", 
     name: "RateHawk Demo Beachfront Resort (Test Hotel)",
     star_rating: 5,
     location: {

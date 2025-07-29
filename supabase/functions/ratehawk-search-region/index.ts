@@ -24,7 +24,7 @@ interface RegionSearchRequest {
 }
 
 interface RatehawkHotel {
-  hotel_id: string;
+  id: string;
   name: string;
   star_rating: number;
   location: {
@@ -44,7 +44,7 @@ interface RatehawkHotel {
 // Mock data for certification - RateHawk Test Hotels
 const mockRegionData: RatehawkHotel[] = [
   {
-    hotel_id: "ratehawk_test_miami_001",
+    id: "ratehawk_test_miami_001",
     name: "RateHawk Test Hotel Miami Beach (Test Hotel)",
     star_rating: 4,
     location: {
@@ -63,7 +63,7 @@ const mockRegionData: RatehawkHotel[] = [
     ]
   },
   {
-    hotel_id: "ratehawk_test_miami_002",
+    id: "ratehawk_test_miami_002",
     name: "RateHawk Demo Resort & Spa (Test Hotel)",
     star_rating: 5,
     location: {
