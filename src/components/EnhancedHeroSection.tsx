@@ -57,7 +57,7 @@ const EnhancedHeroSection = () => {
               onClick={handlePlanYourTrip}
               className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-8 py-3 text-sm font-medium tracking-widest uppercase transition-all duration-300"
             >
-              Book Flight Now
+              Book Now
             </button>
           </div>
         </div>
@@ -116,7 +116,7 @@ const EnhancedHeroSection = () => {
             onClick={handlePlanYourTrip}
             className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-8 py-3 text-sm font-medium tracking-widest uppercase transition-all duration-300"
           >
-            Book Flight Now
+            Book Now
           </button>
         </div>
       </div>
