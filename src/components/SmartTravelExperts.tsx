@@ -2,7 +2,22 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
 
-const SmartTravelExperts = () => {
+const SmartTravelExperts: React.FC = () => {
+  const handleGetInTouchClick = () => {
+    // Scroll to footer and focus email field
+    const footer = document.querySelector('footer');
+    if (footer) {
+      footer.scrollIntoView({ behavior: 'smooth' });
+      // Use a timeout to ensure the scroll completes before focusing
+      setTimeout(() => {
+        const emailInput = footer.querySelector('input[type="email"]') as HTMLInputElement;
+        if (emailInput) {
+          emailInput.focus();
+        }
+      }, 500);
+    }
+  };
+
   const testimonials = [
     {
       text: "UTRIPPIN PLANNED OUR ENTIRE TRIP — DOWN TO THE RESTAURANT RESERVATIONS",
@@ -45,7 +60,10 @@ const SmartTravelExperts = () => {
         </div>
         
         <div className="mb-12">
-          <Button className="bg-black hover:bg-gray-900 text-white px-8 py-3 text-sm font-medium tracking-wider">
+          <Button 
+            onClick={handleGetInTouchClick}
+            className="bg-black hover:bg-gray-900 text-white px-8 py-3 text-sm font-medium tracking-wider"
+          >
             GET IN TOUCH
           </Button>
         </div>
