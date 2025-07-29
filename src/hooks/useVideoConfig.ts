@@ -5,7 +5,7 @@ interface VideoConfig {
   mobileHeroVideos: string[];
 }
 
-const BASE_VIDEO_URL = 'https://utrippin.s3.us-east-2.amazonaws.com/';
+const BASE_VIDEO_URL = 'https://d4ia3yy0dqgwb.cloudfront.net/';
 
 // Fallback videos in case JSON fails to load
 const FALLBACK_VIDEOS = [
