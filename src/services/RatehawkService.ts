@@ -334,15 +334,9 @@ export class RatehawkService {
     console.log('🔍 Getting hotel info for:', hotelId);
     
     try {
-      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-page', {
+      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-info', {
         body: {
-          checkin: '2025-07-25',
-          checkout: '2025-08-01',
-          hotel_id: hotelId,
-          guests: [{ adults: 2, children: [] }],
-          currency: 'USD',
-          language: 'en',
-          residency: 'us'
+          hotelId: hotelId
         }
       });
 
