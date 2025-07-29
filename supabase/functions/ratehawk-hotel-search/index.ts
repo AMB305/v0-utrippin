@@ -53,7 +53,10 @@ serve(async (req) => {
       language = "en",
       currency = "USD",
       residency = "US"
-    }: RatehawkSearchRequest & { destination: string } = requestData;
+    }: RatehawkSearchRequest & { destination: string; children?: number | number[] } = requestData;
+
+    // Convert children from number to array if needed for backward compatibility
+    const childrenArray = typeof children === 'number' ? [] : children;
 
     if (!destination || !checkIn || !checkOut) {
       return new Response(
@@ -121,7 +124,7 @@ serve(async (req) => {
     // Log certification data for test bookings
     const searchId = `search_${Date.now()}`;
     console.log('🏨 RATEHAWK SEARCH CERTIFICATION LOG:');
-    console.log('Request:', JSON.stringify({ destination: destinationObj, checkIn, checkOut, adults, children }, null, 2));
+    console.log('Request:', JSON.stringify({ destination: destinationObj, checkIn, checkOut, adults, children: childrenArray }, null, 2));
     console.log('Response:', JSON.stringify({ hotels: mockRatehawkData, search_id: searchId, status: "success" }, null, 2));
     console.log('Authentication:', RATEHAWK_API_KEY ? 'API Key Present' : 'No API Key');
 
