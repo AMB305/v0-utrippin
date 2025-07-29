@@ -37,19 +37,23 @@ export default function Flights() {
     const originCode = searchData.origin[0]?.iata_code || '';
     const destinationCode = searchData.destination[0]?.iata_code || '';
     
-    let expediaUrl = '';
-    
+    const baseURL = "https://www.expedia.com/Flights-Search";
+    const params = new URLSearchParams({
+      trip: searchData.tripType === 'round-trip' ? 'roundtrip' : 'oneway',
+      leg1: `from:${originCode},to:${destinationCode},departure:${departureDateStr}TANYT`,
+      passengers: `adults:${searchData.passengers.adults},children:0`,
+      mode: 'search',
+      AID: '15754452',
+      PID: '101486313',
+      affcid: 'network.cj.101486313'
+    });
+
     if (searchData.tripType === 'round-trip' && searchData.returnDate) {
-      // Round trip
-      expediaUrl = `https://www.expedia.com/Flights-Search?trip=roundtrip&leg1=from:${encodeURIComponent(originCode)},to:${encodeURIComponent(destinationCode)},departure:${departureDateStr}&leg2=from:${encodeURIComponent(destinationCode)},to:${encodeURIComponent(originCode)},departure:${returnDateStr}&passengers=adults:${searchData.passengers.adults}&mode=search&camref=1101l5dQSW`;
-    } else {
-      // One way
-      expediaUrl = `https://www.expedia.com/Flights-Search?trip=oneway&leg1=from:${encodeURIComponent(originCode)},to:${encodeURIComponent(destinationCode)},departure:${departureDateStr}&passengers=adults:${searchData.passengers.adults}&mode=search&camref=1101l5dQSW`;
+      params.append('leg2', `from:${destinationCode},to:${originCode},departure:${returnDateStr}TANYT`);
     }
-    
-    // Open Expedia in new tab
-    const finalUrl = `https://www.dpbolvw.net/click-101486313-15754452?url=${encodeURIComponent(expediaUrl)}`;
-    window.open(finalUrl, '_blank');
+
+    const expediaUrl = `${baseURL}?${params.toString()}`;
+    window.open(expediaUrl, '_blank');
   };
 
   return (
