@@ -14,27 +14,45 @@ import { useToast } from "@/hooks/use-toast";
 import { MultiRoomBookingForm } from "@/components/hotels/MultiRoomBookingForm";
 import { supabase } from "@/integrations/supabase/client";
 
-// Mock hotel data - in real implementation, this would come from API
-const mockHotel = {
-  id: "1",
-  name: "Grand Palace Hotel",
-  starRating: 5,
-  images: ["/placeholder.svg"],
-  location: "Paris, France",
-  district: "1st Arrondissement",
-  guestRating: 9.2,
-  reviewCount: 1547,
-  amenities: ["Free WiFi", "Swimming Pool", "Fitness Center", "Spa", "Restaurant", "Free Parking"],
-  pricePerNight: 285,
-  freeCancellation: true,
-  breakfastIncluded: true
-};
+// Hotel data interface for real API data
+interface Hotel {
+  id: string;
+  hotel_id: string;
+  name: string;
+  star_rating: number;
+  images: string[];
+  location?: string;
+  address: string;
+  description?: string;
+  amenities?: {
+    general?: string[];
+    room?: string[];
+    business?: string[];
+  };
+  rates?: Array<{
+    book_hash: string;
+    room_name: string;
+    price: {
+      amount: number;
+      currency: string;
+    };
+    payment_type: string;
+    cancellation_info?: {
+      free_cancellation_before?: string;
+    };
+  }>;
+  policies?: {
+    cancellation?: string;
+    check_in?: string;
+    check_out?: string;
+  };
+}
 
 const HotelBooking = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null);
+const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [hotelLoading, setHotelLoading] = useState(true);
   const [prebookId, setPrebookId] = useState<string | null>(null);
   const [isMultiRoom, setIsMultiRoom] = useState(false);
@@ -115,6 +133,69 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
     populateSearchDataFromUrl
   } = useHotelBooking();
 
+  // Function to fetch real hotel data
+  const fetchHotelData = async (hotelId: string) => {
+    try {
+      setHotelLoading(true);
+      
+      const guests = [{
+        adults: parseInt(searchParams.get('adults') || '2'),
+        children: []
+      }];
+      
+      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-page', {
+        body: {
+          checkin: searchParams.get('checkInDate') || '',
+          checkout: searchParams.get('checkOutDate') || '',
+          hotel_id: hotelId,
+          guests,
+          currency: 'USD',
+          language: 'en',
+          residency: 'us'
+        }
+      });
+
+      if (error) {
+        console.error('❌ Hotel API error:', error);
+        throw error;
+      }
+
+      if (data?.status === 'ok' && data?.data) {
+        const hotelData = data.data;
+        
+        // Transform API response to match our Hotel interface
+        const transformedHotel: Hotel = {
+          id: hotelData.hotel_id,
+          hotel_id: hotelData.hotel_id,
+          name: hotelData.name,
+          star_rating: hotelData.star_rating || 4,
+          images: hotelData.images || ['/placeholder.svg'],
+          address: hotelData.address || '',
+          description: hotelData.description,
+          amenities: hotelData.amenities || {},
+          rates: hotelData.rates || [],
+          policies: hotelData.policies || {}
+        };
+        
+        console.log('✅ Hotel data fetched:', transformedHotel);
+        setSelectedHotel(transformedHotel);
+        return transformedHotel;
+      } else {
+        throw new Error('Invalid hotel data received');
+      }
+    } catch (error) {
+      console.error('❌ Failed to fetch hotel data:', error);
+      toast({
+        title: "Hotel Loading Failed",
+        description: "Could not load hotel details. Please try again.",
+        variant: "destructive",
+      });
+      return null;
+    } finally {
+      setHotelLoading(false);
+    }
+  };
+
   useEffect(() => {
     // Populate search data from URL parameters
     populateSearchDataFromUrl(searchParams);
@@ -141,28 +222,22 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
       return;
     }
     
-    // Use mock hotel for now, but preserve the hotel ID from URL
-    const hotelWithId = {
-      ...mockHotel,
-      id: urlHotelId,
-      hid: urlHotelId
+    // Fetch real hotel data and then prebook
+    const loadHotelAndPrebook = async () => {
+      const hotel = await fetchHotelData(urlHotelId);
+      if (hotel) {
+        handlePrebook(hotel, multiRoom);
+      }
     };
     
-    setTimeout(() => {
-      setSelectedHotel(hotelWithId);
-      
-      // Auto-trigger prebook when hotel loads
-      if (hotelWithId) {
-        handlePrebook(hotelWithId, multiRoom);
-      }
-      setHotelLoading(false);
-    }, 1000);
+    loadHotelAndPrebook();
   }, [searchParams]);
 
   const calculateTotalPrice = () => {
-    if (!selectedHotel) return 0;
+    if (!selectedHotel || !selectedHotel.rates?.[0]) return 0;
     const nights = getDurationInNights();
-    const basePrice = selectedHotel.pricePerNight * nights * searchData.rooms;
+    const pricePerNight = selectedHotel.rates[0].price.amount;
+    const basePrice = pricePerNight * nights * searchData.rooms;
     const taxes = basePrice * 0.12; // 12% taxes
     return basePrice + taxes;
   };
@@ -241,18 +316,20 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
                   <div>
                     <h3 className="font-semibold text-lg">{selectedHotel.name}</h3>
                     <div className="flex items-center gap-1 mt-1">
-                      {[...Array(selectedHotel.starRating)].map((_, i) => (
+                      {[...Array(selectedHotel.star_rating)].map((_, i) => (
                         <Star key={i} className="w-3 h-3 fill-travel-gold text-travel-gold" />
                       ))}
                     </div>
                     <div className="flex items-center gap-2 mt-1">
                       <MapPin className="w-3 h-3 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">{selectedHotel.district}, {selectedHotel.location}</span>
+                      <span className="text-sm text-muted-foreground">{selectedHotel.address}</span>
                     </div>
-                    <div className="flex items-center gap-1 mt-1">
-                      <span className="text-sm font-medium">{selectedHotel.guestRating}/10</span>
-                      <span className="text-sm text-muted-foreground">({selectedHotel.reviewCount} reviews)</span>
-                    </div>
+                    {selectedHotel.rates?.[0] && (
+                      <div className="flex items-center gap-1 mt-1">
+                        <span className="text-sm font-medium">${selectedHotel.rates[0].price.amount}/night</span>
+                        <span className="text-sm text-muted-foreground">({selectedHotel.rates[0].room_name})</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -260,27 +337,32 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
                   <div className="space-y-1">
                     <p className="font-medium">Top Amenities:</p>
                     <ul className="text-muted-foreground space-y-1">
-                      {selectedHotel.amenities.slice(0, 3).map((amenity, index) => (
+                      {selectedHotel.amenities?.general?.slice(0, 3).map((amenity, index) => (
                         <li key={index} className="flex items-center gap-1">
                           <CheckCircle className="w-3 h-3 text-green-600" />
                           {amenity}
                         </li>
-                      ))}
+                      )) || (
+                        <li className="flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3 text-green-600" />
+                          Standard hotel amenities
+                        </li>
+                      )}
                     </ul>
                   </div>
                   <div className="space-y-1">
                     <p className="font-medium">Booking Benefits:</p>
                     <ul className="text-muted-foreground space-y-1">
-                      {selectedHotel.freeCancellation && (
+                      {selectedHotel.rates?.[0]?.cancellation_info?.free_cancellation_before && (
                         <li className="flex items-center gap-1">
                           <CheckCircle className="w-3 h-3 text-green-600" />
                           Free cancellation
                         </li>
                       )}
-                      {selectedHotel.breakfastIncluded && (
+                      {selectedHotel.policies?.cancellation && (
                         <li className="flex items-center gap-1">
-                          <CheckCircle className="w-3 h-3 text-green-600" />
-                          Breakfast included
+                          <Info className="w-3 h-3 text-blue-600" />
+                          {selectedHotel.policies.cancellation}
                         </li>
                       )}
                       <li className="flex items-center gap-1">
@@ -483,12 +565,12 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Room rate ({getDurationInNights()} nights)</span>
-                    <span>${selectedHotel.pricePerNight * getDurationInNights() * searchData.rooms}</span>
+                    <span>${selectedHotel.rates?.[0] ? selectedHotel.rates[0].price.amount * getDurationInNights() * searchData.rooms : 0}</span>
                   </div>
                   
                   <div className="flex justify-between text-sm">
                     <span>Taxes & fees</span>
-                    <span>${Math.round(selectedHotel.pricePerNight * getDurationInNights() * searchData.rooms * 0.12)}</span>
+                    <span>${selectedHotel.rates?.[0] ? Math.round(selectedHotel.rates[0].price.amount * getDurationInNights() * searchData.rooms * 0.12) : 0}</span>
                   </div>
                 </div>
                 
@@ -496,11 +578,11 @@ const [selectedHotel, setSelectedHotel] = useState<typeof mockHotel | null>(null
                 
                 <div className="flex justify-between font-semibold text-lg">
                   <span>Total</span>
-                  <span>${calculateTotalPrice()}</span>
+                  <span>${Math.round(calculateTotalPrice())}</span>
                 </div>
                 
                 <div className="space-y-2 text-sm text-muted-foreground">
-                  {selectedHotel.freeCancellation && (
+                  {selectedHotel.rates?.[0]?.cancellation_info?.free_cancellation_before && (
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-600" />
                       <span>Free cancellation until 24h before check-in</span>
