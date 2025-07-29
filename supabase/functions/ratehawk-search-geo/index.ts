@@ -43,42 +43,42 @@ interface RatehawkHotel {
   }>;
 }
 
-// Mock data for certification
+// Mock data for certification - RateHawk Test Hotels
 const mockGeoData: RatehawkHotel[] = [
   {
-    hotel_id: "geo_test_001",
-    name: "Grand Geographic Hotel",
+    hotel_id: "ratehawk_test_miami_geo_001",
+    name: "RateHawk Test Hotel South Beach (Test Hotel)",
     star_rating: 4,
     location: {
-      latitude: 40.7128,
-      longitude: -74.0060,
-      address: "123 Main St, New York, NY"
+      latitude: 25.7617,
+      longitude: -80.1918,
+      address: "300 Ocean Drive, Miami Beach, FL 33139"
     },
     rates: [
       {
-        rate_key: "geo_rate_001",
+        rate_key: "ratehawk_geo_test_rate_001",
         total_amount: 299.99,
         currency: "USD",
-        room_name: "Deluxe City View",
+        room_name: "Test Deluxe Ocean View",
         cancellation_policy: "Free cancellation until 24h before check-in"
       }
     ]
   },
   {
-    hotel_id: "geo_test_002", 
-    name: "Location Prime Resort",
+    hotel_id: "ratehawk_test_miami_geo_002", 
+    name: "RateHawk Demo Beachfront Resort (Test Hotel)",
     star_rating: 5,
     location: {
-      latitude: 40.7589,
-      longitude: -73.9851,
-      address: "456 Park Ave, New York, NY"
+      latitude: 25.7907,
+      longitude: -80.1300,
+      address: "400 Collins Avenue, Miami Beach, FL 33139"
     },
     rates: [
       {
-        rate_key: "geo_rate_002",
+        rate_key: "ratehawk_geo_test_rate_002",
         total_amount: 459.99,
         currency: "USD",
-        room_name: "Executive Suite",
+        room_name: "Test Executive Suite",
         cancellation_policy: "Non-refundable"
       }
     ]

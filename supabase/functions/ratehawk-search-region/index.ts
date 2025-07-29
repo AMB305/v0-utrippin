@@ -41,42 +41,42 @@ interface RatehawkHotel {
   }>;
 }
 
-// Mock data for certification
+// Mock data for certification - RateHawk Test Hotels
 const mockRegionData: RatehawkHotel[] = [
   {
-    hotel_id: "region_test_001",
-    name: "Regional Grand Hotel",
+    hotel_id: "ratehawk_test_miami_001",
+    name: "RateHawk Test Hotel Miami Beach (Test Hotel)",
     star_rating: 4,
     location: {
-      latitude: 51.5074,
-      longitude: -0.1278,
-      address: "123 Regional St, London, UK"
+      latitude: 25.7617,
+      longitude: -80.1918,
+      address: "100 Ocean Drive, Miami Beach, FL 33139"
     },
     rates: [
       {
-        rate_key: "region_rate_001",
+        rate_key: "ratehawk_test_rate_001",
         total_amount: 199.99,
         currency: "USD",
-        room_name: "Standard Regional Room",
+        room_name: "Test Ocean View Room",
         cancellation_policy: "Free cancellation until 48h before check-in"
       }
     ]
   },
   {
-    hotel_id: "region_test_002",
-    name: "Area Luxury Resort",
+    hotel_id: "ratehawk_test_miami_002",
+    name: "RateHawk Demo Resort & Spa (Test Hotel)",
     star_rating: 5,
     location: {
-      latitude: 51.5155,
-      longitude: -0.0922,
-      address: "456 District Ave, London, UK"
+      latitude: 25.7907,
+      longitude: -80.1300,
+      address: "200 Collins Avenue, Miami Beach, FL 33139"
     },
     rates: [
       {
-        rate_key: "region_rate_002",
+        rate_key: "ratehawk_test_rate_002",
         total_amount: 349.99,
         currency: "USD",
-        room_name: "Regional Suite",
+        room_name: "Test Luxury Suite",
         cancellation_policy: "Non-refundable"
       }
     ]

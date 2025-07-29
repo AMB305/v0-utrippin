@@ -67,13 +67,13 @@ serve(async (req) => {
       ? { cityName: destination, countryCode: "US", regionCode: "" }
       : destination;
 
-    // Mock Ratehawk data following exact API format
+    // Mock Ratehawk data following exact API format - RateHawk Test Hotels
     const mockRatehawkData: RatehawkHotel[] = [
       {
-        id: "test_hotel_do_not_book",
-        name: "Mock Hotel Miami Beach",
+        id: "ratehawk_test_miami_main_001",
+        name: "RateHawk Test Hotel Miami Beach (Test Hotel - DO NOT BOOK)",
         stars: 4,
-        address: `123 Ocean Drive, ${destinationObj.cityName}`,
+        address: `500 Ocean Drive, Miami Beach, FL 33139`,
         price: {
           amount: 312.50,
           currency: currency
@@ -82,13 +82,13 @@ serve(async (req) => {
           "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
           "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop"
         ],
-        amenities: ["Pool", "Free WiFi", "Bar", "Breakfast included"]
+        amenities: ["Pool", "Free WiFi", "Bar", "Breakfast included", "Test Hotel"]
       },
       {
-        id: "hotel_002_premium",
-        name: "Premium Resort & Spa",
+        id: "ratehawk_test_miami_main_002",
+        name: "RateHawk Demo Premium Resort & Spa (Test Hotel - DO NOT BOOK)",
         stars: 5,
-        address: `456 Beach Front, ${destinationObj.cityName}`,
+        address: `600 Collins Avenue, Miami Beach, FL 33139`,
         price: {
           amount: 485.00,
           currency: currency
@@ -97,13 +97,13 @@ serve(async (req) => {
           "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&fit=crop",
           "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop"
         ],
-        amenities: ["Pool", "Free WiFi", "Spa", "All-Inclusive", "Beach Access"]
+        amenities: ["Pool", "Free WiFi", "Spa", "All-Inclusive", "Beach Access", "Test Hotel"]
       },
       {
-        id: "hotel_003_business",
-        name: "Business District Hotel",
+        id: "ratehawk_test_miami_main_003",
+        name: "RateHawk Test Business Hotel (Test Hotel - DO NOT BOOK)",
         stars: 4,
-        address: `789 Financial District, ${destinationObj.cityName}`,
+        address: `700 Biscayne Boulevard, Miami, FL 33132`,
         price: {
           amount: 225.00,
           currency: currency
@@ -112,7 +112,7 @@ serve(async (req) => {
           "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop",
           "https://images.unsplash.com/photo-1578774204375-826dc5d996ed?w=800&h=600&fit=crop"
         ],
-        amenities: ["Free WiFi", "Business Center", "Meeting Rooms", "Restaurant"]
+        amenities: ["Free WiFi", "Business Center", "Meeting Rooms", "Restaurant", "Test Hotel"]
       }
     ];
 
