@@ -85,7 +85,10 @@ const SwipeToTravelHero = () => {
   }
 
   return (
-    <div className="lg:hidden relative h-screen w-full overflow-hidden">
+    <div className="lg:hidden relative h-screen w-full overflow-hidden bg-black">
+      {/* Solid black background to prevent flashing */}
+      <div className="absolute inset-0 bg-black" />
+      
       {/* Video Background */}
       <div className="absolute inset-0">
         {videoUrls.map((url, index) => (
@@ -100,6 +103,13 @@ const SwipeToTravelHero = () => {
             loop
             playsInline
             preload="metadata"
+            onError={(e) => {
+              console.error(`❌ Mobile video failed to load: ${url}`);
+              console.log(`This is mobile video #${index + 1} in the rotation`);
+            }}
+            onLoadStart={() => {
+              console.log(`📱 Started loading mobile video #${index + 1}: ${url}`);
+            }}
           />
         ))}
       </div>

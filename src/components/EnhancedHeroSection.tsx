@@ -38,6 +38,8 @@ const EnhancedHeroSection = () => {
   if (videosLoading || videoUrls.length === 0) {
     return (
       <div className="hero-section-set relative h-screen overflow-hidden hidden lg:block bg-black">
+        {/* Solid black background during loading to prevent flashing */}
+        <div className="absolute inset-0 bg-black" />
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="text-center text-white px-4 max-w-4xl mx-auto">
             <h1 className="font-montserrat font-medium mb-8 sm:mb-12 leading-tight tracking-wide text-center" style={{ color: 'white', fontSize: '20pt' }}>
@@ -57,7 +59,10 @@ const EnhancedHeroSection = () => {
   }
 
   return (
-    <div className="hero-section-set relative h-screen overflow-hidden hidden lg:block">
+    <div className="hero-section-set relative h-screen overflow-hidden hidden lg:block bg-black">
+      {/* Solid black background to prevent flashing */}
+      <div className="absolute inset-0 bg-black" />
+      
       {/* Rotating background videos */}
       <div className="absolute inset-0">
         {videoUrls.map((url, index) => (
@@ -77,6 +82,13 @@ const EnhancedHeroSection = () => {
             loop
             playsInline
             preload="metadata"
+            onError={(e) => {
+              console.error(`❌ Video failed to load: ${url}`);
+              console.log(`This is video #${index + 1} in the rotation`);
+            }}
+            onLoadStart={() => {
+              console.log(`📹 Started loading video #${index + 1}: ${url}`);
+            }}
           />
         ))}
       </div>
