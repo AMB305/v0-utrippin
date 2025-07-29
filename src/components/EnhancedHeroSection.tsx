@@ -34,18 +34,25 @@ const EnhancedHeroSection = () => {
     navigate('/ai-travel');
   };
 
-  // Show loading state or don't render until videos are loaded
+  // Show the full component with fallback background while videos load
   if (videosLoading || videoUrls.length === 0) {
     return (
       <div className="hero-section-set relative h-screen overflow-hidden hidden lg:block bg-black">
-        {/* Solid black background during loading to prevent flashing */}
+        {/* Solid black background during loading */}
         <div className="absolute inset-0 bg-black" />
+        
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-black/15" />
+        
+        {/* Centered content - same as loaded state */}
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="text-center text-white px-4 max-w-4xl mx-auto">
-            <h1 className="font-montserrat font-medium mb-8 sm:mb-12 leading-tight tracking-wide text-center" style={{ color: 'white', fontSize: '20pt' }}>
+            <h1 className="font-montserrat font-medium mb-8 sm:mb-12 leading-tight tracking-wide text-center" style={{ color: 'white', background: 'none', WebkitTextFillColor: 'white', backgroundClip: 'unset', fontSize: '20pt' }}>
               YOUR WORLD<br />
               WITHIN REACH
             </h1>
+            
             <button 
               onClick={handlePlanYourTrip}
               className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-8 py-3 text-sm font-medium tracking-widest uppercase transition-all duration-300"
