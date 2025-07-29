@@ -5,14 +5,14 @@ interface VideoConfig {
   mobileHeroVideos: string[];
 }
 
-const BASE_VIDEO_URL = 'https://d4ia3yy0dqgwb.cloudfront.net/';
+const BASE_VIDEO_URL = 'https://utrippin.s3.us-east-2.amazonaws.com/';
 
 // Fallback videos in case JSON fails to load
 const FALLBACK_VIDEOS = [
-  "famous-white-houses-in-fira-santorini-island-gree-2023-11-27-05-01-35-utc.mp4",
-  "herd-of-elephants-approaching-a-waterhole-bank-in-2025-04-25-17-59-46-utc.mp4",
-  "high-angle-footage-of-times-square-at-night-4k-2025-06-09-04-38-32-utc+(1).mp4",
-  "tropical-rainforest-sea-beach-serene-cloudy-sky-tr-2024-02-12-19-16-44-utc+(2).mp4"
+  "santorini-houses.mp4",
+  "elephants-waterhole.mp4",
+  "times-square-night.mp4",
+  "tropical-rainforest-sea.mp4"
 ];
 
 export const useVideoConfig = (type: 'desktop' | 'mobile' = 'desktop') => {
