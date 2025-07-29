@@ -41,7 +41,10 @@ export const useVideoConfig = (type: 'desktop' | 'mobile' = 'desktop') => {
         setVideos(fullUrls);
         setError(null);
         
-        console.log(`✅ Loaded ${fullUrls.length} ${type} hero videos from configuration`);
+        console.log(`✅ Loaded ${fullUrls.length} ${type} hero videos from configuration:`);
+        fullUrls.forEach((url, index) => {
+          console.log(`   ${index + 1}. ${url}`);
+        });
       } catch (err) {
         console.error('❌ Failed to load video configuration:', err);
         setError(err instanceof Error ? err.message : 'Unknown error');
