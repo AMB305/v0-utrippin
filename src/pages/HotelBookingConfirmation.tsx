@@ -11,12 +11,23 @@ const HotelBookingConfirmation = () => {
 
   const bookingId = searchParams.get('bookingId');
   const hotelId = searchParams.get('hotelId');
+  
+  // Debug URL parameters
+  console.log('🔍 URL Parameters:', {
+    bookingId,
+    hotelId,
+    allParams: Object.fromEntries(searchParams.entries())
+  });
 
   // Mock booking data based on URL parameters
   const mockBooking = {
     data: {
-      order_id: bookingId || 'test_booking_order',
+      order_id: bookingId || `ord_${Date.now()}_test`,
       final_price: {
+        amount: 245,
+        currency: 'USD'
+      },
+      total_price: {
         amount: 245,
         currency: 'USD'
       },
@@ -26,6 +37,8 @@ const HotelBookingConfirmation = () => {
       check_out: '2025-08-01'
     }
   };
+  
+  console.log('📋 Mock Booking Data:', mockBooking);
 
   // Mock hotel data
   const mockHotel = {
