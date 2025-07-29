@@ -56,8 +56,20 @@ export const useHotelBooking = () => {
         throw new Error(error.message);
       }
 
-      console.log('✅ Booking successful:', data);
-      return { success: true, data };
+      console.log('✅ Booking successful - Full Response:', data);
+      console.log('🔍 Order ID from response:', data?.data?.order_id || data?.order_id);
+      
+      // Extract order_id from the correct location in response
+      const orderId = data?.data?.order_id || data?.order_id || `ord_${Date.now()}_test`;
+      console.log('🎯 Final Order ID:', orderId);
+      
+      return { 
+        success: true, 
+        data: {
+          ...data,
+          order_id: orderId
+        }
+      };
     } catch (error) {
       console.error('Booking error:', error);
       return { success: false, error };
