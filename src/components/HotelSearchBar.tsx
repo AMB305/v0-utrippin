@@ -175,9 +175,9 @@ const HotelSearchBar = ({ onSearch, loading = false, initialData, compact = fals
   return (
     <Card className="w-full max-w-6xl mx-auto shadow-lg">
       <CardContent className="p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-10 gap-3 items-center">
           {/* Destination */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-3">
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
@@ -190,7 +190,7 @@ const HotelSearchBar = ({ onSearch, loading = false, initialData, compact = fals
           </div>
 
           {/* Combined Dates */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-4">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -240,7 +240,7 @@ const HotelSearchBar = ({ onSearch, loading = false, initialData, compact = fals
           </div>
 
           {/* Travelers */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-2">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -333,7 +333,7 @@ const HotelSearchBar = ({ onSearch, loading = false, initialData, compact = fals
           </div>
 
           {/* Search Button */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-1">
             <Button 
               onClick={handleSearch}
               disabled={loading}
