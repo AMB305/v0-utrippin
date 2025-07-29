@@ -89,7 +89,7 @@ export class RatehawkService {
       
       const { data, error } = await supabase.functions.invoke('ratehawk-search-region', {
         body: {
-          hotel_id: params.region_id.toString(), // Convert region_id to hotel_id for hotel-based search
+          region_id: params.region_id.toString(), // Fixed: send region_id not hotel_id
           checkin: params.checkin,
           checkout: params.checkout,
           guests: params.guests,
@@ -104,7 +104,7 @@ export class RatehawkService {
         throw new Error(`Hotel search failed: ${error.message}`);
       }
 
-      if (!data || data.status !== 'ok') {
+      if (!data || data.status !== 'success') {
         throw new Error('Invalid response from hotel search');
       }
 
