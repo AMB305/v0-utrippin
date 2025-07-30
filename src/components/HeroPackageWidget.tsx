@@ -49,16 +49,6 @@ export default function HeroPackageWidget() {
     setPickupDate(nextMonth.toISOString().split('T')[0]);
     setDropoffDate(returnDefault.toISOString().split('T')[0]);
 
-    // Load HERE API scripts for autocomplete
-    const loadScript = (url: string) => {
-      const script = document.createElement("script");
-      script.src = url;
-      script.async = true;
-      document.body.appendChild(script);
-    };
-
-    loadScript("https://js.api.here.com/v3/3.1/mapsjs-core.js");
-    loadScript("https://js.api.here.com/v3/3.1/mapsjs-service.js");
 
   }, []);
 
