@@ -380,6 +380,27 @@ export type Database = {
         }
         Relationships: []
       }
+      cached_itineraries: {
+        Row: {
+          id: string
+          prompt: string
+          response: string
+          timestamp: string
+        }
+        Insert: {
+          id?: string
+          prompt: string
+          response: string
+          timestamp?: string
+        }
+        Update: {
+          id?: string
+          prompt?: string
+          response?: string
+          timestamp?: string
+        }
+        Relationships: []
+      }
       chat_sessions: {
         Row: {
           budget: string | null
@@ -919,7 +940,9 @@ export type Database = {
           message_type: string | null
           metadata: Json | null
           read_at: string | null
+          sender: string
           sender_id: string
+          user_id: string
         }
         Insert: {
           content: string
@@ -929,7 +952,9 @@ export type Database = {
           message_type?: string | null
           metadata?: Json | null
           read_at?: string | null
+          sender?: string
           sender_id: string
+          user_id?: string
         }
         Update: {
           content?: string
@@ -939,7 +964,9 @@ export type Database = {
           message_type?: string | null
           metadata?: Json | null
           read_at?: string | null
+          sender?: string
           sender_id?: string
+          user_id?: string
         }
         Relationships: [
           {
