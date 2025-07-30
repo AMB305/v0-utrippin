@@ -587,6 +587,36 @@ export type Database = {
           },
         ]
       }
+      destination_knowledge: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          destination_name: string
+          embedding: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          destination_name: string
+          embedding?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          destination_name?: string
+          embedding?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       destination_tips: {
         Row: {
           category: string
