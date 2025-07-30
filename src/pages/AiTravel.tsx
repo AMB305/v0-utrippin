@@ -15,6 +15,7 @@ import { TravelHeader } from "@/components/TravelHeader";
 import { DestinationGrid } from "@/components/DestinationGrid";
 import { AnimatedKeila } from "@/components/AnimatedKeila";
 import { SimpleChatInput } from "@/components/SimpleChatInput";
+import { GlobalKeilaBubble } from "@/components/GlobalKeilaBubble";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -22,106 +23,6 @@ import { SimpleChatInput } from "@/components/SimpleChatInput";
 // These components are now defined within or alongside AiTravel.tsx
 // or are simplified/adapted for this single file.
 
-// Keila Chat Modal/Drawer Component - Now receives props directly from AiTravel.tsx
-const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, resetSession }) => {
-  const messagesEndRef = useRef(null);
-  const [currentInput, setCurrentInput] = useState('');
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { // <--- Changed type here
-    e.preventDefault();
-    const form = e.currentTarget; // Or e.target as HTMLFormElement;
-    const inputElement = form.elements[0] as HTMLInputElement; // <--- Cast here
-    
-    if (inputElement.value.trim()) {
-      sendMessage(inputElement.value);
-      setCurrentInput('');
-    }
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md h-full max-h-[90vh] flex flex-col">
-        {/* Modal Header */}
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-800 flex items-center">
-            <div className="mr-2">
-              <AnimatedKeila />
-            </div>
-            Keila
-          </h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">
-            &times;
-          </button>
-        </div>
-
-        {/* Chat Messages Area */}
-        <div className="flex-grow p-4 overflow-y-auto custom-scrollbar flex flex-col space-y-4">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className="flex justify-start"
-            >
-              <div className="max-w-[80%] p-2 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
-                <p className="text-sm whitespace-pre-wrap">{msg.question}</p>
-              </div>
-            </div>
-          ))}
-          {messages.map((msg, index) => 
-            msg.response ? (
-              <div
-                key={`response-${index}`}
-                className="flex justify-start"
-              >
-                <div className="max-w-[80%] p-2 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
-                  <p className="text-sm whitespace-pre-wrap">{msg.response}</p>
-                </div>
-              </div>
-            ) : null
-          )}
-          {isLoading && (
-            <div className="flex justify-start">
-              <div className="max-w-[80%] p-2 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
-                <div className="flex items-center">
-                  <span className="animate-pulse text-xl">...</span>
-                  <span className="ml-2 text-sm">Keila is typing</span>
-                </div>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Chat Input Area */}
-        <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 flex items-center">
-          <input
-            type="text"
-            value={currentInput}
-            onChange={(e) => setCurrentInput(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2 text-gray-800"
-            disabled={isLoading}
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isLoading || currentInput.trim() === ''}
-          >
-            Send
-          </button>
-        </form>
-        <div className="p-2 flex justify-center">
-            <button onClick={resetSession} className="text-sm text-blue-600 hover:underline">Start New Conversation</button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // New Keila Mini Chat Bar Component - Now receives props directly from AiTravel.tsx
 const KeilaMiniChat = ({ onOpenChat, onSendMessage, messages, isLoading }) => {
@@ -175,7 +76,6 @@ const KeilaMiniChat = ({ onOpenChat, onSendMessage, messages, isLoading }) => {
 // Main Desktop Layout Component - Replicating ixigo's UI
 // This component now receives its necessary state/handlers from AiTravel.tsx
 const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMessage, onStartNewTrip }) => {
-    const [isKeilaChatOpen, setIsKeilaChatOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [showDestinations, setShowDestinations] = useState(false); // State for conditional photos
     const [selectedBudget, setSelectedBudget] = useState(null); // State for selected budget filter
@@ -221,7 +121,6 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
             // Fetch destinations based on search query
             fetchDestinations(undefined, inputElement.value.trim());
             onSendMessage(`Plan a trip to ${inputElement.value}`);
-            setIsKeilaChatOpen(true); // Open chat when search is submitted
             setShowDestinations(true); // Show destinations after a search
             setSearchQuery(''); // Clear search query after submission
         }
@@ -237,20 +136,17 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
 
     const handleDestinationCardClick = (destinationName: string) => {
         onSendMessage(`Generate a complete itinerary for ${destinationName}, focusing on unique experiences and local insights.`);
-        setIsKeilaChatOpen(true); // Open chat when a card is clicked
     };
 
     const handleBudgetClick = (budget: string) => {
         setSelectedBudget(budget);
         onSendMessage(`Find trips with a ${budget} budget.`);
-        setIsKeilaChatOpen(true);
         setShowDestinations(true);
     };
 
     const handleWeatherClick = (weather: string) => {
         setSelectedWeather(weather);
         onSendMessage(`Find trips with ${weather} weather.`);
-        setIsKeilaChatOpen(true);
         setShowDestinations(true);
     };
 
@@ -298,7 +194,7 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                 </form>
 
                 <button
-                    onClick={() => { onStartNewTrip(); setIsKeilaChatOpen(true); }}
+                    onClick={() => { onStartNewTrip(); }}
                     className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out flex items-center"
                 >
                     <img src={keilaCompassIcon} alt="Keila Icon" className="w-6 h-6 mr-2 rounded-full"/>
@@ -554,15 +450,6 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                 </aside>
             </main>
 
-            {/* Keila Chat Modal (for mobile, or if opened from mini chat) */}
-            <KeilaChatModal
-                isOpen={isKeilaChatOpen}
-                onClose={() => setIsKeilaChatOpen(false)}
-                messages={chatMessages}
-                sendMessage={onSendMessage}
-                isLoading={isLoading}
-                resetSession={onClearChat}
-            />
         </div>
     );
 };
@@ -726,7 +613,6 @@ const AiTravel = () => {
   
   // State management for new layout
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [isKeilaChatOpen, setIsKeilaChatOpen] = useState(false);
   const [filters, setFilters] = useState({
     budget: [0, 10000],
     travelTime: [0, 100],
@@ -847,7 +733,6 @@ const AiTravel = () => {
   }, [destinations, selectedCategory, filters]);
 
   const handleCreateTripWithAI = () => {
-    setIsKeilaChatOpen(true);
     if (!hasStartedChat) {
       sendMessage("I want to create a trip with AI assistance.", false, true); // Use Gemini
     }
@@ -886,7 +771,6 @@ const AiTravel = () => {
                 <DestinationGrid 
                   destinations={filteredDestinations}
                   onDestinationClick={(destination) => {
-                    setIsKeilaChatOpen(true);
                     sendMessage(`I'm interested in visiting ${destination.name}. Can you help me plan a trip there?`, false, true); // Use Gemini
                   }}
                 />
@@ -904,7 +788,6 @@ const AiTravel = () => {
                     <SimpleChatInput
                       onSendMessage={(message) => {
                         sendMessage(message, false, true); // Use Gemini
-                        setIsKeilaChatOpen(true);
                       }}
                       placeholder="Ask me to plan your next adventure..."
                       isLoading={loading}
@@ -917,44 +800,8 @@ const AiTravel = () => {
         </div>
       </div>
       
-      {/* Keila Chat Modal */}
-      {isKeilaChatOpen && (
-        <KeilaChatModal 
-          isOpen={isKeilaChatOpen}
-          onClose={() => setIsKeilaChatOpen(false)} 
-          messages={messages}
-          sendMessage={(message) => sendMessage(message, false, true)} // Use Gemini
-          isLoading={loading}
-          resetSession={resetSession}
-        />
-      )}
-      
-      {/* Keila Chat Bubble */}
-      {!isKeilaChatOpen && (
-        <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-72 max-w-[calc(100vw-2rem)]">
-          <div className="cursor-pointer animate-bounce" onClick={() => setIsKeilaChatOpen(true)}>
-            <AnimatedKeila />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-800 truncate">Keila</p>
-            <div className="flex items-center">
-              <p className="text-xs text-gray-600 mr-2 leading-tight">
-                {hasStartedChat 
-                  ? (messages[messages.length - 1]?.response || messages[messages.length - 1]?.question || "Ready to help!")
-                  : "Hi there! How can I help you plan your next adventure?"
-                }
-              </p>
-              {loading && (
-                <div className="flex space-x-1">
-                  <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Global Keila Chat Bubble */}
+      <GlobalKeilaBubble />
     </>
   );
 };

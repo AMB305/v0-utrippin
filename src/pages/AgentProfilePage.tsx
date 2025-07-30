@@ -3,6 +3,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import AgentProfile from '@/components/AgentProfile';
+import { GlobalKeilaBubble } from '@/components/GlobalKeilaBubble';
 
 const AgentProfilePage: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const AgentProfilePage: React.FC = () => {
             <AgentProfile />
           </div>
         </div>
+        <GlobalKeilaBubble />
       </div>
     </>
   );

@@ -7,6 +7,7 @@ import { useTripComCars } from "../hooks/useTripComCars";
 import { SmartImage } from "@/components/SmartImage";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { GlobalKeilaBubble } from "@/components/GlobalKeilaBubble";
 
 export interface TripsPageProps {
   duffelFlights?: any[];
@@ -235,6 +236,7 @@ export default function Trips(props: TripsPageProps) {
       </div>
 
       <Footer />
+      <GlobalKeilaBubble />
     </div>
     </>
   );
