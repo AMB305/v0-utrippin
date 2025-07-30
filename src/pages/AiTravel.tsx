@@ -220,25 +220,25 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
         }
     };
 
-    const handleCategoryClick = (categoryName) => {
+    const handleCategoryClick = (categoryName: string) => {
         onSendMessage(`Show me ${categoryName} themed trips.`);
         setIsKeilaChatOpen(true); // Open chat when category is clicked
         setShowDestinations(true); // Show destinations after category click
     };
 
-    const handleDestinationCardClick = (destinationName) => {
+    const handleDestinationCardClick = (destinationName: string) => {
         onSendMessage(`Plan a trip to ${destinationName}`);
         setIsKeilaChatOpen(true); // Open chat when a card is clicked
     };
 
-    const handleBudgetClick = (budget) => {
+    const handleBudgetClick = (budget: string) => {
         setSelectedBudget(budget);
         onSendMessage(`Find trips with a ${budget} budget.`);
         setIsKeilaChatOpen(true);
         setShowDestinations(true);
     };
 
-    const handleWeatherClick = (weather) => {
+    const handleWeatherClick = (weather: string) => {
         setSelectedWeather(weather);
         onSendMessage(`Find trips with ${weather} weather.`);
         setIsKeilaChatOpen(true);
