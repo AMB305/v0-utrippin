@@ -933,57 +933,27 @@ export type Database = {
       }
       messages: {
         Row: {
-          content: string
-          created_at: string
           id: string
-          match_id: string
-          message_type: string | null
-          metadata: Json | null
-          read_at: string | null
           sender: string
-          sender_id: string
+          text: string
+          timestamp: string
           user_id: string
         }
         Insert: {
-          content: string
-          created_at?: string
           id?: string
-          match_id: string
-          message_type?: string | null
-          metadata?: Json | null
-          read_at?: string | null
-          sender?: string
-          sender_id: string
-          user_id?: string
+          sender: string
+          text: string
+          timestamp?: string
+          user_id: string
         }
         Update: {
-          content?: string
-          created_at?: string
           id?: string
-          match_id?: string
-          message_type?: string | null
-          metadata?: Json | null
-          read_at?: string | null
           sender?: string
-          sender_id?: string
+          text?: string
+          timestamp?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "messages_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "travel_buddy_matches"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "messages_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "travel_buddy_pairings"
-            referencedColumns: ["match_id"]
-          },
-        ]
+        Relationships: []
       }
       monthly_api_limits: {
         Row: {
