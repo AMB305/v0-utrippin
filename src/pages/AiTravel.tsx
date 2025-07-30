@@ -624,6 +624,23 @@ const AiTravel = () => {
   // Get destinations data
   const { destinations, loading: destinationsLoading } = useDestinations();
 
+  // Filter destinations based on category and filters - MOVED BEFORE CONDITIONAL RETURNS
+  const filteredDestinations = useMemo(() => {
+    let filtered = destinations;
+    
+    // Filter by category
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(dest => 
+        dest.category.toLowerCase() === selectedCategory.toLowerCase()
+      );
+    }
+    
+    // Apply additional filters based on filters state
+    // Add more filter logic here as needed
+    
+    return filtered;
+  }, [destinations, selectedCategory, filters]);
+
 
   console.log('[AiTravel Page] Rendering. State:', {
     isAuthLoading: authLoading,
@@ -714,23 +731,6 @@ const AiTravel = () => {
     chatMessages: messages,
     isLoading: loading,
   });
-
-  // Filter destinations based on category and filters
-  const filteredDestinations = useMemo(() => {
-    let filtered = destinations;
-    
-    // Filter by category
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(dest => 
-        dest.category.toLowerCase() === selectedCategory.toLowerCase()
-      );
-    }
-    
-    // Apply additional filters based on filters state
-    // Add more filter logic here as needed
-    
-    return filtered;
-  }, [destinations, selectedCategory, filters]);
 
   const handleCreateTripWithAI = () => {
     if (!hasStartedChat) {
