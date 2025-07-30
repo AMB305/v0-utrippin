@@ -16,7 +16,7 @@ export const useChatAI = () => {
   const { messages, addMessage, updateMessage, clearMessages } = context;
   const [loading, setLoading] = useState(false);
 
-  const sendMessage = async (message: string, comprehensive = false) => {
+  const sendMessage = async (message: string, comprehensive = false, useGemini = false) => {
     setLoading(true);
     const messageId = Date.now().toString();
 
@@ -27,30 +27,53 @@ export const useChatAI = () => {
     });
 
     try {
-      // Use only ai-travel-chat with the new memory system
-      const { data, error } = await supabase.functions.invoke('ai-travel-chat', {
-        body: { 
-          message, 
-          comprehensive, 
-          userId: user?.id
-          // No longer sending conversationHistory - using persistent memory instead
-        },
-      });
+      if (useGemini) {
+        // Use Gemini via our new edge function
+        const { data, error } = await supabase.functions.invoke('gemini-chat', {
+          body: { 
+            chatHistory: messages.map(msg => ({
+              role: 'user',
+              text: msg.question
+            })).concat(messages.filter(msg => msg.response).map(msg => ({
+              role: 'bot', 
+              text: msg.response
+            }))),
+            currentPrompt: message
+          },
+        });
 
-      if (error) throw new Error(`AI Edge Function Error: ${error.message}`);
-      
-      updateMessage(messageId, {
-        response: data.response,
-        detailedItinerary: data.detailedItinerary,
-        isDetailedItinerary: data.isDetailedItinerary,
-        comprehensiveItinerary: data.comprehensiveItinerary,
-        isComprehensiveItinerary: data.isComprehensiveItinerary,
-        showMap: data.showMap,
-        mapLocation: data.mapLocation,
-        quickReplies: data.quickReplies,
-        callsToAction: data.callsToAction,
-        loading: false,
-      });
+        if (error) throw new Error(`Gemini Edge Function Error: ${error.message}`);
+        
+        updateMessage(messageId, {
+          response: data.text,
+          loading: false,
+        });
+      } else {
+        // Use existing ai-travel-chat with the memory system
+        const { data, error } = await supabase.functions.invoke('ai-travel-chat', {
+          body: { 
+            message, 
+            comprehensive, 
+            userId: user?.id
+            // No longer sending conversationHistory - using persistent memory instead
+          },
+        });
+
+        if (error) throw new Error(`AI Edge Function Error: ${error.message}`);
+        
+        updateMessage(messageId, {
+          response: data.response,
+          detailedItinerary: data.detailedItinerary,
+          isDetailedItinerary: data.isDetailedItinerary,
+          comprehensiveItinerary: data.comprehensiveItinerary,
+          isComprehensiveItinerary: data.isComprehensiveItinerary,
+          showMap: data.showMap,
+          mapLocation: data.mapLocation,
+          quickReplies: data.quickReplies,
+          callsToAction: data.callsToAction,
+          loading: false,
+        });
+      }
 
     } catch (err) {
       console.error('Failed to send message:', err);
