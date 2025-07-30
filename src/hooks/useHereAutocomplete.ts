@@ -24,7 +24,13 @@ export const useHereAutocomplete = (setValue: (value: string) => void) => {
       
       service.autosuggest({ q: query, at: "0,0" }, (result: any) => {
         if (result.items && result.items.length > 0) {
-          setValue(result.items[0].address?.label || result.items[0].title);
+          const first = result.items[0];
+          const code = first.id?.split("::")?.pop()?.toUpperCase();
+          if (first.resultType === "place" && code?.length === 3) {
+            setValue(code);
+          } else {
+            setValue(first.address?.label || first.title);
+          }
         }
       });
     };
