@@ -930,17 +930,17 @@ const AiTravel = () => {
       
       {/* Keila Chat Bubble */}
       {!isKeilaChatOpen && (
-        <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-80">
+        <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-72 max-w-[calc(100vw-2rem)]">
           <img 
             src={keilaCompassIcon} 
             alt="Keila Icon" 
             className="w-10 h-10 rounded-full cursor-pointer animate-bounce" 
             onClick={() => setIsKeilaChatOpen(true)}
           />
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-800">Keila AI Assistant</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-800 truncate">Keila AI Assistant</p>
             <p className="text-xs text-gray-600 truncate">
-              {hasStartedChat 
+              {hasStartedChat
                 ? (messages[messages.length - 1]?.response || messages[messages.length - 1]?.question || "Ready to help!")
                 : "Hi there! How can I help you plan your next adventure?"
               }

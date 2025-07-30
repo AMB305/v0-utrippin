@@ -90,7 +90,7 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
         {/* Categories container */}
         <div
           ref={scrollContainerRef}
-          className="flex gap-2 overflow-x-auto scrollbar-hide scroll-smooth"
+          className="flex gap-1 overflow-x-auto scrollbar-hide scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {categories.map((category) => {
@@ -101,13 +101,13 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
               <button
                 key={category.id}
                 onClick={() => onCategorySelect(category.id)}
-                className={`flex flex-col items-center min-w-[80px] px-4 py-3 rounded-lg transition-all duration-200 ${
+                className={`flex flex-col items-center min-w-[70px] px-3 py-3 rounded-lg transition-all duration-200 ${
                   isSelected
                     ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'hover:bg-accent text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <IconComponent className="w-6 h-6 mb-1" />
+                <IconComponent className="w-5 h-5 mb-1" />
                 <span className="text-xs font-medium whitespace-nowrap">
                   {category.name}
                 </span>
