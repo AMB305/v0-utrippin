@@ -1,13 +1,17 @@
 // src/pages/AiTravel.tsx
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useChatAI } from "@/hooks/useChatAI";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useDestinations, type Destination } from "@/hooks/useDestinations";
 import { SEOHead } from "@/components/SEOHead";
 import LoginCard from "@/components/LoginCard";
-import keilaIcon from "@/assets/keila-icon.png";
+import UtrippinLogo from "@/components/UtrippinLogo";
+import { FiltersSidebar } from "@/components/FiltersSidebar";
+import { CategoryCarousel } from "@/components/CategoryCarousel";
+import { TravelHeader } from "@/components/TravelHeader";
+import { DestinationGrid } from "@/components/DestinationGrid";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -43,7 +47,9 @@ const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, res
         {/* Modal Header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-800 flex items-center">
-            <img src={keilaIcon} alt="Keila Icon" className="w-7 h-7 mr-2 rounded-full"/>
+            <div className="mr-2 scale-50 origin-left">
+              <UtrippinLogo />
+            </div>
             Keila AI Assistant
           </h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">
@@ -137,12 +143,9 @@ const KeilaMiniChat = ({ onOpenChat, onSendMessage, messages, isLoading }) => {
 
     return (
         <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-80">
-            <img
-                src={keilaIcon}
-                alt="Keila Icon"
-                className="w-10 h-10 rounded-full cursor-pointer animate-bounce"
-                onClick={onOpenChat}
-            />
+            <div className="scale-75 cursor-pointer animate-bounce" onClick={onOpenChat}>
+                <UtrippinLogo />
+            </div>
             <div className="flex-grow">
                 <p className="text-xs text-gray-600 truncate cursor-pointer mb-1" onClick={onOpenChat}>
                     {displayMessage}
@@ -295,11 +298,9 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                     onClick={() => { onStartNewTrip(); setIsKeilaChatOpen(true); }}
                     className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out flex items-center"
                 >
-                    <img
-                        src={keilaIcon}
-                        alt="Keila Icon"
-                        className="w-6 h-6 mr-2"
-                    />
+                    <div className="scale-50 mr-1">
+                        <UtrippinLogo />
+                    </div>
                     Start New Trip
                 </button>
             </header>
@@ -482,7 +483,9 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                 <aside className="w-96 bg-white shadow-md flex-shrink-0 flex flex-col">
                     <div className="p-4 border-b border-gray-200">
                         <h3 className="text-xl font-bold text-gray-800 flex items-center">
-                            <img src={keilaIcon} alt="Keila Icon" className="w-8 h-8 mr-2 rounded-full"/>
+                            <div className="mr-2 scale-50 origin-left">
+                                <UtrippinLogo />
+                            </div>
                             Keila AI Chat
                         </h3>
                     </div>
@@ -720,6 +723,20 @@ const AiTravel = () => {
   // within KeilaChatModal and DesktopTravelPlanner's chat sections.
   const { messages, sendMessage, resetSession, loading } = useChatAI();
   const hasStartedChat = messages.length > 0;
+  
+  // State management for new layout
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [isKeilaChatOpen, setIsKeilaChatOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    budget: [0, 10000],
+    travelTime: [0, 100],
+    weather: [],
+    pollution: [],
+    temperature: []
+  });
+  
+  // Get destinations data
+  const { destinations, loading: destinationsLoading } = useDestinations();
 
 
   console.log('[AiTravel Page] Rendering. State:', {
@@ -812,17 +829,100 @@ const AiTravel = () => {
     isLoading: loading,
   });
 
+  // Filter destinations based on category and filters
+  const filteredDestinations = useMemo(() => {
+    let filtered = destinations;
+    
+    // Filter by category
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(dest => 
+        dest.category.toLowerCase() === selectedCategory.toLowerCase()
+      );
+    }
+    
+    // Apply additional filters based on filters state
+    // Add more filter logic here as needed
+    
+    return filtered;
+  }, [destinations, selectedCategory, filters]);
+
+  const handleCreateTripWithAI = () => {
+    setIsKeilaChatOpen(true);
+    if (!hasStartedChat) {
+      sendMessage("I want to create a trip with AI assistance.");
+    }
+  };
+
   return (
     <>
-      <SEOHead title="AI Travel Planner | Utrippin" description="Your personal AI travel assistant, Keila." canonical="https://utrippin.ai/ai-travel" />
-      <DesktopTravelPlanner
-        onClearChat={resetSession} // Use resetSession from useChatAI
-        chatMessages={messages}
-        isLoading={loading}
-        onSendMessage={handleSendMessage} // Pass the unified sendMessage handler
-        onStartNewTrip={handleStartNewTrip} // Pass the new combined handler
+      <SEOHead 
+        title="AI Travel Planner - Smart Trip Planning with Personalized Recommendations"
+        description="Plan your perfect trip with our AI-powered travel assistant. Get personalized destination recommendations, itineraries, and travel tips based on your preferences."
+        canonical="https://utrippin.ai/ai-travel"
+        keywords="AI travel planner, trip planning, travel recommendations, personalized travel, smart travel assistant"
       />
-      {/* Keila Mini Chat is now inside DesktopTravelPlanner, or you can add it here if it's a floating global element */}
+      
+      {/* New Layout */}
+      <div className="min-h-screen bg-background flex flex-col">
+        {/* Header */}
+        <TravelHeader onCreateTripWithAI={handleCreateTripWithAI} />
+        
+        {/* Main Content */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Sidebar */}
+          <FiltersSidebar onFiltersChange={setFilters} />
+          
+          {/* Main Content Area */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Category Carousel */}
+            <CategoryCarousel 
+              selectedCategory={selectedCategory}
+              onCategorySelect={setSelectedCategory}
+            />
+            
+            {/* Destinations Grid */}
+            <div className="flex-1 overflow-y-auto">
+              <DestinationGrid 
+                destinations={filteredDestinations}
+                onDestinationClick={(destination) => {
+                  setIsKeilaChatOpen(true);
+                  sendMessage(`I'm interested in visiting ${destination.name}. Can you help me plan a trip there?`);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Keila Chat Modal */}
+      {isKeilaChatOpen && (
+        <KeilaChatModal 
+          isOpen={isKeilaChatOpen}
+          onClose={() => setIsKeilaChatOpen(false)} 
+          messages={messages}
+          sendMessage={sendMessage}
+          isLoading={loading}
+          resetSession={resetSession}
+        />
+      )}
+      
+      {/* Keila Chat Bubble */}
+      {!isKeilaChatOpen && (
+        <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-80">
+          <div className="scale-75 cursor-pointer animate-bounce" onClick={() => setIsKeilaChatOpen(true)}>
+            <UtrippinLogo />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-800">Keila AI Assistant</p>
+            <p className="text-xs text-gray-600 truncate">
+              {hasStartedChat 
+                ? (messages[messages.length - 1]?.response || messages[messages.length - 1]?.question || "Ready to help!")
+                : "Hi there! How can I help you plan your next adventure?"
+              }
+            </p>
+          </div>
+        </div>
+      )}
     </>
   );
 };
