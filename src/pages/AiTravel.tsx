@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useChatAI } from "@/hooks/useChatAI";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useDestinations, type Destination } from "@/hooks/useDestinations";
 import { SEOHead } from "@/components/SEOHead";
 import LoginCard from "@/components/LoginCard";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
@@ -168,22 +169,15 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
     const [showDestinations, setShowDestinations] = useState(false); // State for conditional photos
     const [selectedBudget, setSelectedBudget] = useState(null); // State for selected budget filter
     const [selectedWeather, setSelectedWeather] = useState(null); // State for selected weather filter
+    const [selectedCategory, setSelectedCategory] = useState('All');
 
-    // Mock destination data with USD prices
-    const destinations = [
-        { name: "Fort Lauderdale", price: "400", per: "night", img: "https://placehold.co/300x200/E0F2F7/000?text=Fort+Lauderdale" },
-        { name: "Palm Beach", price: "400", per: "night", img: "https://placehold.co/300x200/D1E9F4/000?text=Palm+Beach" },
-        { name: "Hollywood", price: "400", per: "night", img: "https://placehold.co/300x200/C2E0F0/000?text=Hollywood" },
-        { name: "Orlando", price: "300", per: "night", img: "https://placehold.co/300x200/B3D7EC/000?text=Orlando" },
-        { name: "Cancun", price: "900", per: "night", img: "https://placehold.co/300x200/A4CFE8/000?text=Cancun" },
-        { name: "Tampa", price: "200", per: "night", img: "https://placehold.co/300x200/95C6E4/000?text=Tampa" },
-        { name: "Myrtle Beach", price: "1600", per: "night", img: "https://placehold.co/300x200/86BDDF/000?text=Myrtle+Beach" },
-        { name: "Florida", price: "2100", per: "night", img: "https://placehold.co/300x200/77B4DB/000?text=Florida" },
-        { name: "Manhattan", price: "1600", per: "night", img: "https://placehold.co/300x200/68ABD7/000?text=Manhattan" },
-        { name: "Pensacola", price: "900", per: "night", img: "https://placehold.co/300x200/59A2D3/000?text=Pensacola" },
-        { name: "Panama City Beach", price: "2100", per: "night", img: "https://placehold.co/300x200/4A99CF/000?text=Panama+City+Beach" },
-        { name: "Boston", price: "1300", per: "night", img: "https://placehold.co/300x200/3B90CB/000?text=Boston" },
-    ];
+    // Use the destinations hook for real data
+    const { destinations, loading: destinationsLoading, error: destinationsError, fetchDestinations } = useDestinations();
+
+    // Fetch all destinations on component mount
+    useEffect(() => {
+        fetchDestinations();
+    }, []);
 
     // Category data with enhanced icons (Lucide React placeholders or custom SVGs)
     const categories = [
@@ -213,6 +207,8 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
         const inputElement = form.elements[0] as HTMLInputElement; // <--- Cast here
 
         if (inputElement.value.trim()) {
+            // Fetch destinations based on search query
+            fetchDestinations(undefined, inputElement.value.trim());
             onSendMessage(`Plan a trip to ${inputElement.value}`);
             setIsKeilaChatOpen(true); // Open chat when search is submitted
             setShowDestinations(true); // Show destinations after a search
@@ -221,13 +217,16 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
     };
 
     const handleCategoryClick = (categoryName: string) => {
+        setSelectedCategory(categoryName);
+        // Fetch destinations for the selected category
+        fetchDestinations(categoryName === 'All' ? undefined : categoryName);
         onSendMessage(`Show me ${categoryName} themed trips.`);
         setIsKeilaChatOpen(true); // Open chat when category is clicked
         setShowDestinations(true); // Show destinations after category click
     };
 
     const handleDestinationCardClick = (destinationName: string) => {
-        onSendMessage(`Plan a trip to ${destinationName}`);
+        onSendMessage(`Generate a complete itinerary for ${destinationName}, focusing on unique experiences and local insights.`);
         setIsKeilaChatOpen(true); // Open chat when a card is clicked
     };
 
@@ -377,33 +376,101 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                 {/* Central Content - Destinations or Chat Placeholder */}
                 <section className="flex-grow p-6 bg-gray-50 overflow-y-auto">
                     {showDestinations ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            {destinations.map((destination) => (
-                                <div
-                                    key={destination.name}
-                                    className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300"
-                                    onClick={() => handleDestinationCardClick(destination.name)}
-                                >
-                                    <img
-                                        src={destination.img}
-                                        alt={destination.name}
-                                        className="w-full h-40 object-cover"
-                                    />
-                                    <div className="p-4">
-                                        <h3 className="text-lg font-semibold text-gray-800">{destination.name}</h3>
-                                        <p className="text-gray-600 text-sm mt-1">
-                                            From ${destination.price} {destination.per}
-                                        </p>
-                                    </div>
+                        <div>
+                            {/* Category filter indicator */}
+                            {selectedCategory !== 'All' && (
+                                <div className="mb-4 flex items-center justify-between">
+                                    <h2 className="text-xl font-semibold text-gray-800">
+                                        {selectedCategory} Destinations
+                                    </h2>
+                                    <span className="text-sm text-gray-600">
+                                        {destinations.length} destinations found
+                                    </span>
                                 </div>
-                            ))}
+                            )}
+                            
+                            {/* Loading state */}
+                            {destinationsLoading ? (
+                                <div className="flex items-center justify-center h-64">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                                    <span className="ml-2 text-gray-600">Loading destinations...</span>
+                                </div>
+                            ) : destinationsError ? (
+                                <div className="flex flex-col items-center justify-center h-64 text-red-500">
+                                    <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <p className="text-lg font-medium">Error loading destinations</p>
+                                    <p className="text-sm mt-1">{destinationsError}</p>
+                                    <button 
+                                        onClick={() => fetchDestinations()}
+                                        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                    >
+                                        Try Again
+                                    </button>
+                                </div>
+                            ) : destinations.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+                                    <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.007-5.824-2.448M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <p className="text-lg font-medium">No destinations found</p>
+                                    <p className="text-sm mt-1">Try adjusting your search or filters</p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                    {destinations.map((destination) => (
+                                        <div
+                                            key={destination.id}
+                                            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300 transform hover:scale-105"
+                                            onClick={() => handleDestinationCardClick(destination.name)}
+                                        >
+                                            <img
+                                                src={destination.img || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop'}
+                                                alt={destination.name}
+                                                className="w-full h-40 object-cover"
+                                                onError={(e) => {
+                                                    e.currentTarget.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop';
+                                                }}
+                                            />
+                                            <div className="p-4">
+                                                <h3 className="text-lg font-semibold text-gray-800 mb-1">{destination.name}</h3>
+                                                {destination.country && (
+                                                    <p className="text-sm text-gray-500 mb-2">{destination.country}</p>
+                                                )}
+                                                {destination.description && (
+                                                    <p className="text-sm text-gray-600 mb-2 line-clamp-2">{destination.description}</p>
+                                                )}
+                                                {destination.price && (
+                                                    <p className="text-blue-600 font-semibold">
+                                                        From ${destination.price} {destination.per || 'night'}
+                                                    </p>
+                                                )}
+                                                {destination.category && (
+                                                    <span className="inline-block mt-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                                        {destination.category}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center">
-                            {/* Using a placeholder for image - replace with your actual path */}
-                            <img src="https://via.placeholder.com/128x128" alt="Travel Planner" className="mb-4 w-32 h-32 opacity-75" />
-                            <p className="text-lg">Start by searching for a destination or picking a category!</p>
+                            <svg className="w-32 h-32 mb-4 opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <p className="text-lg font-medium">Start by searching for a destination or picking a category!</p>
                             <p className="text-sm mt-2">Keila, your AI travel planner, is here to help.</p>
+                            <button 
+                                onClick={() => handleCategoryClick('All')}
+                                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                                Browse All Destinations
+                            </button>
                         </div>
                     )}
                 </section>

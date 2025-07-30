@@ -626,6 +626,7 @@ export type Database = {
         Row: {
           average_cost_per_day: number | null
           best_time_to_visit: string | null
+          category: string | null
           country: string
           created_at: string
           culture_overview: string | null
@@ -635,6 +636,7 @@ export type Database = {
           hero_image_url: string | null
           history: string | null
           id: string
+          img: string | null
           keywords: string[] | null
           latitude: number | null
           longitude: number | null
@@ -642,6 +644,8 @@ export type Database = {
           meta_title: string | null
           name: string
           overview: string | null
+          per: string | null
+          price: number | null
           region: string | null
           slug: string
           updated_at: string
@@ -649,6 +653,7 @@ export type Database = {
         Insert: {
           average_cost_per_day?: number | null
           best_time_to_visit?: string | null
+          category?: string | null
           country: string
           created_at?: string
           culture_overview?: string | null
@@ -658,6 +663,7 @@ export type Database = {
           hero_image_url?: string | null
           history?: string | null
           id?: string
+          img?: string | null
           keywords?: string[] | null
           latitude?: number | null
           longitude?: number | null
@@ -665,6 +671,8 @@ export type Database = {
           meta_title?: string | null
           name: string
           overview?: string | null
+          per?: string | null
+          price?: number | null
           region?: string | null
           slug: string
           updated_at?: string
@@ -672,6 +680,7 @@ export type Database = {
         Update: {
           average_cost_per_day?: number | null
           best_time_to_visit?: string | null
+          category?: string | null
           country?: string
           created_at?: string
           culture_overview?: string | null
@@ -681,6 +690,7 @@ export type Database = {
           hero_image_url?: string | null
           history?: string | null
           id?: string
+          img?: string | null
           keywords?: string[] | null
           latitude?: number | null
           longitude?: number | null
@@ -688,6 +698,8 @@ export type Database = {
           meta_title?: string | null
           name?: string
           overview?: string | null
+          per?: string | null
+          price?: number | null
           region?: string | null
           slug?: string
           updated_at?: string
