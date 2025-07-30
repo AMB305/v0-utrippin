@@ -78,15 +78,23 @@ export default function HeroFlightWidget() {
       });
     }
 
-    let expediaUrl = '';
+    const baseURL = "https://www.expedia.com/Flights-Search";
+    const params = new URLSearchParams({
+      trip: tripType === 'round-trip' ? 'roundtrip' : 'oneway',
+      leg1: `from:${fromAirport.iata_code},to:${toAirport.iata_code},departure:${formatDate(checkInDate)}`,
+      passengers: `adults:${adults},children:${children}`,
+      mode: 'search',
+      AID: '15754452',
+      PID: '101486313',
+      affcid: 'network.cj.101486313'
+    });
+
     if (tripType === 'round-trip' && checkOutDate) {
-      expediaUrl = `https://www.expedia.com/Flights-Search?trip=roundtrip&leg1=from:${encodeURIComponent(fromAirport.iata_code)},to:${encodeURIComponent(toAirport.iata_code)},departure:${formatDate(checkInDate)}&leg2=from:${encodeURIComponent(toAirport.iata_code)},to:${encodeURIComponent(fromAirport.iata_code)},departure:${formatDate(checkOutDate)}&passengers=adults:${adults},children:${children}&mode=search&affiliate=utrippin`;
-    } else {
-      expediaUrl = `https://www.expedia.com/Flights-Search?trip=oneway&leg1=from:${encodeURIComponent(fromAirport.iata_code)},to:${encodeURIComponent(toAirport.iata_code)},departure:${formatDate(checkInDate)}&passengers=adults:${adults},children:${children}&mode=search&affiliate=utrippin`;
+      params.append('leg2', `from:${toAirport.iata_code},to:${fromAirport.iata_code},departure:${formatDate(checkOutDate)}`);
     }
-    
-    const finalUrl = `https://www.dpbolvw.net/click-101486313-15754452?url=${encodeURIComponent(expediaUrl)}`;
-    window.open(finalUrl, '_blank');
+
+    const expediaUrl = `${baseURL}?${params.toString()}`;
+    window.open(expediaUrl, '_blank');
   };
 
   return (

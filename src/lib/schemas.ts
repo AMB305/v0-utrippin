@@ -56,7 +56,32 @@ const DayPlanSchema = z.object({
   date: z.string(),
   title: z.string(),
   events: z.array(EventSchema),
-  totalEstimatedCost: z.string().optional()
+  totalEstimatedCost: z.string().optional(),
+  niceToKnow: z.object({
+    freeThingsToDo: z.array(z.string()),
+    walkability: z.string(),
+    transportation: z.string(),
+    foodOptions: z.object({
+      budget: z.string(),
+      splurge: z.string()
+    }),
+    mallOptions: z.array(z.string()),
+    kidsActivities: z.array(z.string()),
+    nightlife: z.array(z.string()),
+    bestBreakfast: z.string(),
+    beaches: z.array(z.string()),
+    bestCoffeeShop: z.string(),
+    drugStores: z.array(z.string()),
+    tours: z.array(z.string()),
+    parks: z.array(z.string()),
+    fishingSpots: z.array(z.string()),
+    horsebackRiding: z.string(),
+    sportingEvents: z.string(),
+    groceryStores: z.array(z.string()),
+    scenicRoutes: z.string(),
+    hospital: z.string(),
+    nailSalon: z.string()
+  }).optional()
 });
 
 const CultureTipSchema = z.object({
@@ -75,6 +100,12 @@ const CategoryRecommendationSchema = z.object({
     location: z.string().optional(),
     cost: z.string().optional()
   }))
+});
+
+const CustomizationCallToActionSchema = z.object({
+  title: z.string(),
+  message: z.string(),
+  quickReplies: z.array(z.string())
 });
 
 export const ComprehensiveItinerarySchema = z.object({
@@ -100,7 +131,8 @@ export const ComprehensiveItinerarySchema = z.object({
   utility: z.object({
     sources: z.array(z.string()),
     downloadPdfLink: z.string().optional()
-  })
+  }),
+  customizationCallToAction: CustomizationCallToActionSchema.optional()
 });
 
 export type DetailedItinerary = z.infer<typeof MultiItinerarySchema>;
@@ -110,3 +142,4 @@ export type DayPlan = z.infer<typeof DayPlanSchema>;
 export type Event = z.infer<typeof EventSchema>;
 export type CultureTip = z.infer<typeof CultureTipSchema>;
 export type CategoryRecommendation = z.infer<typeof CategoryRecommendationSchema>;
+export type CustomizationCallToAction = z.infer<typeof CustomizationCallToActionSchema>;

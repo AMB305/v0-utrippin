@@ -42,7 +42,32 @@ const DayPlanSchema = z.object({
   date: z.string(),
   title: z.string(),
   events: z.array(EventSchema),
-  totalEstimatedCost: z.string().optional()
+  totalEstimatedCost: z.string().optional(),
+  niceToKnow: z.object({
+    freeThingsToDo: z.array(z.string()),
+    walkability: z.string(),
+    transportation: z.string(),
+    foodOptions: z.object({
+      budget: z.string(),
+      splurge: z.string()
+    }),
+    mallOptions: z.array(z.string()),
+    kidsActivities: z.array(z.string()),
+    nightlife: z.array(z.string()),
+    bestBreakfast: z.string(),
+    beaches: z.array(z.string()),
+    bestCoffeeShop: z.string(),
+    drugStores: z.array(z.string()),
+    tours: z.array(z.string()),
+    parks: z.array(z.string()),
+    fishingSpots: z.array(z.string()),
+    horsebackRiding: z.string(),
+    sportingEvents: z.string(),
+    groceryStores: z.array(z.string()),
+    scenicRoutes: z.string(),
+    hospital: z.string(),
+    nailSalon: z.string()
+  }).optional()
 });
 
 const CultureTipSchema = z.object({
@@ -61,6 +86,12 @@ const CategoryRecommendationSchema = z.object({
     location: z.string().optional(),
     cost: z.string().optional()
   }))
+});
+
+const CustomizationCallToActionSchema = z.object({
+  title: z.string(),
+  message: z.string(),
+  quickReplies: z.array(z.string())
 });
 
 const ComprehensiveItinerarySchema = z.object({
@@ -86,7 +117,8 @@ const ComprehensiveItinerarySchema = z.object({
   utility: z.object({
     sources: z.array(z.string()),
     downloadPdfLink: z.string().optional()
-  })
+  }),
+  customizationCallToAction: CustomizationCallToActionSchema.optional()
 });
 
 const openRouterApiKey = Deno.env.get('OPENROUTER_API_KEY');
@@ -204,8 +236,20 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
 
     // Use stored memory + current conversation for extraction
     const storedMessages = conversationMemory?.messages || [];
-    const allMessageHistory = [...storedMessages, ...conversationHistory.map(msg => ({ role: 'user', content: msg.question }), { role: 'assistant', content: msg.response }).flat(), { role: 'user', content: message }];
-    const allMessages = allMessageHistory.map(msg => msg.content).join('\n\n');
+    
+    // Fix conversation history handling
+    const conversationHistoryFlat = conversationHistory.flatMap(chatMsg => [
+      { role: 'user', content: chatMsg.question },
+      ...(chatMsg.response ? [{ role: 'assistant', content: chatMsg.response }] : [])
+    ]);
+    
+    const allMessageHistory = [
+      ...storedMessages, 
+      ...conversationHistoryFlat, 
+      { role: 'user', content: message }
+    ];
+    
+    const allMessages = allMessageHistory.map(msgItem => msgItem.content).join('\n\n');
     
     // Smart information extraction - merge with stored info
     const extractedInfo = {
@@ -316,7 +360,7 @@ ${isAgent ? '- For agents: Subtly favor destinations/activities with good affili
     if (allMessageHistory.length > 0) {
       conversationContext = `
 **CONVERSATION HISTORY:**
-${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Keila'}: ${msg.content}`).join('\n\n')}
+${allMessageHistory.slice(-10).map(msgItem => `${msgItem.role === 'user' ? 'User' : 'Keila'}: ${msgItem.content}`).join('\n\n')}
 
 **EXTRACTED INFORMATION SO FAR:**
 - Destination: ${extractedInfo.destination || 'Not specified'}
@@ -336,12 +380,29 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     console.log('Extracted Info:', extractedInfo);
     console.log('Retry Count:', retryCount);
     
-    // Ensure trip duration OR date is known before attempting itinerary
-    const hasDatesOrDuration = extractedInfo.duration || extractedInfo.dates;
-    const hasEnoughInfo = extractedInfo.destination && extractedInfo.budget && hasDatesOrDuration;
+    // NEW UX FLOW: Use smart defaults and always generate itinerary if destination is provided
+    const fallbackDefaults = (input) => {
+      const today = new Date();
+      const futureDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+      
+      return {
+        destination: extractedInfo.destination || "Cancun",
+        budget: extractedInfo.budget || "$2000", 
+        travelers: extractedInfo.travelers || "1",
+        duration: extractedInfo.duration || "5 days",
+        dates: extractedInfo.dates || futureDate.toISOString().split('T')[0]
+      };
+    };
     
-    // Force-break logic: if we have destination + budget and have retried 3+ times, push ahead
-    const shouldForceItinerary = !!(extractedInfo.destination && extractedInfo.budget && retryCount >= 3);
+    // Apply smart defaults when we have at least a destination
+    const smartDefaults = fallbackDefaults(message);
+    
+    // NEW LOGIC: Generate itinerary if we have destination OR if user asks for trip planning
+    const hasTripPlanningIntent = /plan.*trip|trip to|travel to|vacation|holiday|itinerary|visit/i.test(message);
+    const hasEnoughInfo = extractedInfo.destination || hasTripPlanningIntent;
+    
+    // Always force itinerary when we detect trip planning intent
+    const shouldForceItinerary = hasEnoughInfo;
     
     console.log('Has enough info?', hasEnoughInfo);
     console.log('Should force itinerary?', shouldForceItinerary);
@@ -350,11 +411,41 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     console.log('- Duration/Dates:', extractedInfo.duration, extractedInfo.dates);
     console.log('- Retry count:', retryCount);
 
-    const systemPrompt = `You are Keila, an expert AI travel agent that creates comprehensive, visually rich travel itineraries and engages in intelligent conversation. You MUST respond with a single, valid JSON object and nothing else.
+    const systemPrompt = `You are Keila, an expert AI travel planner for Utrippin. 
+    Always respond with a full itinerary, even if the user's input is vague or incomplete. 
+    Use your best assumptions. Then ask follow-up questions to help refine the plan.
 
-    **NEW MODE**: Answer direct travel-related questions directly, THEN ask about trip planning if relevant.
-    If a user asks "What are the best beaches in Greece?" answer directly, THEN ask about trip planning.
-    Use JSON format always. Return follow-up quick replies if relevant.
+    **CRITICAL: ALWAYS GENERATE FULL ITINERARY FIRST** - Never ask questions before providing value.
+    When someone says "Plan me a trip to Cancun", immediately create a comprehensive itinerary using smart defaults.
+    
+    **SMART DEFAULTS TO USE:**
+    - Destination: ${smartDefaults.destination}
+    - Budget: ${smartDefaults.budget} 
+    - Duration: ${smartDefaults.duration}
+    - Dates: ${smartDefaults.dates}
+    - Travelers: ${smartDefaults.travelers} person(s)
+
+    **CRITICAL: Each day MUST include comprehensive "Nice to Know" section with ALL categories:**
+    - Free things to do
+    - Walkability assessment 
+    - Transportation options with costs
+    - Food options (budget & splurge dining with cost ranges)
+    - Mall/shopping options
+    - Kids activities (always list them)
+    - Best nightlife (bars, clubs, dancing)
+    - Best breakfast places
+    - Beaches in the area
+    - Best coffee shops
+    - Drug stores (CVS, Target, Walmart equivalents)
+    - Tours available with prices
+    - Parks and recreational areas
+    - Fishing spots
+    - Horseback riding options
+    - Sporting events (check local teams)
+    - Grocery stores
+    - Scenic routes for tourists
+    - Nearest hospital/medical
+    - Nail salon recommendations
 
     ${personalizationContext}
     ${conversationContext}
@@ -370,7 +461,7 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     5. **Your response MUST be either COMPREHENSIVE_ITINERARY_SCHEMA or INTELLIGENT_QUESTIONING_SCHEMA**
     6. **All booking links MUST use Expedia with camref=1101l5dQSW for affiliate tracking.**
 
-    **SUFFICIENT INFO CHECK**: ${hasEnoughInfo || shouldForceItinerary ? 'USER HAS PROVIDED SUFFICIENT INFO - CREATE COMPREHENSIVE ITINERARY IMMEDIATELY. DO NOT ASK MORE QUESTIONS.' : 'More info needed - ask smart questions but do not repeat already answered ones'}
+    **SUFFICIENT INFO CHECK**: ${hasEnoughInfo || shouldForceItinerary ? 'CREATE COMPREHENSIVE ITINERARY IMMEDIATELY using the smart defaults above. Include customization options at the end.' : 'More info needed - ask smart questions but do not repeat already answered ones'}
 
     **INTELLIGENT QUESTIONING GUIDELINES:**
     - Analyze what the user DID provide and acknowledge it
@@ -424,34 +515,59 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
           ]
         }
       },
-      "dailyPlan": [
-        {
-          "day": "Day 1",
-          "date": "September 2, 2024",
-          "title": "Arrival & Beach Exploration", 
-          "events": [
-            {
-              "time": "10:00 AM",
-              "title": "Airport Arrival & Hotel Check-in",
-              "description": "Welcome to Miami! Check into your beachfront hotel",
-              "type": "accommodation",
-              "location": "South Beach",
-              "cost": "Included",
-              "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400"
-            },
-            {
-              "time": "2:00 PM", 
-              "title": "South Beach Walking Tour",
-              "description": "Explore the Art Deco architecture and vibrant culture",
-              "type": "activity",
-              "location": "Ocean Drive",
-              "cost": "$25",
-              "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400"
-            }
-          ],
-          "totalEstimatedCost": "$125"
-        }
-      ],
+       "dailyPlan": [
+         {
+           "day": "Day 1",
+           "date": "September 2, 2024",
+           "title": "Arrival & Beach Exploration", 
+           "events": [
+             {
+               "time": "10:00 AM",
+               "title": "Airport Arrival & Hotel Check-in",
+               "description": "Welcome to Miami! Check into your beachfront hotel",
+               "type": "accommodation",
+               "location": "South Beach",
+               "cost": "Included",
+               "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400"
+             },
+             {
+               "time": "2:00 PM", 
+               "title": "South Beach Walking Tour",
+               "description": "Explore the Art Deco architecture and vibrant culture",
+               "type": "activity",
+               "location": "Ocean Drive",
+               "cost": "$25",
+               "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400"
+             }
+           ],
+           "totalEstimatedCost": "$125",
+           "niceToKnow": {
+             "freeThingsToDo": ["Beach walks", "Art Deco District viewing", "Lincoln Road people watching"],
+             "walkability": "Excellent sidewalks in South Beach, very pedestrian-friendly",
+             "transportation": "Metro: $2.25, Taxi: $8-15 local rides, Uber/Lyft available",
+             "foodOptions": {
+               "budget": "Joe's Stone Crab ($), Burger & Beer Joint ($)",
+               "splurge": "Prime 112 ($$$), Nobu Miami ($$$$)"
+             },
+             "mallOptions": ["Lincoln Road Mall (outdoor)", "Aventura Mall (20 min drive)"],
+             "kidsActivities": ["Miami Seaquarium", "Jungle Island", "Miami Children's Museum"],
+             "nightlife": ["LIV at Fontainebleau", "Story Nightclub", "Mango's Tropical Cafe"],
+             "bestBreakfast": "Yardbird Southern Table & Bar, News Cafe",
+             "beaches": ["South Beach", "Mid Beach", "North Beach"],
+             "bestCoffeeShop": "Panther Coffee, Joe & The Juice",
+             "drugStores": ["CVS Pharmacy (multiple locations)", "Walgreens", "Publix Pharmacy"],
+             "tours": ["Art Deco Walking Tour (~$25)", "Miami Vice Boat Tour (~$40)"],
+             "parks": ["Lummus Park", "South Pointe Park"],
+             "fishingSpots": ["South Pointe Pier", "Miami Beach Marina"],
+             "horsebackRiding": "Tropical Trail Rides (~$75 per ride)",
+             "sportingEvents": "Check Miami Heat (basketball) or Miami Dolphins (football) schedules",
+             "groceryStores": ["Publix", "Whole Foods Market", "Fresh Market"],
+             "scenicRoutes": "Ocean Drive, Collins Avenue waterfront drive",
+             "hospital": "Mount Sinai Medical Center",
+             "nailSalon": "Tenoverten (Lincoln Road), Polish Bar"
+           }
+         }
+       ],
       "additionalInfo": {
         "cultureAdapter": [
           {
@@ -478,6 +594,11 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
       "utility": {
         "sources": ["TripAdvisor", "Lonely Planet", "Local Tourism Board"],
         "downloadPdfLink": "https://example.com/itinerary.pdf"
+      },
+      "customizationCallToAction": {
+        "title": "✨ Want to customize this trip?",
+        "message": "Would you like to:\n\n🗓️ Choose specific dates\n👫 Add more travelers\n📍 Change focus (family, nightlife, food, beaches)\n📤 Download or share with a friend or agent\n✏️ Customize the activities\n\nType what you'd like to do next!",
+        "quickReplies": ["Set specific dates", "Add travelers", "Focus on nightlife", "Download trip", "Customize activities"]
       }
     }
 
@@ -524,6 +645,19 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
       });
     }
 
+    // Check if this is the basic greeting asking for help planning a trip
+    const isBasicGreeting = message.toLowerCase().includes('can you help me plan') && 
+                          (!extractedInfo.destination && !extractedInfo.dates && !extractedInfo.budget);
+    
+    if (isBasicGreeting) {
+      console.log('Basic greeting detected, asking for destination...');
+      return new Response(JSON.stringify({
+        response: "Sure! Tell me where you want to go and I'll help you plan an amazing trip."
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     console.log('Making OpenRouter API request for message:', message);
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -532,7 +666,7 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
       body: JSON.stringify({
         model: 'anthropic/claude-3-haiku',
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: message }],
-        max_tokens: 8000,
+        max_tokens: 16000, // Increased from 8000 to handle longer itineraries
         temperature: 0.7,
       })
     });
@@ -555,46 +689,207 @@ ${allMessageHistory.slice(-10).map(msg => `${msg.role === 'user' ? 'User' : 'Kei
     const messageContent = aiJson.choices[0].message.content;
     console.log('AI message content length:', messageContent.length);
     
-    // Enhanced JSON parsing with better error handling
+    // Enhanced JSON parsing with retry logic
     let parsedJson;
+    let retryAttempt = 0;
+    const maxRetries = 2;
+    
+    const attemptParsing = async (attempt) => {
+      try {
+        // Clean up the response - remove any markdown code blocks
+        let cleanedContent = messageContent.trim();
+        if (cleanedContent.startsWith('```json')) {
+          cleanedContent = cleanedContent.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+        }
+        if (cleanedContent.startsWith('```')) {
+          cleanedContent = cleanedContent.replace(/^```\s*/, '').replace(/\s*```$/, '');
+        }
+        
+        // Remove any text before the first { and after the last }
+        const firstBrace = cleanedContent.indexOf('{');
+        const lastBrace = cleanedContent.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+          cleanedContent = cleanedContent.slice(firstBrace, lastBrace + 1);
+        }
+        
+        // Try to repair common JSON issues
+        cleanedContent = cleanedContent
+          .replace(/,(\s*[}\]])/g, '$1') // Remove trailing commas
+          .replace(/([{,]\s*)"([^"]+)"\s*:\s*"([^"]*)"([^",}]*)/g, (match, prefix, key, value, suffix) => {
+            // Fix unescaped quotes in values
+            const cleanValue = value.replace(/"/g, '\\"');
+            return `${prefix}"${key}": "${cleanValue}"${suffix}`;
+          });
+        
+        console.log(`Parsing attempt ${attempt + 1} - Content length:`, cleanedContent.length);
+        console.log('Cleaned content (first 500 chars):', cleanedContent.substring(0, 500));
+        
+        return JSON.parse(cleanedContent);
+        
+      } catch (parseError) {
+        console.error(`JSON parse error on attempt ${attempt + 1}:`, parseError.message);
+        
+        if (attempt < maxRetries - 1) {
+          console.log('Retrying with shorter prompt...');
+          // Retry with a shorter, more focused prompt if parsing fails
+          const shortPrompt = `Create a comprehensive travel itinerary for ${extractedInfo.destination || 'the specified destination'} using this exact JSON format. Ensure valid JSON syntax:
+          
+          ${hasEnoughInfo ? 'COMPREHENSIVE_ITINERARY_SCHEMA' : 'INTELLIGENT_QUESTIONING_SCHEMA'}`;
+          
+          const retryResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${openRouterApiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: 'anthropic/claude-3-haiku',
+              messages: [{ role: 'system', content: shortPrompt }, { role: 'user', content: `Plan a trip to ${extractedInfo.destination} with budget ${extractedInfo.budget} for ${extractedInfo.duration}` }],
+              max_tokens: 12000,
+              temperature: 0.3, // Lower temperature for more structured output
+            })
+          });
+          
+          if (retryResponse.ok) {
+            const retryJson = await retryResponse.json();
+            const retryContent = retryJson.choices[0]?.message?.content;
+            if (retryContent) {
+              return attemptParsing(attempt + 1, retryContent);
+            }
+          }
+        }
+        
+        throw parseError;
+      }
+    };
+    
     try {
-      // Clean up the response - remove any markdown code blocks
-      let cleanedContent = messageContent.trim();
-      if (cleanedContent.startsWith('```json')) {
-        cleanedContent = cleanedContent.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-      }
-      if (cleanedContent.startsWith('```')) {
-        cleanedContent = cleanedContent.replace(/^```\s*/, '').replace(/\s*```$/, '');
-      }
-      
-      // Try to find JSON boundaries if response has extra text
-      const firstBrace = cleanedContent.indexOf('{');
-      const lastBrace = cleanedContent.lastIndexOf('}');
-      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-        cleanedContent = cleanedContent.slice(firstBrace, lastBrace + 1);
-      }
-      
-      console.log('Cleaned AI content for parsing:', cleanedContent.substring(0, 500));
-      parsedJson = JSON.parse(cleanedContent);
-      
-    } catch (parseError) {
-      console.error('JSON parse error:', parseError.message);
+      parsedJson = await attemptParsing(0);
+    } catch (finalError) {
+      console.error('All parsing attempts failed:', finalError.message);
       console.error('Raw content (first 1000 chars):', messageContent.substring(0, 1000));
       
-      // If we have enough info but got bad JSON, force a simple response
-      if (hasEnoughInfo) {
+      // If we have enough info but got bad JSON, try to extract basic info and create a proper itinerary
+      if (hasEnoughInfo && (extractedInfo.destination || hasTripPlanningIntent)) {
+        console.log('Forcing itinerary generation due to sufficient info...');
+        
+        // Generate a comprehensive itinerary directly using the smart defaults
+        const destination = extractedInfo.destination || 'Your Destination';
+        const fallbackItinerary = {
+          itineraryId: `${destination.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+          tripTitle: `Amazing ${destination} Adventure`,
+          destinationCity: destination,
+          destinationCountry: 'TBD',
+          startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          endDate: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          numberOfTravelers: extractedInfo.travelers || 1,
+          travelStyle: 'adventure',
+          introductoryMessage: `Get ready for an incredible journey to ${destination}! Here's your personalized itinerary created just for you. ${extractedInfo.budget ? `Budget: ${extractedInfo.budget}.` : ''} ${extractedInfo.duration ? `Duration: ${extractedInfo.duration}.` : ''}`,
+          imageCollageUrls: [
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+            'https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800',
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800'
+          ],
+          bookingModules: {
+            flights: { 
+              title: 'Flight Options', 
+              items: [
+                {
+                  name: 'Round-trip Economy',
+                  price: extractedInfo.budget ? (parseInt(extractedInfo.budget.replace(/\D/g, '')) * 0.3).toFixed(0) + '$' : '$450',
+                  rating: 4.2,
+                  bookingLink: `https://www.expedia.com/Flights-Search?trip=roundtrip&leg1=from:ORIGIN,to:${destination}&passengers=adults:${extractedInfo.travelers || 1}&camref=1101l5dQSW`,
+                  description: 'Direct flights with major airline'
+                }
+              ]
+            },
+            accommodations: { 
+              title: 'Hotel Recommendations', 
+              items: [
+                {
+                  name: `Top-rated hotel in ${destination}`,
+                  price: extractedInfo.budget ? (parseInt(extractedInfo.budget.replace(/\D/g, '')) * 0.4).toFixed(0) + '$' : '$150/night',
+                  rating: 4.5,
+                  bookingLink: `https://www.expedia.com/Hotels-Search?destination=${destination}&camref=1101l5dQSW`,
+                  description: 'Centrally located with excellent amenities'
+                }
+              ]
+            }
+          },
+          dailyPlan: [
+            {
+              day: 1,
+              date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              theme: 'Arrival & Exploration',
+              description: `Welcome to ${destination}! Start your adventure with a gentle introduction to the city.`,
+              events: [
+                {
+                  startTime: '10:00',
+                  endTime: '12:00',
+                  title: 'Check-in & City Orientation',
+                  location: 'Hotel & City Center',
+                  description: `Check into your accommodation and take a walking tour of ${destination}'s main attractions.`,
+                  category: 'orientation',
+                  cost: 'Free',
+                  bookingInfo: null
+                },
+                {
+                  startTime: '14:00',
+                  endTime: '17:00',
+                  title: 'Local Cuisine Experience',
+                  location: 'Local Restaurant District',
+                  description: `Discover the authentic flavors of ${destination} with a food tour or recommended local restaurant.`,
+                  category: 'dining',
+                  cost: extractedInfo.budget ? `$${(parseInt(extractedInfo.budget.replace(/\D/g, '')) * 0.1).toFixed(0)}` : '$50',
+                  bookingInfo: null
+                }
+              ]
+            }
+          ],
+          additionalInfo: {
+            cultureAdapter: [
+              {
+                category: 'Local Customs',
+                title: 'Cultural Etiquette',
+                description: `Learn about local customs and traditions in ${destination} to enhance your travel experience.`,
+                tips: ['Respect local customs', 'Learn basic phrases', 'Dress appropriately for cultural sites']
+              }
+            ],
+            categoryBasedRecommendations: [
+              {
+                category: 'Must-See Attractions',
+                title: `Top Attractions in ${destination}`,
+                items: [
+                  {
+                    name: `${destination} Main Attraction`,
+                    description: 'The most iconic landmark you must visit',
+                    estimatedCost: 'Free - $30',
+                    recommendedDuration: '2-3 hours'
+                  }
+                ]
+              }
+            ]
+          },
+          utility: {
+            sources: ['AI Generated with Smart Defaults'],
+            downloadPdfLink: ''
+          },
+          customizationCallToAction: {
+            title: '✨ Customize Your Trip',
+            message: 'This itinerary was created with smart defaults. Tell me more about your preferences to make it perfect!',
+            quickReplies: ['Add more days', 'Change budget', 'Modify activities', 'Different dates']
+          }
+        };
+        
         return new Response(JSON.stringify({
-          response: `Great! I have all the details for your trip to ${extractedInfo.destination}. Let me create your detailed itinerary now. This may take a moment...`,
-          quickReplies: ["Show me the itinerary", "Modify preferences", "Start over"],
-          showMap: true,
-          mapLocation: extractedInfo.destination
+          isComprehensiveItinerary: true,
+          comprehensiveItinerary: fallbackItinerary,
+          response: `I've created a personalized itinerary for your ${destination} trip! Check it out below and let me know if you'd like to modify anything.`
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
       }
       
+      // Final fallback to questioning
       return new Response(JSON.stringify({
-        response: "I need a bit more information to plan your perfect trip. Could you tell me your destination, budget, and travel dates?",
+        response: "I'd love to help you plan your perfect trip! Let me ask a few questions to get started: Where would you like to go, when are you planning to travel, and what's your budget range?",
         quickReplies: ["📍 Choose destination", "💰 Set budget", "📅 Pick dates"],
         showMap: false
       }), {

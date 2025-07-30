@@ -15,35 +15,61 @@ class UserService {
       if (authError) throw authError;
       if (!user) return null;
 
+      // First try to get user data without profile join to avoid schema issues
       const { data: userData, error: userError } = await supabase
         .from('users')
-        .select(`
-          *,
-          profile:profiles(*)
-        `)
-        .eq('email', user.email)
-        .single();
+        .select('*')
+        .eq('id', user.id)
+        .maybeSingle();
 
       if (userError) {
-        // User doesn't exist in our users table yet, create them
-        const { data: newUser, error: createError } = await supabase
-          .from('users')
-          .insert({
-            id: user.id,
-            email: user.email!,
-            public_profile: true
-          })
-          .select()
-          .single();
-
-        if (createError) throw createError;
-        return newUser;
+        console.error('Error fetching user data:', userError);
+        return null;
       }
 
-      return {
-        ...userData,
-        profile: Array.isArray(userData.profile) ? userData.profile[0] : userData.profile
-      };
+      // If user doesn't exist, they will be created by the trigger
+      // Just return the basic user info
+      if (!userData) {
+        // Wait a moment for the trigger to create the user, then try again
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        const { data: retryData } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .maybeSingle();
+          
+        if (!retryData) {
+          // Return minimal user data if still not found
+          return {
+            id: user.id,
+            email: user.email!,
+            public_profile: true,
+            created_at: new Date().toISOString(),
+            age: null,
+            verified: false,
+            agoda_affiliate_id: null,
+            stripe_customer_id: null,
+            subscription_status: null,
+            bio: null,
+            location: null,
+            preferred_destinations: null,
+            travel_style: null,
+            interests: null,
+            languages_spoken: null,
+            profile_photo_url: null,
+            booking_affiliate_id: null,
+            expedia_affiliate_id: null,
+            hotels_affiliate_id: null,
+            kayak_affiliate_id: null,
+            priceline_affiliate_id: null
+          };
+        }
+        
+        return retryData;
+      }
+
+      return userData;
     } catch (error) {
       console.error('Error fetching current user:', error);
       return null;

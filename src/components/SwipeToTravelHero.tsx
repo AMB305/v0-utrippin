@@ -4,36 +4,33 @@ import { Plane, Share2, X, Hotel, Car, Brain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import UnifiedBookingSheet from '@/components/UnifiedBookingSheet';
+import { useVideoConfig } from '@/hooks/useVideoConfig';
 
 const SwipeToTravelHero = () => {
   const navigate = useNavigate();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [activeBookingType, setActiveBookingType] = useState('flights');
-
-  // Video URLs for background
-  const videoUrls = [
-    "https://utrippin.s3.us-east-2.amazonaws.com/famous-white-houses-in-fira-santorini-island-gree-2023-11-27-05-01-35-utc.mp4",
-    "https://utrippin.s3.us-east-2.amazonaws.com/herd-of-elephants-approaching-a-waterhole-bank-in-2025-04-25-17-59-46-utc.mp4",
-    "https://utrippin.s3.us-east-2.amazonaws.com/high-angle-footage-of-times-square-at-night-4k-2025-06-09-04-38-32-utc+(1).mp4",
-    "https://utrippin.s3.us-east-2.amazonaws.com/tropical-rainforest-sea-beach-serene-cloudy-sky-tr-2024-02-12-19-16-44-utc+(2).mp4"
-  ];
+  const { videos: videoUrls, loading: videosLoading } = useVideoConfig('mobile');
 
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
   // Video rotation effect
   useEffect(() => {
+    // Don't start interval until videos are loaded
+    if (videosLoading || videoUrls.length === 0) return;
+    
     const interval = setInterval(() => {
       setCurrentVideoIndex((prev) => (prev + 1) % videoUrls.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [videoUrls.length]);
+  }, [videoUrls.length, videosLoading]);
 
   const handleBookingClick = (type: string) => {
     setActiveBookingType(type);
     setSheetOpen(true);
   };
 
-  const handleFlightsClick = () => handleBookingClick('flights');
+  const handleFlightsClick = () => navigate('/flights');
 
   const handleShareClick = async () => {
     const shareData = {
@@ -60,8 +57,38 @@ const SwipeToTravelHero = () => {
   };
 
 
+  // Show loading state or don't render until videos are loaded
+  if (videosLoading || videoUrls.length === 0) {
+    return (
+      <div className="lg:hidden relative h-screen w-full overflow-hidden bg-black">
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-black/30" />
+
+        {/* Centered content */}
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="text-center text-white px-4 max-w-4xl mx-auto">
+            <h1 className="font-montserrat font-medium mb-8 leading-tight tracking-wide text-center" style={{ color: 'white', fontSize: '16pt' }}>
+              YOUR WORLD<br />
+              WITHIN REACH
+            </h1>
+            <button 
+              onClick={handleFlightsClick}
+              className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-6 py-2 text-xs font-medium tracking-widest uppercase transition-all duration-300"
+            >
+              Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="lg:hidden relative h-screen w-full overflow-hidden">
+    <div className="lg:hidden relative h-screen w-full overflow-hidden bg-black">
+      {/* Solid black background to prevent flashing */}
+      <div className="absolute inset-0 bg-black" />
+      
       {/* Video Background */}
       <div className="absolute inset-0">
         {videoUrls.map((url, index) => (
@@ -76,6 +103,13 @@ const SwipeToTravelHero = () => {
             loop
             playsInline
             preload="metadata"
+            onError={(e) => {
+              console.error(`❌ Mobile video failed to load: ${url}`);
+              console.log(`This is mobile video #${index + 1} in the rotation`);
+            }}
+            onLoadStart={() => {
+              console.log(`📱 Started loading mobile video #${index + 1}: ${url}`);
+            }}
           />
         ))}
       </div>
@@ -96,7 +130,7 @@ const SwipeToTravelHero = () => {
             onClick={handleFlightsClick}
             className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-6 py-2 text-xs font-medium tracking-widest uppercase transition-all duration-300"
           >
-            Book Flight Now
+            Book Now
           </button>
         </div>
       </div>

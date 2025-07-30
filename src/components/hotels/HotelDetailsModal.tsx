@@ -58,6 +58,11 @@ interface HotelDetailsModalProps {
   checkIn: string;
   checkOut: string;
   guests: string;
+  searchData?: {
+    rooms: number;
+    adults: number;
+    children: number;
+  };
 }
 
 const amenityIcons: { [key: string]: React.ComponentType<any> } = {
@@ -79,7 +84,8 @@ export function HotelDetailsModal({
   onBook, 
   checkIn, 
   checkOut, 
-  guests 
+  guests,
+  searchData
 }: HotelDetailsModalProps) {
   const [selectedImage, setSelectedImage] = useState(0);
 
@@ -209,11 +215,14 @@ export function HotelDetailsModal({
               </div>
             </div>
             <Button 
-              onClick={() => onBook(hotel)} 
+              onClick={() => {
+                console.log('🧪 HOTEL MODAL - Booking with searchData:', searchData);
+                onBook(hotel);
+              }} 
               className="w-full"
               size="lg"
             >
-              Continue to Booking
+              Continue to Booking {searchData && searchData.rooms > 1 ? `(${searchData.rooms} rooms)` : ''}
             </Button>
           </div>
         </div>

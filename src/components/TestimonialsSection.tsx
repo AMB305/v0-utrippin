@@ -1,6 +1,20 @@
 import React from 'react';
 
 const TestimonialsSection: React.FC = () => {
+  const handleGetInTouchClick = () => {
+    // Scroll to footer and focus email field
+    const footer = document.querySelector('footer');
+    if (footer) {
+      footer.scrollIntoView({ behavior: 'smooth' });
+      // Use a timeout to ensure the scroll completes before focusing
+      setTimeout(() => {
+        const emailInput = footer.querySelector('input[type="email"]') as HTMLInputElement;
+        if (emailInput) {
+          emailInput.focus();
+        }
+      }, 500);
+    }
+  };
   return (
     <section className="py-6 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -11,7 +25,10 @@ const TestimonialsSection: React.FC = () => {
         <p className="text-sm text-gray-600 mb-8">
           So let's begin. Let's do something remarkable.
         </p>
-        <button className="bg-black text-white px-6 py-2 text-xs font-medium tracking-wider hover:bg-gray-800 transition-colors">
+        <button 
+          onClick={handleGetInTouchClick}
+          className="bg-black text-white px-6 py-2 text-xs font-medium tracking-wider hover:bg-gray-800 transition-colors"
+        >
           GET IN TOUCH
         </button>
         

@@ -15,6 +15,7 @@ const AiTravel = () => {
   const { messages, sendMessage, resetSession, loading } = useChatAI();
   const hasStartedChat = messages.length > 0;
 
+
   console.log('[AiTravel Page] Rendering. State:', {
     isAuthLoading: authLoading,
     isUser: !!user,
@@ -34,6 +35,7 @@ const AiTravel = () => {
   const handleSendMessage = (message: string) => {
     sendMessage(message);
   };
+=
 
   const handleMobileSearch = (query: string) => {
     sendMessage(`I want to plan a trip to ${query}`);
@@ -60,7 +62,7 @@ const AiTravel = () => {
 
   const handleMobileChatStart = () => {
     if (!hasStartedChat) {
-      sendMessage("Hi Keila! I'd like to plan a trip. Can you help me?");
+      sendMessage("Keila, can you help me plan a trip?");
     }
   };
 
@@ -81,6 +83,9 @@ const AiTravel = () => {
           onCategorySelect={handleMobileCategorySelect}
           onDestinationClick={handleMobileDestinationClick}
           onChatStart={handleMobileChatStart}
+          onSendMessage={sendMessage}
+          messages={messages}
+          isLoading={loading}
         />
       </>
     );

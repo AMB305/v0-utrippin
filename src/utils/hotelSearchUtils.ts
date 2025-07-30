@@ -12,6 +12,12 @@ export interface HotelSearchParams {
   priceRange?: [number, number];
   amenities?: string[];
   hotelType?: string;
+  multiRoom?: {
+    rooms: Array<{
+      adults: number;
+      children: number[];
+    }>;
+  };
 }
 
 // Category to destination mapping for specific hotel types

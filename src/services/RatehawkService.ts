@@ -89,7 +89,7 @@ export class RatehawkService {
       
       const { data, error } = await supabase.functions.invoke('ratehawk-search-region', {
         body: {
-          hotel_id: params.region_id.toString(), // Convert region_id to hotel_id for hotel-based search
+          region_id: params.region_id.toString(), // Fixed: send region_id not hotel_id
           checkin: params.checkin,
           checkout: params.checkout,
           guests: params.guests,
@@ -104,7 +104,7 @@ export class RatehawkService {
         throw new Error(`Hotel search failed: ${error.message}`);
       }
 
-      if (!data || data.status !== 'ok') {
+      if (!data || data.status !== 'success') {
         throw new Error('Invalid response from hotel search');
       }
 
@@ -334,15 +334,9 @@ export class RatehawkService {
     console.log('🔍 Getting hotel info for:', hotelId);
     
     try {
-      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-page', {
+      const { data, error } = await supabase.functions.invoke('ratehawk-hotel-info', {
         body: {
-          checkin: '2025-07-25',
-          checkout: '2025-08-01',
-          hotel_id: hotelId,
-          guests: [{ adults: 2, children: [] }],
-          currency: 'USD',
-          language: 'en',
-          residency: 'us'
+          hotelId: hotelId
         }
       });
 
@@ -360,7 +354,10 @@ export class RatehawkService {
 
       // Handle the response structure - check if it's wrapped in status/data
       const hotel = data.status === 'ok' ? data.data : data;
-      console.log('✅ Processed hotel data:', hotel);
+      
+      // CRITICAL: Always ensure hotel ID is preserved from the original request
+      hotel.id = hotelId;
+      hotel.hid = hotelId;
       
       // Inject fallback policies if missing
       if (!hotel.policies) {

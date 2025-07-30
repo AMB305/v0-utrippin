@@ -13,11 +13,13 @@ import { CategoryRecommendations } from './CategoryRecommendations';
 interface ComprehensiveItineraryDisplayProps {
   itinerary: ComprehensiveItinerary;
   onBack?: () => void;
+  onQuickReply?: (reply: string) => void;
 }
 
 export const ComprehensiveItineraryDisplay: React.FC<ComprehensiveItineraryDisplayProps> = ({ 
   itinerary, 
-  onBack 
+  onBack,
+  onQuickReply
 }) => {
   const [isSaved, setIsSaved] = useState(false);
 
@@ -134,6 +136,37 @@ export const ComprehensiveItineraryDisplay: React.FC<ComprehensiveItineraryDispl
             <CategoryRecommendations 
               recommendations={itinerary.additionalInfo.categoryBasedRecommendations} 
             />
+          </div>
+        )}
+
+        {/* Customization Call-to-Action */}
+        {itinerary.customizationCallToAction && (
+          <div className="mb-8">
+            <div className="bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-lg p-6 border">
+              <h3 className="text-xl font-semibold mb-3 text-center">
+                {itinerary.customizationCallToAction.title}
+              </h3>
+              <div className="text-center mb-4 whitespace-pre-line">
+                {itinerary.customizationCallToAction.message}
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {itinerary.customizationCallToAction.quickReplies.map((reply, index) => (
+                  <Button 
+                    key={index} 
+                    variant="outline" 
+                    size="sm"
+                    className="hover:bg-primary hover:text-primary-foreground transition-colors"
+                    onClick={() => {
+                      if (onQuickReply) {
+                        onQuickReply(reply);
+                      }
+                    }}
+                  >
+                    {reply}
+                  </Button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 

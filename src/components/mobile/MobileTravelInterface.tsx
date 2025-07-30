@@ -13,23 +13,29 @@ interface MobileTravelInterfaceProps {
   onCategorySelect?: (category: string) => void;
   onDestinationClick?: (destination: string) => void;
   onChatStart?: () => void;
+  onSendMessage?: (message: string) => void;
+  messages?: any[];
+  isLoading?: boolean;
 }
 
 export const MobileTravelInterface: React.FC<MobileTravelInterfaceProps> = ({
   onSearch,
   onCategorySelect,
   onDestinationClick,
-  onChatStart
+  onChatStart,
+  onSendMessage,
+  messages,
+  isLoading
 }) => {
   return (
-    <div className="min-h-screen bg-mobile-dark relative">
+    <div className="min-h-screen min-h-[100dvh] bg-mobile-dark relative w-full overflow-x-hidden">
       {/* Search Header */}
-      <div className="bg-mobile-dark pt-safe-top px-4 pb-4">
+      <div className="bg-mobile-dark pt-safe-top px-4 pb-4 w-full">
         <TravelSearchBar onSearch={onSearch} />
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto pb-32">
+      <div className="flex-1 overflow-y-auto pb-32 w-full">
         {/* Travel Categories */}
         <TravelCategoriesGrid onCategorySelect={onCategorySelect} />
         
@@ -50,7 +56,13 @@ export const MobileTravelInterface: React.FC<MobileTravelInterfaceProps> = ({
       <MobileTravelNavigation />
 
       {/* Keila Chat Bot - Bottom Right */}
-      <KeilaChatBot onChatStart={onChatStart} />
+      <KeilaChatBot 
+        onChatStart={onChatStart}
+        onSendMessage={onSendMessage}
+        messages={messages}
+        isLoading={isLoading}
+        onQuickReply={onSendMessage}
+      />
     </div>
   );
 };

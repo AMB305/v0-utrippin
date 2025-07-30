@@ -19,11 +19,13 @@ export default function HeroCarWidget() {
   useEffect(() => {
     // Auto-fill default dates
     const today = new Date();
-    const nextWeek = new Date(today);
-    nextWeek.setDate(today.getDate() + 7);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const threeDaysLater = new Date(tomorrow);
+    threeDaysLater.setDate(tomorrow.getDate() + 3);
     
-    setPickupDate(today.toISOString().split('T')[0]);
-    setDropoffDate(nextWeek.toISOString().split('T')[0]);
+    setPickupDate(tomorrow.toISOString().split('T')[0]);
+    setDropoffDate(threeDaysLater.toISOString().split('T')[0]);
 
     // Close dropdown when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
@@ -53,11 +55,32 @@ export default function HeroCarWidget() {
       });
     }
 
-    // Build car rental search URL
-    const finalDropoff = differentDropoff ? dropoffLocation : pickupLocation;
-    const carUrl = `https://www.expedia.com/Cars-Search?locn=${encodeURIComponent(pickupLocation)}&date1=${pickupDate}&time1=${pickupTime}&date2=${dropoffDate}&time2=${dropoffTime}&locn2=${encodeURIComponent(finalDropoff)}&age=${driverAge}`;
-    const finalUrl = `https://www.dpbolvw.net/click-101486313-15754452?url=${encodeURIComponent(carUrl)}`;
-    window.open(finalUrl, '_blank');
+    // Build new Expedia affiliate URL with all required parameters
+    const url = new URL('https://www.expedia.com/Car-Search');
+    url.searchParams.set('locn', pickupLocation);
+    url.searchParams.set('startDate', pickupDate);
+    url.searchParams.set('startTime', pickupTime);
+    url.searchParams.set('endDate', dropoffDate);
+    url.searchParams.set('endTime', dropoffTime);
+    url.searchParams.set('age', driverAge);
+    
+    // Add different drop-off location if selected
+    if (differentDropoff && dropoffLocation) {
+      url.searchParams.set('dropLocn', dropoffLocation);
+    }
+    
+    // Add all required affiliate parameters
+    url.searchParams.set('partnerref', '1100lBkVXSGk');
+    url.searchParams.set('siteid', '1');
+    url.searchParams.set('langid', '1033');
+    url.searchParams.set('clickref', '1100lBkVXSGk');
+    url.searchParams.set('affcid', 'US.DIRECT.PHG.1100l402697.1100l68075');
+    url.searchParams.set('ref_id', '1100lBkVXSGk');
+    url.searchParams.set('my_ad', 'AFF.US.DIRECT.PHG.1100l402697.1100l68075');
+    url.searchParams.set('afflid', '1100lBkVXSGk');
+    url.searchParams.set('affdtl', 'PHG.1100lBkVXSGk.PZNccLk9hR');
+
+    window.location.href = url.toString();
   };
 
   const ageRanges = [
@@ -212,7 +235,7 @@ export default function HeroCarWidget() {
               {/* Search Button */}
               <button 
                 type="submit"
-                className="bg-teal-500 hover:bg-teal-600 text-white font-bold px-8 py-4 text-base transition-colors duration-200 rounded-r-full"
+                className="bg-[#00ccb8] hover:bg-[#00b2a3] text-white font-semibold px-6 py-2 text-base transition-colors duration-200 rounded-r-full flex items-center justify-center h-full"
               >
                 SEARCH
               </button>

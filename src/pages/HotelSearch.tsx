@@ -111,9 +111,18 @@ export default function HotelSearch() {
     setLoading(true);
 
     try {
-      // Get hotel details
+      // Get hotel details and preserve original hotel data
       const details = await RatehawkService.getHotelInfo(hotel.id);
-      setHotelDetails(details);
+      // Ensure the details object has the hotel ID from the original search result
+      const hotelDetailsWithId = {
+        ...details,
+        id: details.id || hotel.id,
+        hid: details.hid || hotel.hid || hotel.id,
+        // Preserve other essential fields from original search result
+        name: details.name || hotel.name,
+        star_rating: details.star_rating || hotel.star_rating
+      };
+      setHotelDetails(hotelDetailsWithId);
       setCurrentStep('details');
     } catch (error) {
       console.error('Failed to load hotel details:', error);
@@ -128,29 +137,51 @@ export default function HotelSearch() {
   };
 
   const handleBookHotel = async (hotel: any) => {
-    setLoading(true);
+    console.log('🏨 Starting booking process for hotel:', hotel);
+    
+    // Ensure we have a valid hotel ID - use multiple fallbacks
+    const hotelId = hotel?.id || hotel?.hid || selectedHotel?.id || selectedHotel?.hid;
+    
+    console.log('🔍 Hotel ID resolution:', {
+      'hotel.id': hotel?.id,
+      'hotel.hid': hotel?.hid,
+      'selectedHotel.id': selectedHotel?.id,
+      'selectedHotel.hid': selectedHotel?.hid,
+      'finalHotelId': hotelId
+    });
+    
+    if (!hotelId) {
+      console.error('❌ No valid hotel ID found for booking');
+      toast({
+        title: "Error",
+        description: "Unable to find hotel information for booking",
+        variant: "destructive"
+      });
+      return;
+    }
     
     try {
-      // Prebook the hotel
-      const prebook = await RatehawkService.prebookHotel({
-        hotelId: hotel.id,
-        checkIn: searchData.checkInDate,
-        checkOut: searchData.checkOutDate,
-        adults: searchData.adults,
-        children: []
+      // Navigate to the hotel booking page with proper parameters
+      const params = new URLSearchParams({
+        destination: searchData.destination,
+        checkInDate: searchData.checkInDate,
+        checkOutDate: searchData.checkOutDate,
+        adults: searchData.adults.toString(),
+        children: searchData.children.toString(),
+        rooms: searchData.rooms.toString(),
+        hotelId: hotelId
       });
-
-      setPrebookData(prebook);
-      setCurrentStep('booking');
+      
+      console.log('🚀 Navigating to booking with params:', Object.fromEntries(params.entries()));
+      
+      window.location.href = `/hotels/booking?${params.toString()}`;
     } catch (error) {
-      console.error('Prebook error:', error);
+      console.error('❌ Failed to navigate to booking:', error);
       toast({
-        title: "Booking Error", 
-        description: "Unable to proceed with booking. Please try again.",
-        variant: "destructive",
+        title: "Error",
+        description: "Failed to navigate to booking page",
+        variant: "destructive"
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -316,6 +347,7 @@ export default function HotelSearch() {
             checkIn={searchData.checkInDate}
             checkOut={searchData.checkOutDate}
             guests={`${searchData.adults + searchData.children} guests, ${searchData.rooms} room${searchData.rooms > 1 ? 's' : ''}`}
+            searchData={searchData}
           />
         );
 
@@ -333,6 +365,7 @@ export default function HotelSearch() {
         return (
           <BookingConfirmation
             booking={bookingData}
+            hotel={hotelDetails}
             onNewSearch={handleNewSearch}
           />
         );
@@ -370,6 +403,7 @@ export default function HotelSearch() {
             checkIn={searchData.checkInDate}
             checkOut={searchData.checkOutDate}
             guests={`${searchData.adults + searchData.children} guests, ${searchData.rooms} room${searchData.rooms > 1 ? 's' : ''}`}
+            searchData={searchData}
           />
         )}
 
@@ -385,6 +419,7 @@ export default function HotelSearch() {
         {currentStep === 'confirmation' && (
           <BookingConfirmation
             booking={bookingData}
+            hotel={hotelDetails}
             onNewSearch={handleNewSearch}
           />
         )}

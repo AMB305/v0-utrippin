@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { MapPin, Calendar, Users, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { DateRangePicker } from '@/components/hotels/DateRangePicker';
+import { GuestRoomSelector } from '@/components/hotels/GuestRoomSelector';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 
@@ -13,17 +15,26 @@ export function SearchWidget({ onSearch }: SearchWidgetProps) {
   const navigate = useNavigate();
   const [destination, setDestination] = useState('');
   const [activePropertyType, setActivePropertyType] = useState('Hotel');
+  const [dateRange, setDateRange] = useState({
+    checkIn: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    checkOut: new Date(Date.now() + 9 * 24 * 60 * 60 * 1000)
+  });
+  const [guestConfig, setGuestConfig] = useState({
+    adults: 2,
+    children: [],
+    rooms: 1
+  });
   
   const propertyTypes = ['Hotel', 'Villa', 'House', 'Apartment'];
   
   const handleSearch = () => {
     const searchData = {
       destination,
-      checkInDate: format(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
-      checkOutDate: format(new Date(Date.now() + 9 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
-      adults: '2',
-      children: '0',
-      rooms: '1'
+      checkInDate: dateRange.checkIn?.toISOString().split('T')[0] || format(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
+      checkOutDate: dateRange.checkOut?.toISOString().split('T')[0] || format(new Date(Date.now() + 9 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
+      adults: guestConfig.adults.toString(),
+      children: guestConfig.children.length.toString(),
+      rooms: guestConfig.rooms.toString()
     };
     
     if (destination) {
@@ -64,25 +75,21 @@ export function SearchWidget({ onSearch }: SearchWidgetProps) {
         />
       </div>
 
-      {/* Quick Action Buttons */}
-      <div className="grid grid-cols-3 gap-3 mb-4">
-        <Button 
-          variant="outline" 
-          className="bg-mobile-dark-grey border-mobile-border-color text-mobile-text-primary hover:bg-mobile-primary-teal/20"
-        >
-          <Calendar className="w-4 h-4 mr-2" />
-          Select Date
-        </Button>
-        <Button 
-          variant="outline"
-          className="bg-mobile-dark-grey border-mobile-border-color text-mobile-text-primary hover:bg-mobile-primary-teal/20"
-        >
-          <Users className="w-4 h-4 mr-2" />
-          Add guest
-        </Button>
+      {/* Date and Guest Selection */}
+      <div className="space-y-3 mb-4">
+        <DateRangePicker
+          value={dateRange}
+          onChange={setDateRange}
+          className="w-full bg-mobile-dark-grey border-mobile-border-color text-mobile-text-primary"
+        />
+        <GuestRoomSelector
+          value={guestConfig}
+          onChange={setGuestConfig}
+          className="w-full bg-mobile-dark-grey border-mobile-border-color text-mobile-text-primary"
+        />
         <Button 
           variant="outline"
-          className="bg-mobile-dark-grey border-mobile-border-color text-mobile-text-primary hover:bg-mobile-primary-teal/20"
+          className="w-full bg-mobile-dark-grey border-mobile-border-color text-mobile-text-primary hover:bg-mobile-primary-teal/20"
         >
           <Play className="w-4 h-4 mr-2" />
           Take a tour
