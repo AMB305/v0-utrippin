@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { User, Sparkles, Paperclip, ArrowUp, Map, Compass } from "lucide-react";
+import { User, Sparkles, Paperclip, ArrowUp, Map, Compass, Star, Plane, MapPin } from "lucide-react";
 
 // This reusable component is simple and correct. No changes needed here.
 const ChatMessage = ({ message }) => {
-  const { text = "", isUser = false } = message;
+  const { text = "", isUser = false, children } = message;
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
-    if (!isUser) {
+    if (!isUser && text) {
       const words = text.split(" ");
       let currentWordIndex = 0;
       setDisplayedText(""); // Clear previous text
@@ -31,14 +31,14 @@ const ChatMessage = ({ message }) => {
     }
   }, [text, isUser]);
 
-  const wrapperClasses = ` w-[100%] flex items-end gap-3 my-4 ${
+  const wrapperClasses = `flex items-end gap-3 my-4 ${
     isUser ? "justify-end" : "justify-start"
   }`;
 
   const bubbleClasses = isUser
     ? "bg-blue-600 text-white rounded-2xl rounded-br-none" // User bubble
-    : "w-[100%] text-gray-200 rounded-2xl rounded-bl-none"; // AI bubble
-
+    : " text-gray-200 rounded-2xl rounded-bl-none"; // AI bubble
+  
   const UserAvatar = () => (
     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center shadow-lg">
       <User className="text-white" />
@@ -55,17 +55,152 @@ const ChatMessage = ({ message }) => {
     <div className={wrapperClasses}>
       {/* Show AI avatar on the left, user avatar on the right */}
       {!isUser && <AiAvatar />}
-      <div
-        className={`max-w-2xl px-4 text-white py-3 shadow-md ${bubbleClasses}`}
-      >
-        <p className="whitespace-pre-wrap text-white font-white">
-          {displayedText} 
-        </p>
+      
+      <div className={` px-4 text-white py-3 shadow-md ${bubbleClasses}`}>
+      {!isUser && <FlightDetails />  }
+    {  !isUser && <HotelDetails />  }
+        {text && <p className="whitespace-pre-wrap text-white font-white">
+          
+          { displayedText}</p>}
+        {children}
       </div>
       {isUser && <UserAvatar />}
     </div>
   );
 };
+
+// --- NEW COMPONENT: Flight Details ---
+const FlightDetails = () => (
+  <div className="mt-4">
+    <div className="flex justify-between items-center mb-3">
+      <h3 className="text-lg font-bold text-gray-100">How to get there</h3>
+      <div className="flex items-center gap-2 text-sm text-gray-400">
+        <span>Fastest</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-70"><path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+      </div>
+    </div>
+
+    {/* Flight Option 1 */}
+    <div className="bg-[#0D1117] rounded-lg p-4 mb-3 border border-gray-700">
+      <div className="flex justify-between items-start">
+        <div className="flex items-center gap-3">
+          <img src="https://ai-travel-planner-smoky.vercel.app/images/american-airlines.svg" alt="American Airlines" className="w-6 h-6 bg-white p-0.5 rounded-sm"/>
+          <span className="text-sm font-semibold text-gray-300">American Airlines</span>
+          <span className="text-xs bg-gray-600 text-gray-200 px-2 py-0.5 rounded">ADS</span>
+        </div>
+        <span className="text-xl font-bold text-white">$449</span>
+      </div>
+      <div className="flex justify-between items-center mt-3 text-center">
+        <div>
+          <p className="text-lg font-semibold">JFK</p>
+          <p className="text-sm text-gray-400">New York</p>
+          <p className="text-xs text-gray-500 mt-1">11 May - 20:00</p>
+        </div>
+        <div className="flex-1 text-center px-4">
+          <p className="text-xs text-gray-400">5h 50</p>
+          <div className="w-full h-px bg-gray-600 my-1 relative">
+             <Plane size={16} className="absolute right-1/2 top-1/2 -translate-y-1/2 translate-x-1/2 text-gray-400 bg-[#0D1117] px-1" />
+          </div>
+          <p className="text-xs text-green-400">Direct</p>
+        </div>
+        <div>
+          <p className="text-lg font-semibold">LAX</p>
+          <p className="text-sm text-gray-400">Los Angeles</p>
+          <p className="text-xs text-gray-500 mt-1">12 May - 01:50</p>
+        </div>
+      </div>
+    </div>
+    
+    {/* Flight Option 2 */}
+    <div className="bg-[#0D1117] rounded-lg p-4 border border-gray-700">
+       <div className="flex justify-between items-start">
+         <div className="flex items-center gap-3">
+           <img src="https://ai-travel-planner-smoky.vercel.app/images/swiss-airlines.svg" alt="Swiss Airlines" className="w-6 h-6 bg-white p-0.5 rounded-sm"/>
+           <span className="text-sm font-semibold text-gray-300">Swiss</span>
+         </div>
+        <span className="text-xl font-bold text-white">$489</span>
+      </div>
+      <div className="flex justify-between items-center mt-3 text-center">
+        <div>
+          <p className="text-lg font-semibold">JFK</p>
+          <p className="text-sm text-gray-400">New York</p>
+          <p className="text-xs text-gray-500 mt-1">11 May - 21:10</p>
+        </div>
+        <div className="flex-1 text-center px-4">
+          <p className="text-xs text-gray-400">7h 50</p>
+          <div className="w-full h-px bg-gray-600 my-1 relative">
+             <Plane size={16} className="absolute right-1/2 top-1/2 -translate-y-1/2 translate-x-1/2 text-gray-400 bg-[#0D1117] px-1" />
+          </div>
+          <p className="text-xs text-gray-400">1 stop</p>
+        </div>
+        <div>
+          <p className="text-lg font-semibold">BCN</p>
+          <p className="text-sm text-gray-400">Barcelona-El Prat</p>
+          <p className="text-xs text-gray-500 mt-1">12 May - 04:50</p>
+        </div>
+      </div>
+    </div>
+    <p className="text-right text-xs text-gray-500 mt-2">Powered by Skyscanner</p>
+  </div>
+);
+
+// --- NEW COMPONENT: Hotel Details ---
+const HotelDetails = () => (
+  <div className="mt-6">
+    <div className="flex justify-between items-center mb-3">
+      <h3 className="text-lg font-bold text-gray-100">Where to stay</h3>
+      <div className="flex items-center gap-2 text-sm text-gray-400">
+        <span>Cheapest</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-70"><path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+      </div>
+    </div>
+
+    <div className="bg-[#0D1117] rounded-lg border border-gray-700 overflow-hidden flex flex-col md:flex-row">
+      <div className="md:w-1/3 relative">
+        <img src="https://ai-travel-planner-smoky.vercel.app/images/hotel-1.jpg" alt="Catalonia Atenas" className="w-full h-full object-cover"/>
+        <button className="absolute top-2 right-2 bg-black/50 p-1.5 rounded-full text-white hover:text-red-500 transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </button>
+      </div>
+      <div className="p-4 flex-1 flex flex-col">
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h4 className="text-xl font-bold text-white">Catalonia Atenas</h4>
+            <div className="flex text-yellow-400">
+              {[...Array(4)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+              <Star size={16} />
+            </div>
+          </div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="px-2 py-1 bg-blue-600 text-white font-bold text-xs rounded">4.8/5</span>
+            <span className="text-sm text-gray-300">Very Good</span>
+            <span className="text-sm text-gray-400">(167 reviews)</span>
+          </div>
+          <div className="flex items-center gap-2 mt-2 text-gray-400">
+            <MapPin size={14}/>
+            <span className="text-sm">Near Sagrada Familia</span>
+          </div>
+          <p className="text-sm text-gray-300 mt-3">Double Room or Twin Room</p>
+          <p className="text-sm text-gray-400">Breakfast included • <span className="text-green-400">Free cancellation</span></p>
+        </div>
+        <div className="mt-4 flex justify-between items-end">
+          <div>
+             <span className="text-sm bg-purple-600 text-white px-2 py-1 rounded-md">Special Discount</span>
+             <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-gray-500 line-through text-xl">$72</span>
+                <span className="text-white font-bold text-3xl">$48</span>
+             </div>
+             <p className="text-xs text-gray-400">Total price: $240</p>
+          </div>
+          <button className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-500 transition-colors flex items-center gap-2">
+            Check Availability <ArrowUp size={16} className="transform rotate-45"/>
+          </button>
+        </div>
+      </div>
+    </div>
+     <p className="text-right text-xs text-gray-500 mt-2">Powered by Booking.com</p>
+  </div>
+);
 
 
 const DesktopTravelPlanner = ({
@@ -128,23 +263,24 @@ const DesktopTravelPlanner = ({
     </div>
   );
 
-  // --- THIS IS THE MAJOR FIX ---
-  // The ChatView is rewritten to handle the new message structure.
   const ChatView = () => (
     <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6">
+      {/* --- ADDED FLIGHT AND HOTEL SECTIONS --- */}
+      <ChatMessage message={{ isUser: false }}>
+          
+          <HotelDetails />
+      </ChatMessage>
+      
       {console.log('[DesktopTravelPlanner] Now mapping through chat message pairs...')}
       {chatMessages.map((messagePair) => (
-        // Use a React Fragment to group the question and its corresponding answer
         <React.Fragment key={messagePair.id}>
-          {/* --- 1. Render the User's Question --- */}
           {messagePair.question && (
             <ChatMessage message={{ text: messagePair.question, isUser: true }} />
           )}
 
-          {/* --- 2. Render the AI's Response OR a Loading Indicator --- */}
           {messagePair.loading ? (
-            // Show a "typing..." indicator if this specific pair is loading
             <div className="flex items-start gap-3 my-4 justify-start">
+             
               <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 via-purple-500 to-blue-500 flex items-center justify-center shadow-lg">
                 <Sparkles className="text-white" />
               </div>
@@ -157,7 +293,6 @@ const DesktopTravelPlanner = ({
               </div>
             </div>
           ) : (
-            // If not loading, and a response exists, render it
             messagePair.response && (
               <ChatMessage message={{ text: messagePair.response, isUser: false }} />
             )
@@ -228,6 +363,7 @@ const DesktopTravelPlanner = ({
             <p className="text-xs text-center text-gray-600 mt-2">
               U-Trippin may produce inaccurate information. Verify important details.
             </p>
+            
           </div>
         </div>
       </main>
