@@ -1,0 +1,6 @@
+-- Add some nightlife destinations to test the filtering
+INSERT INTO destinations (name, description, category, price, per, img, country, slug) VALUES
+('Las Vegas', 'Entertainment capital with spectacular shows, casinos, and world-famous nightlife on the Strip', 'Nightlife', 250, 'night', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', 'USA', 'las-vegas'),
+('Miami Beach', 'Vibrant beach city with world-class nightlife, art deco architecture, and South Beach party scene', 'Nightlife', 180, 'night', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', 'USA', 'miami-beach'),
+('Ibiza', 'Global party destination with legendary clubs, beach parties, and electronic music scene', 'Nightlife', 200, 'night', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', 'Spain', 'ibiza'),
+('Bangkok Nightlife', 'Vibrant nightlife scene with rooftop bars, night markets, and entertainment districts', 'Nightlife', 60, 'night', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', 'Thailand', 'bangkok-nightlife');
