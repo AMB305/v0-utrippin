@@ -62,14 +62,35 @@ export const useHereAutocomplete = (setValue: (value: string) => void) => {
         const query = target.value;
         if (query.length < 3) return;
         
-        service.autosuggest({ q: query, at: "0,0" }, (result: any) => {
+        service.autosuggest({ 
+          q: query, 
+          at: "0,0",
+          limit: 5,
+          resultTypes: ["place", "airport"],
+          categories: "airport"
+        }, (result: any) => {
           if (result.items && result.items.length > 0) {
-            const first = result.items[0];
-            const code = first.id?.split("::")?.pop()?.toUpperCase();
-            if (first.resultType === "place" && code?.length === 3) {
-              setValue(code);
+            // Prioritize airport results
+            const airport = result.items.find((item: any) => 
+              item.resultType === "place" && item.id?.includes("airport")
+            );
+            
+            if (airport) {
+              const code = airport.id?.split("::")?.pop()?.toUpperCase();
+              if (code?.length === 3) {
+                setValue(code);
+              } else {
+                setValue(airport.title || airport.address?.label);
+              }
             } else {
-              setValue(first.address?.label || first.title);
+              // Fallback to first result
+              const first = result.items[0];
+              const code = first.id?.split("::")?.pop()?.toUpperCase();
+              if (first.resultType === "place" && code?.length === 3) {
+                setValue(code);
+              } else {
+                setValue(first.address?.label || first.title);
+              }
             }
           }
         });
