@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Building2, Church, Globe, Trees, Waves, Mountain, ShoppingBag, Utensils, Music, Sparkles, Castle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Building2, Church, Globe, Trees, Waves, Mountain, ShoppingBag, Utensils, Music, Sparkles, Castle, Trophy, Heart, MoonStar, Tent, Wine, Gem, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const categories = [
@@ -13,9 +13,14 @@ const categories = [
   { id: 'shopping', name: 'Shopping', icon: ShoppingBag },
   { id: 'beaches', name: 'Beaches', icon: Waves },
   { id: 'mountains', name: 'Mountains', icon: Mountain },
-  { id: 'outdoors', name: 'Outdoors', icon: Trees },
-  { id: 'nightlife', name: 'Nightlife', icon: Sparkles },
-  { id: 'luxury', name: 'Luxury', icon: Sparkles },
+  { id: 'outdoors', name: 'Outdoors', icon: Tent },
+  { id: 'nightlife', name: 'Nightlife', icon: Wine },
+  { id: 'luxury', name: 'Luxury', icon: Gem },
+  { id: 'romance', name: 'Romance', icon: Heart },
+  { id: 'nightskies', name: 'NightSkies', icon: MoonStar },
+  { id: 'sports', name: 'Sports', icon: Trophy },
+  { id: 'offbeat', name: 'Offbeat', icon: Compass },
+  { id: 'melanin-compass', name: 'Melanin Compass', icon: Compass },
 ];
 
 interface CategoryCarouselProps {

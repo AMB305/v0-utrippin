@@ -7,7 +7,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useDestinations, type Destination } from "@/hooks/useDestinations";
 import { SEOHead } from "@/components/SEOHead";
 import LoginCard from "@/components/LoginCard";
-import UtrippinLogo from "@/components/UtrippinLogo";
+import keilaCompassIcon from "@/assets/keila-compass-icon.png";
 import { FiltersSidebar } from "@/components/FiltersSidebar";
 import { CategoryCarousel } from "@/components/CategoryCarousel";
 import { TravelHeader } from "@/components/TravelHeader";
@@ -47,9 +47,7 @@ const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, res
         {/* Modal Header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-800 flex items-center">
-            <div className="mr-2 scale-50 origin-left">
-              <UtrippinLogo />
-            </div>
+            <img src={keilaCompassIcon} alt="Keila Icon" className="w-7 h-7 mr-2 rounded-full"/>
             Keila AI Assistant
           </h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">
@@ -144,7 +142,7 @@ const KeilaMiniChat = ({ onOpenChat, onSendMessage, messages, isLoading }) => {
     return (
         <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-80">
             <div className="scale-75 cursor-pointer animate-bounce" onClick={onOpenChat}>
-                <UtrippinLogo />
+                <img src={keilaCompassIcon} alt="Keila AI" className="w-8 h-8 rounded-full" />
             </div>
             <div className="flex-grow">
                 <p className="text-xs text-gray-600 truncate cursor-pointer mb-1" onClick={onOpenChat}>
@@ -298,9 +296,8 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                     onClick={() => { onStartNewTrip(); setIsKeilaChatOpen(true); }}
                     className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out flex items-center"
                 >
-                    <div className="scale-50 mr-1">
-                        <UtrippinLogo />
-                    </div>
+                    <img src={keilaCompassIcon} alt="Keila Icon" className="w-6 h-6 mr-2 rounded-full"/>
+                    Start New Trip
                     Start New Trip
                 </button>
             </header>
@@ -483,9 +480,7 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                 <aside className="w-96 bg-white shadow-md flex-shrink-0 flex flex-col">
                     <div className="p-4 border-b border-gray-200">
                         <h3 className="text-xl font-bold text-gray-800 flex items-center">
-                            <div className="mr-2 scale-50 origin-left">
-                                <UtrippinLogo />
-                            </div>
+                            <img src={keilaCompassIcon} alt="Keila Icon" className="w-8 h-8 mr-2 rounded-full"/>
                             Keila AI Chat
                         </h3>
                     </div>
@@ -909,9 +904,12 @@ const AiTravel = () => {
       {/* Keila Chat Bubble */}
       {!isKeilaChatOpen && (
         <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-80">
-          <div className="scale-75 cursor-pointer animate-bounce" onClick={() => setIsKeilaChatOpen(true)}>
-            <UtrippinLogo />
-          </div>
+          <img 
+            src={keilaCompassIcon} 
+            alt="Keila Icon" 
+            className="w-10 h-10 rounded-full cursor-pointer animate-bounce" 
+            onClick={() => setIsKeilaChatOpen(true)}
+          />
           <div className="flex-1">
             <p className="text-sm font-medium text-gray-800">Keila AI Assistant</p>
             <p className="text-xs text-gray-600 truncate">
