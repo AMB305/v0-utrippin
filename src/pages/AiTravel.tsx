@@ -8,10 +8,13 @@ import { useDestinations, type Destination } from "@/hooks/useDestinations";
 import { SEOHead } from "@/components/SEOHead";
 import LoginCard from "@/components/LoginCard";
 import keilaCompassIcon from "@/assets/keila-compass-icon.png";
+import UtrippinLogo from "@/components/UtrippinLogo";
 import { FiltersSidebar } from "@/components/FiltersSidebar";
 import { CategoryCarousel } from "@/components/CategoryCarousel";
 import { TravelHeader } from "@/components/TravelHeader";
 import { DestinationGrid } from "@/components/DestinationGrid";
+import { AnimatedKeila } from "@/components/AnimatedKeila";
+import { SimpleChatInput } from "@/components/SimpleChatInput";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -875,15 +878,39 @@ const AiTravel = () => {
               onCategorySelect={setSelectedCategory}
             />
             
-            {/* Destinations Grid */}
+            {/* Destinations Grid or Welcome Content */}
             <div className="flex-1 overflow-y-auto">
-              <DestinationGrid 
-                destinations={filteredDestinations}
-                onDestinationClick={(destination) => {
-                  setIsKeilaChatOpen(true);
-                  sendMessage(`I'm interested in visiting ${destination.name}. Can you help me plan a trip there?`);
-                }}
-              />
+              {hasStartedChat ? (
+                <DestinationGrid 
+                  destinations={filteredDestinations}
+                  onDestinationClick={(destination) => {
+                    setIsKeilaChatOpen(true);
+                    sendMessage(`I'm interested in visiting ${destination.name}. Can you help me plan a trip there?`);
+                  }}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full p-8">
+                  {/* Welcome Section */}
+                  <div className="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto text-center">
+                    <div className="mb-6">
+                      <UtrippinLogo />
+                    </div>
+                    <AnimatedKeila />
+                    <h1 className="text-3xl font-bold mt-4 text-gray-900">Hi, I'm Keila!</h1>
+                    <p className="text-gray-600 mt-2 mb-8">Select a category above to start planning your trip, or ask me anything!</p>
+                    
+                    {/* Chat Input */}
+                    <SimpleChatInput
+                      onSendMessage={(message) => {
+                        sendMessage(message);
+                        setIsKeilaChatOpen(true);
+                      }}
+                      placeholder="Ask me to plan your next adventure..."
+                      isLoading={loading}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
