@@ -53,15 +53,15 @@ serve(async (req) => {
         p_provider: 'here',
         p_endpoint: 'autocomplete',
         p_usage_count: 1,
-        p_metadata: { query: query.substring(0, 100), action: 'autocomplete' }
+        p_metadata: { query: query.substring(0, 100), action: 'autosuggest' }
       })
     } catch (trackError) {
       console.error('Error tracking API usage:', trackError)
       // Continue with the request even if tracking fails
     }
 
-    // Call HERE Autocomplete API (more cost-effective than Autosuggest)
-    const hereUrl = `https://autocomplete.search.hereapi.com/v1/autocomplete?at=40.7128,-74.0060&q=${encodeURIComponent(query)}&apiKey=${hereApiKey}`;
+    // Call HERE Geocoding and Search API
+    const hereUrl = `https://autosuggest.search.hereapi.com/v1/autosuggest?at=40.7128,-74.0060&q=${encodeURIComponent(query)}&apiKey=${hereApiKey}`;
     
     const hereRes = await fetch(hereUrl);
 

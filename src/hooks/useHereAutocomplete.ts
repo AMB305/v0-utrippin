@@ -1,61 +1,111 @@
 import { useRef, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+
+declare global {
+  interface Window {
+    H: any;
+  }
+}
 
 export const useHereAutocomplete = (setValue: (value: string) => void) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!inputRef.current) return;
+    const loadHereScripts = async () => {
+      // Check if HERE API is already loaded
+      if (window.H) {
+        setupAutocomplete();
+        return;
+      }
 
-    const handleInput = async (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      const query = target.value;
-      if (query.length < 3) return;
-      
-      try {
-        const { data, error } = await supabase.functions.invoke('here-locations', {
-          body: { query }
-        });
-
-        if (error) {
-          console.error('HERE API error:', error);
-          return;
-        }
-
-        if (data?.results && data.results.length > 0) {
-          // Prioritize airport results - look for 3-letter codes in the address label
-          const airport = data.results.find((item: any) => {
-            const label = item.address?.label || '';
-            const words = label.split(/[\s,]+/);
-            return words.some((word: string) => /^[A-Z]{3}$/.test(word));
-          });
-          
-          if (airport) {
-            const label = airport.address?.label || '';
-            const words = label.split(/[\s,]+/);
-            const code = words.find((word: string) => /^[A-Z]{3}$/.test(word));
-            if (code) {
-              setValue(code);
-            } else {
-              setValue(airport.address?.label || '');
-            }
-          } else {
-            // Fallback to first result
-            setValue(data.results[0].address?.label || '');
+      // Load HERE API scripts
+      const loadScript = (url: string): Promise<void> => {
+        return new Promise((resolve, reject) => {
+          if (document.querySelector(`script[src="${url}"]`)) {
+            resolve();
+            return;
           }
-        }
+          
+          const script = document.createElement("script");
+          script.src = url;
+          script.async = true;
+          script.onload = () => resolve();
+          script.onerror = () => reject(new Error(`Failed to load script: ${url}`));
+          document.body.appendChild(script);
+        });
+      };
+
+      try {
+        await loadScript("https://js.api.here.com/v3/3.1/mapsjs-core.js");
+        await loadScript("https://js.api.here.com/v3/3.1/mapsjs-service.js");
+        
+        // Wait a bit for the scripts to initialize
+        setTimeout(() => {
+          if (window.H) {
+            setupAutocomplete();
+          }
+        }, 100);
       } catch (error) {
-        console.error('Failed to fetch locations:', error);
+        console.error("Failed to load HERE API scripts:", error);
       }
     };
 
-    inputRef.current.addEventListener("input", handleInput);
-    
-    return () => {
-      if (inputRef.current) {
-        inputRef.current.removeEventListener("input", handleInput);
-      }
+    const setupAutocomplete = () => {
+      if (!window.H || !inputRef.current) return;
+      
+      const platform = new window.H.service.Platform({ 
+        apikey: import.meta.env.VITE_HERE_API_KEY || "YOUR_HERE_API_KEY_HARDCODED_FOR_NOW"
+      });
+      const service = platform.getSearchService();
+
+      const handleInput = (e: Event) => {
+        const target = e.target as HTMLInputElement;
+        const query = target.value;
+        if (query.length < 3) return;
+        
+        service.autosuggest({ 
+          q: query, 
+          at: "0,0",
+          limit: 5,
+          resultTypes: ["place", "airport"],
+          categories: "airport"
+        }, (result: any) => {
+          if (result.items && result.items.length > 0) {
+            // Prioritize airport results
+            const airport = result.items.find((item: any) => 
+              item.resultType === "place" && item.id?.includes("airport")
+            );
+            
+            if (airport) {
+              const code = airport.id?.split("::")?.pop()?.toUpperCase();
+              if (code?.length === 3) {
+                setValue(code);
+              } else {
+                setValue(airport.title || airport.address?.label);
+              }
+            } else {
+              // Fallback to first result
+              const first = result.items[0];
+              const code = first.id?.split("::")?.pop()?.toUpperCase();
+              if (first.resultType === "place" && code?.length === 3) {
+                setValue(code);
+              } else {
+                setValue(first.address?.label || first.title);
+              }
+            }
+          }
+        });
+      };
+
+      inputRef.current.addEventListener("input", handleInput);
+      
+      return () => {
+        if (inputRef.current) {
+          inputRef.current.removeEventListener("input", handleInput);
+        }
+      };
     };
+
+    loadHereScripts();
   }, [setValue]);
 
   return inputRef;
