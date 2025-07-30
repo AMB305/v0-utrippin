@@ -22,10 +22,13 @@ const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, res
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { // <--- Changed type here
     e.preventDefault();
-    if (currentInput.trim()) {
-      sendMessage(currentInput);
+    const form = e.currentTarget; // Or e.target as HTMLFormElement;
+    const inputElement = form.elements[0] as HTMLInputElement; // <--- Cast here
+    
+    if (inputElement.value.trim()) {
+      sendMessage(inputElement.value);
       setCurrentInput('');
     }
   };
@@ -109,10 +112,13 @@ const KeilaMiniChat = ({ onOpenChat, onSendMessage, messages, isLoading }) => {
     const [miniInput, setMiniInput] = useState('');
     const lastMessage = messages[messages.length - 1];
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { // <--- Changed type here
         e.preventDefault();
-        if (miniInput.trim()) {
-            onSendMessage(miniInput);
+        const form = e.currentTarget; // Or e.target as HTMLFormElement;
+        const inputElement = form.elements[0] as HTMLInputElement; // <--- Cast here
+
+        if (inputElement.value.trim()) {
+            onSendMessage(inputElement.value);
             setMiniInput('');
             onOpenChat(); // Open full chat when message is sent from mini chat
         }
@@ -201,12 +207,16 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
     ];
 
 
-    const handleSearchSubmit = (e) => {
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => { // <--- Changed type here
         e.preventDefault();
-        if (searchQuery.trim()) {
-            onSendMessage(`Plan a trip to ${searchQuery}`);
+        const form = e.currentTarget;
+        const inputElement = form.elements[0] as HTMLInputElement; // <--- Cast here
+
+        if (inputElement.value.trim()) {
+            onSendMessage(`Plan a trip to ${inputElement.value}`);
             setIsKeilaChatOpen(true); // Open chat when search is submitted
             setShowDestinations(true); // Show destinations after a search
+            setSearchQuery(''); // Clear search query after submission
         }
     };
 
@@ -443,9 +453,10 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                         )}
                         <div ref={useRef(null)} /> {/* This ref likely belongs in a real scrollable chat component */}
                     </div>
-                    <form onSubmit={(e) => {
+                    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => { // <--- Changed type here
                         e.preventDefault();
-                        const inputElement = e.target.elements[0]; // Assuming input is the first element
+                        const form = e.currentTarget;
+                        const inputElement = form.elements[0] as HTMLInputElement; // <--- Cast here
                         if (inputElement.value.trim()) {
                             onSendMessage(inputElement.value);
                             inputElement.value = '';
@@ -504,17 +515,21 @@ const MobileTravelInterface = ({ onSearch, onCategorySelect, onDestinationClick,
         "Miami", "New York", "Los Angeles", "Chicago", "Orlando", "Las Vegas"
     ];
 
-    const handleSearchSubmit = (e) => {
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => { // <--- Changed type here
         e.preventDefault();
-        if (searchQuery.trim()) {
-            onSearch(searchQuery);
+        const form = e.currentTarget;
+        const inputElement = form.elements[0] as HTMLInputElement; // <--- Cast here
+
+        if (inputElement.value.trim()) {
+            onSearch(inputElement.value);
             setSearchQuery('');
         }
     };
 
-    const handleChatInputSubmit = (e) => {
+    const handleChatInputSubmit = (e: React.FormEvent<HTMLFormElement>) => { // <--- Changed type here
       e.preventDefault();
-      const inputElement = e.target.elements[0]; // Assuming input is the first element
+      const form = e.currentTarget;
+      const inputElement = form.elements[0] as HTMLInputElement; // <--- Cast here
       if (inputElement.value.trim()) {
           onSendMessage(inputElement.value);
           inputElement.value = '';
