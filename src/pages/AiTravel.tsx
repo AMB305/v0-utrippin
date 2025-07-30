@@ -67,7 +67,7 @@ const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, res
               key={index}
               className="flex justify-start"
             >
-              <div className="max-w-[80%] p-3 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
+              <div className="max-w-[80%] p-2 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
                 <p className="text-sm whitespace-pre-wrap">{msg.question}</p>
               </div>
             </div>
@@ -78,7 +78,7 @@ const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, res
                 key={`response-${index}`}
                 className="flex justify-start"
               >
-                <div className="max-w-[80%] p-3 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
+                <div className="max-w-[80%] p-2 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
                   <p className="text-sm whitespace-pre-wrap">{msg.response}</p>
                 </div>
               </div>
@@ -86,7 +86,7 @@ const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, res
           )}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="max-w-[80%] p-3 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
+              <div className="max-w-[80%] p-2 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
                 <div className="flex items-center">
                   <span className="animate-pulse text-xl">...</span>
                   <span className="ml-2 text-sm">Keila is typing</span>
@@ -849,7 +849,7 @@ const AiTravel = () => {
   const handleCreateTripWithAI = () => {
     setIsKeilaChatOpen(true);
     if (!hasStartedChat) {
-      sendMessage("I want to create a trip with AI assistance.");
+      sendMessage("I want to create a trip with AI assistance.", false, true); // Use Gemini
     }
   };
 
@@ -887,7 +887,7 @@ const AiTravel = () => {
                   destinations={filteredDestinations}
                   onDestinationClick={(destination) => {
                     setIsKeilaChatOpen(true);
-                    sendMessage(`I'm interested in visiting ${destination.name}. Can you help me plan a trip there?`);
+                    sendMessage(`I'm interested in visiting ${destination.name}. Can you help me plan a trip there?`, false, true); // Use Gemini
                   }}
                 />
               ) : (
@@ -903,7 +903,7 @@ const AiTravel = () => {
                     {/* Chat Input */}
                     <SimpleChatInput
                       onSendMessage={(message) => {
-                        sendMessage(message);
+                        sendMessage(message, false, true); // Use Gemini
                         setIsKeilaChatOpen(true);
                       }}
                       placeholder="Ask me to plan your next adventure..."
@@ -923,7 +923,7 @@ const AiTravel = () => {
           isOpen={isKeilaChatOpen}
           onClose={() => setIsKeilaChatOpen(false)} 
           messages={messages}
-          sendMessage={sendMessage}
+          sendMessage={(message) => sendMessage(message, false, true)} // Use Gemini
           isLoading={loading}
           resetSession={resetSession}
         />
