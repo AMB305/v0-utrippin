@@ -13,7 +13,7 @@ export const useHereAutocomplete = (setValue: (value: string) => void) => {
     if (!window.H || !inputRef.current) return;
     
     const platform = new window.H.service.Platform({ 
-      apikey: process.env.NEXT_PUBLIC_HERE_API_KEY 
+      apikey: import.meta.env.VITE_HERE_API_KEY || "YOUR_HERE_API_KEY_HARDCODED_FOR_NOW"
     });
     const service = platform.getSearchService();
 
