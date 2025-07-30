@@ -16,7 +16,7 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ onFiltersChange 
   const [selectedPollution, setSelectedPollution] = useState<string[]>([]);
   const [selectedTemperature, setSelectedTemperature] = useState<string[]>([]);
 
-  const budgetLabels = ['₹0', '₹1K', '₹5K', '₹10K', '₹20K', '₹50K', '₹1L+'];
+  const budgetLabels = ['$0', '$1K', '$5K', '$10K', '$20K', '$50K', '$1L+'];
   
   const weatherOptions = [
     { id: 'rain', label: 'Rain', icon: CloudRain },
