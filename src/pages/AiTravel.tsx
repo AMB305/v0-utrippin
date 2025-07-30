@@ -892,10 +892,9 @@ const AiTravel = () => {
                 <div className="flex flex-col items-center justify-center h-full p-8">
                   {/* Welcome Section */}
                   <div className="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto text-center">
-                    <div className="mb-6">
-                      <UtrippinLogo />
+                    <div className="flex justify-center mb-6">
+                      <AnimatedKeila />
                     </div>
-                    <AnimatedKeila />
                     <h1 className="text-3xl font-bold mt-4 text-gray-900">Hi, I'm Keila!</h1>
                     <p className="text-gray-600 mt-2 mb-8">Select a category above to start planning your trip, or ask me anything!</p>
                     
