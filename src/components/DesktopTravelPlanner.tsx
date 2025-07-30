@@ -1,5 +1,3 @@
-// src/components/DesktopTravelPlanner.tsx
-
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { User, Sparkles, Paperclip, ArrowUp, Map, Compass } from "lucide-react";
@@ -7,15 +5,40 @@ import { User, Sparkles, Paperclip, ArrowUp, Map, Compass } from "lucide-react";
 // This reusable component is simple and correct. No changes needed here.
 const ChatMessage = ({ message }) => {
   const { text = "", isUser = false } = message;
+  const [displayedText, setDisplayedText] = useState("");
 
-  const wrapperClasses = `flex items-end gap-3 my-4 ${
+  useEffect(() => {
+    if (!isUser) {
+      const words = text.split(" ");
+      let currentWordIndex = 0;
+      setDisplayedText(""); // Clear previous text
+
+      const intervalId = setInterval(() => {
+        if (currentWordIndex < words.length) {
+          setDisplayedText((prev) =>
+            prev ? `${prev} ${words[currentWordIndex]}` : words[currentWordIndex]
+          );
+          currentWordIndex++;
+        } else {
+          clearInterval(intervalId);
+        }
+      }, 100); // Adjust the speed of word rendering here (in milliseconds)
+
+      return () => clearInterval(intervalId);
+    } else {
+      // For user messages, display them instantly
+      setDisplayedText(text);
+    }
+  }, [text, isUser]);
+
+  const wrapperClasses = ` w-[100%] flex items-end gap-3 my-4 ${
     isUser ? "justify-end" : "justify-start"
   }`;
 
   const bubbleClasses = isUser
     ? "bg-blue-600 text-white rounded-2xl rounded-br-none" // User bubble
-    : "bg-[#2a2a33] text-gray-200 rounded-2xl rounded-bl-none"; // AI bubble
-  
+    : "w-[100%] text-gray-200 rounded-2xl rounded-bl-none"; // AI bubble
+
   const UserAvatar = () => (
     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center shadow-lg">
       <User className="text-white" />
@@ -32,8 +55,12 @@ const ChatMessage = ({ message }) => {
     <div className={wrapperClasses}>
       {/* Show AI avatar on the left, user avatar on the right */}
       {!isUser && <AiAvatar />}
-      <div className={`max-w-2xl px-4 py-3 shadow-md ${bubbleClasses}`}>
-        <p className="whitespace-pre-wrap">{text}</p>
+      <div
+        className={`max-w-2xl px-4 text-white py-3 shadow-md ${bubbleClasses}`}
+      >
+        <p className="whitespace-pre-wrap text-white font-white">
+          {displayedText} 
+        </p>
       </div>
       {isUser && <UserAvatar />}
     </div>
