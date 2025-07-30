@@ -7,6 +7,52 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// COST OPTIMIZATION STRATEGY 2: Cache for common queries to avoid API calls
+const commonResponses = {
+  "what is utrippin.ai": "Utrippin.ai is an AI-powered travel planning platform that helps you discover destinations, plan itineraries, and connect with travel buddies. I'm Keila, your personal travel assistant!",
+  "what is utrippin": "Utrippin.ai is an AI-powered travel planning platform that helps you discover destinations, plan itineraries, and connect with travel buddies. I'm Keila, your personal travel assistant!",
+  "who are you": "I'm Keila, your AI travel assistant! I help you plan amazing trips, find destinations, and create personalized itineraries.",
+  "hello": "Hi there! I'm Keila, your AI travel assistant. How can I help you plan your next adventure?",
+  "hi": "Hi! I'm Keila, ready to help you plan an amazing trip. Where would you like to go?",
+  "hey": "Hey! I'm Keila, your travel planning assistant. What adventure are we planning today?",
+  "help": "I can help you plan trips, find destinations, create itineraries, and answer travel questions. What would you like to explore?",
+  "what can you do": "I can help you plan trips, find destinations, create custom itineraries, suggest activities, and provide travel advice. Where would you like to go?"
+};
+
+// Function to check if query matches a cached response
+function getCachedResponse(query: string): string | null {
+  const normalizedQuery = query.toLowerCase().trim().replace(/[.,!?]/g, '');
+  return commonResponses[normalizedQuery] || null;
+}
+
+// COST OPTIMIZATION STRATEGY 1: Limit chat history to last N turns
+function limitChatHistory(chatHistory: any[], maxTurns: number = 5): any[] {
+  if (!chatHistory || chatHistory.length <= maxTurns) {
+    return chatHistory || [];
+  }
+  
+  // Take only the last N turns to reduce input tokens significantly
+  return chatHistory.slice(-maxTurns);
+}
+
+// COST OPTIMIZATION STRATEGY 3: Create concise, optimized prompts
+function createOptimizedPrompt(currentPrompt: string): string {
+  // Add conciseness instructions to reduce output tokens
+  const conciseInstructions = `You are Keila, a helpful travel assistant. Be concise and practical.
+
+RESPONSE GUIDELINES:
+- Keep responses under 100 words unless detailed itinerary requested
+- Use bullet points for efficiency
+- Be direct and actionable
+- Focus only on essential travel information
+
+USER REQUEST: ${currentPrompt}
+
+Provide a helpful, concise response.`;
+
+  return conciseInstructions;
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -23,17 +69,35 @@ serve(async (req) => {
   try {
     const { chatHistory, currentPrompt } = await req.json();
     
+    console.log('=== COST OPTIMIZATION METRICS ===');
+    console.log('Original chat history length:', chatHistory?.length || 0);
+    console.log('Current prompt:', currentPrompt?.substring(0, 50) + '...');
+
+    // STRATEGY 2: Check for cached common responses first (saves API calls)
+    const cachedResponse = getCachedResponse(currentPrompt);
+    if (cachedResponse) {
+      console.log('✅ COST SAVED: Serving cached common response - API call avoided');
+      return new Response(
+        JSON.stringify({ 
+          text: cachedResponse,
+          costOptimized: true,
+          source: 'common_cache'
+        }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     // Initialize Supabase client
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
     
-    // Create cache key from the prompt (for simple caching)
+    // Check database cache
     const cacheKey = currentPrompt.toLowerCase().trim();
-    
-    // Check cache first
-    console.log('Checking cache for prompt:', cacheKey.substring(0, 50) + '...');
+    console.log('Checking database cache for prompt...');
     const { data: cachedData } = await supabase
       .from('cached_itineraries')
       .select('response')
@@ -41,15 +105,18 @@ serve(async (req) => {
       .maybeSingle();
     
     if (cachedData) {
-      console.log('Found cached response, returning from cache');
-      return new Response(JSON.stringify({ text: cachedData.response }), {
+      console.log('✅ COST SAVED: Found cached database response - API call avoided');
+      return new Response(JSON.stringify({ 
+        text: cachedData.response,
+        costOptimized: true,
+        source: 'database_cache'
+      }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    
-    // Get Gemini API key from environment
+
+    // Get Gemini API key
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
-    
     if (!geminiApiKey) {
       console.error('Gemini API Key is not configured');
       return new Response(JSON.stringify({ error: 'Gemini API Key is not configured on the server.' }), {
@@ -58,14 +125,22 @@ serve(async (req) => {
       });
     }
 
-    console.log('Processing Gemini chat request with history length:', chatHistory?.length || 0);
+    // STRATEGY 1: Limit chat history to reduce input tokens
+    const limitedHistory = limitChatHistory(chatHistory, 5);
+    const tokensSaved = (chatHistory?.length || 0) - limitedHistory.length;
+    console.log('✅ TOKENS OPTIMIZED: Limited chat history to', limitedHistory.length, 'messages');
+    console.log('✅ COST SAVED: Reduced input by', tokensSaved, 'messages (~', tokensSaved * 50, 'tokens estimated)');
+
+    // STRATEGY 3: Use optimized, concise prompt
+    const optimizedPrompt = createOptimizedPrompt(currentPrompt);
+    console.log('✅ PROMPT OPTIMIZED: Added conciseness instructions to reduce output tokens');
 
     // Format chat history for Gemini API
     const contents = [];
     
-    // Add chat history
-    if (chatHistory && Array.isArray(chatHistory)) {
-      for (const message of chatHistory) {
+    // Add limited chat history
+    if (limitedHistory && Array.isArray(limitedHistory)) {
+      for (const message of limitedHistory) {
         contents.push({
           role: message.role === 'bot' ? 'model' : 'user',
           parts: [{ text: message.text }]
@@ -73,13 +148,15 @@ serve(async (req) => {
       }
     }
 
-    // Add current prompt
+    // Add optimized current prompt
     contents.push({
       role: 'user',
-      parts: [{ text: currentPrompt }]
+      parts: [{ text: optimizedPrompt }]
     });
 
-    // Call Gemini API
+    console.log('Final API call - Total messages:', contents.length);
+
+    // Call Gemini API with cost-optimized settings
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiApiKey}`, {
       method: 'POST',
       headers: {
@@ -90,8 +167,9 @@ serve(async (req) => {
         generationConfig: {
           temperature: 0.7,
           topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 2048,
+          topP: 0.8,
+          maxOutputTokens: 400, // REDUCED from 2048 to 400 for cost savings
+          stopSequences: [],
         },
         safetySettings: [
           {
@@ -126,8 +204,6 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    
-    // Extract the response text
     const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
     
     if (!responseText) {
@@ -140,7 +216,9 @@ serve(async (req) => {
       });
     }
 
-    console.log('Gemini response generated successfully');
+    console.log('✅ API call completed - Response length:', responseText.length, 'characters');
+    console.log('✅ OUTPUT TOKENS OPTIMIZED: Limited to ~400 tokens max');
+    console.log('=== END COST OPTIMIZATION METRICS ===');
 
     // Cache the response for future use
     try {
@@ -150,13 +228,20 @@ serve(async (req) => {
           prompt: cacheKey,
           response: responseText
         });
-      console.log('Response cached successfully');
+      console.log('Response cached for future cost savings');
     } catch (cacheError) {
       console.error('Failed to cache response:', cacheError);
-      // Don't fail the request if caching fails
     }
 
-    return new Response(JSON.stringify({ text: responseText }), {
+    return new Response(JSON.stringify({ 
+      text: responseText,
+      costOptimized: true,
+      optimizations: {
+        historyLimited: tokensSaved > 0,
+        promptOptimized: true,
+        outputLimited: true
+      }
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
