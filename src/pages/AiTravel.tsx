@@ -220,9 +220,8 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
         setSelectedCategory(categoryName);
         // Fetch destinations for the selected category
         fetchDestinations(categoryName === 'All' ? undefined : categoryName);
-        onSendMessage(`Show me ${categoryName} themed trips.`);
-        setIsKeilaChatOpen(true); // Open chat when category is clicked
         setShowDestinations(true); // Show destinations after category click
+        // Note: No longer auto-opening Keila chat - let users browse first
     };
 
     const handleDestinationCardClick = (destinationName: string) => {
