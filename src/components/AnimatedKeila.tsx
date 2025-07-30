@@ -4,7 +4,7 @@ import React from 'react';
 
 export const AnimatedKeila = () => {
   return (
-    <div className="relative w-32 h-32">
+    <div className="relative w-8 h-8">
       <img 
         src="/lovable-uploads/444cd76d-946f-4ff4-b428-91e07589acd6.png" 
         alt="Keila AI Travel Assistant" 

@@ -50,7 +50,7 @@ const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, res
         {/* Modal Header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-800 flex items-center">
-            <div className="scale-75 mr-2">
+            <div className="mr-2">
               <AnimatedKeila />
             </div>
             Keila
@@ -894,7 +894,7 @@ const AiTravel = () => {
                 <div className="flex flex-col items-center justify-center h-full p-8">
                   {/* Welcome Section */}
                   <div className="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto text-center">
-                    <div className="flex justify-center mb-6">
+                    <div className="flex justify-center mb-6 scale-[3]">
                       <AnimatedKeila />
                     </div>
                     <h1 className="text-3xl font-bold mt-4 text-gray-900">Hi, I'm Keila!</h1>
@@ -932,7 +932,7 @@ const AiTravel = () => {
       {/* Keila Chat Bubble */}
       {!isKeilaChatOpen && (
         <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-72 max-w-[calc(100vw-2rem)]">
-          <div className="scale-50 cursor-pointer animate-bounce" onClick={() => setIsKeilaChatOpen(true)}>
+          <div className="cursor-pointer animate-bounce" onClick={() => setIsKeilaChatOpen(true)}>
             <AnimatedKeila />
           </div>
           <div className="flex-1 min-w-0">
