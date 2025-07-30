@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { MapPin, Calendar, Users, ChevronDown, Plane, Building2, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import heroImage from '@/assets/hero-packages.jpg';
 
@@ -42,6 +43,17 @@ export default function HeroPackageWidget() {
     setReturnDate(returnDefault.toISOString().split('T')[0]);
     setPickupDate(nextMonth.toISOString().split('T')[0]);
     setDropoffDate(returnDefault.toISOString().split('T')[0]);
+
+    // Load HERE API scripts for autocomplete
+    const loadScript = (url: string) => {
+      const script = document.createElement("script");
+      script.src = url;
+      script.async = true;
+      document.body.appendChild(script);
+    };
+
+    loadScript("https://js.api.here.com/v3/3.1/mapsjs-core.js");
+    loadScript("https://js.api.here.com/v3/3.1/mapsjs-service.js");
 
     // Close dropdown when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
@@ -103,12 +115,12 @@ export default function HeroPackageWidget() {
       return;
     }
 
-    // Track search event for analytics
+    // Track search event for analytics with enhanced GTM tracking
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'click', {
-        event_category: 'Package Search',
-        event_label: 'HeroPackageWidget',
-        value: adults
+      window.gtag('event', 'expedia_package_click', {
+        event_category: 'Packages',
+        event_label: 'Expedia Redirect',
+        value: 1
       });
     }
 
