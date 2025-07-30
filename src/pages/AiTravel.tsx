@@ -35,7 +35,6 @@ const AiTravel = () => {
   const handleSendMessage = (message: string) => {
     sendMessage(message);
   };
-=
 
   const handleMobileSearch = (query: string) => {
     sendMessage(`I want to plan a trip to ${query}`);
