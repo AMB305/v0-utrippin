@@ -7,6 +7,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useDestinations, type Destination } from "@/hooks/useDestinations";
 import { SEOHead } from "@/components/SEOHead";
 import LoginCard from "@/components/LoginCard";
+import keilaIcon from "@/assets/keila-icon.png";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -42,8 +43,7 @@ const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, res
         {/* Modal Header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-800 flex items-center">
-            {/* Using a placeholder for Keila Icon - replace with your actual path */}
-            <img src="https://via.placeholder.com/28x28" alt="Keila Icon" className="w-7 h-7 mr-2 rounded-full"/>
+            <img src={keilaIcon} alt="Keila Icon" className="w-7 h-7 mr-2 rounded-full"/>
             Keila AI Assistant
           </h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">
@@ -56,19 +56,25 @@ const KeilaChatModal = ({ isOpen, onClose, messages, sendMessage, isLoading, res
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              className="flex justify-start"
             >
-              <div
-                className={`max-w-[80%] p-3 rounded-xl shadow-sm ${
-                  msg.sender === 'user'
-                    ? 'bg-blue-500 text-white rounded-br-none'
-                    : 'bg-gray-200 text-gray-800 rounded-bl-none'
-                }`}
-              >
-                <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+              <div className="max-w-[80%] p-3 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
+                <p className="text-sm whitespace-pre-wrap">{msg.question}</p>
               </div>
             </div>
           ))}
+          {messages.map((msg, index) => 
+            msg.response ? (
+              <div
+                key={`response-${index}`}
+                className="flex justify-start"
+              >
+                <div className="max-w-[80%] p-3 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
+                  <p className="text-sm whitespace-pre-wrap">{msg.response}</p>
+                </div>
+              </div>
+            ) : null
+          )}
           {isLoading && (
             <div className="flex justify-start">
               <div className="max-w-[80%] p-3 rounded-xl shadow-sm bg-gray-200 text-gray-800 rounded-bl-none">
@@ -126,14 +132,13 @@ const KeilaMiniChat = ({ onOpenChat, onSendMessage, messages, isLoading }) => {
     };
 
     const displayMessage = messages.length > 0
-        ? (lastMessage.sender === 'user' ? `You: ${lastMessage.text}` : `Keila: ${lastMessage.text}`)
+        ? (lastMessage.response ? `Keila: ${lastMessage.response}` : `You: ${lastMessage.question}`)
         : "Hi there! How can I help you plan your next adventure?";
 
     return (
         <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-80">
-            {/* Using a placeholder for Keila Icon - replace with your actual path */}
             <img
-                src="https://via.placeholder.com/40x40"
+                src={keilaIcon}
                 alt="Keila Icon"
                 className="w-10 h-10 rounded-full cursor-pointer animate-bounce"
                 onClick={onOpenChat}
@@ -290,9 +295,8 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                     onClick={() => { onStartNewTrip(); setIsKeilaChatOpen(true); }}
                     className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out flex items-center"
                 >
-                    {/* Using a placeholder for Keila Icon - replace with your actual path */}
                     <img
-                        src="https://via.placeholder.com/24x24"
+                        src={keilaIcon}
                         alt="Keila Icon"
                         className="w-6 h-6 mr-2"
                     />
@@ -478,8 +482,7 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                 <aside className="w-96 bg-white shadow-md flex-shrink-0 flex flex-col">
                     <div className="p-4 border-b border-gray-200">
                         <h3 className="text-xl font-bold text-gray-800 flex items-center">
-                            {/* Using a placeholder for Keila Icon - replace with your actual path */}
-                            <img src="https://via.placeholder.com/32x32" alt="Keila Icon" className="w-8 h-8 mr-2 rounded-full"/>
+                            <img src={keilaIcon} alt="Keila Icon" className="w-8 h-8 mr-2 rounded-full"/>
                             Keila AI Chat
                         </h3>
                     </div>
