@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.3';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -21,6 +22,30 @@ serve(async (req) => {
 
   try {
     const { chatHistory, currentPrompt } = await req.json();
+    
+    // Initialize Supabase client
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+    
+    // Create cache key from the prompt (for simple caching)
+    const cacheKey = currentPrompt.toLowerCase().trim();
+    
+    // Check cache first
+    console.log('Checking cache for prompt:', cacheKey.substring(0, 50) + '...');
+    const { data: cachedData } = await supabase
+      .from('cached_itineraries')
+      .select('response')
+      .eq('prompt', cacheKey)
+      .maybeSingle();
+    
+    if (cachedData) {
+      console.log('Found cached response, returning from cache');
+      return new Response(JSON.stringify({ text: cachedData.response }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
     
     // Get Gemini API key from environment
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
@@ -116,6 +141,20 @@ serve(async (req) => {
     }
 
     console.log('Gemini response generated successfully');
+
+    // Cache the response for future use
+    try {
+      await supabase
+        .from('cached_itineraries')
+        .insert({
+          prompt: cacheKey,
+          response: responseText
+        });
+      console.log('Response cached successfully');
+    } catch (cacheError) {
+      console.error('Failed to cache response:', cacheError);
+      // Don't fail the request if caching fails
+    }
 
     return new Response(JSON.stringify({ text: responseText }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
