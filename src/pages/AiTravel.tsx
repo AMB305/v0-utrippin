@@ -938,7 +938,7 @@ const AiTravel = () => {
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-800 truncate">Keila</p>
             <div className="flex items-center">
-              <p className="text-xs text-gray-600 truncate mr-2">
+              <p className="text-xs text-gray-600 mr-2 leading-tight">
                 {hasStartedChat 
                   ? (messages[messages.length - 1]?.response || messages[messages.length - 1]?.question || "Ready to help!")
                   : "Hi there! How can I help you plan your next adventure?"
