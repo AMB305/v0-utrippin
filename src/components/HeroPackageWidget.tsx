@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useHereAutocomplete } from '@/hooks/useHereAutocomplete';
 import heroImage from '@/assets/hero-packages.jpg';
 
 export default function HeroPackageWidget() {
@@ -26,9 +27,13 @@ export default function HeroPackageWidget() {
   // Universal inputs
   const [adults, setAdults] = useState(2);
   const [rooms, setRooms] = useState(1);
-  const [showTravelerDropdown, setShowTravelerDropdown] = useState(false);
+  const [showTravelerModal, setShowTravelerModal] = useState(false);
   
-  const travelerDropdownRef = useRef<HTMLDivElement>(null);
+  // HERE Autocomplete hooks
+  const leavingFromRef = useHereAutocomplete(setLeavingFrom);
+  const goingToRef = useHereAutocomplete(setGoingTo);
+  const pickupRef = useHereAutocomplete(setPickupLocation);
+  
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
@@ -55,17 +60,6 @@ export default function HeroPackageWidget() {
     loadScript("https://js.api.here.com/v3/3.1/mapsjs-core.js");
     loadScript("https://js.api.here.com/v3/3.1/mapsjs-service.js");
 
-    // Close dropdown when clicking outside
-    const handleClickOutside = (event: MouseEvent) => {
-      if (travelerDropdownRef.current && !travelerDropdownRef.current.contains(event.target as Node)) {
-        setShowTravelerDropdown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
   }, []);
 
   const handleToggle = (type: 'flight' | 'stay' | 'car') => {
@@ -229,6 +223,7 @@ export default function HeroPackageWidget() {
                 <div className="flex items-center border border-gray-200 rounded-lg px-3 py-2">
                   <MapPin className="text-teal-500 w-5 h-5 mr-2 flex-shrink-0" />
                   <Input
+                    ref={leavingFromRef}
                     type="text"
                     placeholder="Leaving from"
                     value={leavingFrom}
@@ -240,6 +235,7 @@ export default function HeroPackageWidget() {
                 <div className="flex items-center border border-gray-200 rounded-lg px-3 py-2">
                   <MapPin className="text-teal-500 w-5 h-5 mr-2 flex-shrink-0" />
                   <Input
+                    ref={goingToRef}
                     type="text"
                     placeholder="Going to"
                     value={goingTo}
@@ -277,6 +273,7 @@ export default function HeroPackageWidget() {
                 <div className="flex items-center border border-gray-200 rounded-lg px-3 py-2">
                   <Car className="text-teal-500 w-5 h-5 mr-2 flex-shrink-0" />
                   <Input
+                    ref={pickupRef}
                     type="text"
                     placeholder="Car pickup location"
                     value={pickupLocation}
@@ -310,22 +307,22 @@ export default function HeroPackageWidget() {
 
             {/* Travelers and Rooms */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Travelers */}
-              <div className="flex items-center border border-gray-200 rounded-lg px-3 py-2 relative" ref={travelerDropdownRef}>
-                <Users className="text-teal-500 w-5 h-5 mr-2 flex-shrink-0" />
-                <div 
-                  className="flex items-center cursor-pointer text-gray-700 font-medium w-full justify-between"
-                  onClick={() => setShowTravelerDropdown(!showTravelerDropdown)}
-                >
-                  <span>
-                    {adults} Traveler{adults !== 1 ? 's' : ''}
-                  </span>
-                  <ChevronDown className="w-4 h-4 text-gray-400" />
-                </div>
-                
-                {/* Travelers Dropdown */}
-                {showTravelerDropdown && (
-                  <div className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-xl z-[9999] mt-2 p-4 w-full">
+              {/* Travelers Modal */}
+              <Dialog open={showTravelerModal} onOpenChange={setShowTravelerModal}>
+                <DialogTrigger asChild>
+                  <div className="flex items-center border border-gray-200 rounded-lg px-3 py-2 cursor-pointer">
+                    <Users className="text-teal-500 w-5 h-5 mr-2 flex-shrink-0" />
+                    <div className="flex items-center text-gray-700 font-medium w-full justify-between">
+                      <span>
+                        {adults} Traveler{adults !== 1 ? 's' : ''}
+                      </span>
+                      <ChevronDown className="w-4 h-4 text-gray-400" />
+                    </div>
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Select Travelers</h3>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-700 font-medium">Adults</span>
                       <div className="flex items-center space-x-3">
@@ -347,8 +344,8 @@ export default function HeroPackageWidget() {
                       </div>
                     </div>
                   </div>
-                )}
-              </div>
+                </DialogContent>
+              </Dialog>
 
               {/* Rooms */}
               <div className="flex items-center border border-gray-200 rounded-lg px-3 py-2">
