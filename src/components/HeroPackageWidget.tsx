@@ -118,44 +118,43 @@ export default function HeroPackageWidget() {
       });
     }
 
-    // Build Expedia packages URL
-    const baseUrl = 'https://www.expedia.com/Packages-Search';
-    const url = new URL(baseUrl);
-    
-    // Add trip type if flight is selected
+    // Build Expedia packages URL with proper encoding
+    const base = "https://www.expedia.com/Packages-Search";
+    const params = new URLSearchParams();
+
+    const encode = (value: string) => value.trim().toUpperCase();
+
     if (isFlight) {
-      url.searchParams.set('trip', 'roundtrip');
-      url.searchParams.set('leg1', `from:${leavingFrom},to:${goingTo},departure:${departureDate}`);
-      url.searchParams.set('leg2', `from:${goingTo},to:${leavingFrom},departure:${returnDate}`);
-      url.searchParams.set('passengers', `adults:${adults}`);
+      params.append("trip", "roundtrip");
+      params.append("leg1", `from:${encode(leavingFrom)},to:${encode(goingTo)},departure:${departureDate}`);
+      params.append("leg2", `from:${encode(goingTo)},to:${encode(leavingFrom)},departure:${returnDate}`);
+      params.append("passengers", `adults:${adults}`);
     }
 
-    // Add hotel destination if stay is selected (use goingTo as default)
     if (isStay) {
-      url.searchParams.set('hotel.destination', goingTo || leavingFrom);
+      params.append("hotel.destination", encode(goingTo || leavingFrom));
     }
 
-    // Add car details if car is selected
     if (isCar) {
-      url.searchParams.set('car.pickupLocation', pickupLocation);
-      url.searchParams.set('car.pickupDate', pickupDate);
-      url.searchParams.set('car.dropoffDate', dropoffDate);
+      params.append("car.pickupLocation", encode(pickupLocation || goingTo));
+      params.append("car.pickupDate", pickupDate);
+      params.append("car.dropoffDate", dropoffDate);
     }
 
-    // Add rooms
-    url.searchParams.set('rooms', rooms.toString());
+    params.append("rooms", `${rooms}`);
+    
+    // Add affiliate tracking parameters
+    params.append("siteid", "1");
+    params.append("langid", "1033");
+    params.append("clickref", "1100lBkVXSGk");
+    params.append("affcid", "US.DIRECT.PHG.1100l402697.1100l68075");
+    params.append("ref_id", "1100lBkVXSGk");
+    params.append("my_ad", "AFF.US.DIRECT.PHG.1100l402697.1100l68075");
+    params.append("afflid", "1100lBkVXSGk");
+    params.append("affdtl", "PHG.1100lBkVXSGk.PZNccLk9hR");
 
-    // Add affiliate parameters
-    url.searchParams.set('siteid', '1');
-    url.searchParams.set('langid', '1033');
-    url.searchParams.set('clickref', '1100lBkVXSGk');
-    url.searchParams.set('affcid', 'US.DIRECT.PHG.1100l402697.1100l68075');
-    url.searchParams.set('ref_id', '1100lBkVXSGk');
-    url.searchParams.set('my_ad', 'AFF.US.DIRECT.PHG.1100l402697.1100l68075');
-    url.searchParams.set('afflid', '1100lBkVXSGk');
-    url.searchParams.set('affdtl', 'PHG.1100lBkVXSGk.PZNccLk9hR');
-
-    window.location.href = url.toString();
+    const finalURL = `${base}?${params.toString()}`;
+    window.location.href = finalURL;
   };
 
   return (
