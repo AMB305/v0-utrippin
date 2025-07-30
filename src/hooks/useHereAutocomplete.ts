@@ -22,9 +22,9 @@ export const useHereAutocomplete = (setValue: (value: string) => void) => {
           return;
         }
 
-        if (data && data.length > 0) {
+        if (data?.results && data.results.length > 0) {
           // Prioritize airport results - look for 3-letter codes in the address label
-          const airport = data.find((item: any) => {
+          const airport = data.results.find((item: any) => {
             const label = item.address?.label || '';
             const words = label.split(/[\s,]+/);
             return words.some((word: string) => /^[A-Z]{3}$/.test(word));
@@ -41,7 +41,7 @@ export const useHereAutocomplete = (setValue: (value: string) => void) => {
             }
           } else {
             // Fallback to first result
-            setValue(data[0].address?.label || '');
+            setValue(data.results[0].address?.label || '');
           }
         }
       } catch (error) {

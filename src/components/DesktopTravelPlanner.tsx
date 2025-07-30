@@ -3,8 +3,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { User, Sparkles, Paperclip, ArrowUp, Map, Compass, Star, Plane, MapPin } from "lucide-react";
 
 // This reusable component is simple and correct. No changes needed here.
-const ChatMessage = ({ message }) => {
-  const { text = "", isUser = false, children } = message;
+const ChatMessage = ({ message, children = null }) => {
+  const { text = "", isUser = false } = message;
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
@@ -57,12 +57,14 @@ const ChatMessage = ({ message }) => {
       {!isUser && <AiAvatar />}
       
       <div className={` px-4 text-white py-3 shadow-md ${bubbleClasses}`}>
-      {!isUser && <FlightDetails />  }
-    {  !isUser && <HotelDetails />  }
-        {text && <p className="whitespace-pre-wrap text-white font-white">
-          
-          { displayedText}</p>}
-        {children}
+        {children ? children : (
+          text && <p className="whitespace-pre-wrap text-white font-white">
+            {displayedText}
+            {!isUser && displayedText.length > 0 && displayedText.length < text.length && (
+              <span className="inline-block w-1 h-4 bg-white ml-1 animate-pulse"></span>
+            )}
+          </p>
+        )}
       </div>
       {isUser && <UserAvatar />}
     </div>
@@ -263,16 +265,20 @@ const DesktopTravelPlanner = ({
     </div>
   );
 
-  const ChatView = () => (
-    <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6">
-      {/* --- ADDED FLIGHT AND HOTEL SECTIONS --- */}
-      <ChatMessage message={{ isUser: false }}>
-          
-          <HotelDetails />
-      </ChatMessage>
-      
-      {console.log('[DesktopTravelPlanner] Now mapping through chat message pairs...')}
-      {chatMessages.map((messagePair) => (
+  const ChatView = () => {
+    console.log('[DesktopTravelPlanner] Now mapping through chat message pairs...');
+    
+    return (
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6">
+        {/* --- ADDED FLIGHT AND HOTEL SECTIONS --- */}
+        <ChatMessage message={{ isUser: false }}>
+          <div>
+            <FlightDetails />
+            <HotelDetails />
+          </div>
+        </ChatMessage>
+        
+        {chatMessages.map((messagePair) => (
         <React.Fragment key={messagePair.id}>
           {messagePair.question && (
             <ChatMessage message={{ text: messagePair.question, isUser: true }} />
@@ -298,13 +304,14 @@ const DesktopTravelPlanner = ({
             )
           )}
         </React.Fragment>
-      ))}
-    </div>
-  );
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="flex h-screen bg-black text-white font-sans">
-      <style jsx>{`
+      <style>{`
         @keyframes beam { 0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); } 50% { transform: translateX(400%) translateY(400%) rotate(45deg); } 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); } }
         @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .beam-container { position: relative; overflow: hidden; }
@@ -324,7 +331,7 @@ const DesktopTravelPlanner = ({
           <button title="Explore" className="p-3 rounded-full bg-[#1c1c24] hover:bg-[#2a2a33] transition-colors"><Compass size={20} /></button>
         </div>
         <div className="mt-auto mb-2">
-          <img src={user?.avatar || "/public/utrippin-logo.svg"} alt="User Avatar" className="w-12 h-12 rounded-full border-2 border-green-400 object-cover" />
+          <img src={user?.user_metadata?.avatar_url || "/public/utrippin-logo.svg"} alt="User Avatar" className="w-12 h-12 rounded-full border-2 border-green-400 object-cover" />
         </div>
       </div>
 

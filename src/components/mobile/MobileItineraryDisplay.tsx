@@ -184,26 +184,6 @@ export const MobileItineraryDisplay: React.FC<MobileItineraryDisplayProps> = ({
         </div>
       </div>
 
-      {/* Quick Replies */}
-      {itinerary.customizationCallToAction?.quickReplies && (
-        <div className="p-4 bg-white border-t">
-          <h3 className="font-medium text-gray-800 mb-3">You may also ask</h3>
-          <div className="space-y-2">
-            {itinerary.customizationCallToAction.quickReplies.slice(0, 3).map((reply, index) => (
-              <button
-                key={index}
-                onClick={() => onQuickReply?.(reply)}
-                className="w-full text-left p-3 bg-gray-50 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center justify-between"
-              >
-                <span>{reply}</span>
-                <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
-                  <div className="w-0 h-0 border-l-2 border-r-2 border-b-3 border-l-transparent border-r-transparent border-b-blue-600 transform rotate-90" />
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
