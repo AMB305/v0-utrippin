@@ -314,14 +314,14 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                 {/* Central Content - Destinations or Chat Placeholder */}
                 <section className="flex-grow p-6 bg-gray-50 overflow-y-auto">
                     {(() => {
-                        console.log('🔍 Rendering logic - selectedCategory:', selectedCategory);
-                        console.log('🔍 Rendering logic - showDestinations:', showDestinations);
+                        console.log('🚨 DEBUG: Rendering logic - selectedCategory:', selectedCategory);
+                        console.log('🚨 DEBUG: Rendering logic - showDestinations:', showDestinations);
                         
                         if (selectedCategory === 'Religious' || selectedCategory === 'religious') {
-                            console.log('🔍 Should show Religious cards');
+                            console.log('🚨 DEBUG: RELIGIOUS CATEGORY IS SELECTED - RENDERING CARDS');
                             return (
-                                <div>
-                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Religious & Spiritual Destinations</h2>
+                                <div style={{border: '5px solid red', padding: '20px', backgroundColor: 'yellow'}}>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">🚨 TEST: Religious & Spiritual Destinations 🚨</h2>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                         {[
                                             { title: "Vatican City", imageUrl: "https://images.unsplash.com/photo-1539650116574-75c0c6d73042?w=400&h=300&fit=crop" },
@@ -332,9 +332,11 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                                                 key={index}
                                                 className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group h-64 bg-gray-800"
                                                 onClick={() => {
-                                                    console.log('✅ CLICK WORKING:', card.title);
-                                                    alert(`SUCCESS! You clicked: ${card.title}`);
+                                                    console.log('🚨 CARD CLICKED!!! Title:', card.title);
+                                                    alert(`🚨 SUCCESS!!! You clicked: ${card.title}`);
+                                                    console.log('🚨 This should show an alert!');
                                                 }}
+                                                style={{border: '3px solid lime'}}
                                             >
                                                 <div className="absolute inset-0">
                                                     <img
