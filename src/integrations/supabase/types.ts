@@ -491,6 +491,13 @@ export type Database = {
             referencedRelation: "destinations"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "destination_activities_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "full_destination_detail"
+            referencedColumns: ["destination_id"]
+          },
         ]
       }
       destination_attractions: {
@@ -544,6 +551,13 @@ export type Database = {
             referencedRelation: "destinations"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "destination_attractions_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "full_destination_detail"
+            referencedColumns: ["destination_id"]
+          },
         ]
       }
       destination_images: {
@@ -584,6 +598,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "destinations"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "destination_images_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "full_destination_detail"
+            referencedColumns: ["destination_id"]
           },
         ]
       }
@@ -673,6 +694,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "destinations"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "destination_tips_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "full_destination_detail"
+            referencedColumns: ["destination_id"]
           },
         ]
       }
@@ -998,6 +1026,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "destinations"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "local_experts_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "full_destination_detail"
+            referencedColumns: ["destination_id"]
           },
         ]
       }
@@ -1899,6 +1934,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "travel_stories_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "full_destination_detail"
+            referencedColumns: ["destination_id"]
+          },
+          {
             foreignKeyName: "travel_stories_trip_id_fkey"
             columns: ["trip_id"]
             isOneToOne: false
@@ -2540,6 +2582,24 @@ export type Database = {
           gross_revenue: number | null
           total_bookings: number | null
           type: string | null
+        }
+        Relationships: []
+      }
+      full_destination_detail: {
+        Row: {
+          activities: Json | null
+          best_time: string | null
+          best_time_notes: string | null
+          destination_id: string | null
+          overview: string | null
+          photos: Json | null
+          slug: string | null
+          subtitle: string | null
+          suggested_trip_duration: string | null
+          title: string | null
+          transport: Json | null
+          travel_tips: Json | null
+          weather: Json | null
         }
         Relationships: []
       }
