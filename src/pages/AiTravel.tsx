@@ -31,6 +31,7 @@ import { HiddenGemTravelCards } from "@/components/HiddenGemTravelCards";
 import { LuxuryTravelCards } from "@/components/LuxuryTravelCards";
 import { HistoricalTravelCards } from "@/components/HistoricalTravelCards";
 import { MountainTravelCards } from "@/components/MountainTravelCards";
+import { NightSkiesTravelCards } from "@/components/NightSkiesTravelCards";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -844,7 +845,12 @@ const AiTravel = () => {
                   <h2 className="text-2xl font-bold mb-6 text-center">Culinary Adventures & Food Destinations</h2>
                   <FoodTravelCards />
                 </div>
-              ) : selectedCategory === 'nightskies' || selectedCategory === 'wildlife' ? (
+              ) : selectedCategory === 'nightskies' ? (
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-6 text-center">Night Skies & Stargazing Destinations</h2>
+                  <NightSkiesTravelCards />
+                </div>
+              ) : selectedCategory === 'wildlife' ? (
                 <div className="p-6">
                   <h2 className="text-2xl font-bold mb-6 text-center">Wildlife & Safari Adventures</h2>
                   <WildlifeTravelCards />
