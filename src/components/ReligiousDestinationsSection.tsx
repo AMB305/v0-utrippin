@@ -59,7 +59,11 @@ const ReligiousDestinationsSection: React.FC = () => {
             };
             
             return (
-              <Link to={`/destinations/${destData.slug}`} key={i}>
+              <Link 
+                to={`/destinations/${destData.slug}`} 
+                key={i}
+                onClick={() => console.log('🔗 Clicking destination:', destData)}
+              >
                 <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group h-64">
                   <div className="absolute inset-0">
                     <img
