@@ -94,6 +94,7 @@ const KeilaMiniChat = ({ onOpenChat, onSendMessage, messages, isLoading }) => {
 // Main Desktop Layout Component - Replicating ixigo's UI
 // This component now receives its necessary state/handlers from AiTravel.tsx
 const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMessage, onStartNewTrip }) => {
+    console.log('🚀 DesktopTravelPlanner COMPONENT IS LOADING!');
     const [searchQuery, setSearchQuery] = useState('');
     const [showDestinations, setShowDestinations] = useState(false); // State for conditional photos
     const [selectedBudget, setSelectedBudget] = useState(null); // State for selected budget filter
