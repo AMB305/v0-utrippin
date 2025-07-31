@@ -68,7 +68,7 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
 import HotelsMiami from "./pages/HotelsMiami";
-import Miami from "./pages/Miami";
+
 import UploadTrips from "./pages/admin/UploadTrips";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ImageGeneration from "./pages/ImageGeneration";
@@ -125,7 +125,7 @@ const App = () => (
                   <Route path="/hotels" element={<Hotels />} />
                   <Route path="/hotels/search" element={<HotelSearch />} />
                   <Route path="/hotels/miami" element={<HotelsMiami />} />
-                  <Route path="/miami" element={<Miami />} />
+                  
                   <Route path="/hotels/results" element={<HotelResults />} />
                   <Route path="/hotels/booking" element={<HotelBooking />} />
                   <Route path="/hotels/confirmation" element={<HotelBookingConfirmation />} />
