@@ -892,7 +892,7 @@ const AiTravel = () => {
                   <h2 className="text-2xl font-bold mb-6 text-center">Hidden Gems & Off-Beat Destinations</h2>
                   <HiddenGemTravelCards />
                 </div>
-              ) : selectedCategory === 'melanin compass' ? (
+              ) : selectedCategory === 'Melanin Compass' ? (
                 <div className="p-6">
                   <h2 className="text-2xl font-bold mb-6 text-center">Melanin Compass - Black Heritage & Culture Travel</h2>
                   <MelaninCompassTravelCards />
