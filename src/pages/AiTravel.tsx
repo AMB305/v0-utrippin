@@ -146,21 +146,13 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
 
     const handleCategoryClick = (categoryName: string) => {
         console.log('🔍 Category clicked:', categoryName);
-        console.log('🔍 Previous selectedCategory:', selectedCategory);
-        
-        // Add alert for Melanin Compass debugging
-        if (categoryName === 'Melanin Compass') {
-            alert('Melanin Compass clicked!');
-        }
+        alert(`Category clicked: ${categoryName}`);
         
         setSelectedCategory(categoryName);
-        console.log('🔍 After setSelectedCategory, should be:', categoryName);
-        console.log('🔍 Is Melanin Compass?', categoryName === 'Melanin Compass');
         
         // Fetch destinations for the selected category
         fetchDestinations(categoryName === 'All' ? undefined : categoryName);
         setShowDestinations(true); // Show destinations after category click
-        // Note: No longer auto-opening Keila chat - let users browse first
     };
 
     const handleDestinationCardClick = (destinationName: string) => {
