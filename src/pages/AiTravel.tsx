@@ -38,6 +38,7 @@ import { NightlifeTravelCards } from "@/components/NightlifeTravelCards";
 import { SportsTravelCards } from "@/components/SportsTravelCards";
 import { WellnessTravelCards } from "@/components/WellnessTravelCards";
 import { SoloTravelCards } from "@/components/SoloTravelCards";
+import { TravelTypeSelector } from "@/components/TravelTypeSelector";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -195,22 +196,12 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
         <div className="min-h-screen bg-gray-50 flex flex-col">
             {/* Top Bar - Mimicking ixigo's header */}
             <header className="bg-white shadow-sm p-4 flex items-center justify-between relative z-10">
-                <div className="flex items-center space-x-4">
-                    <div className="flex items-center text-gray-700">
-                        <span className="font-semibold mr-1">From</span>
-                        <select className="border border-gray-300 rounded-md p-1 bg-gray-50 text-sm focus:ring-blue-400 focus:border-blue-400">
-                            <option>Miami</option>
-                            <option>New York</option>
-                        </select>
-                    </div>
-                    <div className="flex items-center text-gray-700">
-                        <span className="font-semibold mr-1">Travel month</span>
-                        <select className="border border-gray-300 rounded-md p-1 bg-gray-50 text-sm focus:ring-blue-400 focus:border-blue-400">
-                            <option>August</option>
-                            <option>September</option>
-                        </select>
-                    </div>
-                </div>
+                <TravelTypeSelector 
+                    onSelect={(type) => {
+                        console.log('Selected travel type:', type);
+                        // Handle the selection - could trigger different UI flows
+                    }}
+                />
                 
                 <form onSubmit={handleSearchSubmit} className="flex-grow max-w-xl mx-4">
                     <div className="relative">
