@@ -9,6 +9,7 @@ import { Button } from './ui/button';
 import { MessageSquare } from 'lucide-react';
 import { AnimatedKeila } from './AnimatedKeila';
 import { SimpleChatInput } from './SimpleChatInput';
+import { ReligionTravelCards } from './ReligionTravelCards';
 
 const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, chatMessages, isLoading, onSendMessage }) => {
   const { user } = useAuth();
@@ -16,10 +17,9 @@ const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, c
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
-    if (category !== 'All') {
-      // Generate category-specific travel question
+    if (category !== 'All' && category !== 'Religious') {
+      // Generate category-specific travel question for categories other than Religious
       const categoryQuestions = {
-        Religious: "I'm interested in religious and spiritual travel experiences",
         Cultural: "I want to explore cultural attractions and experiences",
         Nature: "I'm looking for nature-based travel destinations",
         Food: "I want to discover amazing food experiences while traveling",
@@ -82,6 +82,11 @@ const DesktopTravelPlanner = ({ onQuestionSelect, hasStartedChat, onClearChat, c
               isLoading={isLoading}
               onSendMessage={onSendMessage}
             />
+          </div>
+        ) : selectedCategory === 'Religious' ? (
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-2xl font-bold mb-6 text-center">Religious & Spiritual Destinations</h2>
+            <ReligionTravelCards />
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
