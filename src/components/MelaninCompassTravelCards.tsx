@@ -60,12 +60,11 @@ export const MelaninCompassTravelCards = () => {
           key={i}
           className="rounded-2xl overflow-hidden shadow hover:shadow-lg transition-all duration-300 bg-white"
         >
-          <div className="aspect-[4/3] bg-gray-200">
-            <img
-              src={`/public/images/melanin/${title.toLowerCase().replace(/[^a-z0-9]/g, "_")}.jpg`}
-              alt={title}
-              className="w-full h-full object-cover"
-            />
+          <div className="aspect-[4/3] bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+            <div className="text-white text-center p-4">
+              <h4 className="font-bold text-lg mb-2">{title}</h4>
+              <p className="text-sm opacity-90">Black Cultural Heritage</p>
+            </div>
           </div>
           <div className="p-4 text-center">
             <h3 className="text-lg font-semibold">{title}</h3>
