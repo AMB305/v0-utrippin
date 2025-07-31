@@ -18,6 +18,7 @@ import { SimpleChatInput } from "@/components/SimpleChatInput";
 import { GlobalKeilaBubble } from "@/components/GlobalKeilaBubble";
 import { ReligionTravelCards } from "@/components/ReligionTravelCards";
 import { NatureTravelCards } from "@/components/NatureTravelCards";
+import { AdventureTravelCards } from "@/components/AdventureTravelCards";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -800,6 +801,11 @@ const AiTravel = () => {
                 <div className="p-6">
                   <h2 className="text-2xl font-bold mb-6 text-center">Nature & Wildlife Destinations</h2>
                   <NatureTravelCards />
+                </div>
+              ) : selectedCategory === 'outdoors' ? (
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-6 text-center">Adventure & Outdoor Activities</h2>
+                  <AdventureTravelCards />
                 </div>
               ) : hasStartedChat ? (
                 <DestinationGrid 
