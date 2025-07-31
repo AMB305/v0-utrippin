@@ -313,6 +313,98 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                                     <ReligionTravelCards />
                                 </div>
                             );
+                        } else if (selectedCategory === 'Melanin Compass') {
+                            console.log('🔍 Should show Melanin Compass cards');
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Melanin Compass Destinations</h2>
+                                    <MelaninCompassTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Cultural') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Cultural Destinations</h2>
+                                    <CultureTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Nature') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Nature Destinations</h2>
+                                    <NatureTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Food') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Food & Culinary Destinations</h2>
+                                    <FoodTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Festivals') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Festival Destinations</h2>
+                                    <FestivalTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Beaches') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Beach Destinations</h2>
+                                    <BeachTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Mountains') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Mountain Destinations</h2>
+                                    <MountainTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Outdoors') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Outdoor Adventure Destinations</h2>
+                                    <OutdoorTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'NightSkies') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Stargazing Destinations</h2>
+                                    <NightSkiesTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Luxury') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Luxury Destinations</h2>
+                                    <LuxuryTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Romance') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Romantic Destinations</h2>
+                                    <RomanticTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Shopping') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Shopping Destinations</h2>
+                                    <ShoppingTravelCards />
+                                </div>
+                            );
+                        } else if (selectedCategory === 'Offbeat') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Hidden Gem Destinations</h2>
+                                    <HiddenGemTravelCards />
+                                </div>
+                            );
                         } else if (showDestinations) {
                             console.log('🔍 Should show regular destinations');
                             return (
