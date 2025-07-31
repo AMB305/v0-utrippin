@@ -25,6 +25,7 @@ import { RomanticTravelCards } from "@/components/RomanticTravelCards";
 import { FamilyTravelCards } from "@/components/FamilyTravelCards";
 import { FoodTravelCards } from "@/components/FoodTravelCards";
 import { WildlifeTravelCards } from "@/components/WildlifeTravelCards";
+import { ShoppingTravelCards } from "@/components/ShoppingTravelCards";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -842,6 +843,11 @@ const AiTravel = () => {
                 <div className="p-6">
                   <h2 className="text-2xl font-bold mb-6 text-center">Wildlife & Safari Adventures</h2>
                   <WildlifeTravelCards />
+                </div>
+              ) : selectedCategory === 'shopping' ? (
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-6 text-center">Shopping & Market Destinations</h2>
+                  <ShoppingTravelCards />
                 </div>
               ) : hasStartedChat ? (
                 <DestinationGrid 
