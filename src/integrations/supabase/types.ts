@@ -617,6 +617,30 @@ export type Database = {
         }
         Relationships: []
       }
+      destination_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          destination_id: string
+          id: string
+          url: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          destination_id: string
+          id?: string
+          url: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          destination_id?: string
+          id?: string
+          url?: string
+        }
+        Relationships: []
+      }
       destination_tips: {
         Row: {
           category: string
@@ -651,6 +675,84 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      destination_transport: {
+        Row: {
+          created_at: string
+          destination_id: string
+          details: string
+          id: string
+          mode: string
+        }
+        Insert: {
+          created_at?: string
+          destination_id: string
+          details: string
+          id?: string
+          mode: string
+        }
+        Update: {
+          created_at?: string
+          destination_id?: string
+          details?: string
+          id?: string
+          mode?: string
+        }
+        Relationships: []
+      }
+      destination_visit_info: {
+        Row: {
+          best_time: string
+          created_at: string
+          destination_id: string
+          id: string
+          notes: string | null
+        }
+        Insert: {
+          best_time: string
+          created_at?: string
+          destination_id: string
+          id?: string
+          notes?: string | null
+        }
+        Update: {
+          best_time?: string
+          created_at?: string
+          destination_id?: string
+          id?: string
+          notes?: string | null
+        }
+        Relationships: []
+      }
+      destination_weather: {
+        Row: {
+          aqi: number
+          created_at: string
+          destination_id: string
+          id: string
+          month: string
+          notes: string | null
+          temperature: string
+        }
+        Insert: {
+          aqi: number
+          created_at?: string
+          destination_id: string
+          id?: string
+          month: string
+          notes?: string | null
+          temperature: string
+        }
+        Update: {
+          aqi?: number
+          created_at?: string
+          destination_id?: string
+          id?: string
+          month?: string
+          notes?: string | null
+          temperature?: string
+        }
+        Relationships: []
       }
       destinations: {
         Row: {

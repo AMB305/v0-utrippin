@@ -32,7 +32,11 @@ export const adaptDestinationToTemplate = (
   destination: any,
   activities: any[] = [],
   attractions: any[] = [],
-  tips: any[] = []
+  tips: any[] = [],
+  weather: any[] = [],
+  transport: any[] = [],
+  visitInfo: any = null,
+  photos: any[] = []
 ): DestinationPageData => {
   // Convert activities to template format
   const adaptedActivities = activities.map(activity => ({
@@ -83,11 +87,46 @@ export const adaptDestinationToTemplate = (
     }
   ];
 
+  // Convert weather data if available
+  const adaptedWeatherData = weather.length > 0 ? weather.map(w => ({
+    month: w.month.substring(0, 3), // Convert to 3-letter format
+    temp: w.temperature,
+    aqi: w.aqi.toString(),
+    icon: w.aqi > 50 ? 'cloud' : (w.temperature.includes('30') || w.temperature.includes('35') ? 'sun' : 'cloud') as 'sun' | 'cloud' | 'cloud-rain',
+    highlight: ['Apr', 'May', 'Jun', 'Sep', 'Oct'].includes(w.month.substring(0, 3))
+  })) : defaultWeatherData;
+
   // Convert tips to FAQ format
   const faqs = tips.map(tip => ({
     question: tip.title || 'Travel Tip',
     content: React.createElement('p', { className: 'text-sm text-gray-700' }, tip.content || 'Helpful travel information.')
   }));
+
+  // Add transport FAQ if available
+  if (transport.length > 0) {
+    const transportContent = transport.map(t => `${t.mode}: ${t.details}`).join('\n\n');
+    faqs.push({
+      question: `How to reach ${destination.name}?`,
+      content: React.createElement('div', { className: 'text-sm text-gray-700' }, 
+        transport.map((t, i) => 
+          React.createElement('p', { key: i, className: 'mb-2' }, 
+            React.createElement('strong', {}, t.mode + ': '), t.details
+          )
+        )
+      )
+    });
+  }
+
+  // Add visit info FAQ if available
+  if (visitInfo) {
+    faqs.push({
+      question: `What is the best time to visit ${destination.name}?`,
+      content: React.createElement('div', { className: 'text-sm text-gray-700' }, 
+        React.createElement('p', { className: 'mb-2' }, `Best time: ${visitInfo.best_time}`),
+        React.createElement('p', {}, visitInfo.notes)
+      )
+    });
+  }
 
   // Add default FAQ if none exist
   if (faqs.length === 0) {
@@ -107,8 +146,8 @@ export const adaptDestinationToTemplate = (
     heroImage: destination.hero_image_url || `https://placehold.co/1200x500/10B981/FFFFFF?text=${encodeURIComponent(destination.name)}`,
     
     // Weather data
-    monthsData: defaultWeatherData,
-    bestTimeToVisit: 'June-September',
+    monthsData: adaptedWeatherData,
+    bestTimeToVisit: visitInfo?.best_time || 'June-September',
     
     // Content data
     popularFeatures: defaultPopularFeatures,
