@@ -35,6 +35,7 @@ import { NightSkiesTravelCards } from "@/components/NightSkiesTravelCards";
 import { OutdoorTravelCards } from "@/components/OutdoorTravelCards";
 import { MelaninCompassTravelCards } from "@/components/MelaninCompassTravelCards";
 import { NightlifeTravelCards } from "@/components/NightlifeTravelCards";
+import { SportsTravelCards } from "@/components/SportsTravelCards";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -1001,6 +1002,11 @@ const AiTravel = () => {
                 <div className="p-6">
                   <h2 className="text-2xl font-bold mb-6 text-center">Hidden Gems & Off-Beat Destinations</h2>
                   <HiddenGemTravelCards />
+                </div>
+              ) : selectedCategory === 'sports' ? (
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-6 text-center">Adventure Sports & Outdoor Activities</h2>
+                  <SportsTravelCards />
                 </div>
               ) : selectedCategory === 'nightlife' ? (
                 <div className="p-6">
