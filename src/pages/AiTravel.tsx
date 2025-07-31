@@ -286,7 +286,7 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                         console.log('🔍 Rendering logic - selectedCategory:', selectedCategory);
                         console.log('🔍 Rendering logic - showDestinations:', showDestinations);
                         
-                        if (selectedCategory === 'Religious') {
+                        if (selectedCategory === 'Religious' || selectedCategory === 'religious') {
                             console.log('🔍 Should show Religious cards');
                             return (
                                 <div>
@@ -790,7 +790,12 @@ const AiTravel = () => {
             
             {/* Destinations Grid or Welcome Content */}
             <div className="flex-1 overflow-y-auto">
-              {hasStartedChat ? (
+              {selectedCategory === 'religious' ? (
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-6 text-center">Religious & Spiritual Destinations</h2>
+                  <ReligionTravelCards />
+                </div>
+              ) : hasStartedChat ? (
                 <DestinationGrid 
                   destinations={filteredDestinations}
                   onDestinationClick={(destination) => {
