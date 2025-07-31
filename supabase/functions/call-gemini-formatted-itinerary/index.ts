@@ -59,45 +59,49 @@ serve(async (req) => {
 
     console.log(`No cache found for ${cacheKey}, generating new guide`);
 
-    // 🧠 Step 2: Enhanced Few-shot prompt with structured template
+    // 🧠 Step 2: Enhanced Few-shot prompt with comprehensive structured template
     const wrappedPrompt = `
-You are a travel itinerary generator. You MUST output ONLY structured Markdown with the exact format below. No conversational text, no commentary, no casual tone.
+Your task is to generate a structured Markdown-formatted trip itinerary using this exact format:
 
---- REQUIRED OUTPUT FORMAT ---
+--- EXAMPLE FORMAT BELOW ---
 
-## 🏖 Day 1: [Destination Theme Title]
+## ✈️ ${city} Trip — ${date} ($500 Budget)
 
-### 🌅 Morning
-- ✈️ [Arrival details if applicable]
-- 🚖 [Transport from airport/station (~$XX)]
-- ☕ [Breakfast suggestion with cost]
+### 🛫 Flights
+- Book ASAP on budget airlines
+- Fly into **[Airport Code] ([Airport Name])**
 
-### 🏛️ Afternoon  
-- [Main activity/attraction]
-- 🍽 [Lunch suggestion with location and cost]
-- [Secondary activity]
+### 🏨 Hotel Suggestions
+- All-inclusive: **[Hotel Name 1]** or **[Hotel Name 2]**
+- Budget: **[Budget Option]**
 
-### 🌆 Evening
-- [Evening activity/walk]
-- 🍲 [Dinner suggestion with cost]
+### 🏖️ Day-by-Day Activities
 
-### 💰 Budget Breakdown (Day 1)
+#### ${date}
+- ✅ [Check-in activity]
+- 🍽️ [Dinner suggestion with cost]
 
-| Category    | Cost          |
-|------------|---------------|
-| Transport   | ~$XX          |
-| Food        | ~$XX/person   |
-| Activities  | $XX or Free   |
+### 💰 Budget Summary
 
-### 🌍 Cultural Tips
-- 💸 **Tipping:** [local tipping customs]
-- 🍽 **Dining:** [meal timing/customs]
-- 🗣 **Language:** [local language info]
-- 👕 **Dress:** [dress code/weather tips]
+| Category         | Cost (Est.)         |
+|------------------|---------------------|
+| Flights          | ~$XXX               |
+| Hotel            | ~$XXX               |
+| Activities       | ~$XXX               |
+| Food             | ~$XXX               |
+| Transport        | ~$XXX               |
+| **Total**        | **$XXX**            |
 
---- END FORMAT ---
+### 🌮 Local Tips
+- [Transportation tip]
+- [Food/drink recommendation]
+- [Cultural/safety tip]
 
-Generate a 1-day itinerary for ${city} on ${date}. Use EXACTLY this structure with emojis, headers, and markdown tables. Be specific about costs in local currency.
+--- END EXAMPLE ---
+
+Now create the exact same style for this request:
+
+**Plan a trip to ${city} on ${date} with a $500 budget.**
 `;
 
     console.log("PROMPT SENT TO GEMINI >>>", wrappedPrompt);
