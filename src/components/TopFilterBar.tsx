@@ -9,11 +9,13 @@ interface TopFilterBarProps {
 export const TopFilterBar: React.FC<TopFilterBarProps> = ({ onCreateTripWithAI }) => {
   return (
     <div className="flex items-center gap-4 mb-6 px-4">
-      <div className="bg-white border border-gray-200 px-4 py-2 rounded-full shadow-sm">
-        From <strong className="ml-1 text-gray-800">Your Location</strong>
-      </div>
-      <div className="bg-white border border-gray-200 px-4 py-2 rounded-full shadow-sm">
-        Travel month <strong className="ml-1 text-gray-800">Any Month</strong>
+      <div className="flex items-center space-x-4">
+        <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+          Staycation
+        </button>
+        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+          Vacation
+        </button>
       </div>
       <Input
         type="text"
