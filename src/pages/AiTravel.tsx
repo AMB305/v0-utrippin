@@ -234,6 +234,7 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
             <main className="flex-grow flex">
                 {/* Left Sidebar - Categories and Filters */}
                 <aside className="w-64 bg-white shadow-md p-6 overflow-y-auto custom-scrollbar flex-shrink-0 max-h-screen">
+                    <button onClick={() => console.log('TEST BUTTON WORKS')} className="mb-4 p-2 bg-red-500 text-white">TEST CLICK</button>
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">Categories</h3>
                     <div className="grid grid-cols-1 gap-2 mb-8">{/* Changed to single column */}
                         {categories.map((category, index) => {
