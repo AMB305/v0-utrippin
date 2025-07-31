@@ -235,19 +235,22 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
             {/* Main Content Area */}
             <main className="flex-grow flex">
                 {/* Left Sidebar - Categories and Filters */}
-                <aside className="w-64 bg-white shadow-md p-6 overflow-y-auto custom-scrollbar flex-shrink-0">
+                <aside className="w-64 bg-white shadow-md p-6 overflow-y-auto custom-scrollbar flex-shrink-0 max-h-screen">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">Categories</h3>
-                    <div className="grid grid-cols-2 gap-4 mb-8">
-                        {categories.map((category) => (
-                            <button
-                                key={category.name}
-                                onClick={() => handleCategoryClick(category.name)}
-                                className="flex flex-col items-center justify-center p-3 border border-gray-200 rounded-lg hover:bg-blue-50 transition duration-200 text-gray-700 text-sm font-medium"
-                            >
-                                {category.icon}
-                                <span className="mt-2 text-center">{category.name}</span>
-                            </button>
-                        ))}
+                    <div className="grid grid-cols-1 gap-2 mb-8">{/* Changed to single column */}
+                        {categories.map((category, index) => {
+                            console.log(`Rendering category ${index}:`, category.name);
+                            return (
+                                <button
+                                    key={category.name}
+                                    onClick={() => handleCategoryClick(category.name)}
+                                    className="flex flex-col items-center justify-center p-3 border border-gray-200 rounded-lg hover:bg-blue-50 transition duration-200 text-gray-700 text-sm font-medium"
+                                >
+                                    {category.icon}
+                                    <span className="mt-2 text-center">{category.name}</span>
+                                </button>
+                            );
+                        })}
                     </div>
 
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">Filters</h3>
