@@ -74,10 +74,14 @@ export const useChatAI = () => {
           loading: false,
         });
 
-        // Store comprehensive itinerary in localStorage for full-page view
+        // Store comprehensive itinerary and navigate to dedicated page
         if (data.comprehensiveItinerary && data.isComprehensiveItinerary) {
-          const { saveItinerary } = await import('@/utils/itineraryStorage');
-          saveItinerary(data.comprehensiveItinerary);
+          const itineraryId = Date.now().toString();
+          localStorage.setItem(`itinerary_${itineraryId}`, JSON.stringify(data.comprehensiveItinerary));
+          
+          // Navigate to the comprehensive itinerary page
+          window.location.href = `/comprehensive-itinerary/${itineraryId}`;
+          return; // Don't add the message to chat since we're navigating away
         }
       }
 
