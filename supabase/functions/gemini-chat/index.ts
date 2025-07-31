@@ -37,7 +37,76 @@ function limitChatHistory(chatHistory: any[], maxTurns: number = 5): any[] {
 
 // COST OPTIMIZATION STRATEGY 3: Create concise, optimized prompts
 function createOptimizedPrompt(currentPrompt: string): string {
-  // Add conciseness instructions to reduce output tokens
+  // Check if this is a travel planning request
+  const travelKeywords = ['trip', 'travel', 'plan', 'itinerary', 'visit', 'vacation', 'budget'];
+  const isTravelRequest = travelKeywords.some(keyword => 
+    currentPrompt.toLowerCase().includes(keyword)
+  );
+  
+  if (isTravelRequest) {
+    // Use structured travel planning format
+    return `You are Keila, a friendly AI travel assistant. Generate a clear, Markdown-formatted itinerary.
+
+✅ Use this structure exactly:
+- Friendly intro paragraph
+- Emoji headers for each section
+- Budget table
+- Insider tips
+
+Keep tone helpful and encouraging, like a well-traveled friend planning the perfect getaway.
+
+---
+
+## 🏖 [Destination] Trip – Budget Friendly
+
+Hey there! ✨ Here's how to explore your destination and have an amazing time.
+
+### ✈️ Flights  
+**Here's the move:** Search early and fly into the nearest major airport.  
+Try budget airlines.  
+📍 Tip: Mid-week flights are often cheaper!
+
+### 🏨 Where to Stay  
+**Let's keep it comfy and budget-friendly:**
+- 💎 All-Inclusive options
+- 💰 Budget hostels or Airbnb
+
+### 📆 Daily Game Plan
+
+#### Day 1 – Arrival  
+- ✈️ Land and check-in  
+- 🏖 Explore main attraction  
+- 🍽 Local dinner
+
+#### Day 2 – Adventure  
+- 🚌 Visit cultural site  
+- 🌮 Lunch at local spot  
+- 🎟 Explore markets
+
+### 💸 Budget Breakdown
+
+| Category       | Estimated Cost |
+|----------------|----------------|
+| Flights        | $XXX           |
+| Hotel          | $XXX           |
+| Food           | $XXX           |
+| Activities     | $XXX           |
+| Transport      | $XXX           |
+| **Total**      | **$XXX**       |
+
+### 💡 Keila's Tips  
+- [Practical tip 1]
+- [Practical tip 2]
+- [Local insight]
+
+---
+
+USER REQUEST: ${currentPrompt}
+
+Generate this exact format with specific details for their request.`;
+  }
+  
+  // Regular concise response for non-travel queries
   const conciseInstructions = `You are Keila, a helpful travel assistant. Be concise and practical.
 
 RESPONSE GUIDELINES:
@@ -156,7 +225,13 @@ serve(async (req) => {
 
     console.log('Final API call - Total messages:', contents.length);
 
-    // Call Gemini API with cost-optimized settings
+    // Detect if this is a travel planning request for token allocation
+    const travelKeywords = ['trip', 'travel', 'plan', 'itinerary', 'visit', 'vacation', 'budget'];
+    const isTravelRequest = travelKeywords.some(keyword => 
+      currentPrompt.toLowerCase().includes(keyword)
+    );
+
+    // Call Gemini API with dynamic token limits
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiApiKey}`, {
       method: 'POST',
       headers: {
@@ -168,7 +243,7 @@ serve(async (req) => {
           temperature: 0.7,
           topK: 40,
           topP: 0.8,
-          maxOutputTokens: 400, // REDUCED from 2048 to 400 for cost savings
+          maxOutputTokens: isTravelRequest ? 1500 : 400, // Higher limit for travel requests
           stopSequences: [],
         },
         safetySettings: [
