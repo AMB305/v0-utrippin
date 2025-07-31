@@ -28,7 +28,7 @@ const ItineraryDisplay: React.FC = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('call-gemini-formatted-itinerary', {
-        body: { city, date }
+        body: { city, date, budget: 500 }
       });
       
       if (error) {
