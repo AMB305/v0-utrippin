@@ -33,6 +33,7 @@ import { HistoricalTravelCards } from "@/components/HistoricalTravelCards";
 import { MountainTravelCards } from "@/components/MountainTravelCards";
 import { NightSkiesTravelCards } from "@/components/NightSkiesTravelCards";
 import { OutdoorTravelCards } from "@/components/OutdoorTravelCards";
+import { MelaninCompassTravelCards } from "@/components/MelaninCompassTravelCards";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -890,6 +891,11 @@ const AiTravel = () => {
                 <div className="p-6">
                   <h2 className="text-2xl font-bold mb-6 text-center">Hidden Gems & Off-Beat Destinations</h2>
                   <HiddenGemTravelCards />
+                </div>
+              ) : selectedCategory === 'melanin compass' ? (
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-6 text-center">Melanin Compass - Black Heritage & Culture Travel</h2>
+                  <MelaninCompassTravelCards />
                 </div>
               ) : hasStartedChat ? (
                 <DestinationGrid 
