@@ -7,9 +7,16 @@ const ReligiousDestinationsSection: React.FC = () => {
   const { destinations, loading, fetchDestinations } = useDestinations();
 
   useEffect(() => {
+    console.log('🔍 ReligiousDestinationsSection: Starting to fetch religious destinations');
     // First try to fetch religious destinations from database
     fetchDestinations('Religious');
   }, []);
+
+  console.log('🏛️ ReligiousDestinationsSection: Current state:', { 
+    destinationsCount: destinations.length, 
+    loading, 
+    destinations: destinations.slice(0, 3) // Log first 3 for debugging
+  });
 
   return (
     <section className="mb-12">
