@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Building2, Church, Globe, Trees, Waves, Mountain, ShoppingBag, Utensils, Music, Sparkles, Castle, Trophy, Heart, MoonStar, Tent, Wine, Gem, Compass, Leaf, Users } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Building2, Church, Globe, Trees, Waves, Mountain, ShoppingBag, Utensils, Music, Sparkles, Castle, Trophy, Heart, MoonStar, Tent, Wine, Gem, Compass, Leaf, Users, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const categories = [
@@ -21,6 +21,7 @@ const categories = [
   { id: 'sports', name: 'Sports', icon: Trophy },
   { id: 'wellness', name: 'Wellness', icon: Leaf },
   { id: 'family', name: 'Family & Kids', icon: Users },
+  { id: 'solo', name: 'Solo Travel', icon: User },
   { id: 'offbeat', name: 'Offbeat', icon: Compass },
   { id: 'melanin-compass', name: 'Melanin Compass', icon: Compass },
 ];
