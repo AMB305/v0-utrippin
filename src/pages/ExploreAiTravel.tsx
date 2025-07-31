@@ -3,6 +3,7 @@ import { BudgetSlider } from "@/components/BudgetSlider";
 import { SimpleChatInput } from "@/components/SimpleChatInput";
 import { SmartImage } from "@/components/SmartImage";
 import { SEOHead } from "@/components/SEOHead";
+import ReligiousDestinationsSection from "@/components/ReligiousDestinationsSection";
 import { fallbackTrips } from "@/data/fallbackTrips";
 import destinations from "@/data/destinations";
 import { affiliateConfig } from "@/config/affiliateConfig";
@@ -139,6 +140,9 @@ const ExploreAiTravel = () => {
               ))}
             </div>
           </div>
+
+          {/* Religious & Spiritual Destinations */}
+          <ReligiousDestinationsSection />
 
           {/* AI Travel Assistant */}
           <div className="mb-12">
