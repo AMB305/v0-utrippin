@@ -149,6 +149,7 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
         console.log('🔍 Previous selectedCategory:', selectedCategory);
         setSelectedCategory(categoryName);
         console.log('🔍 After setSelectedCategory, should be:', categoryName);
+        console.log('🔍 Is Melanin Compass?', categoryName === 'Melanin Compass');
         
         // Fetch destinations for the selected category
         fetchDestinations(categoryName === 'All' ? undefined : categoryName);
@@ -893,10 +894,15 @@ const AiTravel = () => {
                   <HiddenGemTravelCards />
                 </div>
               ) : selectedCategory === 'Melanin Compass' ? (
-                <div className="p-6">
-                  <h2 className="text-2xl font-bold mb-6 text-center">Melanin Compass - Black Heritage & Culture Travel</h2>
-                  <MelaninCompassTravelCards />
-                </div>
+                (() => {
+                  console.log('🌍 Rendering Melanin Compass category');
+                  return (
+                    <div className="p-6">
+                      <h2 className="text-2xl font-bold mb-6 text-center">Melanin Compass - Black Heritage & Culture Travel</h2>
+                      <MelaninCompassTravelCards />
+                    </div>
+                  );
+                })()
               ) : hasStartedChat ? (
                 <DestinationGrid 
                   destinations={filteredDestinations}
