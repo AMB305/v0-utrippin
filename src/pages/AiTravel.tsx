@@ -949,10 +949,15 @@ const AiTravel = () => {
                   <h2 className="text-2xl font-bold mb-6 text-center">Romantic Getaways & Couple Destinations</h2>
                   <RomanticTravelCards />
                 </div>
-              ) : selectedCategory === 'wellness' || selectedCategory === 'family' ? (
+              ) : selectedCategory === 'wellness' ? (
                 <div className="p-6">
                   <h2 className="text-2xl font-bold mb-6 text-center">Wellness & Retreats - Peaceful Destinations</h2>
                   <WellnessTravelCards />
+                </div>
+              ) : selectedCategory === 'family' ? (
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-6 text-center">Family & Kids - Perfect Destinations for All Ages</h2>
+                  <FamilyTravelCards />
                 </div>
               ) : selectedCategory === 'food' ? (
                 <div className="p-6">
