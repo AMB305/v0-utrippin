@@ -38,10 +38,10 @@ serve(async (req) => {
   }
 
   try {
-    const { city, date } = await req.json();
-    const cacheKey = `${city}_${date}`;
+    const { city, date, budget = 500 } = await req.json();
+    const cacheKey = `${city}_${date}_${budget}`;
 
-    console.log(`Generating travel guide for ${city} on ${date}`);
+    console.log(`Generating travel guide for ${city} on ${date} with budget $${budget}`);
 
     // 🔍 Step 1: Try to get cached guide
     const { data: cache, error: cacheError } = await supabase
@@ -59,58 +59,87 @@ serve(async (req) => {
 
     console.log(`No cache found for ${cacheKey}, generating new guide`);
 
-    // 🧠 Step 2: Enhanced Few-shot prompt with comprehensive structured template
-    const wrappedPrompt = `
-Your task is to generate a structured Markdown-formatted trip itinerary using this exact format:
+    // 🧠 Step 2: Keila-style friendly prompt with structure
+    const keilaPrompt = `
+You are Keila, a smart, friendly AI travel assistant. 
+Generate a clear, Markdown-formatted itinerary for a trip to **${city}**, starting **${date}**, with a budget of **$${budget}**.
 
---- EXAMPLE FORMAT BELOW ---
+✅ Use this structure exactly:
+- Friendly intro paragraph
+- Emoji headers for each section
+- Budget table
+- Insider tips
+- Expedia booking links
 
-## ✈️ ${city} Trip — ${date} ($500 Budget)
+Keep tone helpful and encouraging, like a well-traveled friend planning the perfect getaway.
 
-### 🛫 Flights
-- Book ASAP on budget airlines
-- Fly into **[Airport Code] ([Airport Name])**
+---
 
-### 🏨 Hotel Suggestions
-- All-inclusive: **[Hotel Name 1]** or **[Hotel Name 2]**
-- Budget: **[Budget Option]**
+## 🏖 ${city} Trip – ${date} – Budget: $${budget}
 
-### 🏖️ Day-by-Day Activities
+Hey there! ✨ Here's how to explore ${city} on a $${budget} budget and still have an amazing time.
 
-#### ${date}
-- ✅ [Check-in activity]
-- 🍽️ [Dinner suggestion with cost]
+### ✈️ Flights  
+**Here's the move:** Search early and fly into the nearest major airport.  
+Try budget airlines like JetBlue, Spirit, or Aeroméxico.  
+📍 Tip: Mid-week flights are often cheaper!
 
-### 💰 Budget Summary
+### 🏨 Where to Stay  
+**Let's keep it comfy and budget-friendly:**
+- 💎 All-Inclusive? Try Riu or Krystal
+- 💰 Budget? Hostels like Selina or Freehand
 
-| Category         | Cost (Est.)         |
-|------------------|---------------------|
-| Flights          | ~$XXX               |
-| Hotel            | ~$XXX               |
-| Activities       | ~$XXX               |
-| Food             | ~$XXX               |
-| Transport        | ~$XXX               |
-| **Total**        | **$XXX**            |
+### 📆 Daily Game Plan
 
-### 🌮 Local Tips
-- [Transportation tip]
-- [Food/drink recommendation]
-- [Cultural/safety tip]
+#### Day 1 – Arrival  
+- ✈️ Land and check-in  
+- 🏖 Beach time at a popular free spot  
+- 🍽 Street food dinner (~$12)
 
---- END EXAMPLE ---
+#### Day 2 – Local Adventure  
+- 🚌 Visit ruins or cultural site (~$60)  
+- 🌮 Lunch at a local café  
+- 🎟 Explore markets
 
-Now create the exact same style for this request:
+#### Day 3 – Water Fun  
+- ⛴ Ferry to nearby island/snorkeling  
+- 🐠 Beach time and street tacos
 
-**Plan a trip to ${city} on ${date} with a $500 budget.**
+#### Day 4 – Wind Down  
+- 🧘 Chill day and fly home
+
+### 💸 Budget Breakdown
+
+| Category       | Estimated Cost |
+|----------------|----------------|
+| Flights        | $XXX           |
+| Hotel          | $XXX           |
+| Food           | $XXX           |
+| Activities     | $XXX           |
+| Transport      | $XXX           |
+| **Total**      | **$${budget}** |
+
+### 💡 Keila's Tips  
+- Bring sunscreen + refillable water bottle  
+- Use public transport like R1 or R2  
+- Book ferries or excursions in advance!
+
+---
+
+🔗 [Book Flights](https://www.expedia.com/Flights?siteid=1&clickref=1100lBkVXSGk) | [Book Hotels](https://www.expedia.com/Hotels?siteid=1&clickref=1100lBkVXSGk)
+
+Only return Markdown — no extra text or apologies.
 `;
 
-    console.log("PROMPT SENT TO GEMINI >>>", wrappedPrompt);
+    console.log("KEILA PROMPT SENT TO GEMINI >>>", keilaPrompt);
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-pro-latest",
+      generationConfig: { temperature: 0.0 }
+    });
 
     const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: wrappedPrompt }] }],
-      generationConfig: { temperature: 0.0 },
+      contents: [{ role: "user", parts: [{ text: keilaPrompt }] }],
     });
 
     const markdown = result.response.candidates?.[0]?.content?.parts?.[0]?.text;
