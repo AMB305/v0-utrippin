@@ -146,9 +146,15 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
 
     const handleCategoryClick = (categoryName: string) => {
         console.log('🔍 Category clicked:', categoryName);
-        alert(`Category clicked: ${categoryName}`);
+        console.log('🔍 Current selectedCategory:', selectedCategory);
+        
+        if (categoryName === 'Melanin Compass') {
+            console.log('🌍 MELANIN COMPASS CLICKED! Setting state...');
+        }
         
         setSelectedCategory(categoryName);
+        
+        console.log('🔍 After setState, selectedCategory should be:', categoryName);
         
         // Fetch destinations for the selected category
         fetchDestinations(categoryName === 'All' ? undefined : categoryName);
