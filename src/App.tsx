@@ -46,6 +46,7 @@ import Cruises from "./pages/Cruises";
 import Deals from "./pages/Deals";
 import Widgets from "./pages/Widgets";
 import Destination from "./pages/Destination";
+import DestinationView from "./pages/DestinationView";
 import Category from "./pages/Category";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -137,7 +138,7 @@ const App = () => (
                   <Route path="/cruises" element={<Cruises />} />
                   <Route path="/deals" element={<Deals />} />
                   <Route path="/widgets" element={<Widgets />} />
-                  <Route path="/destinations/:slug" element={<Destination />} />
+                  <Route path="/destinations/:slug" element={<DestinationView />} />
                   <Route path="/categories/:category" element={<Category />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />
