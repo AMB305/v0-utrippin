@@ -916,10 +916,6 @@ const AiTravel = () => {
             
             {/* Destinations Grid or Welcome Content */}
             <div className="flex-1 overflow-y-auto">
-              {/* DEBUG: Show current category */}
-              <div className="p-2 bg-yellow-200 text-black text-center">
-                Current selectedCategory: "{selectedCategory}"
-              </div>
               {selectedCategory === 'religious' ? (
                 <div className="p-6">
                   <h2 className="text-2xl font-bold mb-6 text-center">Religious & Spiritual Destinations</h2>
@@ -1005,7 +1001,7 @@ const AiTravel = () => {
                   <h2 className="text-2xl font-bold mb-6 text-center">Hidden Gems & Off-Beat Destinations</h2>
                   <HiddenGemTravelCards />
                 </div>
-              ) : selectedCategory === 'Melanin Compass' ? (
+              ) : selectedCategory === 'melanin-compass' ? (
                 (() => {
                   console.log('🌍 Rendering Melanin Compass category');
                   return (
