@@ -62,3 +62,6 @@ verify_jwt = false
 
 [functions.ratehawk-search-geo]
 verify_jwt = false
+
+[functions.scrape-destinations]
+verify_jwt = false
