@@ -32,6 +32,7 @@ import { LuxuryTravelCards } from "@/components/LuxuryTravelCards";
 import { HistoricalTravelCards } from "@/components/HistoricalTravelCards";
 import { MountainTravelCards } from "@/components/MountainTravelCards";
 import { NightSkiesTravelCards } from "@/components/NightSkiesTravelCards";
+import { OutdoorTravelCards } from "@/components/OutdoorTravelCards";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -874,6 +875,11 @@ const AiTravel = () => {
                 <div className="p-6">
                   <h2 className="text-2xl font-bold mb-6 text-center">Mountain Adventures & Alpine Escapes</h2>
                   <MountainTravelCards />
+                </div>
+              ) : selectedCategory === 'outdoors' ? (
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-6 text-center">Outdoor Adventures & Nature Escapes</h2>
+                  <OutdoorTravelCards />
                 </div>
               ) : selectedCategory === 'historical' ? (
                 <div className="p-6">
