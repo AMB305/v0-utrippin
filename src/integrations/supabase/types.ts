@@ -1626,6 +1626,24 @@ export type Database = {
         }
         Relationships: []
       }
+      travel_guides: {
+        Row: {
+          created_at: string | null
+          id: string
+          markdown: string
+        }
+        Insert: {
+          created_at?: string | null
+          id: string
+          markdown: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          markdown?: string
+        }
+        Relationships: []
+      }
       travel_matches: {
         Row: {
           created_at: string | null
