@@ -2,9 +2,19 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { GoogleGenerativeAI } from "https://esm.sh/@google/generative-ai@0.1.3";
 
-const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY")!;
+const supabaseUrl = Deno.env.get("SUPABASE_URL");
+const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+
+if (!supabaseUrl) {
+  throw new Error("SUPABASE_URL is not set in Supabase environment");
+}
+if (!supabaseKey) {
+  throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set in Supabase environment");
+}
+if (!GEMINI_API_KEY) {
+  throw new Error("GEMINI_API_KEY is not set in Supabase environment");
+}
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
