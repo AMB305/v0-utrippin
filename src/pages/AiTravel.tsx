@@ -128,7 +128,11 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
     };
 
     const handleCategoryClick = (categoryName: string) => {
+        console.log('🔍 Category clicked:', categoryName);
+        console.log('🔍 Previous selectedCategory:', selectedCategory);
         setSelectedCategory(categoryName);
+        console.log('🔍 After setSelectedCategory, should be:', categoryName);
+        
         // Fetch destinations for the selected category
         fetchDestinations(categoryName === 'All' ? undefined : categoryName);
         setShowDestinations(true); // Show destinations after category click
@@ -278,109 +282,122 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
 
                 {/* Central Content - Destinations or Chat Placeholder */}
                 <section className="flex-grow p-6 bg-gray-50 overflow-y-auto">
-                    {selectedCategory === 'Religious' ? (
-                        <div>
-                            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Religious & Spiritual Destinations</h2>
-                            <ReligionTravelCards />
-                        </div>
-                    ) : showDestinations ? (
-                        <div>
-                            {/* Category filter indicator */}
-                            {selectedCategory !== 'All' && (
-                                <div className="mb-4 flex items-center justify-between">
-                                    <h2 className="text-xl font-semibold text-gray-800">
-                                        {selectedCategory} Destinations
-                                    </h2>
-                                    <span className="text-sm text-gray-600">
-                                        {destinations.length} destinations found
-                                    </span>
+                    {(() => {
+                        console.log('🔍 Rendering logic - selectedCategory:', selectedCategory);
+                        console.log('🔍 Rendering logic - showDestinations:', showDestinations);
+                        
+                        if (selectedCategory === 'Religious') {
+                            console.log('🔍 Should show Religious cards');
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Religious & Spiritual Destinations</h2>
+                                    <ReligionTravelCards />
                                 </div>
-                            )}
-                            
-                            {/* Loading state */}
-                            {destinationsLoading ? (
-                                <div className="flex items-center justify-center h-64">
-                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                                    <span className="ml-2 text-gray-600">Loading destinations...</span>
+                            );
+                        } else if (showDestinations) {
+                            console.log('🔍 Should show regular destinations');
+                            return (
+                                <div>
+                                    {/* Category filter indicator */}
+                                    {selectedCategory !== 'All' && (
+                                        <div className="mb-4 flex items-center justify-between">
+                                            <h2 className="text-xl font-semibold text-gray-800">
+                                                {selectedCategory} Destinations
+                                            </h2>
+                                            <span className="text-sm text-gray-600">
+                                                {destinations.length} destinations found
+                                            </span>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Loading state */}
+                                    {destinationsLoading ? (
+                                        <div className="flex items-center justify-center h-64">
+                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                                            <span className="ml-2 text-gray-600">Loading destinations...</span>
+                                        </div>
+                                    ) : destinationsError ? (
+                                        <div className="flex flex-col items-center justify-center h-64 text-red-500">
+                                            <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <p className="text-lg font-medium">Error loading destinations</p>
+                                            <p className="text-sm mt-1">{destinationsError}</p>
+                                            <button 
+                                                onClick={() => fetchDestinations()}
+                                                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                            >
+                                                Try Again
+                                            </button>
+                                        </div>
+                                    ) : destinations.length === 0 ? (
+                                        <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+                                            <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.007-5.824-2.448M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            <p className="text-lg font-medium">No destinations found</p>
+                                            <p className="text-sm mt-1">Try adjusting your search or filters</p>
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                            {destinations.map((destination) => (
+                                                <div
+                                                    key={destination.id}
+                                                    className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300 transform hover:scale-105"
+                                                    onClick={() => handleDestinationCardClick(destination.name)}
+                                                >
+                                                    <img
+                                                        src={destination.img || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop'}
+                                                        alt={destination.name}
+                                                        className="w-full h-40 object-cover"
+                                                        onError={(e) => {
+                                                            e.currentTarget.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop';
+                                                        }}
+                                                    />
+                                                    <div className="p-4">
+                                                        <h3 className="text-lg font-semibold text-gray-800 mb-1">{destination.name}</h3>
+                                                        {destination.country && (
+                                                            <p className="text-sm text-gray-500 mb-2">{destination.country}</p>
+                                                        )}
+                                                        {destination.description && (
+                                                            <p className="text-sm text-gray-600 mb-2 line-clamp-2">{destination.description}</p>
+                                                        )}
+                                                        {destination.price && (
+                                                            <p className="text-blue-600 font-semibold">
+                                                                From ${destination.price} {destination.per || 'night'}
+                                                            </p>
+                                                        )}
+                                                        {destination.category && (
+                                                            <span className="inline-block mt-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                                                {destination.category}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                            ) : destinationsError ? (
-                                <div className="flex flex-col items-center justify-center h-64 text-red-500">
-                                    <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            );
+                        } else {
+                            return (
+                                <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center">
+                                    <svg className="w-32 h-32 mb-4 opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
-                                    <p className="text-lg font-medium">Error loading destinations</p>
-                                    <p className="text-sm mt-1">{destinationsError}</p>
+                                    <p className="text-lg font-medium">Start by searching for a destination or picking a category!</p>
+                                    <p className="text-sm mt-2">Keila, your AI travel planner, is here to help.</p>
                                     <button 
-                                        onClick={() => fetchDestinations()}
-                                        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                        onClick={() => handleCategoryClick('All')}
+                                        className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                                     >
-                                        Try Again
+                                        Browse All Destinations
                                     </button>
                                 </div>
-                            ) : destinations.length === 0 ? (
-                                <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                                    <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.007-5.824-2.448M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                    <p className="text-lg font-medium">No destinations found</p>
-                                    <p className="text-sm mt-1">Try adjusting your search or filters</p>
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                    {destinations.map((destination) => (
-                                        <div
-                                            key={destination.id}
-                                            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300 transform hover:scale-105"
-                                            onClick={() => handleDestinationCardClick(destination.name)}
-                                        >
-                                            <img
-                                                src={destination.img || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop'}
-                                                alt={destination.name}
-                                                className="w-full h-40 object-cover"
-                                                onError={(e) => {
-                                                    e.currentTarget.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop';
-                                                }}
-                                            />
-                                            <div className="p-4">
-                                                <h3 className="text-lg font-semibold text-gray-800 mb-1">{destination.name}</h3>
-                                                {destination.country && (
-                                                    <p className="text-sm text-gray-500 mb-2">{destination.country}</p>
-                                                )}
-                                                {destination.description && (
-                                                    <p className="text-sm text-gray-600 mb-2 line-clamp-2">{destination.description}</p>
-                                                )}
-                                                {destination.price && (
-                                                    <p className="text-blue-600 font-semibold">
-                                                        From ${destination.price} {destination.per || 'night'}
-                                                    </p>
-                                                )}
-                                                {destination.category && (
-                                                    <span className="inline-block mt-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                                                        {destination.category}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center">
-                            <svg className="w-32 h-32 mb-4 opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            <p className="text-lg font-medium">Start by searching for a destination or picking a category!</p>
-                            <p className="text-sm mt-2">Keila, your AI travel planner, is here to help.</p>
-                            <button 
-                                onClick={() => handleCategoryClick('All')}
-                                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                            >
-                                Browse All Destinations
-                            </button>
-                        </div>
-                    )}
+                            );
+                        }
+                    })()}
                 </section>
 
                 {/* Right Sidebar - Keila Chat */}
