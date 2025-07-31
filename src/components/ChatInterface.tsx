@@ -1,6 +1,8 @@
 
 import React, { useEffect, useRef } from "react";
-import { MapPin } from "lucide-react";
+import { MapPin, ExternalLink } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { TypingIndicator } from "./TypingIndicator";
 import { EnhancedMapComponent } from "./EnhancedMapComponent";
 import { TripSummaryCard } from "./TripSummaryCard";
@@ -234,6 +236,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   tripName = "Philippines Adventure"
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   
   // Show dummy messages only when there are no real messages AND no loading state
   const messages = (propMessages.length > 0 || loading) ? propMessages : dummyMessages;
@@ -248,6 +251,12 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   const handleQuickReply = (suggestion: string) => {
     onSendMessage(suggestion);
+  };
+
+  const handleViewFullItinerary = (itinerary: ComprehensiveItineraryData) => {
+    const itineraryId = itinerary.itineraryId || Date.now().toString();
+    localStorage.setItem(`itinerary_${itineraryId}`, JSON.stringify(itinerary));
+    navigate(`/itinerary/${itineraryId}`);
   };
 
   return (
@@ -270,10 +279,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 <div className="space-y-4">
                   {/* Comprehensive Itinerary Display - NEW FORMAT */}
                   {message.isComprehensiveItinerary && message.comprehensiveItinerary ? (
-                    <div className="bg-white rounded-lg overflow-hidden">
-                      <ComprehensiveItinerary data={message.comprehensiveItinerary} />
+                    <div className="space-y-4">
+                      <div className="bg-white rounded-lg overflow-hidden">
+                        <ComprehensiveItinerary data={message.comprehensiveItinerary} />
+                      </div>
+                      <Button 
+                        onClick={() => handleViewFullItinerary(message.comprehensiveItinerary)}
+                        className="w-full bg-primary hover:bg-primary/90"
+                      >
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        View Full Itinerary Page
+                      </Button>
                     </div>
-                  ) : 
+                  ) :
                   /* Legacy Detailed Itinerary Display */
                   message.detailedItinerary ? (
                     <ItineraryCard itinerary={message.detailedItinerary} />

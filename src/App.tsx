@@ -89,6 +89,7 @@ import MyTrips from "./pages/MyTrips";
 import TripBoard from "./pages/TripBoard";
 import PublicTripView from "./pages/PublicTripView";
 import AgentProfilePage from "./pages/AgentProfilePage";
+import ItineraryView from "./pages/ItineraryView";
 
 const queryClient = new QueryClient();
 
@@ -158,6 +159,7 @@ const App = () => (
                   <Route path="/solo-travel" element={<SoloTravel />} />
                   <Route path="/events" element={<Events />} />
                    <Route path="/ai-travel" element={<AiTravel />} />
+                   <Route path="/itinerary/:id" element={<ItineraryView />} />
                    <Route path="/my-trips" element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
                    <Route path="/trip-board/:tripId" element={<ProtectedRoute><TripBoard /></ProtectedRoute>} />
                    <Route path="/trip/:shareId" element={<PublicTripView />} />

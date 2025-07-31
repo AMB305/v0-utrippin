@@ -73,6 +73,12 @@ export const useChatAI = () => {
           callsToAction: data.callsToAction,
           loading: false,
         });
+
+        // Store comprehensive itinerary in localStorage for full-page view
+        if (data.comprehensiveItinerary && data.isComprehensiveItinerary) {
+          const { saveItinerary } = await import('@/utils/itineraryStorage');
+          saveItinerary(data.comprehensiveItinerary);
+        }
       }
 
     } catch (err) {
