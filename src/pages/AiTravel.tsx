@@ -1059,12 +1059,77 @@ const AiTravel = () => {
                   );
                 })()
               ) : hasStartedChat ? (
-                <DestinationGrid 
-                  destinations={filteredDestinations}
-                  onDestinationClick={(destination) => {
-                    sendMessage(`I'm interested in visiting ${destination.name}. Can you help me plan a trip there?`, false, true); // Use Gemini
-                  }}
-                />
+                <div className="flex h-full">
+                  {/* Chat Interface - Full Width */}
+                  <div className="flex-1 flex flex-col bg-white rounded-lg shadow-sm m-4">
+                    <div className="flex justify-between items-center p-4 border-b border-gray-200">
+                      <h2 className="text-lg font-semibold">Chat with Keila</h2>
+                      <button 
+                        onClick={() => {
+                          resetSession();
+                          setSelectedCategory('all');
+                        }}
+                        className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+                      >
+                        New Chat
+                      </button>
+                    </div>
+                    
+                    {/* Messages */}
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                      {messages.map((message, index) => (
+                        <div key={message.id || index} className="space-y-4">
+                          {/* User Message */}
+                          <div className="flex justify-end">
+                            <div className="bg-blue-500 text-white rounded-lg px-4 py-2 max-w-xs lg:max-w-md">
+                              {message.question}
+                            </div>
+                          </div>
+                          
+                          {/* AI Response */}
+                          {message.response && (
+                            <div className="flex justify-start">
+                              <div className="bg-gray-100 text-gray-900 rounded-lg px-4 py-2 max-w-full lg:max-w-4xl">
+                                <div className="prose prose-sm max-w-none">
+                                  {message.response.split('\n').map((line, i) => (
+                                    <p key={i} className="mb-2 last:mb-0">{line}</p>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Loading indicator */}
+                          {message.loading && (
+                            <div className="flex justify-start">
+                              <div className="bg-gray-100 rounded-lg px-4 py-2">
+                                <div className="flex items-center space-x-2">
+                                  <div className="flex space-x-1">
+                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                                  </div>
+                                  <span className="text-sm text-gray-600">Keila is thinking...</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Chat Input */}
+                    <div className="border-t border-gray-200 p-4">
+                      <SimpleChatInput
+                        onSendMessage={(message) => {
+                          sendMessage(message, false, true); // Use Gemini
+                        }}
+                        placeholder="Ask me to plan your next adventure..."
+                        isLoading={loading}
+                      />
+                    </div>
+                  </div>
+                </div>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full p-8">
                   {/* Welcome Section */}
@@ -1090,9 +1155,6 @@ const AiTravel = () => {
           </div>
         </div>
       </div>
-      
-      {/* Global Keila Chat Bubble */}
-      <GlobalKeilaBubble />
     </>
   );
 };
