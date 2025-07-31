@@ -16,6 +16,7 @@ import { DestinationGrid } from "@/components/DestinationGrid";
 import { AnimatedKeila } from "@/components/AnimatedKeila";
 import { SimpleChatInput } from "@/components/SimpleChatInput";
 import { GlobalKeilaBubble } from "@/components/GlobalKeilaBubble";
+import { ReligionTravelCards } from "@/components/ReligionTravelCards";
 // No need to import DesktopTravelPlanner or MobileTravelInterface here,
 // as their implementations are now included below or adapted.
 
@@ -277,7 +278,12 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
 
                 {/* Central Content - Destinations or Chat Placeholder */}
                 <section className="flex-grow p-6 bg-gray-50 overflow-y-auto">
-                    {showDestinations ? (
+                    {selectedCategory === 'Religious' ? (
+                        <div>
+                            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Religious & Spiritual Destinations</h2>
+                            <ReligionTravelCards />
+                        </div>
+                    ) : showDestinations ? (
                         <div>
                             {/* Category filter indicator */}
                             {selectedCategory !== 'All' && (
