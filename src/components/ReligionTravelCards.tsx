@@ -26,21 +26,23 @@ export const ReligionTravelCards: React.FC = () => {
           {/* Background Image */}
           <div className="absolute inset-0">
             <img
-              src={`/images/religion/${title.toLowerCase().replace(/[^a-z0-9]/g, "_")}.jpg`}
+              src={`https://images.unsplash.com/search/photos?query=${encodeURIComponent(query)}&w=400&h=300&fit=crop`}
               alt={title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               onError={(e) => {
-                e.currentTarget.src = '/placeholder.svg';
+                e.currentTarget.src = `https://images.unsplash.com/photo-1549144511-f099e773c147?w=400&h=300&fit=crop`;
               }}
             />
-            {/* Gradient Overlay for better text visibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+            {/* Strong dark overlay for text visibility */}
+            <div className="absolute inset-0 bg-black/50"></div>
           </div>
           
-          {/* Text Overlay */}
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center p-4">
-            <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">{title}</h3>
-            <p className="text-sm font-medium tracking-wider uppercase opacity-90 drop-shadow-md">
+          {/* Text Overlay - BRIGHT WHITE TEXT */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
+            <h3 className="text-white text-2xl font-bold mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wide">
+              {title}
+            </h3>
+            <p className="text-white text-sm font-medium tracking-[0.2em] uppercase opacity-95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
               {location}
             </p>
           </div>
