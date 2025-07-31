@@ -405,6 +405,13 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
                                     <HiddenGemTravelCards />
                                 </div>
                             );
+                        } else if (selectedCategory === 'Melanin Compass') {
+                            return (
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Melanin Compass Destinations</h2>
+                                    <MelaninCompassTravelCards />
+                                </div>
+                            );
                         } else if (showDestinations) {
                             console.log('🔍 Should show regular destinations');
                             return (
