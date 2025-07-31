@@ -102,7 +102,11 @@ export const KeilaChatModal: React.FC<KeilaChatModalProps> = ({
                 {/* AI response */}
                 {message.response && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-100 rounded-lg px-4 py-2 max-w-2xl break-words prose prose-sm">
+                    <div className="bg-gray-100 rounded-lg px-4 py-2 max-w-2xl break-words w-full">
+                      {/* Debug: Show if this is markdown */}
+                      {message.response.includes('#') && (
+                        <div className="text-xs text-red-500 mb-2">DEBUG: Markdown detected</div>
+                      )}
                       <ReactMarkdown 
                         remarkPlugins={[remarkGfm]}
                         components={{
