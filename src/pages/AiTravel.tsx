@@ -38,61 +38,108 @@ import { NightlifeTravelCards } from "@/components/NightlifeTravelCards";
 import { SportsTravelCards } from "@/components/SportsTravelCards";
 import { WellnessTravelCards } from "@/components/WellnessTravelCards";
 import { SoloTravelCards } from "@/components/SoloTravelCards";
-// No need to import DesktopTravelPlanner or MobileTravelInterface here,
-// as their implementations are now included below or adapted.
+import StaycationModal from "@/components/StaycationModal";
+import VacationChat from "@/components/VacationChat";
 
 // --- START: Internal Components (moved/adapted from previous iterations) ---
 // These components are now defined within or alongside AiTravel.tsx
 // or are simplified/adapted for this single file.
 
 
-// New Keila Mini Chat Bar Component - Now receives props directly from AiTravel.tsx
-const KeilaMiniChat = ({ onOpenChat, onSendMessage, messages, isLoading }) => {
-    const [miniInput, setMiniInput] = useState('');
-    const lastMessage = messages[messages.length - 1];
+export default function AiTravel() {
+  const { user } = useAuth();
+  const { messages, loading, sendMessage, resetSession } = useChatAI();
+  const isMobile = useIsMobile();
+  
+  // New state for managing travel flow
+  const [flow, setFlow] = useState('start');
+  
+  // Function to reset the flow back to the start
+  const resetFlow = () => setFlow('start');
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { // <--- Changed type here
-        e.preventDefault();
-        const form = e.currentTarget; // Or e.target as HTMLFormElement;
-        const inputElement = form.elements[0] as HTMLInputElement; // <--- Cast here
+  const handleStartNewTrip = () => {
+    resetSession();
+    resetFlow();
+  };
 
-        if (inputElement.value.trim()) {
-            onSendMessage(inputElement.value);
-            setMiniInput('');
-            onOpenChat(); // Open full chat when message is sent from mini chat
-        }
-    };
+  // Render content based on the current flow state
+  const renderFlow = () => {
+    switch (flow) {
+      case 'staycation':
+        // The modal component takes a function to close itself
+        return <StaycationModal onClose={resetFlow} />;
+      case 'vacation':
+        // The chat component
+        return (
+          <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
+            <VacationChat />
+          </div>
+        );
+      default:
+        // The initial choice buttons - replaces the old From/Travel Month fields
+        return (
+          <div className="text-center py-12">
+            <h1 className="text-4xl font-bold mb-8 text-gray-800">How are you traveling?</h1>
+            <div className="flex justify-center gap-6">
+              <button 
+                onClick={() => setFlow('staycation')}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-6 px-12 rounded-xl text-xl shadow-lg transition-all duration-300 hover:scale-105"
+              >
+                🏠 Staycation
+                <div className="text-sm mt-2 opacity-90">Explore your local area</div>
+              </button>
+              <button
+                onClick={() => setFlow('vacation')}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-6 px-12 rounded-xl text-xl shadow-lg transition-all duration-300 hover:scale-105"
+              >
+                ✈️ Vacation
+                <div className="text-sm mt-2 opacity-90">Travel somewhere new</div>
+              </button>
+            </div>
+          </div>
+        );
+    }
+  };
 
-    const displayMessage = messages.length > 0
-        ? (lastMessage.response ? `Keila: ${lastMessage.response}` : `You: ${lastMessage.question}`)
-        : "Hi there! How can I help you plan your next adventure?";
-
+  // For mobile users, show different interface
+  if (isMobile) {
     return (
-        <div className="fixed bottom-4 right-4 bg-white rounded-xl shadow-lg p-3 flex items-center space-x-2 z-40 w-80">
-            <div className="scale-75 cursor-pointer animate-bounce" onClick={onOpenChat}>
-                <img src={keilaCompassIcon} alt="Keila AI" className="w-8 h-8 rounded-full" />
-            </div>
-            <div className="flex-grow">
-                <p className="text-xs text-gray-600 truncate cursor-pointer mb-1" onClick={onOpenChat}>
-                    {displayMessage}
-                </p>
-                <form onSubmit={handleSubmit} className="flex">
-                    <input
-                        type="text"
-                        value={miniInput}
-                        onChange={(e) => setMiniInput(e.target.value)}
-                        placeholder="Chat with Keila..."
-                        className="flex-grow p-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
-                        disabled={isLoading}
-                    />
-                    <button type="submit" className="ml-2 text-blue-600 hover:text-blue-800" disabled={isLoading}>
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.169.409l5 1.429a1 1 0 001.169-1.409l-7-14z"></path></svg>
-                    </button>
-                </form>
-            </div>
-        </div>
+      <div className="bg-gray-50 min-h-screen">
+        <SEOHead 
+          title="AI Travel Assistant - Keila | Plan Your Perfect Trip"
+          description="Get personalized travel recommendations from Keila, your AI travel assistant. Plan trips, discover destinations, and get expert travel advice."
+        />
+        {renderFlow()}
+      </div>
     );
-};
+  }
+
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      <SEOHead 
+        title="AI Travel Assistant - Keila | Plan Your Perfect Trip"
+        description="Get personalized travel recommendations from Keila, your AI travel assistant. Plan trips, discover destinations, and get expert travel advice."
+      />
+      
+      {flow === 'start' && (
+        <>
+          {/* Top Header Bar */}
+          <header className="bg-white shadow-sm p-4 flex items-center justify-between relative z-10">
+            <div className="flex items-center space-x-4">
+              <UtrippinLogo />
+            </div>
+            
+            {/* The main choice section - this replaces the old From/Travel Month */}
+            {renderFlow()}
+
+            <button
+              onClick={handleStartNewTrip}
+              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out flex items-center"
+            >
+              <img src={keilaCompassIcon} alt="Keila Icon" className="w-6 h-6 mr-2 rounded-full"/>
+              Start New Trip
+            </button>
+          </header>
 
 
 // Main Desktop Layout Component - Replicating ixigo's UI
@@ -193,44 +240,41 @@ const DesktopTravelPlanner = ({ onClearChat, chatMessages, isLoading, onSendMess
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
-            {/* Top Bar - Mimicking ixigo's header */}
+            {/* Top Bar - Replace From/Travel Month with Staycation/Vacation choice */}
             <header className="bg-white shadow-sm p-4 flex items-center justify-between relative z-10">
                 <div className="flex items-center space-x-4">
                     <div className="flex items-center text-gray-700">
-                        <span className="font-semibold mr-1">From</span>
-                        <select className="border border-gray-300 rounded-md p-1 bg-gray-50 text-sm focus:ring-blue-400 focus:border-blue-400">
-                            <option>Miami</option>
-                            <option>New York</option>
-                        </select>
-                    </div>
-                    <div className="flex items-center text-gray-700">
-                        <span className="font-semibold mr-1">Travel month</span>
-                        <select className="border border-gray-300 rounded-md p-1 bg-gray-50 text-sm focus:ring-blue-400 focus:border-blue-400">
-                            <option>August</option>
-                            <option>September</option>
-                        </select>
+                        <UtrippinLogo />
                     </div>
                 </div>
                 
-                <form onSubmit={handleSearchSubmit} className="flex-grow max-w-xl mx-4">
-                    <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="Search"
-                            className="w-full p-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                        <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                {/* MAIN FEATURE: Replace From/Travel Month with Staycation/Vacation choice */}
+                <div className="flex-grow max-w-xl mx-4">
+                    <div className="text-center">
+                        <h2 className="text-lg font-bold mb-3 text-gray-800">How are you traveling?</h2>
+                        <div className="flex justify-center gap-4">
+                            <StaycationModal onClose={() => {}} />
+                            <button 
+                                onClick={() => console.log('Staycation clicked')}
+                                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                            >
+                                🏠 Staycation
+                            </button>
+                            <button
+                                onClick={() => console.log('Vacation clicked')}
+                                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                            >
+                                ✈️ Vacation
+                            </button>
+                        </div>
                     </div>
-                </form>
+                </div>
 
                 <button
                     onClick={() => { onStartNewTrip(); }}
                     className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out flex items-center"
                 >
                     <img src={keilaCompassIcon} alt="Keila Icon" className="w-6 h-6 mr-2 rounded-full"/>
-                    Start New Trip
                     Start New Trip
                 </button>
             </header>

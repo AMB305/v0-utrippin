@@ -84,7 +84,7 @@ import NotFound from "./pages/NotFound";
 import ExploreMerged from "@/pages/ExploreMerged";
 import AiTravelResults from "./pages/AiTravelResults";
 import ExploreAiTravel from "./pages/ExploreAiTravel";
-import AiTravel from "./pages/AiTravel";
+import AiTravelFixed from "./pages/AiTravelFixed";
 import MyTrips from "./pages/MyTrips";
 import TripBoard from "./pages/TripBoard";
 import PublicTripView from "./pages/PublicTripView";
@@ -158,7 +158,7 @@ const App = () => (
                   <Route path="/family-travel" element={<FamilyTravel />} />
                   <Route path="/solo-travel" element={<SoloTravel />} />
                   <Route path="/events" element={<Events />} />
-                   <Route path="/ai-travel" element={<AiTravel />} />
+                   <Route path="/ai-travel" element={<AiTravelFixed />} />
                    <Route path="/itinerary/:id" element={<ItineraryView />} />
                    <Route path="/my-trips" element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
                    <Route path="/trip-board/:tripId" element={<ProtectedRoute><TripBoard /></ProtectedRoute>} />
