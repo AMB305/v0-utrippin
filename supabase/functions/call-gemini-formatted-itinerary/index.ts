@@ -59,50 +59,53 @@ serve(async (req) => {
 
     console.log(`No cache found for ${cacheKey}, generating new guide`);
 
-    // 🧠 Step 2: Few-shot prompt
-    const fewShotPrompt = `
-Your job is to generate a well-formatted multi-section travel guide in Markdown.
-Structure it using **bold headers**, emoji icons, and GitHub Flavored Markdown tables.
+    // 🧠 Step 2: Enhanced Few-shot prompt with structured template
+    const wrappedPrompt = `
+You are a travel itinerary generator. You MUST output ONLY structured Markdown with the exact format below. No conversational text, no commentary, no casual tone.
 
---- Example Itinerary Format ---
+--- REQUIRED OUTPUT FORMAT ---
 
-## ✨ Day 1: Gaudí and Gothic Architecture
+## 🏖 Day 1: [Destination Theme Title]
 
 ### 🌅 Morning
-- Arrive at **Barcelona-El Prat Airport (BCN)** at 6:30 AM.
-- 🚖 Take a taxi to your hotel (~$25, 20 mins).
-- ☕️ Breakfast: Try **churros con chocolate** (€3.10–4.20) at a local café.
+- ✈️ [Arrival details if applicable]
+- 🚖 [Transport from airport/station (~$XX)]
+- ☕ [Breakfast suggestion with cost]
 
-### 🏛️ Afternoon
-- Visit **Barcelona Cathedral** (30–45 mins).
-- 🛍 Explore Gothic Quarter & shop for souvenirs.
-- 🍽 Lunch at La Boqueria Market: Try **patatas bravas** (€3–4.20).
+### 🏛️ Afternoon  
+- [Main activity/attraction]
+- 🍽 [Lunch suggestion with location and cost]
+- [Secondary activity]
 
-### 🎭 Evening
-- Stroll down **La Rambla** and enjoy live street performances.
-- 🍲 Dinner: Try **paella or fideuà** (seafood noodles) (€2.50–3.25).
+### 🌆 Evening
+- [Evening activity/walk]
+- 🍲 [Dinner suggestion with cost]
 
-### 🧾 Estimated Costs (Day 1)
+### 💰 Budget Breakdown (Day 1)
 
 | Category    | Cost          |
 |------------|---------------|
-| Transport   | ~$25          |
-| Food        | ~$40/person   |
-| Activities  | Free (walking) |
+| Transport   | ~$XX          |
+| Food        | ~$XX/person   |
+| Activities  | $XX or Free   |
 
-### 🌍 Cultural Tips (Barcelona)
-- 💸 **Tipping** isn't required, but rounding up is appreciated.
-- 🍽 **Dining** starts late (after 8 PM).
-- 🏖 **Beachwear** is fine at the beach, not elsewhere.
-- 🗣 **Languages:** Catalan & Spanish are both common.
+### 🌍 Cultural Tips
+- 💸 **Tipping:** [local tipping customs]
+- 🍽 **Dining:** [meal timing/customs]
+- 🗣 **Language:** [local language info]
+- 👕 **Dress:** [dress code/weather tips]
 
---- Your Task: Generate the same style for ${city} on ${date}. Use the exact format above. DO NOT use any casual tone or extra commentary. ---
+--- END FORMAT ---
+
+Generate a 1-day itinerary for ${city} on ${date}. Use EXACTLY this structure with emojis, headers, and markdown tables. Be specific about costs in local currency.
 `;
+
+    console.log("PROMPT SENT TO GEMINI >>>", wrappedPrompt);
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
 
     const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: fewShotPrompt }] }],
+      contents: [{ role: "user", parts: [{ text: wrappedPrompt }] }],
       generationConfig: { temperature: 0.0 },
     });
 
