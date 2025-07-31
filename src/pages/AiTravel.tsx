@@ -1155,6 +1155,9 @@ const AiTravel = () => {
           </div>
         </div>
       </div>
+      
+      {/* Global Keila Chat Bubble */}
+      <GlobalKeilaBubble />
     </>
   );
 };
