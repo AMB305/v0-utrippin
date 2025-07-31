@@ -32,49 +32,20 @@ export const TravelHeader: React.FC<TravelHeaderProps> = ({ onCreateTripWithAI }
       <div className="flex items-center justify-between gap-4">
         {/* Left side - Location and Date */}
         <div className="flex items-center gap-4">
-          {/* From Location */}
-          <div className="flex flex-col">
-            <label className="text-sm text-muted-foreground mb-1">From</label>
-            <Select value={fromLocation} onValueChange={setFromLocation}>
-              <SelectTrigger className="w-[140px] bg-background">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {popularLocations.map((location) => (
-                  <SelectItem key={location} value={location}>
-                    {location}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Travel Month */}
-          <div className="flex flex-col">
-            <label className="text-sm text-muted-foreground mb-1">Travel month</label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-[140px] justify-start text-left font-normal bg-background",
-                    !travelMonth && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {travelMonth ? format(travelMonth, "MMMM") : "August"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={travelMonth}
-                  onSelect={setTravelMonth}
-                  initialFocus
-                  className="pointer-events-auto"
-                />
-              </PopoverContent>
-            </Popover>
+          {/* Travel Type Selector */}
+          <div className="flex items-center space-x-4">
+            <button 
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+              onClick={() => console.log('Staycation selected')}
+            >
+              Staycation
+            </button>
+            <button 
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+              onClick={() => console.log('Vacation selected')}
+            >
+              Vacation
+            </button>
           </div>
         </div>
 
