@@ -1,7 +1,7 @@
 // src/pages/keila/Home.jsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Zap, ChevronDown, Search, Menu, Home, Mic, User, ArrowRight } from 'lucide-react'
+import { ArrowRight, Home as HomeIcon, MessageSquare, Mic } from 'lucide-react'
 
 const prompts = [
   '7-day family trip to Costa Rica',
@@ -10,63 +10,72 @@ const prompts = [
   'Boutique Bali hotels',
 ]
 
-export default function KeilaHome() {
+export default function Home() {
   const nav = useNavigate()
+
   return (
-    <div className="min-h-screen bg-[#101419] p-6 flex flex-col">
-      {/* top nav icons */}
-      <div className="flex items-center space-x-4 mb-8">
-        <Zap className="text-white" size={24} />
-        <ChevronDown className="text-white" size={24} />
-        <div className="flex-1" />
-        <Search className="text-white" size={24} />
-        <Menu className="text-white" size={24} />
-      </div>
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* HEADER */}
+      <header className="px-6 pt-16">
+        <h1 className="text-4xl font-bold text-black">
+          Where to{' '}
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-500">
+            next?
+          </span>
+        </h1>
+      </header>
 
-      {/* heading */}
-      <h1 className="text-white text-3xl font-bold mb-6">Where to next?</h1>
-
-      {/* search bar */}
-      <div className="flex items-center bg-[#1d2029] rounded-full px-4 py-2 mb-6">
-        <input
-          type="text"
-          placeholder="e.g., 5-day romantic getaway to Paris"
-          className="flex-1 bg-transparent outline-none text-white placeholder-gray-400 py-2"
-        />
-        <button
-          onClick={() => nav('/keila/chat')}
-          className="p-3 rounded-full bg-gradient-to-r from-[#6a11cb] to-[#2575fc]"
-        >
-          <ArrowRight className="text-white" size={20} />
-        </button>
-      </div>
-
-      {/* prompt chips */}
-      <div className="flex space-x-3 overflow-x-auto mb-6 pb-2">
-        {prompts.map((p) => (
+      {/* SEARCH & PROMPTS */}
+      <main className="flex-1 px-6 pt-6">
+        {/* Search input */}
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="e.g., 5-day romantic getaway to Paris"
+            className="w-full h-12 rounded-full bg-gray-100 placeholder-gray-400 px-6 pr-16 shadow-sm focus:outline-none"
+          />
           <button
-            key={p}
-            className="flex-shrink-0 bg-[#1d2029] px-4 py-2 rounded-full text-white text-sm whitespace-nowrap"
+            onClick={() => nav('/keila/chat')}
+            className="absolute top-1/2 right-0 transform -translate-y-1/2 mr-4 bg-purple-600 p-3 rounded-full"
           >
-            {p}
+            <ArrowRight size={20} color="#fff" />
           </button>
-        ))}
-      </div>
+        </div>
 
-      <div className="flex-1" />
+        {/* Prompt chips */}
+        <div className="flex flex-wrap gap-2 mt-4">
+          {prompts.map((p) => (
+            <button
+              key={p}
+              onClick={() =>
+                nav(`/keila/chat?prefill=${encodeURIComponent(p)}`)
+              }
+              className="bg-gray-100 px-4 py-2 rounded-full text-gray-700 text-sm shadow-sm"
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+      </main>
 
-      {/* bottom nav */}
-      <div className="flex justify-around py-4 border-t border-gray-800">
-        <button>
-          <Home className="text-[#2575fc]" size={28} />
-        </button>
-        <button onClick={() => nav('/keila/voice')}>
-          <Mic className="text-white" size={28} />
-        </button>
-        <button>
-          <User className="text-white" size={28} />
-        </button>
-      </div>
+      {/* BOTTOM NAV */}
+      <nav className="h-16 bg-white border-t border-gray-200 flex justify-around items-center">
+        <HomeIcon
+          size={24}
+          className="text-purple-600 cursor-pointer"
+          onClick={() => nav('/keila/home')}
+        />
+        <MessageSquare
+          size={24}
+          className="text-gray-400 cursor-pointer"
+          onClick={() => nav('/keila/chat')}
+        />
+        <Mic
+          size={24}
+          className="text-gray-400 cursor-pointer"
+          onClick={() => nav('/keila/voice')}
+        />
+      </nav>
     </div>
   )
 }
