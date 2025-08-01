@@ -106,7 +106,7 @@ const App = () => (
               <Toaster />
               <Sonner />
               <ErrorBoundaryEnhanced>
-                <CriticalBugFixes />
+                {/* <CriticalBugFixes /> */}
                 <ScrollToTop />
                 <Routes>
                   <Route path="/auth" element={<Auth />} />
