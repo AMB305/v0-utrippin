@@ -61,16 +61,34 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
 
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
-    if (scrollContainer) {
+    if (!scrollContainer) return;
+
+    try {
       scrollContainer.addEventListener('scroll', checkScrollButtons);
       checkScrollButtons(); // Initial check
 
-      const resizeObserver = new ResizeObserver(checkScrollButtons);
-      resizeObserver.observe(scrollContainer);
+      // Add null check and try-catch for ResizeObserver
+      if (typeof ResizeObserver !== 'undefined') {
+        const resizeObserver = new ResizeObserver(checkScrollButtons);
+        resizeObserver.observe(scrollContainer);
 
+        return () => {
+          scrollContainer.removeEventListener('scroll', checkScrollButtons);
+          resizeObserver.disconnect();
+        };
+      } else {
+        return () => {
+          scrollContainer.removeEventListener('scroll', checkScrollButtons);
+        };
+      }
+    } catch (error) {
+      console.warn('CategoryCarousel observer setup failed:', error);
+      // Fallback: just add scroll listener
+      scrollContainer.addEventListener('scroll', checkScrollButtons);
+      checkScrollButtons();
+      
       return () => {
         scrollContainer.removeEventListener('scroll', checkScrollButtons);
-        resizeObserver.disconnect();
       };
     }
   }, []);
