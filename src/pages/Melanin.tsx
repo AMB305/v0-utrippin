@@ -6,6 +6,8 @@ import { Zap, TrendingUp, Clock, RefreshCw, ExternalLink, Calendar, Rss } from "
 import { Link } from "react-router-dom"
 import { useFreshStories } from "@/hooks/useFreshStories"
 import { RSSAttributionBadge } from "@/components/RSSAttributionBadge"
+import { StoryVerificationBadge } from "@/components/StoryVerificationBadge"
+import { RelevanceScoreBadge } from "@/components/RelevanceScoreBadge"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 
@@ -338,6 +340,12 @@ export default function Melanin() {
                           rssSource={freshStories[0].rssSource}
                           attribution={freshStories[0].attribution}
                         />
+                        {freshStories[0].relevanceScore && (
+                          <RelevanceScoreBadge score={freshStories[0].relevanceScore} />
+                        )}
+                        {freshStories[0].verified && (
+                          <StoryVerificationBadge verified={freshStories[0].verified} source={freshStories[0].source} />
+                        )}
                       </div>
                       <Badge className="bg-blue-600/20 text-blue-100 border-blue-400/30 backdrop-blur-sm">
                         Featured Story
@@ -451,6 +459,7 @@ export default function Melanin() {
                             <Zap className="h-2 w-2 mr-1" />
                             Fresh
                           </Badge>
+                          {story.relevanceScore && <RelevanceScoreBadge score={story.relevanceScore} />}
                         </div>
                         <h3 className="text-sm font-semibold text-black group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
                           {story.title}
@@ -467,6 +476,7 @@ export default function Melanin() {
                             rssSource={story.rssSource}
                             attribution={story.attribution}
                           />
+                          {story.verified && <StoryVerificationBadge verified={story.verified} source={story.source} />}
                         </div>
                       </div>
                       <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
