@@ -90,7 +90,7 @@ export default function Chat() {
             <div 
               className={`max-w-[80%] px-4 py-2 rounded-xl ${
                 msg.isUser 
-                  ? 'bg-blue-600 text-white' 
+                  ? 'bg-transparent text-gray-800 border border-gray-200' 
                   : 'bg-gray-100 text-black'
               }`}
             >
