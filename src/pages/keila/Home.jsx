@@ -6,14 +6,14 @@ import {
   MessageSquare,
   Mic,
   Compass,
-  Airplane,
+  Plane,
   Calendar,
   MapPin,
 } from 'lucide-react'
 
 const categories = [
   { label: 'Hotels',    icon: Calendar,     bg: 'from-purple-500 to-pink-400' },
-  { label: 'Flights',   icon: Airplane,     bg: 'from-pink-400 to-yellow-400' },
+  { label: 'Flights',   icon: Plane,     bg: 'from-pink-400 to-yellow-400' },
   { label: 'Packages',  icon: MapPin,       bg: 'from-blue-400 to-green-400' },
   { label: 'Trains',    icon: Compass,      bg: 'from-green-400 to-teal-400' },
   { label: 'Rentals',   icon: HomeIcon,     bg: 'from-yellow-400 to-orange-400' },
