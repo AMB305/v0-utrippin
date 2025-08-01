@@ -102,12 +102,12 @@ const App = () => (
           <AuthProvider>
             <ChatProvider>
               <TooltipProvider>
-              <KeyboardNavigationIndicator />
+              {/* <KeyboardNavigationIndicator /> */}
               <Toaster />
               <Sonner />
-              <ErrorBoundaryEnhanced>
+              {/* <ErrorBoundaryEnhanced> */}
                 {/* <CriticalBugFixes /> */}
-                <ScrollToTop />
+                {/* <ScrollToTop /> */}
                 <Routes>
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/" element={<Index />} />
@@ -184,7 +184,7 @@ const App = () => (
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </ErrorBoundaryEnhanced>
+              {/* </ErrorBoundaryEnhanced> */}
             </TooltipProvider>
             </ChatProvider>
           </AuthProvider>
