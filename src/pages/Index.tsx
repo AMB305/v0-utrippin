@@ -25,9 +25,8 @@ import { Search, Heart, MessageCircle, MapPin } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
+  console.log('🏠 HOMEPAGE INDEX COMPONENT IS LOADING!');
   const { user } = useAuth();
-
-  try {
 
   return (
     <>
@@ -56,10 +55,6 @@ const Index = () => {
       <BackToTop />
     </>
   );
-  } catch (error) {
-    console.error('Error in Index component:', error);
-    return <div>Error loading homepage: {error.message}</div>;
-  }
 };
 
 export default Index;
