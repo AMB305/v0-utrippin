@@ -4,27 +4,22 @@ import { useNavigate } from 'react-router-dom'
 import UtrippinLogo from '../../components/UtrippinLogo'
 import {
   ChevronDown,
+  SpeakerX,
+  MoreHorizontal,
+  Lightbulb,
+  RefreshCw,
   Camera,
   Globe,
   Compass,
-  Lightbulb,
-  Send,
   Mic,
+  Send,
 } from 'lucide-react'
 
 const cards = [
-  {
-    question: 'What are the best wineries to visit in Napa Valley?',
-  },
-  {
-    question: 'Which beaches in Miami Beach are dog-friendly?',
-  },
-  {
-    question: 'Top free museums in Washington, DC?',
-  },
-  {
-    question: 'How to plan a budget-friendly trip to St Croix, USVI?',
-  },
+  'What are the best wineries to visit in Napa Valley?',
+  'Which beaches in Miami Beach are dog-friendly?',
+  'Top free museums in Washington, DC?',
+  'How to plan a budget-friendly trip to St Croix, USVI?',
 ]
 
 export default function Home() {
@@ -39,40 +34,45 @@ export default function Home() {
           <ChevronDown className="w-5 h-5 text-gray-600" />
         </div>
         <div className="flex items-center space-x-4">
-          {/* you can wire these icons up later */}
-          <Camera    className="w-6 h-6 text-gray-600" />
-          <Globe className="w-6 h-6 text-gray-600" />
-          <Compass   className="w-6 h-6 text-gray-600" />
+          <SpeakerX className="w-6 h-6 text-gray-600" />
+          <MoreHorizontal className="w-6 h-6 text-gray-600" />
         </div>
       </header>
 
       {/* ── GREETING & CARDS ── */}
       <main className="px-6 mt-4 flex-1">
-        <h1 className="text-3xl font-bold text-black">Hi there!</h1>
+        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
+          Hi there!
+        </h1>
 
         <div className="mt-4 grid grid-cols-1 gap-4">
-          {cards.map((c, i) => (
-            <div
+          {cards.map((q, i) => (
+            <button
               key={i}
-              className="border border-gray-200 rounded-lg p-4 flex items-start space-x-3"
+              onClick={() =>
+                nav(`/keila/chat?prefill=${encodeURIComponent(q)}`)
+              }
+              className="w-full text-left border border-gray-200 rounded-xl p-4 flex items-start space-x-3 hover:shadow"
             >
-              <Lightbulb className="w-5 h-5 text-blue-600 mt-1" />
-              <p className="text-sm text-black">{c.question}</p>
-            </div>
+              <Lightbulb className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
+              <span className="text-base text-black">{q}</span>
+            </button>
           ))}
         </div>
 
-        {/* optional: you can wire up "Refresh" */}
-        <button className="mt-4 text-blue-600 text-sm font-medium">
-          ↻ Refresh Questions
+        <button
+          onClick={() => {/* regenerate */}}
+          className="mt-4 flex items-center text-blue-500 text-sm font-medium"
+        >
+          <RefreshCw className="w-4 h-4 mr-1" /> Refresh Questions
         </button>
       </main>
 
-      {/* ── BOTTOM ACTIONS ── */}
-      <div className="px-6 pb-4 space-y-4">
-        <div className="flex justify-around">
+      {/* ── ACTION ROW ── */}
+      <div className="px-6 pb-4">
+        <div className="flex justify-around border-t border-gray-200 pt-4">
           <button className="flex flex-col items-center space-y-1">
-            <Camera    className="w-6 h-6 text-gray-700" />
+            <Camera className="w-6 h-6 text-gray-700" />
             <span className="text-xs text-black">Recognize Image</span>
           </button>
           <button className="flex flex-col items-center space-y-1">
@@ -80,19 +80,19 @@ export default function Home() {
             <span className="text-xs text-black">Live Translate</span>
           </button>
           <button className="flex flex-col items-center space-y-1">
-            <Compass   className="w-6 h-6 text-gray-700" />
+            <Compass className="w-6 h-6 text-gray-700" />
             <span className="text-xs text-black">Live Guide</span>
           </button>
         </div>
 
-        {/* input bar */}
-        <div className="relative">
+        {/* ── INPUT BAR ── */}
+        <div className="mt-4 relative">
           <input
             type="text"
             placeholder="Ask anything you want…"
-            className="w-full h-12 rounded-full bg-gray-100 px-4 pr-14 text-black placeholder-gray-500 focus:outline-none"
+            className="w-full h-12 bg-gray-100 rounded-full px-4 pr-16 text-black placeholder-gray-500 focus:outline-none"
           />
-          <button className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center space-x-1 text-blue-600">
+          <button className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center space-x-1 text-blue-500">
             <Mic size={18} />
             <Send size={18} />
           </button>
