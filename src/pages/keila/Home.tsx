@@ -51,7 +51,7 @@ export default function Home() {
       <header className="px-6 pt-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <MapPin className="w-6 h-6 text-blue-600" />
-          <img src="/logo.svg" alt="Utrippin.ai" className="h-6" />
+          <span className="text-xl font-bold text-blue-600">Utrippin</span>
           <ChevronDown className="w-5 h-5 text-gray-600" />
         </div>
         <div className="flex items-center space-x-4">
