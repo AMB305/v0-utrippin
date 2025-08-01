@@ -9,7 +9,7 @@ export default function GreatMigrationRoutes() {
       readTime="8 min read"
       publishDate="January 15, 2025"
       category="History"
-      heroImage="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&h=600&fit=crop"
+      heroImage="/lovable-uploads/e6e67b89-c174-45b9-87cd-97149d2bf90a.png"
       seoKeywords={["Great Migration", "African American history", "travel routes", "historical tourism", "Black heritage", "migration patterns", "civil rights", "historical sites"]}
     >
       {/* Introduction with contextual image */}
