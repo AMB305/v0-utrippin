@@ -91,6 +91,10 @@ import PublicTripView from "./pages/PublicTripView";
 import AgentProfilePage from "./pages/AgentProfilePage";
 import ItineraryView from "./pages/ItineraryView";
 import ComprehensiveItineraryPage from "./pages/ComprehensiveItineraryPage";
+import KeilaOnboarding from "./pages/keila/Onboarding";
+import KeilaHome from "./pages/keila/Home";
+import KeilaChat from "./pages/keila/Chat";
+import KeilaVoice from "./pages/keila/Voice";
 
 const queryClient = new QueryClient();
 
@@ -180,9 +184,13 @@ const App = () => (
                   <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
                   <Route path="/legal" element={<Legal />} />
                   <Route path="/virtual-tour" element={<VirtualTour />} />
-                  <Route path="/search-history" element={<SearchHistory />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
+                   <Route path="/search-history" element={<SearchHistory />} />
+                   <Route path="/keila/onboarding" element={<KeilaOnboarding />} />
+                   <Route path="/keila/home" element={<KeilaHome />} />
+                   <Route path="/keila/chat" element={<KeilaChat />} />
+                   <Route path="/keila/voice" element={<KeilaVoice />} />
+                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </ErrorBoundaryEnhanced>
             </TooltipProvider>
