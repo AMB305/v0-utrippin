@@ -119,7 +119,7 @@ const App = () => {
                   <ScrollToTop />
                   <Routes>
                   <Route path="/auth" element={<Auth />} />
-                  <Route path="/" element={<Index />} />
+                   <Route path="/" element={<Index />} />
                   <Route path="/email-verification" element={<EmailVerification />} />
                   <Route path="/profile-setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
                   <Route path="/travel-buddy" element={<ProtectedRoute><TravelBuddy /></ProtectedRoute>} />
