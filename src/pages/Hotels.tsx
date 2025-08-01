@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { generateBreadcrumbSchema, generateTravelServiceSchema } from "@/utils/structuredData";
 import { BackToTop } from '@/components/BackToTop';
-import { useIsMobile } from "@/hooks/use-mobile";
+import useIsMobile from "@/hooks/use-mobile";
 import { MobileHeader } from "@/components/mobile/MobileHeader";
 import { SearchWidget } from "@/components/mobile/SearchWidget";
 import { QuickDestinations } from "@/components/mobile/QuickDestinations";

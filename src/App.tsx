@@ -2,8 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import useIsMobile from "@/hooks/use-mobile";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { ChatProvider } from "@/providers/chat-provider";
@@ -98,21 +99,24 @@ import KeilaVoice from "./pages/keila/Voice";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <HelmetProvider>
-      <ThemeProvider defaultTheme="light" storageKey="ui-theme">
-        <BrowserRouter>
-          <AuthProvider>
-            <ChatProvider>
-              <TooltipProvider>
-              <KeyboardNavigationIndicator />
-              <Toaster />
-              <Sonner />
-              <ErrorBoundaryEnhanced>
-                <CriticalBugFixes />
-                <ScrollToTop />
-                <Routes>
+const App = () => {
+  const isMobile = useIsMobile();
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <HelmetProvider>
+        <ThemeProvider defaultTheme="light" storageKey="ui-theme">
+          <BrowserRouter>
+            <AuthProvider>
+              <ChatProvider>
+                <TooltipProvider>
+                <KeyboardNavigationIndicator />
+                <Toaster />
+                <Sonner />
+                <ErrorBoundaryEnhanced>
+                  <CriticalBugFixes />
+                  <ScrollToTop />
+                  <Routes>
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/" element={<Index />} />
                   <Route path="/email-verification" element={<EmailVerification />} />
@@ -163,7 +167,14 @@ const App = () => (
                   <Route path="/family-travel" element={<FamilyTravel />} />
                   <Route path="/solo-travel" element={<SoloTravel />} />
                   <Route path="/events" element={<Events />} />
-                   <Route path="/ai-travel" element={<AiTravel />} />
+                   <Route 
+                     path="/ai-travel" 
+                     element={
+                       isMobile 
+                         ? <Navigate to="/keila/home" replace />
+                         : <AiTravel />
+                     } 
+                   />
                     <Route path="/itinerary/:id" element={<ItineraryView />} />
                     <Route path="/comprehensive-itinerary/:id" element={<ComprehensiveItineraryPage />} />
                    <Route path="/my-trips" element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
@@ -191,15 +202,16 @@ const App = () => (
                    <Route path="/keila/voice" element={<KeilaVoice />} />
                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                    <Route path="*" element={<NotFound />} />
-                </Routes>
-              </ErrorBoundaryEnhanced>
-            </TooltipProvider>
-            </ChatProvider>
-          </AuthProvider>
-        </BrowserRouter>
-      </ThemeProvider>
-    </HelmetProvider>
-  </QueryClientProvider>
-);
+                  </Routes>
+                </ErrorBoundaryEnhanced>
+              </TooltipProvider>
+              </ChatProvider>
+            </AuthProvider>
+          </BrowserRouter>
+        </ThemeProvider>
+      </HelmetProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

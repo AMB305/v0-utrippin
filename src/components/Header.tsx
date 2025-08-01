@@ -11,7 +11,7 @@ import UtrippinLogo from "@/components/UtrippinLogo";
 import EnhancedLanguageSelector from "@/components/EnhancedLanguageSelector";
 import { CurrencySelector } from "@/components/CurrencySelector";
 import { useAuth } from "@/hooks/useAuth";
-import { useIsMobile } from "@/hooks/use-mobile";
+import useIsMobile from "@/hooks/use-mobile";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
