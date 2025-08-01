@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { getMelaninStories } from '../data/melanin-stories';
 
 interface Story {
   id: number | string;
@@ -55,50 +55,23 @@ export function useFreshStories() {
       setLoading(true);
       setError(null);
 
-      // Try to get from API first, fallback to Supabase
-      try {
-        const response = await fetch("/api/melanin-stories", {
-          cache: "no-store",
-        });
+      // Simulate API delay for realism
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        if (response.ok) {
-          const data: StoriesResponse = await response.json();
-          setStories(data.stories);
-          setFreshStories(data.freshStories || []);
-          setOlderStories(data.olderStories || []);
-          setLastUpdated(data.lastUpdated);
-          setSources(data.sources || []);
-          setTotalFound(data.totalFound || 0);
-          setFreshCount(data.freshCount || 0);
-          setOlderCount(data.olderCount || 0);
-          setRssources(data.rss_sources || 0);
-          return;
-        }
-      } catch (apiError) {
-        console.log('API not available, falling back to Supabase');
-      }
+      const data = getMelaninStories();
 
-      // Fallback to Supabase
-      const { data, error: fetchError } = await supabase
-        .from('stories')
-        .select('*')
-        .order('published_at', { ascending: false })
-        .limit(30);
-
-      if (fetchError) {
-        console.error('Failed to load stories:', fetchError);
-        setError('Failed to load travel stories');
-      } else {
-        const supabaseStories = data || [];
-        setStories(supabaseStories);
-        setFreshStories(supabaseStories.slice(0, 10));
-        setOlderStories(supabaseStories.slice(10));
-        setFreshCount(Math.min(10, supabaseStories.length));
-        setOlderCount(Math.max(0, supabaseStories.length - 10));
-      }
+      setStories(data.stories);
+      setFreshStories(data.freshStories);
+      setOlderStories(data.olderStories);
+      setLastUpdated(data.lastUpdated);
+      setSources(data.sources);
+      setTotalFound(data.totalFound);
+      setFreshCount(data.freshCount);
+      setOlderCount(data.olderCount);
+      setRssources(data.rss_sources);
     } catch (err) {
-      console.error('Error fetching stories:', err);
-      setError('An unexpected error occurred');
+      setError(err instanceof Error ? err.message : "An error occurred");
+      console.error("Error fetching stories:", err);
     } finally {
       setLoading(false);
     }
