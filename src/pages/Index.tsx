@@ -26,6 +26,8 @@ import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
   const { user } = useAuth();
+  
+  console.log('🏠 INDEX COMPONENT IS RENDERING - This should show on homepage!');
 
   return (
     <>
