@@ -14,25 +14,32 @@ import {
   Mic,
   Send,
 } from 'lucide-react'
-import { fetchInspiration } from '../../api/keila'
+const defaultQuestions = [
+  "Where should I go next?",
+  "Plan a trip for me",
+  "Solo travel ideas",
+  "Budget-friendly destinations",
+];
 
 export default function Home() {
   const nav = useNavigate()
-  const [cards, setCards] = useState<string[]>([])
+  const [cards, setCards] = useState<string[]>(defaultQuestions)
   const [loading, setLoading] = useState(false)
-
-  // load on mount
-  useEffect(() => {
-    refreshQuestions()
-  }, [])
 
   async function refreshQuestions() {
     setLoading(true)
     try {
-      const insp = await fetchInspiration()   // your API returns string[]
-      setCards(insp)
+      // Try to fetch from API, but fallback to default questions
+      const res = await fetch('https://api.utrippin.ai/keila/inspiration')
+      if (res.ok) {
+        const data = await res.json()
+        setCards(data.prompts || defaultQuestions)
+      } else {
+        setCards(defaultQuestions)
+      }
     } catch (err) {
-      console.error(err)
+      console.error('API error, using default questions:', err)
+      setCards(defaultQuestions)
     } finally {
       setLoading(false)
     }
