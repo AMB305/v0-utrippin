@@ -38,8 +38,12 @@ const Index = () => {
       />
       
       <LuxuryNav />
-      <EnhancedHeroSection />
-      <SwipeToTravelHero />
+      {/* Temporarily disabled video components */}
+      {/* <EnhancedHeroSection /> */}
+      {/* <SwipeToTravelHero /> */}
+      <div className="h-96 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl">
+        🏠 HOMEPAGE IS WORKING - VIDEO COMPONENTS DISABLED FOR TESTING
+      </div>
       <SmartTravelExperts />
       <WhatWeDoSection />
       <GuideToTravel />
