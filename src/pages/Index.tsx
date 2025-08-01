@@ -26,8 +26,8 @@ import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
   const { user } = useAuth();
-  
-  console.log('🏠 INDEX COMPONENT IS RENDERING - This should show on homepage!');
+
+  try {
 
   return (
     <>
@@ -56,6 +56,10 @@ const Index = () => {
       <BackToTop />
     </>
   );
+  } catch (error) {
+    console.error('Error in Index component:', error);
+    return <div>Error loading homepage: {error.message}</div>;
+  }
 };
 
 export default Index;
