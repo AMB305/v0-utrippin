@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getMelaninStoriesFromRSS } from '../api/melanin-stories';
 import { getMelaninStories } from '../data/melanin-stories';
 
 interface Story {
@@ -51,10 +52,14 @@ export function useFreshStories() {
       setLoading(true);
       setError(null);
 
-      // Simulate API delay for realism
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const data = getMelaninStories();
+      // Try to fetch from RSS first, fallback to static data
+      let data;
+      try {
+        data = await getMelaninStoriesFromRSS();
+      } catch (rssError) {
+        console.warn("RSS fetch failed, using static data:", rssError);
+        data = getMelaninStories();
+      }
 
       setStories(data.stories);
       setFreshStories(data.freshStories);
