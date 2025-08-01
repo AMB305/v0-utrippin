@@ -102,6 +102,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const isMobile = useIsMobile();
+  console.log('🔍 App.tsx - isMobile:', isMobile, 'window.innerWidth:', typeof window !== 'undefined' ? window.innerWidth : 'unknown');
   
   return (
     <QueryClientProvider client={queryClient}>
@@ -170,11 +171,7 @@ const App = () => {
                   <Route path="/events" element={<Events />} />
                    <Route 
                      path="/ai-travel" 
-                     element={
-                       isMobile 
-                         ? <Navigate to="/keila/home" replace />
-                         : <AiTravel />
-                     } 
+                     element={<AiTravel />}
                    />
                     <Route path="/itinerary/:id" element={<ItineraryView />} />
                     <Route path="/comprehensive-itinerary/:id" element={<ComprehensiveItineraryPage />} />
