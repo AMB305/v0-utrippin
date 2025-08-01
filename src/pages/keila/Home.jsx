@@ -2,134 +2,88 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-  Home as HomeIcon,
-  MessageSquare,
-  Mic,
-  Compass,
-  Plane,
-  Calendar,
+  ChevronDown,
+  Chat,
+  Image,
+  List,
   MapPin,
+  ArrowRightCircle,
 } from 'lucide-react'
 
-const categories = [
-  { label: 'Hotels',    icon: Calendar,     bg: 'from-purple-500 to-pink-400' },
-  { label: 'Flights',   icon: Plane,     bg: 'from-pink-400 to-yellow-400' },
-  { label: 'Packages',  icon: MapPin,       bg: 'from-blue-400 to-green-400' },
-  { label: 'Trains',    icon: Compass,      bg: 'from-green-400 to-teal-400' },
-  { label: 'Rentals',   icon: HomeIcon,     bg: 'from-yellow-400 to-orange-400' },
-  { label: 'Attractions',icon: MessageSquare,bg: 'from-indigo-500 to-purple-500' },
+const suggestions = [
+  'Trip to Tokyo on a budget',
+  'Find flights to Rome under $800',
+  'Top attractions in Lisbon',
+  'Suggest boutique hotels in Bali',
 ]
 
-const popular = [
-  'Miami', 'New York', 'Los Angeles',
-  'Chicago', 'Orlando', 'Las Vegas',
+const features = [
+  { Icon: Image,  label: 'Image Maker',    desc: 'Create travel visuals' },
+  { Icon: List,   label: 'Itinerary Builder',desc: 'Day-by-day plans' },
+  { Icon: MapPin, label: 'Local Guides',    desc: 'Hidden gems & tips' },
 ]
 
 export default function Home() {
   const nav = useNavigate()
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#FFEDE5] to-white">
-      {/* HEADER */}
-      <header className="flex items-center justify-between px-6 pt-12">
-        {/* Utrippin.ai logo placeholder */}
-        <div className="flex items-center space-x-2">
-          <MapPin className="w-8 h-8 text-purple-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Utrippin.ai</h1>
-        </div>
-        <button onClick={() => nav('/keila/voice')}>
-          <Mic className="w-6 h-6 text-gray-700" />
-        </button>
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* 1) Header */}
+      <header className="px-6 pt-8 flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-black">
+          What can I do for you{' '}
+          <span className="text-blue-600">today?</span>
+        </h1>
+        <ChevronDown size={24} className="text-black" />
       </header>
 
-      {/* SEARCH BAR */}
-      <div className="px-6 mt-6">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Where do you want to go?"
-            className="w-full h-12 rounded-full bg-white placeholder-gray-400 px-6 pr-14 shadow-lg focus:outline-none"
-          />
-          <button
-            onClick={() => nav('/keila/chat')}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 mr-4 bg-purple-600 p-3 rounded-full shadow-lg hover:bg-purple-700 transition"
-          >
-            <MessageSquare size={20} color="#fff" />
-          </button>
-        </div>
-      </div>
-
-      {/* CATEGORIES GRID */}
-      <section className="px-6 mt-8">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          Categories
-        </h2>
-        <div className="grid grid-cols-3 gap-4">
-          {categories.map(({ label, icon: Icon, bg }) => (
-            <button
-              key={label}
-              onClick={() => console.log(label)}
-              className={`
-                flex flex-col items-center justify-center
-                h-20 rounded-2xl
-                bg-gradient-to-br ${bg}
-                text-white font-medium
-                shadow-lg transform hover:scale-105 transition
-              `}
-            >
-              <Icon className="w-6 h-6 mb-1" />
-              {label}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* POPULAR DESTINATIONS */}
-      <section className="px-6 mt-8 flex-1">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          Popular Destinations
-        </h2>
-        <div className="grid grid-cols-2 gap-4">
-          {popular.map((city) => (
-            <button
-              key={city}
-              onClick={() => nav(`/keila/chat?prefill=Trip to ${encodeURIComponent(city)}`)}
-              className="py-3 rounded-full bg-white text-gray-800 font-medium shadow hover:shadow-xl transition"
-            >
-              {city}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* TALK TO KEILA CTA */}
-      <div className="px-6 pb-6">
+      {/* 2) Central CTA */}
+      <div className="px-6 mt-6 flex justify-center">
         <button
           onClick={() => nav('/keila/chat')}
-          className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-500 text-white font-bold text-lg rounded-full shadow-xl hover:from-purple-700 hover:to-blue-600 transition"
+          className="w-3/4 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-lg font-medium shadow-md"
         >
-          Talk to Keila
+          <Chat className="mr-2" size={20} /> Start Chat
         </button>
       </div>
 
-      {/* BOTTOM NAV */}
-      <nav className="h-16 bg-white border-t border-gray-200 flex justify-around items-center">
-        <HomeIcon
-          size={24}
-          className="text-purple-600 cursor-pointer"
-          onClick={() => nav('/keila/home')}
-        />
-        <MessageSquare
-          size={24}
-          className="text-gray-400 cursor-pointer"
+      {/* 3) Suggestion chips */}
+      <div className="px-6 mt-4 flex flex-wrap gap-2">
+        {suggestions.map((s) => (
+          <button
+            key={s}
+            onClick={() => nav(`/keila/chat?prefill=${encodeURIComponent(s)}`)}
+            className="px-4 py-2 bg-gray-100 text-black rounded-full text-sm"
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+
+      {/* 4) Feature cards */}
+      <div className="px-6 mt-6 grid grid-cols-3 gap-4">
+        {features.map(({ Icon, label, desc }) => (
+          <div
+            key={label}
+            className="bg-gray-50 rounded-lg p-4 flex flex-col items-center text-center shadow-sm"
+          >
+            <Icon size={24} className="text-blue-600 mb-2" />
+            <h3 className="text-sm font-semibold text-black">{label}</h3>
+            <p className="text-xs text-gray-500 mt-1">{desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* 5) Bottom "Talk to Keila" CTA */}
+      <div className="mt-auto px-6 pb-6">
+        <button
           onClick={() => nav('/keila/chat')}
-        />
-        <Mic
-          size={24}
-          className="text-gray-400 cursor-pointer"
-          onClick={() => nav('/keila/voice')}
-        />
-      </nav>
+          className="w-full h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-base font-medium shadow-md"
+        >
+          Talk to Keila
+          <ArrowRightCircle className="ml-2" size={20} />
+        </button>
+      </div>
     </div>
   )
 }
