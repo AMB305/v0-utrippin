@@ -1,8 +1,8 @@
 // src/pages/keila/Home.jsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import UtrippinLogo from '../../components/UtrippinLogo'
 import {
-  MapPin,
   ChevronDown,
   Search,
   Menu,
@@ -36,8 +36,7 @@ export default function Home() {
       {/* ── HEADER ── */}
       <header className="px-6 pt-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <MapPin className="w-6 h-6 text-blue-600" />
-          <span className="text-xl font-bold text-black">Utrippin.ai</span>
+          <UtrippinLogo />
           <ChevronDown className="w-5 h-5 text-gray-600" />
         </div>
         <div className="flex items-center space-x-4">
