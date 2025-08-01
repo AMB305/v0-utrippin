@@ -228,115 +228,57 @@ export default function Melanin() {
       />
       
       <ProductLayout>
-        <div className="min-h-screen bg-background text-foreground">
-          {/* The Melanin Compass Hero */}
-          <section className="bg-gradient-to-br from-muted to-muted/80 py-20">
+        <div className="min-h-screen bg-slate-900 text-white">
+          {/* The Melanin Compass Hero - Matching the design */}
+          <section className="bg-slate-800 py-20">
             <div className="max-w-4xl mx-auto text-center px-4">
               <div className="flex items-center justify-center mb-6">
                 <div className="relative mr-4">
-                  {/* Animated Compass SVG */}
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 100 100"
-                    className="animate-spin"
-                    style={{ animationDuration: "20s" }}
-                  >
-                    {/* Outer ring */}
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="url(#compassGradient)" strokeWidth="2" />
-
-                    {/* Inner compass face */}
-                    <circle cx="50" cy="50" r="35" fill="white" stroke="hsl(var(--border))" strokeWidth="1" />
-
-                    {/* Compass needle */}
-                    <g className="animate-pulse">
-                      {/* North needle (red) */}
-                      <polygon points="50,15 55,45 50,40 45,45" fill="hsl(var(--destructive))" />
-                      {/* South needle (white) */}
-                      <polygon points="50,85 45,55 50,60 55,55" fill="hsl(var(--muted-foreground))" />
-                    </g>
-
-                    {/* Center dot */}
-                    <circle cx="50" cy="50" r="3" fill="hsl(var(--foreground))" />
-
-                    {/* Cardinal directions */}
-                    <text x="50" y="10" textAnchor="middle" className="text-xs font-bold fill-foreground">
-                      N
-                    </text>
-                    <text x="90" y="55" textAnchor="middle" className="text-xs font-bold fill-foreground">
-                      E
-                    </text>
-                    <text x="50" y="95" textAnchor="middle" className="text-xs font-bold fill-foreground">
-                      S
-                    </text>
-                    <text x="10" y="55" textAnchor="middle" className="text-xs font-bold fill-foreground">
-                      W
-                    </text>
-
-                    <defs>
-                      <linearGradient id="compassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="hsl(var(--warning))" />
-                        <stop offset="50%" stopColor="hsl(var(--destructive))" />
-                        <stop offset="100%" stopColor="hsl(var(--primary))" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
+                  {/* Compass matching the reference */}
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center">
+                    <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center relative">
+                      <div className="w-8 h-8 bg-white rounded-full"></div>
+                      <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-1 h-6 bg-red-500"></div>
+                    </div>
+                  </div>
                 </div>
 
                 <h1 className="text-6xl font-bold">
-                  <span className="text-foreground">The </span>
-                  <span className="bg-gradient-to-r from-primary via-accent to-warning bg-clip-text text-transparent">
+                  <span className="text-white">The </span>
+                  <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-yellow-500 bg-clip-text text-transparent">
                     Melanin
                   </span>{" "}
-                  <span className="bg-gradient-to-r from-warning via-destructive to-warning bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 bg-clip-text text-transparent">
                     Compass
                   </span>
                 </h1>
               </div>
 
-              <p className="text-xl text-muted-foreground mb-8">
+              <p className="text-xl text-gray-300 mb-8">
                 Navigate the world with confidence, celebrating our rich heritage and discovering destinations where melanin
                 shines bright
               </p>
 
-              <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
-                <div className="w-2 h-2 bg-warning rounded-full animate-pulse"></div>
+              <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
+                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
                 <span>Current 2025 content • Live RSS feeds • Fresh travel insights</span>
-                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: "1s" }}></div>
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: "1s" }}></div>
               </div>
-
-              {/* Content Freshness Indicators */}
-              {sources && sources.length > 0 && (
-                <div className="mt-6 flex flex-wrap justify-center gap-2">
-                  <Badge className="bg-success/20 text-success border-success/30">
-                    <Zap className="h-3 w-3 mr-1" />
-                    {freshCount} Fresh Stories (2025)
-                  </Badge>
-                  <Badge className="bg-warning/20 text-warning border-warning/30">
-                    <Rss className="h-3 w-3 mr-1" />
-                    {rss_sources || sources.length} Live Sources
-                  </Badge>
-                  <Badge className="bg-primary/20 text-primary border-primary/30">
-                    <Calendar className="h-3 w-3 mr-1" />
-                    Updated Every 15 Minutes
-                  </Badge>
-                </div>
-              )}
             </div>
           </section>
 
-          {/* Current Month Featured Stories - TOP PRIORITY */}
-          <section className="py-12 bg-background">
+          {/* Latest 2025 Travel Updates - Dark theme to match */}
+          <section className="py-12 bg-slate-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h2 className="text-3xl font-bold text-foreground flex items-center">
-                    <Zap className="h-8 w-8 text-success mr-3" />
+                  <h2 className="text-3xl font-bold text-white flex items-center">
+                    <Zap className="h-8 w-8 text-green-400 mr-3" />
                     Latest 2025 Travel Updates
                   </h2>
-                  <p className="text-muted-foreground mt-2">Current information for making travel decisions right now</p>
+                  <p className="text-gray-400 mt-2">Current information for making travel decisions right now</p>
                 </div>
-                <Badge className="bg-success/20 text-success border-success/30 px-4 py-2">
+                <Badge className="bg-green-500/20 text-green-400 border-green-500/30 px-4 py-2">
                   <TrendingUp className="h-4 w-4 mr-2" />
                   {freshCount} Fresh Stories
                 </Badge>
@@ -364,7 +306,7 @@ export default function Melanin() {
                         {/* Top badges */}
                         <div className="flex justify-between items-start">
                           <div className="flex space-x-2">
-                            <Badge className="bg-success/30 text-success border-success/50 backdrop-blur-sm">
+                            <Badge className="bg-green-500/30 text-green-200 border-green-400/50 backdrop-blur-sm">
                               <Zap className="h-3 w-3 mr-1" />
                               Fresh 2025 Content
                             </Badge>
@@ -374,7 +316,7 @@ export default function Melanin() {
                               attribution={freshStories[0].attribution}
                             />
                           </div>
-                          <Badge className="bg-warning/20 text-warning border-warning/30 backdrop-blur-sm">
+                          <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 backdrop-blur-sm">
                             Featured Story
                           </Badge>
                         </div>
@@ -388,7 +330,7 @@ export default function Melanin() {
                               href={freshStories[0].link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-block bg-success hover:bg-success/80 text-white font-bold px-6 py-3 rounded-lg transition-colors"
+                              className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-lg transition-colors"
                             >
                               Read Latest Update →
                             </a>
@@ -400,15 +342,15 @@ export default function Melanin() {
                       </div>
                     </div>
                   ) : loading ? (
-                    <div className="relative h-96 rounded-lg overflow-hidden bg-muted animate-pulse">
+                    <div className="relative h-96 rounded-lg overflow-hidden bg-slate-700 animate-pulse">
                       <div className="absolute bottom-6 left-6 right-6">
-                        <div className="h-8 bg-muted-foreground/20 rounded mb-4"></div>
-                        <div className="h-4 bg-muted-foreground/20 rounded mb-2"></div>
-                        <div className="h-4 bg-muted-foreground/20 rounded w-3/4"></div>
+                        <div className="h-8 bg-slate-600 rounded mb-4"></div>
+                        <div className="h-4 bg-slate-600 rounded mb-2"></div>
+                        <div className="h-4 bg-slate-600 rounded w-3/4"></div>
                       </div>
                     </div>
                   ) : (
-                    <div className="relative h-96 rounded-lg overflow-hidden bg-gradient-to-br from-success to-success/80">
+                    <div className="relative h-96 rounded-lg overflow-hidden bg-gradient-to-br from-green-600 via-green-700 to-green-800">
                       <div className="absolute inset-0 p-6 flex flex-col justify-between">
                         <div className="flex justify-between items-start">
                           <Badge className="bg-white/20 text-white border-white/30">Loading Fresh Content</Badge>
@@ -432,29 +374,29 @@ export default function Melanin() {
 
                   {/* Additional Fresh Stories */}
                   {!loading && !error && freshStories.length > 1 && (
-                    <div className="mt-8 p-6 bg-card rounded-lg border border-success/30">
+                    <div className="mt-8 p-6 bg-slate-800 rounded-lg border border-green-500/30">
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-bold text-foreground flex items-center">
-                          <div className="w-2 h-2 bg-success rounded-full animate-pulse mr-2"></div>
+                        <h3 className="text-lg font-bold text-white flex items-center">
+                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
                           More Current 2025 Updates
                         </h3>
-                        <Badge className="bg-success/20 text-success border-success/30">Live Updates</Badge>
+                        <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Live Updates</Badge>
                       </div>
                       <div className="grid md:grid-cols-2 gap-4">
                         {freshStories.slice(1, 3).map((story, index) => (
                           <div
                             key={story.id}
-                            className="flex items-start space-x-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors border border-success/20"
+                            className="flex items-start space-x-3 p-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors border border-green-500/20"
                           >
-                            <div className="w-12 h-12 bg-gradient-to-br from-success to-success/80 rounded-lg flex-shrink-0 flex items-center justify-center">
+                            <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex-shrink-0 flex items-center justify-center">
                               <Zap className="h-5 w-5 text-white" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-sm font-semibold text-foreground mb-1 line-clamp-2">{story.title}</h4>
-                              <p className="text-xs text-muted-foreground mb-2 line-clamp-1">{story.excerpt}</p>
+                              <h4 className="text-sm font-semibold text-white mb-1 line-clamp-2">{story.title}</h4>
+                              <p className="text-xs text-gray-400 mb-2 line-clamp-1">{story.excerpt}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-xs text-success">{story.publishedAt || story.published_at}</span>
-                                <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                                <span className="text-xs text-green-400">{story.publishedAt || story.published_at}</span>
+                                <ExternalLink className="h-3 w-3 text-gray-400" />
                               </div>
                             </div>
                           </div>
@@ -470,9 +412,9 @@ export default function Melanin() {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between mb-6">
                       <div>
-                        <h3 className="text-xl font-bold text-foreground">This Month's Updates</h3>
+                        <h3 className="text-xl font-bold text-white">This Month's Updates</h3>
                         {lastUpdated && (
-                          <div className="flex items-center text-xs text-muted-foreground mt-1">
+                          <div className="flex items-center text-xs text-gray-400 mt-1">
                             <Clock className="h-3 w-3 mr-1" />
                             Updated {new Date(lastUpdated).toLocaleTimeString()}
                           </div>
@@ -482,7 +424,7 @@ export default function Melanin() {
                         onClick={refreshStories}
                         variant="ghost"
                         size="sm"
-                        className="text-muted-foreground hover:text-foreground"
+                        className="text-gray-300 hover:text-white"
                         disabled={loading}
                       >
                         <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -491,18 +433,18 @@ export default function Melanin() {
 
                     {loading && (
                       <div className="text-center py-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-success mx-auto"></div>
-                        <p className="mt-4 text-muted-foreground">Fetching latest 2025 content...</p>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mx-auto"></div>
+                        <p className="mt-4 text-gray-400">Fetching latest 2025 content...</p>
                       </div>
                     )}
 
                     {error && (
                       <div className="text-center py-8">
-                        <p className="text-destructive mb-4">{error}</p>
+                        <p className="text-red-400 mb-4">{error}</p>
                         <Button
                           onClick={refreshStories}
                           variant="outline"
-                          className="border-border text-foreground bg-transparent"
+                          className="border-gray-600 text-gray-300 bg-transparent"
                         >
                           Try Again
                         </Button>
@@ -514,23 +456,23 @@ export default function Melanin() {
                         {freshStories.slice(1, 5).map((story, index) => (
                           <div
                             key={story.id}
-                            className="flex items-start space-x-4 group cursor-pointer border border-success/20 rounded-lg p-3 hover:border-success/40 transition-colors"
+                            className="flex items-start space-x-4 group cursor-pointer border border-green-500/20 rounded-lg p-3 hover:border-green-500/40 transition-colors"
                           >
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-1">
-                                <Badge className="bg-success/20 text-success border-success/30 text-xs">
+                                <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">
                                   <Zap className="h-2 w-2 mr-1" />
                                   Fresh
                                 </Badge>
                               </div>
-                              <h3 className="text-sm font-semibold text-foreground group-hover:text-success transition-colors mb-1 line-clamp-2">
+                              <h3 className="text-sm font-semibold text-white group-hover:text-green-400 transition-colors mb-1 line-clamp-2">
                                 {story.title}
                               </h3>
-                              <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{story.excerpt}</p>
-                              <div className="flex items-center text-xs text-muted-foreground mb-1">
+                              <p className="text-xs text-gray-400 mb-2 line-clamp-2">{story.excerpt}</p>
+                              <div className="flex items-center text-xs text-gray-500 mb-1">
                                 <span>{story.source}</span>
                                 <span className="mx-2">•</span>
-                                <span className="text-success">{story.publishedAt || story.published_at}</span>
+                                <span className="text-green-400">{story.publishedAt || story.published_at}</span>
                               </div>
                               <RSSAttributionBadge
                                 source={story.source}
@@ -538,8 +480,8 @@ export default function Melanin() {
                                 attribution={story.attribution}
                               />
                             </div>
-                            <div className="w-6 h-6 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
-                              <ExternalLink className="h-3 w-3 text-success" />
+                            <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                              <ExternalLink className="h-3 w-3 text-green-400" />
                             </div>
                           </div>
                         ))}
@@ -552,20 +494,20 @@ export default function Melanin() {
           </section>
 
           {/* Editorial Stories Grid */}
-          <section className="py-16 bg-muted/50">
+          <section className="py-16 bg-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-foreground mb-4">Black Travel Stories ✈️</h2>
-                <p className="text-xl text-muted-foreground">Curated editorial content celebrating Black travel experiences</p>
+                <h2 className="text-3xl font-bold text-white mb-4">Black Travel Stories ✈️</h2>
+                <p className="text-xl text-gray-400">Curated editorial content celebrating Black travel experiences</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {mockEditorialStories.slice(0, 6).map((story, index) => (
                   <Card
                     key={story.id}
-                    className="bg-card border-border overflow-hidden group hover:border-warning/50 transition-all"
+                    className="bg-slate-700 border-slate-600 overflow-hidden group hover:border-orange-500/50 transition-all"
                   >
-                    <div className="h-48 bg-gradient-to-br from-warning to-destructive relative overflow-hidden">
+                    <div className="h-48 bg-gradient-to-br from-orange-400 to-red-500 relative overflow-hidden">
                       <img
                         src={story.image || "/placeholder.svg"}
                         alt={story.title}
@@ -575,15 +517,15 @@ export default function Melanin() {
                         }}
                       />
                       <div className="absolute top-4 left-4">
-                        <Badge className="bg-white/90 text-foreground border-0">{story.category}</Badge>
+                        <Badge className="bg-white/90 text-slate-800 border-0">{story.category}</Badge>
                       </div>
                     </div>
                     <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-warning transition-colors">
+                      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-orange-400 transition-colors">
                         {story.title}
                       </h3>
-                      <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{story.description}</p>
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <p className="text-gray-300 text-sm mb-4 line-clamp-3">{story.description}</p>
+                      <div className="flex items-center justify-between text-xs text-gray-500">
                         <span>By {story.author}</span>
                         <span>{story.readTime}</span>
                       </div>
@@ -595,16 +537,16 @@ export default function Melanin() {
           </section>
 
           {/* Black-Owned Restaurants */}
-          <section className="py-16 bg-background">
+          <section className="py-16 bg-slate-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-3xl font-bold text-foreground mb-8 text-center">Black-Owned Restaurants 🍽️</h2>
+              <h2 className="text-3xl font-bold text-white mb-8 text-center">Black-Owned Restaurants 🍽️</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {mockRestaurants.slice(0, 8).map((restaurant, index) => (
                   <Card
                     key={restaurant.id}
-                    className="bg-card border-border overflow-hidden group hover:border-warning/50 transition-all"
+                    className="bg-slate-700 border-slate-600 overflow-hidden group hover:border-orange-500/50 transition-all"
                   >
-                    <div className="h-32 bg-gradient-to-br from-warning to-destructive relative overflow-hidden">
+                    <div className="h-32 bg-gradient-to-br from-orange-400 to-red-500 relative overflow-hidden">
                       <img
                         src={restaurant.image || "/placeholder.svg"}
                         alt={restaurant.name}
@@ -615,12 +557,12 @@ export default function Melanin() {
                       />
                     </div>
                     <CardContent className="p-4">
-                      <h4 className="font-semibold text-foreground mb-1 group-hover:text-warning transition-colors">
+                      <h4 className="font-semibold text-white mb-1 group-hover:text-orange-400 transition-colors">
                         {restaurant.name}
                       </h4>
-                      <p className="text-sm text-muted-foreground mb-2">{restaurant.location}</p>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{restaurant.description}</p>
-                      <Badge className="bg-warning/20 text-warning border-warning/30 text-xs mt-2">
+                      <p className="text-sm text-gray-400 mb-2">{restaurant.location}</p>
+                      <p className="text-xs text-gray-400 line-clamp-2">{restaurant.description}</p>
+                      <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 text-xs mt-2">
                         {restaurant.cuisine}
                       </Badge>
                     </CardContent>
@@ -631,22 +573,22 @@ export default function Melanin() {
           </section>
 
           {/* Black-Owned Wineries */}
-          <section className="py-16 bg-muted/50">
+          <section className="py-16 bg-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-3xl font-bold text-foreground mb-8 text-center">Black-Owned Wineries 🍷</h2>
+              <h2 className="text-3xl font-bold text-white mb-8 text-center">Black-Owned Wineries 🍷</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {mockWineries.slice(0, 8).map((winery, index) => (
                   <Card
                     key={index}
-                    className="bg-card border-border overflow-hidden group hover:border-primary/50 transition-all"
+                    className="bg-slate-700 border-slate-600 overflow-hidden group hover:border-purple-500/50 transition-all"
                   >
-                    <div className="h-32 bg-gradient-to-br from-primary to-accent"></div>
+                    <div className="h-32 bg-gradient-to-br from-purple-500 to-pink-500"></div>
                     <CardContent className="p-4">
-                      <h4 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                      <h4 className="font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors">
                         {winery.name}
                       </h4>
-                      <p className="text-sm text-muted-foreground mb-2">{winery.location}</p>
-                      <Badge className="bg-primary/20 text-primary border-primary/30 text-xs">
+                      <p className="text-sm text-gray-400 mb-2">{winery.location}</p>
+                      <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">
                         {winery.specialty}
                       </Badge>
                     </CardContent>
@@ -656,72 +598,11 @@ export default function Melanin() {
             </div>
           </section>
 
-          {/* Older Stories Section - BOTTOM */}
-          {!loading && !error && olderStories.length > 0 && (
-            <section className="py-16 bg-background border-t border-border">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between mb-8">
-                  <div>
-                    <h2 className="text-2xl font-bold text-foreground">Older Stories</h2>
-                    <p className="text-muted-foreground mt-2">Previous travel content and historical perspectives</p>
-                  </div>
-                  <Badge className="bg-muted text-muted-foreground border-border">{olderCount} Archive Stories</Badge>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-6">
-                  {olderStories.slice(0, 9).map((story) => (
-                    <Card
-                      key={story.id}
-                      className="bg-card border-border overflow-hidden group hover:border-border/50 transition-all opacity-75"
-                    >
-                      <div className="h-48 bg-gradient-to-br from-muted to-muted/80 relative overflow-hidden">
-                        <img
-                          src={story.image || "/placeholder.svg"}
-                          alt={story.title}
-                          className="w-full h-full object-cover opacity-60"
-                          onError={(e) => {
-                            e.currentTarget.src = "/placeholder.svg?height=200&width=400&text=Archive+Story"
-                          }}
-                        />
-                      </div>
-                      <CardContent className="p-6">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <Badge className="bg-muted text-muted-foreground border-border text-xs">Archive</Badge>
-                          <span className="text-xs text-muted-foreground">{story.publishedAt || story.published_at}</span>
-                        </div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-muted-foreground transition-colors">
-                          {story.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm mb-4">{story.excerpt}</p>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs text-muted-foreground">{story.source}</span>
-                          <a
-                            href={story.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-muted-foreground hover:text-foreground"
-                          >
-                            <ExternalLink className="h-4 w-4" />
-                          </a>
-                        </div>
-                        <RSSAttributionBadge
-                          source={story.source}
-                          rssSource={story.rssSource}
-                          attribution={story.attribution}
-                        />
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
-
           {/* Newsletter Section */}
-          <section className="bg-gradient-to-r from-warning to-destructive py-16">
+          <section className="bg-gradient-to-r from-orange-500 to-red-500 py-16">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
               <h2 className="text-3xl font-bold text-white mb-4">Stay Updated with Fresh 2025 Black Travel Content</h2>
-              <p className="text-xl text-warning-foreground mb-8">
+              <p className="text-xl text-orange-100 mb-8">
                 Get the latest travel updates, current destination info, and fresh insights delivered weekly for making
                 informed travel decisions.
               </p>
@@ -729,9 +610,9 @@ export default function Melanin() {
                 <Input
                   type="email"
                   placeholder="Enter your email"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/70"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-orange-200"
                 />
-                <Button className="bg-white text-warning hover:bg-white/90">Subscribe</Button>
+                <Button className="bg-white text-orange-500 hover:bg-orange-50">Subscribe</Button>
               </div>
             </div>
           </section>
