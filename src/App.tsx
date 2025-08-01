@@ -80,6 +80,12 @@ import VirtualTour from "./pages/VirtualTour";
 
 import SearchHistory from "./pages/SearchHistory";
 
+// Story Pages
+import BlackCowboysHeritage from "./pages/stories/BlackCowboysHeritage";
+import GreatMigrationRoutes from "./pages/stories/GreatMigrationRoutes";
+import BlackTravelTrends2025 from "./pages/stories/BlackTravelTrends2025";
+import HarlemRenaissanceTour from "./pages/stories/HarlemRenaissanceTour";
+
 import NotFound from "./pages/NotFound";
 import ExploreMerged from "@/pages/ExploreMerged";
 import AiTravelResults from "./pages/AiTravelResults";
@@ -167,7 +173,13 @@ const App = () => (
                    <Route path="/trip/:shareId" element={<PublicTripView />} />
                    <Route path="/ai-travel-results" element={<AiTravelResults />} />
                   <Route path="/name-your-price" element={<ExploreMerged />} />
-                  <Route path="/melanin" element={<Melanin />} />
+                   <Route path="/melanin" element={<Melanin />} />
+                   
+                   {/* Story Pages */}
+                   <Route path="/melanin/stories/black-cowboys-heritage" element={<BlackCowboysHeritage />} />
+                   <Route path="/melanin/stories/great-migration-routes" element={<GreatMigrationRoutes />} />
+                   <Route path="/melanin/stories/2025-black-travel-trends" element={<BlackTravelTrends2025 />} />
+                   <Route path="/melanin/stories/harlem-renaissance-tour" element={<HarlemRenaissanceTour />} />
                   <Route path="/seo-reports" element={<SEOReports />} />
                   <Route path="/admin/upload-trips" element={<UploadTrips />} />
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
