@@ -132,8 +132,21 @@ export default function Home() {
               px-4 pr-16 text-black placeholder-gray-500
               focus:outline-none
             "
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                nav(`/keila/chat?prefill=${encodeURIComponent(e.currentTarget.value.trim())}`)
+              }
+            }}
           />
-          <button className="absolute right-0 top-1/2 transform -translate-y-1/2 pr-4 flex items-center space-x-2 text-blue-500">
+          <button 
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 pr-4 flex items-center space-x-2 text-blue-500"
+            onClick={() => {
+              const input = document.querySelector('input') as HTMLInputElement
+              if (input?.value.trim()) {
+                nav(`/keila/chat?prefill=${encodeURIComponent(input.value.trim())}`)
+              }
+            }}
+          >
             <Mic size={18} />
             <Send size={18} />
           </button>
