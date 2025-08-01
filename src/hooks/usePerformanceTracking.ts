@@ -19,9 +19,10 @@ export const usePerformanceTracking = ({
   const [metrics, setMetrics] = useState<PerformanceMetrics>({});
 
   useEffect(() => {
+    // Temporarily disabled for Lovable environment compatibility
+    return;
+    
     if (!trackCoreWebVitals) return;
-
-    // Track Time to First Byte (TTFB)
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
         if (entry.entryType === 'navigation') {
