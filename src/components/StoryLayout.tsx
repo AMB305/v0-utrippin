@@ -158,7 +158,7 @@ export default function StoryLayout({
           {/* Article Content */}
           <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
             <div className="p-8 md:p-12">
-              <div className="prose prose-lg prose-gray max-w-none">
+              <div className="prose prose-lg prose-gray max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-gray-900">
                 <p className="text-xl text-gray-700 mb-8 font-medium leading-relaxed border-l-4 border-blue-500 pl-6 bg-blue-50 py-4 rounded-r-lg">
                   {excerpt}
                 </p>
