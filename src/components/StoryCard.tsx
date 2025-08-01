@@ -1,5 +1,6 @@
 import React from 'react';
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 interface StoryCardProps {
   story: {
@@ -41,6 +42,10 @@ export const StoryCard = ({ story, size = 'medium', backgroundColor = 'white' }:
     });
   };
 
+  const isInternalLink = (url: string) => {
+    return url.startsWith('/') || url.startsWith('#');
+  };
+
   return (
     <div className={`group ${cardBg} rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 ${sizeClasses[size]}`}>
       <div className="relative overflow-hidden">
@@ -62,14 +67,23 @@ export const StoryCard = ({ story, size = 'medium', backgroundColor = 'white' }:
           {story.excerpt}
         </p>
         <div className="flex items-center justify-between">
-          <a 
-            href={story.link} 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block text-orange-600 hover:text-orange-400 font-semibold text-sm transition-colors duration-200 group-hover:underline underline-offset-4"
-          >
-            Read more via {story.source} →
-          </a>
+          {isInternalLink(story.link) ? (
+            <Link 
+              to={story.link}
+              className="inline-block text-orange-600 hover:text-orange-400 font-semibold text-sm transition-colors duration-200 group-hover:underline underline-offset-4"
+            >
+              Read more →
+            </Link>
+          ) : (
+            <a 
+              href={story.link} 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block text-orange-600 hover:text-orange-400 font-semibold text-sm transition-colors duration-200 group-hover:underline underline-offset-4"
+            >
+              Read more via {story.source} →
+            </a>
+          )}
           <span className={`text-xs ${excerptColor}`}>
             {formatDate(story.published_at)}
           </span>
