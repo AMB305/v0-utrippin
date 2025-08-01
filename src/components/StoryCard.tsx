@@ -110,29 +110,29 @@ export const HeroStoryCard = ({ image, title, tag, excerpt, link }: HeroStoryCar
           alt={title} 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
       </div>
       
-      {/* Top badges */}
+      {/* Top badges with minimal background */}
       <div className="absolute top-6 left-6 right-6">
         <Badge className="bg-blavity-gold text-blavity-black font-bold uppercase text-sm tracking-wide px-4 py-2">
           {tag}
         </Badge>
       </div>
       
-      {/* Bottom content with reduced coverage */}
-      <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 text-white">
-        <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold mb-3 leading-tight max-w-4xl">
+      {/* Bottom content - reduced height and opacity */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
+        <h1 className="text-xl md:text-3xl lg:text-4xl font-extrabold mb-2 leading-tight max-w-4xl">
           {title}
         </h1>
-        <p className="text-base md:text-lg text-gray-200 mb-6 max-w-2xl line-clamp-2">
+        <p className="text-sm md:text-base text-gray-200 mb-4 max-w-2xl line-clamp-2">
           {excerpt}
         </p>
         <a 
           href={link} 
-          className="inline-block bg-blavity-gold text-blavity-black font-bold px-6 py-3 rounded-lg hover:bg-blavity-coral transition-colors duration-200 text-base"
+          className="inline-block bg-blavity-gold text-blavity-black font-bold px-5 py-2.5 rounded-lg hover:bg-blavity-coral transition-colors duration-200 text-sm"
         >
-          Read Full Story →
+          Read Latest Update →
         </a>
       </div>
     </div>
