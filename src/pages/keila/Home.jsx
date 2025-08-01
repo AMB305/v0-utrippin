@@ -4,28 +4,27 @@ import { useNavigate } from 'react-router-dom'
 import UtrippinLogo from '../../components/UtrippinLogo'
 import {
   ChevronDown,
-  Search,
-  Menu,
-  MessageSquare,
-  Image,
-  List,
-  Map,
-  Home as HomeIcon,
-  MessageCircle,
+  Camera,
+  Translate,
+  Compass,
+  Lightbulb,
+  Send,
   Mic,
 } from 'lucide-react'
 
-const suggestions = [
-  'Trip to Tokyo on a budget',
-  'Find flights to Rome under $800',
-  'Top attractions in Lisbon',
-  'Suggest boutique hotels in Bali',
-]
-
-const features = [
-  { Icon: Image, label: 'Image Maker',    desc: 'Create travel visuals' },
-  { Icon: List,  label: 'Itinerary Builder', desc: 'Day-by-day plans' },
-  { Icon: Map,   label: 'Local Guides',    desc: 'Hidden gems & tips' },
+const cards = [
+  {
+    question: 'What are the best wineries to visit in Napa Valley?',
+  },
+  {
+    question: 'Which beaches in Miami Beach are dog-friendly?',
+  },
+  {
+    question: 'Top free museums in Washington, DC?',
+  },
+  {
+    question: 'How to plan a budget-friendly trip to St Croix, USVI?',
+  },
 ]
 
 export default function Home() {
@@ -40,87 +39,65 @@ export default function Home() {
           <ChevronDown className="w-5 h-5 text-gray-600" />
         </div>
         <div className="flex items-center space-x-4">
-          <Search className="w-6 h-6 text-gray-600" />
-          <Menu   className="w-6 h-6 text-gray-600" />
+          {/* you can wire these icons up later */}
+          <Camera    className="w-6 h-6 text-gray-600" />
+          <Translate className="w-6 h-6 text-gray-600" />
+          <Compass   className="w-6 h-6 text-gray-600" />
         </div>
       </header>
 
-      {/* ── MAIN ── */}
-      <main className="px-6 mt-6 flex-1">
-        {/* 1) Title */}
-        <h1 className="text-3xl font-bold text-black">
-          What can I do for you{' '}
-          <span className="text-blue-600">today?</span>
-        </h1>
+      {/* ── GREETING & CARDS ── */}
+      <main className="px-6 mt-4 flex-1">
+        <h1 className="text-3xl font-bold text-black">Hi there!</h1>
 
-        {/* 2) Central Chat CTA */}
-        <button
-          onClick={() => nav('/keila/chat')}
-          className="mt-6 w-full h-14 bg-blue-600 rounded-full flex items-center justify-center text-white text-lg font-semibold shadow-md"
-        >
-          <MessageSquare className="w-5 h-5 mr-2" />
-          Start Chat
-        </button>
-
-        {/* 3) Suggestion Chips */}
-        <div className="mt-4 flex flex-wrap gap-2">
-          {suggestions.map((s) => (
-            <button
-              key={s}
-              onClick={() =>
-                nav(`/keila/chat?prefill=${encodeURIComponent(s)}`)
-              }
-              className="px-4 py-2 bg-gray-100 text-black rounded-full text-sm"
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-
-        {/* 4) Feature Cards */}
-        <div className="mt-6 grid grid-cols-3 gap-4">
-          {features.map(({ Icon, label, desc }) => (
+        <div className="mt-4 grid grid-cols-1 gap-4">
+          {cards.map((c, i) => (
             <div
-              key={label}
-              className="bg-gray-50 rounded-lg p-4 flex flex-col items-center text-center shadow-sm"
+              key={i}
+              className="border border-gray-200 rounded-lg p-4 flex items-start space-x-3"
             >
-              <Icon size={24} className="text-blue-600 mb-2" />
-              <h3 className="text-sm font-semibold text-black">{label}</h3>
-              <p className="text-xs text-gray-500 mt-1">{desc}</p>
+              <Lightbulb className="w-5 h-5 text-blue-600 mt-1" />
+              <p className="text-sm text-black">{c.question}</p>
             </div>
           ))}
         </div>
+
+        {/* optional: you can wire up "Refresh" */}
+        <button className="mt-4 text-blue-600 text-sm font-medium">
+          ↻ Refresh Questions
+        </button>
       </main>
 
-      {/* ── FOOTER CTA ── */}
-      <div className="px-6 pb-6">
-        <button
-          onClick={() => nav('/keila/chat')}
-          className="w-full h-14 bg-blue-600 text-white rounded-full flex items-center justify-center text-base font-medium shadow-md"
-        >
-          Talk to Keila
-          <MessageCircle className="w-5 h-5 ml-2" />
-        </button>
-      </div>
+      {/* ── BOTTOM ACTIONS ── */}
+      <div className="px-6 pb-4 space-y-4">
+        <div className="flex justify-around">
+          <button className="flex flex-col items-center space-y-1">
+            <Camera    className="w-6 h-6 text-gray-700" />
+            <span className="text-xs text-black">Recognize Image</span>
+          </button>
+          <button className="flex flex-col items-center space-y-1">
+            <Translate className="w-6 h-6 text-gray-700" />
+            <span className="text-xs text-black">Live Translate</span>
+          </button>
+          <button className="flex flex-col items-center space-y-1">
+            <Compass   className="w-6 h-6 text-gray-700" />
+            <span className="text-xs text-black">Live Guide</span>
+          </button>
+        </div>
 
-      {/* ── BOTTOM NAV ── */}
-      <nav className="h-16 bg-white border-t border-gray-200 flex justify-around items-center px-6">
-        <HomeIcon
-          size={24}
-          className="text-blue-600 cursor-pointer"
-          onClick={() => nav('/keila/home')}
-        />
-        <MessageCircle
-          size={24}
-          className="text-gray-400 cursor-pointer"
-          onClick={() => nav('/keila/chat')}
-        />
-        <Mic
-          size={24}
-          className="text-gray-400 cursor-pointer"
-          onClick={() => nav('/keila/voice')}
-        />
-      </nav>
+        {/* input bar */}
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Ask anything you want…"
+            className="w-full h-12 rounded-full bg-gray-100 px-4 pr-14 text-black placeholder-gray-500 focus:outline-none"
+          />
+          <button className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center space-x-1 text-blue-600">
+            <Mic size={18} />
+            <Send size={18} />
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
