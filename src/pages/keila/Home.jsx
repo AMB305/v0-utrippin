@@ -5,7 +5,7 @@ import UtrippinLogo from '../../components/UtrippinLogo'
 import {
   ChevronDown,
   Camera,
-  Translate,
+  Globe,
   Compass,
   Lightbulb,
   Send,
@@ -41,7 +41,7 @@ export default function Home() {
         <div className="flex items-center space-x-4">
           {/* you can wire these icons up later */}
           <Camera    className="w-6 h-6 text-gray-600" />
-          <Translate className="w-6 h-6 text-gray-600" />
+          <Globe className="w-6 h-6 text-gray-600" />
           <Compass   className="w-6 h-6 text-gray-600" />
         </div>
       </header>
@@ -76,7 +76,7 @@ export default function Home() {
             <span className="text-xs text-black">Recognize Image</span>
           </button>
           <button className="flex flex-col items-center space-y-1">
-            <Translate className="w-6 h-6 text-gray-700" />
+            <Globe className="w-6 h-6 text-gray-700" />
             <span className="text-xs text-black">Live Translate</span>
           </button>
           <button className="flex flex-col items-center space-y-1">
