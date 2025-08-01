@@ -120,7 +120,7 @@ const App = () => {
                   <ScrollToTop />
                   <Routes>
                   <Route path="/auth" element={<Auth />} />
-                   <Route path="/" element={<Index />} />
+                   <Route path="/" element={<div style={{padding: '50px', fontSize: '24px', color: 'red', background: 'yellow'}}>🚨 HOMEPAGE TEST - IF YOU SEE THIS, ROUTING IS WORKING!</div>} />
                   <Route path="/email-verification" element={<EmailVerification />} />
                   <Route path="/profile-setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
                   <Route path="/travel-buddy" element={<ProtectedRoute><TravelBuddy /></ProtectedRoute>} />
