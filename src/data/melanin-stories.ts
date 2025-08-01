@@ -1,5 +1,38 @@
+// Story interface
+interface Story {
+  id: string
+  title: string
+  excerpt: string
+  image?: string
+  source: string
+  publishedAt: string
+  rawPublishDate?: string
+  link: string
+  category?: string
+  verified?: boolean
+  rssSource?: boolean
+  attribution?: string
+  featured?: boolean
+  freshnessScore?: number
+  relevanceScore?: number
+  isFresh?: boolean
+  contentAge?: "fresh" | "older"
+}
+
+interface StoriesResponse {
+  stories: Story[]
+  freshStories: Story[]
+  olderStories: Story[]
+  lastUpdated: string
+  sources: string[]
+  totalFound: number
+  freshCount: number
+  olderCount: number
+  rss_sources: number
+}
+
 // Mock RSS stories data for React/Vite
-const MOCK_RSS_STORIES = [
+const MOCK_RSS_STORIES: Story[] = [
   {
     id: "rss-black-travel-safety-2025",
     title: "New 'Safe Travels' App Launches for Black Travelers Worldwide",
@@ -78,7 +111,7 @@ const MOCK_RSS_STORIES = [
   },
 ]
 
-const EDITORIAL_STORIES = [
+const EDITORIAL_STORIES: Story[] = [
   {
     id: "utrippin-editorial-featured-2025",
     title: "2025 Black Travel Trends: Where Melanin Travelers Are Heading This Year",
@@ -118,7 +151,7 @@ const EDITORIAL_STORIES = [
   },
 ]
 
-export const getMelaninStories = () => {
+export const getMelaninStories = (): StoriesResponse => {
   const allStories = [...EDITORIAL_STORIES, ...MOCK_RSS_STORIES]
 
   const freshStories = allStories.filter((story) => story.isFresh)

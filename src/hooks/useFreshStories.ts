@@ -2,16 +2,14 @@ import { useState, useEffect } from 'react';
 import { getMelaninStories } from '../data/melanin-stories';
 
 interface Story {
-  id: number | string;
+  id: string;
   title: string;
-  link: string;
-  image: string | null;
-  excerpt: string | null;
-  source: string | null;
-  published_at: string;
-  created_at: string;
-  publishedAt?: string;
+  excerpt: string;
+  image?: string;
+  source: string;
+  publishedAt: string;
   rawPublishDate?: string;
+  link: string;
   category?: string;
   verified?: boolean;
   rssSource?: boolean;
@@ -28,13 +26,11 @@ interface StoriesResponse {
   freshStories: Story[];
   olderStories: Story[];
   lastUpdated: string;
-  sources?: string[];
-  totalFound?: number;
-  freshCount?: number;
-  olderCount?: number;
-  rss_sources?: number;
-  contentTypes?: string[];
-  legal_notice?: string;
+  sources: string[];
+  totalFound: number;
+  freshCount: number;
+  olderCount: number;
+  rss_sources: number;
 }
 
 export function useFreshStories() {
