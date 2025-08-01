@@ -1,9 +1,9 @@
-"use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Zap, TrendingUp, Clock, RefreshCw, ExternalLink, Calendar, Rss } from "lucide-react"
+import { Link } from "react-router-dom"
 import { useFreshStories } from "@/hooks/useFreshStories"
 import { RSSAttributionBadge } from "@/components/RSSAttributionBadge"
 
@@ -313,8 +313,7 @@ export default function Melanin() {
                   <img
                     src={
                       freshStories[0].image ||
-                      "/placeholder.svg?height=400&width=800&text=Black+Travelers+Tropical+Beach" ||
-                      "/placeholder.svg"
+                      "/placeholder.svg?height=400&width=800&text=Black+Travelers+Tropical+Beach"
                     }
                     alt={freshStories[0].title}
                     className="w-full h-full object-cover"
@@ -325,7 +324,7 @@ export default function Melanin() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                   <div className="absolute inset-0 p-6 flex flex-col justify-between">
                     <div className="flex justify-between items-start">
-                      <div className="flex space-x-2">
+                      <div className="flex space-x-2 flex-wrap">
                         <Badge className="bg-blue-500/30 text-blue-100 border-blue-400/50 backdrop-blur-sm">
                           <Zap className="h-3 w-3 mr-1" />
                           Fresh 2025 Content
@@ -368,7 +367,7 @@ export default function Melanin() {
                   </div>
                 </div>
               ) : (
-                <a href="/melanin/stories/2025-black-travel-trends" className="block">
+                <Link to="/melanin/stories/2025-black-travel-trends" className="block">
                   <div className="relative h-96 rounded-lg overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600">
                     <div className="absolute inset-0 p-6 flex flex-col justify-between">
                       <Badge className="bg-white/20 text-white border-white/30 self-start">Featured Editorial</Badge>
@@ -385,7 +384,7 @@ export default function Melanin() {
                       </div>
                     </div>
                   </div>
-                </a>
+                </Link>
               )}
             </div>
 
@@ -435,9 +434,12 @@ export default function Melanin() {
               {!loading && !error && freshStories.length > 0 && (
                 <div className="space-y-4">
                   {freshStories.slice(1, 5).map((story, index) => (
-                    <div
+                    <a
                       key={story.id}
-                      className="flex items-start space-x-4 group cursor-pointer border border-blue-200 rounded-lg p-3 hover:border-blue-400 transition-colors"
+                      href={story.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-start space-x-4 group cursor-pointer border border-blue-200 rounded-lg p-3 hover:border-blue-400 transition-colors block"
                     >
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
@@ -445,7 +447,6 @@ export default function Melanin() {
                             <Zap className="h-2 w-2 mr-1" />
                             Fresh
                           </Badge>
-                          
                         </div>
                         <h3 className="text-sm font-semibold text-black group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
                           {story.title}
@@ -462,13 +463,12 @@ export default function Melanin() {
                             rssSource={story.rssSource}
                             attribution={story.attribution}
                           />
-                          
                         </div>
                       </div>
                       <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
                         <ExternalLink className="h-3 w-3 text-blue-600" />
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               )}
@@ -487,7 +487,7 @@ export default function Melanin() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {editorialStories.slice(0, 6).map((story, index) => (
-              <a key={story.id} href={story.link}>
+              <Link key={story.id} to={story.link}>
                 <Card className="bg-white border-gray-200 overflow-hidden group hover:border-blue-300 transition-all shadow-sm hover:shadow-md h-full">
                   <div className="h-48 bg-gradient-to-br from-blue-500 to-blue-600 relative overflow-hidden">
                     <img
@@ -513,7 +513,7 @@ export default function Melanin() {
                     </div>
                   </CardContent>
                 </Card>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -524,15 +524,15 @@ export default function Melanin() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-black">Black-Owned Restaurants 🍽️</h2>
-            <a href="/melanin/restaurants">
+            <Link to="/melanin/restaurants">
               <Button variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent">
                 View All
               </Button>
-            </a>
+            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {blackOwnedRestaurants.slice(0, 8).map((restaurant, index) => (
-              <a key={restaurant.id} href={restaurant.link}>
+              <Link key={restaurant.id} to={restaurant.link}>
                 <Card className="bg-white border-gray-200 overflow-hidden group hover:border-blue-300 transition-all shadow-sm hover:shadow-md h-full">
                   <div className="h-32 bg-gradient-to-br from-blue-500 to-blue-600 relative overflow-hidden">
                     <img
@@ -552,7 +552,7 @@ export default function Melanin() {
                     </Badge>
                   </CardContent>
                 </Card>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -564,7 +564,7 @@ export default function Melanin() {
           <h2 className="text-3xl font-bold text-black mb-8 text-center">Black-Owned Wineries 🍷</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {blackOwnedWineries.slice(0, 8).map((winery, index) => (
-              <a key={winery.id} href={winery.link}>
+              <Link key={winery.id} to={winery.link}>
                 <Card className="bg-white border-gray-200 overflow-hidden group hover:border-blue-300 transition-all shadow-sm hover:shadow-md h-full">
                   <div className="h-32 bg-gradient-to-br from-blue-500 to-blue-600"></div>
                   <CardContent className="p-4">
@@ -576,7 +576,7 @@ export default function Melanin() {
                     <Badge className="bg-blue-100 text-blue-700 border-blue-200 text-xs">{winery.specialty}</Badge>
                   </CardContent>
                 </Card>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
