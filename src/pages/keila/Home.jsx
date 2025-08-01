@@ -3,7 +3,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ChevronDown,
-  Chat,
+  MessageSquare,
   Image,
   List,
   MapPin,
@@ -43,7 +43,7 @@ export default function Home() {
           onClick={() => nav('/keila/chat')}
           className="w-3/4 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-lg font-medium shadow-md"
         >
-          <Chat className="mr-2" size={20} /> Start Chat
+          <MessageSquare className="mr-2" size={20} /> Start Chat
         </button>
       </div>
 
