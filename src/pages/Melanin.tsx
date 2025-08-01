@@ -6,6 +6,8 @@ import { Zap, TrendingUp, Clock, RefreshCw, ExternalLink, Calendar, Rss } from "
 import { Link } from "react-router-dom"
 import { useFreshStories } from "@/hooks/useFreshStories"
 import { RSSAttributionBadge } from "@/components/RSSAttributionBadge"
+import Header from "@/components/Header"
+import Footer from "@/components/Footer"
 
 // REAL editorial stories with working links - YOUR STORIES
 const editorialStories = [
@@ -200,7 +202,9 @@ export default function Melanin() {
   } = useFreshStories()
 
   return (
-    <div className="bg-white text-black min-h-screen">
+    <>
+      <Header />
+      <div className="bg-white text-black min-h-screen">
       {/* Hero Section - WHITE BACKGROUND WITH ANIMATED COMPASS */}
       <section className="bg-gradient-to-br from-gray-50 to-blue-50 py-20">
         <div className="max-w-4xl mx-auto text-center px-4">
@@ -659,7 +663,9 @@ export default function Melanin() {
             <Button className="bg-white text-blue-600 hover:bg-blue-50">Subscribe</Button>
           </div>
         </div>
-      </section>
-    </div>
+        </section>
+      </div>
+      <Footer />
+    </>
   )
 }
