@@ -14,6 +14,7 @@ import { KeyboardNavigationIndicator } from "@/components/AccessibilityEnhanceme
 import CriticalBugFixes from "@/components/CriticalBugFixes";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import Index from "./pages/Index";
+import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import EmailVerification from "./pages/EmailVerification";
 import ProfileSetup from "./pages/ProfileSetup";
@@ -118,7 +119,7 @@ const App = () => {
                   <ScrollToTop />
                   <Routes>
                   <Route path="/auth" element={<Auth />} />
-                  <Route path="/" element={<Index />} />
+                  <Route path="/" element={<Home />} />
                   <Route path="/email-verification" element={<EmailVerification />} />
                   <Route path="/profile-setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
                   <Route path="/travel-buddy" element={<ProtectedRoute><TravelBuddy /></ProtectedRoute>} />
