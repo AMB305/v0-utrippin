@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import UtrippinLogo from '../../components/UtrippinLogo'
 import {
   ChevronDown,
-  SpeakerX,
+  VolumeX,
   MoreHorizontal,
   ArrowDown,
   Lightbulb,
@@ -82,7 +82,7 @@ export default function Chat() {
           <ChevronDown className="w-5 h-5 text-gray-600" />
         </div>
         <div className="flex items-center space-x-4">
-          <SpeakerX className="w-6 h-6 text-gray-600" />
+          <VolumeX className="w-6 h-6 text-gray-600" />
           <MoreHorizontal className="w-6 h-6 text-gray-600" />
         </div>
       </header>
