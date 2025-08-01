@@ -25,6 +25,7 @@ import { Search, Heart, MessageCircle, MapPin } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
+  console.log('🏠 INDEX COMPONENT RENDERING');
   const { user } = useAuth();
 
   return (
