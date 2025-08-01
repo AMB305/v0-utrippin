@@ -12,7 +12,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, MapPin, Star, Wifi, Car, Waves } from 'lucide-react';
-import useIsMobile from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { MobileHeader } from '@/components/mobile/MobileHeader';
 import { SearchWidget } from '@/components/mobile/SearchWidget';
 import { QuickDestinations } from '@/components/mobile/QuickDestinations';

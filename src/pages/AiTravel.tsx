@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useChatAI } from "@/hooks/useChatAI";
-import useIsMobile from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useDestinations, type Destination } from "@/hooks/useDestinations";
 import { SEOHead } from "@/components/SEOHead";
 import LoginCard from "@/components/LoginCard";
@@ -1155,9 +1155,6 @@ const AiTravel = () => {
           </div>
         </div>
       </div>
-      
-      {/* Global Keila Chat Bubble */}
-      <GlobalKeilaBubble />
     </>
   );
 };
