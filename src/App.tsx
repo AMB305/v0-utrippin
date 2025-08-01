@@ -85,6 +85,8 @@ import BlackCowboysHeritage from "./pages/stories/BlackCowboysHeritage";
 import GreatMigrationRoutes from "./pages/stories/GreatMigrationRoutes";
 import BlackTravelTrends2025 from "./pages/stories/BlackTravelTrends2025";
 import HarlemRenaissanceTour from "./pages/stories/HarlemRenaissanceTour";
+import BlackBeachTowns from "./pages/stories/BlackBeachTowns";
+import UndergroundRailroadSites from "./pages/stories/UndergroundRailroadSites";
 
 import NotFound from "./pages/NotFound";
 import ExploreMerged from "@/pages/ExploreMerged";
@@ -180,6 +182,8 @@ const App = () => (
                    <Route path="/melanin/stories/great-migration-routes" element={<GreatMigrationRoutes />} />
                    <Route path="/melanin/stories/2025-black-travel-trends" element={<BlackTravelTrends2025 />} />
                    <Route path="/melanin/stories/harlem-renaissance-tour" element={<HarlemRenaissanceTour />} />
+                   <Route path="/melanin/stories/black-beach-towns" element={<BlackBeachTowns />} />
+                   <Route path="/melanin/stories/underground-railroad-sites" element={<UndergroundRailroadSites />} />
                   <Route path="/seo-reports" element={<SEOReports />} />
                   <Route path="/admin/upload-trips" element={<UploadTrips />} />
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
