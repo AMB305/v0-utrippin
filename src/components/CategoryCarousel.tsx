@@ -68,14 +68,26 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
       checkScrollButtons(); // Initial check
 
       // Add null check and try-catch for ResizeObserver
-      if (typeof ResizeObserver !== 'undefined') {
-        const resizeObserver = new ResizeObserver(checkScrollButtons);
-        resizeObserver.observe(scrollContainer);
+      if (typeof ResizeObserver !== 'undefined' && scrollContainer.isConnected) {
+        try {
+          const resizeObserver = new ResizeObserver(() => {
+            if (scrollContainer && scrollContainer.isConnected) {
+              checkScrollButtons();
+            }
+          });
+          
+          resizeObserver.observe(scrollContainer);
 
-        return () => {
-          scrollContainer.removeEventListener('scroll', checkScrollButtons);
-          resizeObserver.disconnect();
-        };
+          return () => {
+            scrollContainer.removeEventListener('scroll', checkScrollButtons);
+            resizeObserver.disconnect();
+          };
+        } catch (observerError) {
+          console.warn('ResizeObserver failed:', observerError);
+          return () => {
+            scrollContainer.removeEventListener('scroll', checkScrollButtons);
+          };
+        }
       } else {
         return () => {
           scrollContainer.removeEventListener('scroll', checkScrollButtons);
@@ -84,11 +96,15 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
     } catch (error) {
       console.warn('CategoryCarousel observer setup failed:', error);
       // Fallback: just add scroll listener
-      scrollContainer.addEventListener('scroll', checkScrollButtons);
-      checkScrollButtons();
+      try {
+        scrollContainer.addEventListener('scroll', checkScrollButtons);
+        checkScrollButtons();
+      } catch {}
       
       return () => {
-        scrollContainer.removeEventListener('scroll', checkScrollButtons);
+        try {
+          scrollContainer.removeEventListener('scroll', checkScrollButtons);
+        } catch {}
       };
     }
   }, []);
