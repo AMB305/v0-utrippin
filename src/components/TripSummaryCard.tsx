@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Plane, Hotel, MapPin, Star, Clock } from 'lucide-react';
 

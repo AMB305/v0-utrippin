@@ -1,4 +1,3 @@
-
 -- Create API usage tracking tables
 CREATE TABLE IF NOT EXISTS public.api_usage_tracking (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

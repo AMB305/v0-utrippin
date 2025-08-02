@@ -1,4 +1,3 @@
-
 -- Add columns to track agent sharing functionality
 ALTER TABLE public.saved_trips 
 ADD COLUMN IF NOT EXISTS shared_with_agent_at TIMESTAMP WITH TIME ZONE,

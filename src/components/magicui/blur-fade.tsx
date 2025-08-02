@@ -66,4 +66,4 @@ export function BlurFade({
       {children}
     </div>
   );
-} 
+}

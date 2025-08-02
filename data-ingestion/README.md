@@ -5,14 +5,14 @@ This directory contains the script to ingest travel knowledge into Supabase with
 ## Setup
 
 1. Install dependencies:
-```bash
+\`\`\`bash
 npm install
-```
+\`\`\`
 
 2. Copy `.env.example` to `.env` and fill in your API keys:
-```bash
+\`\`\`bash
 cp .env.example .env
-```
+\`\`\`
 
 3. Update the `.env` file with your actual keys:
 - `SUPABASE_SERVICE_KEY`: Your Supabase service role key (starts with eyJh...)
@@ -21,9 +21,9 @@ cp .env.example .env
 ## Usage
 
 Run the ingestion script:
-```bash
+\`\`\`bash
 npm start
-```
+\`\`\`
 
 ## Notes
 

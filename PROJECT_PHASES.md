@@ -40,7 +40,7 @@
 ## Project Architecture
 
 ### File Structure Overview
-```
+\`\`\`
 src/
 ├── components/           # Reusable UI components
 │   ├── ui/              # Shadcn UI components (40+ components)
@@ -73,7 +73,7 @@ src/
 ├── integrations/        # External service integrations
 │   └── supabase/        # Supabase client and types
 └── assets/              # Static assets and images
-```
+\`\`\`
 
 ---
 

@@ -112,4 +112,4 @@ const TravelCarousel: React.FC<TravelCarouselProps> = ({ images, className = '' 
   );
 };
 
-export default TravelCarousel; 
+export default TravelCarousel;

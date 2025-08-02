@@ -237,4 +237,4 @@ export const PromptInputArea = ({
       )}
     </div>
   );
-}; 
+};

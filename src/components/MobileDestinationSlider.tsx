@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { VecteezyImage } from "@/components/VecteezyImage";
 import saintCroixImage from "@/assets/saint-croix-virgin-islands.jpg";
