@@ -1,0 +1,108 @@
+{
+  "featuredBusiness": {
+    "title": "Harlem Roots Winery",
+    "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+    "description": "A Black-owned vineyard in New York offering curated tastings and soul food pairings.",
+    "website": "https://harlemrootswinery.com",
+    "location": "Harlem, NY",
+    "highlightType": "winery"
+  },
+  "featuredDestinationUS": {
+    "title": "New Orleans",
+    "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+    "shortDescription": "Music, creole cuisine, and Black history tours make NOLA a must-visit.",
+    "link": "/destinations/new-orleans"
+  },
+  "featuredDestinationWorld": {
+    "title": "Accra, Ghana",
+    "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+    "shortDescription": "Dive into rich culture, art markets, and Cape Coast history.",
+    "link": "/destinations/accra"
+  },
+  "mixologyCorner": {
+    "title": "Rum Punch",
+    "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+    "recipe": "Mix dark rum, pineapple juice, orange juice, lime, and grenadine over ice. Garnish with mint.",
+    "origin": "Caribbean"
+  },
+  "blackTravelHeadlines": [
+    {
+      "title": "5 Black-Owned Resorts to Check Out This Fall",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/articles/black-owned-resorts",
+      "category": "Travel",
+      "excerpt": "Discover luxury accommodations owned by Black entrepreneurs across the globe."
+    },
+    {
+      "title": "Why Black Travelers Love New Orleans",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/articles/black-travel-nola",
+      "category": "Destinations",
+      "excerpt": "From jazz history to Creole culture, NOLA offers unparalleled experiences."
+    },
+    {
+      "title": "How to Stay Safe as a Black Solo Traveler",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/articles/black-solo-tips",
+      "category": "Safety",
+      "excerpt": "Essential tips and resources for confident solo adventures worldwide."
+    },
+    {
+      "title": "The Rise of Black Travel Groups",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/articles/black-travel-groups",
+      "category": "Community",
+      "excerpt": "How group travel is creating safe spaces and lasting friendships."
+    }
+  ],
+  "generalTravelHeadlines": [
+    {
+      "title": "Top 10 Fall Travel Destinations for 2025",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/articles/fall-travel-2025",
+      "excerpt": "From autumn foliage to harvest festivals, discover the season's best spots."
+    },
+    {
+      "title": "Flight Prices Expected to Drop 15% by Winter",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/articles/flight-price-drop",
+      "excerpt": "Industry experts predict significant savings for winter bookings."
+    },
+    {
+      "title": "Sustainable Travel Trends Shaping 2025",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/articles/sustainable-travel-2025",
+      "excerpt": "Eco-conscious choices are becoming the new standard for travelers."
+    }
+  ],
+  "cultureFood": [
+    {
+      "title": "Best Soul Food Spots in Atlanta",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/articles/soul-food-atlanta",
+      "category": "Food",
+      "excerpt": "From historic establishments to modern interpretations of classic dishes."
+    },
+    {
+      "title": "Top Juneteenth Festivals to Attend",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/articles/juneteenth-festivals",
+      "category": "Culture",
+      "excerpt": "Celebrate freedom and culture at these meaningful festivals nationwide."
+    },
+    {
+      "title": "Caribbean Food Markets You Must Visit",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/articles/caribbean-markets",
+      "category": "Food",
+      "excerpt": "Immerse yourself in the vibrant flavors and spices of the Caribbean."
+    },
+    {
+      "title": "African Art Museums Around the World",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/articles/african-art-museums",
+      "category": "Culture",
+      "excerpt": "Explore the rich artistic heritage of Africa in these world-class museums."
+    }
+  ]
+}

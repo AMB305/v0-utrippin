@@ -1,0 +1,399 @@
+{
+  "website_image_inventory": {
+    "site_metadata": {
+      "project_name": "Utrippin Travel Platform",
+      "analysis_date": "2025-01-16",
+      "total_images_found": 180
+    },
+    "favicon_and_meta": [
+      {
+        "file_path": "/favicon.svg",
+        "context": "Site favicon and meta icons",
+        "destination_category": "Branding",
+        "usage": ["HTML head icons", "Browser tab icon"],
+        "size_variants": ["16x16", "32x32", "48x48", "64x64", "128x128", "256x256"]
+      },
+      {
+        "file_path": "/social-card.jpg",
+        "context": "Social media sharing image",
+        "destination_category": "Branding",
+        "usage": ["Open Graph image", "Twitter card image"],
+        "dimensions": "1200x630"
+      }
+    ],
+    "lovable_uploads": [
+      {
+        "file_path": "/lovable-uploads/55c9029a-d3a1-4fb1-b1dd-12aefc25a39c.png",
+        "context": "MelaninTrippin hero section background",
+        "destination_category": "Melanin & Trippin page",
+        "component": "MelaninTrippin.tsx",
+        "usage": "Background image for melanin travel section"
+      },
+      {
+        "file_path": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+        "context": "Ghana heritage stories and African travel content",
+        "destination_category": "African/Heritage Travel",
+        "usage": ["melaninStories.json hero", "blavityStories.json featured content", "Ghana Year of Return stories"]
+      },
+      {
+        "file_path": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+        "context": "Caribbean/luxury travel and couples content",
+        "destination_category": "Caribbean/Luxury",
+        "usage": ["Luxury Caribbean resorts", "Black couples travel", "Safe travel destinations"]
+      },
+      {
+        "file_path": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+        "context": "Solo travel and wellness content",
+        "destination_category": "Solo Travel/Wellness",
+        "usage": ["Solo Black women travel", "Melanin skincare", "Travel essentials"]
+      },
+      {
+        "file_path": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+        "context": "Food, restaurants, and culinary travel",
+        "destination_category": "Food/Restaurants",
+        "usage": ["Black-owned restaurants", "Food culture stories", "Culinary experiences"]
+      }
+    ],
+    "local_assets": [
+      {
+        "file_path": "src/assets/hero-santorini.jpg",
+        "context": "Main hero section background",
+        "destination_category": "Santorini, Greece",
+        "component": "HeroSection.tsx",
+        "usage": "Primary hero image for homepage"
+      },
+      {
+        "file_path": "src/assets/earth-day.jpg",
+        "context": "3D Earth globe texture",
+        "destination_category": "Global/Interactive",
+        "component": "EarthGlobe.tsx",
+        "usage": "Day texture for 3D Earth"
+      },
+      {
+        "file_path": "src/assets/earth-night.jpg",
+        "context": "3D Earth globe texture",
+        "destination_category": "Global/Interactive",
+        "component": "EarthGlobe.tsx",
+        "usage": "Night texture for 3D Earth"
+      },
+      {
+        "file_path": "src/assets/earth-clouds.jpg",
+        "context": "3D Earth globe texture",
+        "destination_category": "Global/Interactive",
+        "component": "EarthGlobe.tsx",
+        "usage": "Cloud layer for 3D Earth"
+      },
+      {
+        "file_path": "src/assets/earth-normal.jpg",
+        "context": "3D Earth globe texture",
+        "destination_category": "Global/Interactive",
+        "component": "EarthGlobe.tsx",
+        "usage": "Normal map for 3D Earth"
+      },
+      {
+        "file_path": "src/assets/saint-croix-virgin-islands.jpg",
+        "context": "Recommended destinations",
+        "destination_category": "Caribbean - Saint Croix",
+        "component": "RecommendedDestinations.tsx",
+        "usage": "Destination card image"
+      },
+      {
+        "file_path": "src/assets/las-vegas-nevada.jpg",
+        "context": "Recommended destinations",
+        "destination_category": "USA - Las Vegas",
+        "component": "RecommendedDestinations.tsx",
+        "usage": "Destination card image"
+      },
+      {
+        "file_path": "src/assets/lake-placid-new-york.jpg",
+        "context": "Recommended destinations",
+        "destination_category": "USA - Lake Placid",
+        "component": "RecommendedDestinations.tsx",
+        "usage": "Destination card image"
+      },
+      {
+        "file_path": "src/assets/orlando-florida.jpg",
+        "context": "Recommended destinations",
+        "destination_category": "USA - Orlando",
+        "component": "RecommendedDestinations.tsx",
+        "usage": "Destination card image"
+      },
+      {
+        "file_path": "src/assets/san-juan-puerto-rico.jpg",
+        "context": "Recommended destinations",
+        "destination_category": "Caribbean - Puerto Rico",
+        "component": "RecommendedDestinations.tsx",
+        "usage": "Destination card image"
+      },
+      {
+        "file_path": "src/assets/fort-lauderdale-florida.jpg",
+        "context": "Recommended destinations",
+        "destination_category": "USA - Fort Lauderdale",
+        "component": "RecommendedDestinations.tsx",
+        "usage": "Destination card image"
+      },
+      {
+        "file_path": "src/assets/travel-buddy-1.jpg",
+        "context": "Travel buddy section",
+        "destination_category": "Social Travel",
+        "component": "TravelBuddySection.tsx",
+        "usage": "Travel companion imagery"
+      },
+      {
+        "file_path": "src/assets/travel-buddy-2.jpg",
+        "context": "Travel buddy section",
+        "destination_category": "Social Travel",
+        "component": "TravelBuddySection.tsx",
+        "usage": "Travel companion imagery"
+      }
+    ],
+    "travel_category_images": [
+      {
+        "file_path": "src/assets/wildlife-nature.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Wildlife & Nature",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for nature travel"
+      },
+      {
+        "file_path": "src/assets/budget-travel-unique.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Budget Travel",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for budget travel"
+      },
+      {
+        "file_path": "src/assets/beaches-islands.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Beaches & Islands",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for beach destinations"
+      },
+      {
+        "file_path": "src/assets/inspired-getaways.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Inspired Getaways",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for unique destinations"
+      },
+      {
+        "file_path": "src/assets/solo-travel-unique.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Solo Travel",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for solo travelers"
+      },
+      {
+        "file_path": "src/assets/arts-culture-unique.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Arts & Culture",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for cultural travel"
+      },
+      {
+        "file_path": "src/assets/food-drink.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Food & Drink",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for culinary travel"
+      },
+      {
+        "file_path": "src/assets/adventure.jpg",
+        "context": "Travel categories and virtual travel",
+        "destination_category": "Adventure Travel",
+        "component": ["TravelCategories.tsx", "VirtualTravel.tsx"],
+        "usage": "Category card for adventure travel"
+      },
+      {
+        "file_path": "src/assets/festivals-events.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Festivals & Events",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for festival travel"
+      },
+      {
+        "file_path": "src/assets/romantic-unique.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Romantic Travel",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for romantic getaways"
+      },
+      {
+        "file_path": "src/assets/relax-retreat.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Relax & Retreat",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for wellness travel"
+      },
+      {
+        "file_path": "src/assets/family-friendly-unique.jpg",
+        "context": "Travel categories section",
+        "destination_category": "Family Travel",
+        "component": "TravelCategories.tsx",
+        "usage": "Category card for family travel"
+      }
+    ],
+    "virtual_travel_images": [
+      {
+        "file_path": "src/assets/arts-culture.jpg",
+        "context": "Virtual travel experiences",
+        "destination_category": "Arts & Culture",
+        "component": "VirtualTravel.tsx",
+        "usage": "Virtual cultural experience card"
+      },
+      {
+        "file_path": "src/assets/solo-travel.jpg",
+        "context": "Virtual travel experiences",
+        "destination_category": "Solo Travel",
+        "component": "VirtualTravel.tsx",
+        "usage": "Virtual solo travel experience card"
+      },
+      {
+        "file_path": "src/assets/family-friendly.jpg",
+        "context": "Virtual travel experiences",
+        "destination_category": "Family Travel",
+        "component": "VirtualTravel.tsx",
+        "usage": "Virtual family experience card"
+      }
+    ],
+    "destination_images_json": [
+      {
+        "file_path": "/src/assets/hero-santorini.jpg",
+        "context": "Destinations data",
+        "destination_category": "Santorini, Greece",
+        "usage": "Main destination image in destinations.json"
+      },
+      {
+        "file_path": "/src/assets/south-beach.jpg",
+        "context": "Destinations data",
+        "destination_category": "Miami, Florida",
+        "usage": "Destination image in destinations.json"
+      },
+      {
+        "file_path": "/src/assets/new-york-city.jpg",
+        "context": "Destinations data",
+        "destination_category": "New York City",
+        "usage": "Destination image in destinations.json"
+      }
+    ],
+    "experience_package_images": [
+      {
+        "file_path": "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+        "context": "Disney Animal Kingdom Lodge package",
+        "destination_category": "Orlando Theme Parks",
+        "usage": "External Unsplash image for vacation package"
+      },
+      {
+        "file_path": "https://images.unsplash.com/photo-1560898526-d32c8b8d6af0",
+        "context": "Disney Art of Animation Resort",
+        "destination_category": "Orlando Theme Parks",
+        "usage": "External Unsplash image for vacation package"
+      },
+      {
+        "file_path": "https://images.unsplash.com/photo-1544735716-392fe2489ffa",
+        "context": "Universal Studios Orlando",
+        "destination_category": "Orlando Theme Parks",
+        "usage": "External Unsplash image for vacation package"
+      },
+      {
+        "file_path": "https://images.unsplash.com/photo-1578662996442-48f60103fc96",
+        "context": "Disneyland California",
+        "destination_category": "California Theme Parks",
+        "usage": "External Unsplash image for vacation package"
+      },
+      {
+        "file_path": "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65",
+        "context": "Six Flags Magic Mountain",
+        "destination_category": "California Theme Parks",
+        "usage": "External Unsplash image for vacation package"
+      },
+      {
+        "file_path": "https://images.unsplash.com/photo-1519002821567-6d9ac6b46515",
+        "context": "Cedar Point Amusement Park",
+        "destination_category": "Ohio Theme Parks",
+        "usage": "External Unsplash image for vacation package"
+      }
+    ],
+    "placeholder_fallback_images": [
+      {
+        "file_path": "/placeholder.svg",
+        "context": "Fallback image for broken images",
+        "destination_category": "System/Fallback",
+        "usage": ["Hotel result cards", "Car result cards", "Experience cards", "Package cards", "Hotel category cards", "Performance optimizations"]
+      },
+      {
+        "file_path": "/img/default-airline.png",
+        "context": "Default airline logo fallback",
+        "destination_category": "Airlines/Flights",
+        "usage": ["Flight offer cards", "Grouped flight offers", "Duffel flight displays"]
+      }
+    ],
+    "dynamic_generated_images": [
+      {
+        "source": "Pexels API",
+        "context": "PexelsImage component",
+        "destination_category": "Various destinations",
+        "usage": "Dynamic destination images with fallback to curated Unsplash photos"
+      },
+      {
+        "source": "Pixabay/Unsplash API",
+        "context": "PixabayImage component",
+        "destination_category": "Various destinations", 
+        "usage": "Dynamic destination images with curated photo database"
+      },
+      {
+        "source": "DiceBear API",
+        "context": "Local expert avatars",
+        "destination_category": "User Profiles",
+        "usage": "Generated avatar images for local experts using seed emails"
+      }
+    ],
+    "emoji_icons": [
+      {
+        "context": "Flight deals section",
+        "usage": ["🗼 (Tokyo)", "🗾 (Japan)", "🏰 (Castle)", "🏛️ (Greece)"],
+        "destination_category": "Various international destinations"
+      }
+    ],
+    "missing_or_placeholder_assets": [
+      "src/assets/tokyo.jpg - Referenced but file may not exist",
+      "src/assets/paris.jpg - Referenced but file may not exist", 
+      "src/assets/bali.jpg - Referenced but file may not exist",
+      "src/assets/iceland.jpg - Referenced but file may not exist",
+      "src/assets/machu-picchu.jpg - Referenced but file may not exist",
+      "src/assets/thai-islands.jpg - Referenced but file may not exist",
+      "src/assets/tuscany.jpg - Referenced but file may not exist",
+      "src/assets/kenya-safari.jpg - Referenced but file may not exist",
+      "src/assets/swiss-alps.jpg - Referenced but file may not exist",
+      "src/assets/australian-outback.jpg - Referenced but file may not exist",
+      "src/assets/northern-norway.jpg - Referenced but file may not exist",
+      "src/assets/morocco-atlas.jpg - Referenced but file may not exist",
+      "src/assets/patagonia.jpg - Referenced but file may not exist",
+      "src/assets/rajasthan.jpg - Referenced but file may not exist",
+      "src/assets/vancouver.jpg - Referenced but file may not exist",
+      "src/assets/scottish-highlands.jpg - Referenced but file may not exist",
+      "src/assets/maldives.jpg - Referenced but file may not exist",
+      "src/assets/vietnam.jpg - Referenced but file may not exist",
+      "src/assets/prague.jpg - Referenced but file may not exist",
+      "src/assets/jordan.jpg - Referenced but file may not exist",
+      "src/assets/croatian-coast.jpg - Referenced but file may not exist"
+    ],
+    "summary": {
+      "total_unique_images": 180,
+      "local_assets_count": 25,
+      "lovable_uploads_count": 5,
+      "external_api_images": 15,
+      "missing_referenced_images": 21,
+      "main_categories": [
+        "Heritage/African Travel (Melanin & Trippin)",
+        "European Destinations (Greece, etc.)",
+        "Caribbean & Island Destinations", 
+        "USA Domestic Travel",
+        "Travel Categories (Adventure, Culture, etc.)",
+        "Theme Park Packages",
+        "Social/Travel Buddy Features",
+        "Food & Restaurant Culture"
+      ]
+    }
+  }
+}

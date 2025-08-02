@@ -1,0 +1,722 @@
+[
+  {
+    "prompt": "Ultra realistic photo of the actual city of Santorini, Greece, with iconic white buildings and blue domes overlooking the Aegean Sea, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hero-santorini-1.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Saint Croix, US Virgin Islands, with pristine Caribbean beaches and crystal clear turquoise waters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/saint-croix-virgin-islands-2.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Las Vegas Strip at sunset with famous casino hotels and bright illuminated skyline, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/las-vegas-nevada-3.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of South Beach Miami with art deco buildings, palm trees, and pristine white sand beach, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/south-beach-4.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Manhattan skyline with Empire State Building and Central Park view, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/new-york-city-5.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of romantic couple dining on a Mediterranean terrace overlooking sunset over ocean, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/romantic-unique-6.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Cape Coast Castle in Ghana with ocean backdrop and historic architecture, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-trippin-hero-7.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of African safari with elephants and acacia trees on the savanna at golden hour, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/wildlife-nature-8.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of backpackers exploring colorful mountain village with affordable hostels, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/budget-travel-unique-9.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of tropical paradise beach with crystal clear water and palm trees, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/beaches-islands-10.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of unique glamping tent setup in scenic mountain landscape, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/inspired-getaways-11.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of solo female traveler exploring ancient temple ruins with backpack, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/solo-travel-unique-12.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of art museum exterior with modern architecture and sculptures, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/arts-culture-unique-13.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of outdoor restaurant patio with vibrant colorful seating and fresh cuisine, no visible text on signs or menus, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/food-drink-14.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of mountain climbers scaling dramatic rocky peaks, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/adventure-15.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of colorful festival celebration with people dancing in traditional costumes, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/festivals-events-16.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury spa resort with infinity pool overlooking ocean, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/relax-retreat-17.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of family playing on beach with children building sandcastles, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/family-friendly-unique-18.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of outdoor Black-owned restaurant in Atlanta with vibrant patio seating, no visible text on signs or menus, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-restaurant-19.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Black travel group exploring the French Quarter in New Orleans with historic architecture, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-nola-20.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of solo Black woman traveler at scenic overlook with beautiful landscape, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-solo-woman-21.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Black couple relaxing at luxury Caribbean resort with infinity pool, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-couples-22.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Black-owned winery in Napa Valley California with vineyard rows, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-winery-23.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Black-owned restaurant in Atlanta with outdoor dining and southern charm, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-atlanta-24.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of soul food restaurant in Chicago with warm atmosphere and comfort food, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-chicago-25.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Caribbean restaurant in Miami with tropical decor and vibrant colors, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-miami-26.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Black-owned winery in Texas Hill Country with rolling hills and vines, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-texas-winery-27.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of historic Black winery in Virginia with colonial architecture and vineyards, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/melanin-virginia-winery-28.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Tokyo cityscape with Mount Fuji in background and cherry blossoms, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/tokyo-29.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Paris with Eiffel Tower and Seine River at golden hour, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/paris-30.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Bali's iconic rice terraces in Jatiluwih with lush green landscape, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/bali-31.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Iceland's Ring Road with dramatic waterfalls and volcanic landscape, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/iceland-32.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Machu Picchu ancient ruins with Huayna Picchu mountain backdrop, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/machu-picchu-33.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Thai islands with limestone cliffs and crystal clear turquoise waters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/thai-islands-34.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Tuscany countryside with rolling hills, cypress trees, and vineyard estates, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/tuscany-35.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Kenyan safari with lions and zebras on the Masai Mara plains, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/kenya-safari-36.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Swiss Alps with Matterhorn peak and alpine meadows, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/swiss-alps-37.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Australian Outback with Uluru (Ayers Rock) and red desert landscape, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/australian-outback-38.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Northern Norway fjords with aurora borealis dancing in the night sky, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/northern-norway-39.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Morocco's Atlas Mountains with Berber villages and snow-capped peaks, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/morocco-atlas-40.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Patagonia wilderness with Torres del Paine granite spires, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/patagonia-41.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Rajasthan's Amber Palace with intricate Mughal architecture, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/rajasthan-42.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Vancouver skyline with North Shore mountains and harbor, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/vancouver-43.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Scottish Highlands with Eilean Donan Castle and misty lochs, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/scottish-highlands-44.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Maldives overwater bungalows with crystal clear lagoon and coral reef, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/maldives-45.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Vietnam's Ha Long Bay with limestone karsts and emerald waters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/vietnam-46.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Prague's Old Town Square with astronomical clock and Gothic architecture, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/prague-47.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Jordan's Petra with Treasury facade carved into red sandstone cliffs, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/jordan-48.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Croatian Coast with Dubrovnik's ancient walls and Adriatic Sea, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/croatian-coast-49.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Chile's Casablanca Valley vineyards with Andes Mountains backdrop, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/chile-wine-country-50.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Mykonos island with traditional white windmills and blue Aegean Sea, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/greece-mykonos-51.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Athens Acropolis with Parthenon temple on the ancient citadel, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/greece-athens-52.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Greek family enjoying beach vacation on Crete with golden sand, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/greece-family-beach-53.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of traditional Greek mezze spread with olives, feta, and Mediterranean ingredients, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/greece-food-54.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Orlando theme parks with Cinderella Castle at Walt Disney World, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/orlando-florida-55.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Fort Lauderdale beaches with white sand and clear blue waters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/fort-lauderdale-florida-56.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Disney World's Magic Kingdom with iconic castle and attractions, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/disney-world-57.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Universal Studios Orlando with thrilling roller coasters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/universal-studios-58.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Kennedy Space Center with space shuttle and launch facilities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/kennedy-space-center-59.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Everglades National Park with alligators and sawgrass marshes, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/everglades-60.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Clearwater Beach with pristine white sand and Gulf of Mexico waters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/clearwater-beach-61.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Dry Tortugas National Park with historic Fort Jefferson, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/dry-tortugas-62.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Venetian Pool in Coral Gables with Mediterranean architecture, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/venetian-pool-63.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Wynwood Walls street art district in Miami with colorful murals, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/wynwood-walls-64.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Bok Tower Gardens with carillon tower and botanical gardens, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/bok-tower-gardens-65.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Salvador Dali Museum in St. Petersburg with surreal architecture, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/dali-museum-66.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Manatee Springs State Park with crystal clear spring waters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/manatee-springs-67.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Earth from space showing continents and blue oceans, photorealistic style, no text, no logos, no signs",
+    "file_path": "src/assets/earth-normal-68.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Earth at night from space with city lights illuminated, photorealistic style, no text, no logos, no signs",
+    "file_path": "src/assets/earth-night-69.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Earth from space with swirling cloud formations, photorealistic style, no text, no logos, no signs",
+    "file_path": "src/assets/earth-clouds-70.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Earth from space on Earth Day with vibrant green continents, photorealistic style, no text, no logos, no signs",
+    "file_path": "src/assets/earth-day-71.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of diverse travel companions hiking together on mountain trail, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/travel-buddy-1-72.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of travel friends enjoying beach volleyball and sunset, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/travel-buddy-2-73.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of travel buddies exploring European city streets together, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/travel-buddy-3-74.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of adventure travel group white water rafting, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/travel-buddy-4-75.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of travel companions camping under starry night sky, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/travel-buddy-5-76.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury beach resort with crystal clear pool overlooking ocean, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotels/beach-resort-1-77.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of budget-friendly boutique hotel with cozy modern interior, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotels/budget-hotel-1-78.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of modern business hotel exterior with glass facade and city skyline, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotels/business-hotel-1-79.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of historic castle hotel with medieval architecture and gardens, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotels/castle-hotel-1-80.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury resort with infinity pool and mountain views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotels/luxury-pool-hotel-1-81.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of oceanview hotel balcony with panoramic sea views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotels/ocean-view-hotel-1-82.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury spa hotel with wellness facilities and zen gardens, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotels/spa-hotel-1-83.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of family waterpark resort with slides and splash zones, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotels/waterpark-resort-1-84.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Nashville skyline with music venues and honky-tonk atmosphere, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/nashville-85.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Washington DC with Capitol Building and National Mall, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/washington-dc-86.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Atlanta skyline with Piedmont Park and downtown towers, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/atlanta-87.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Lake Placid, New York with Adirondack Mountains reflection, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/lake-placid-new-york-88.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of San Juan, Puerto Rico with colorful colonial buildings, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/san-juan-puerto-rico-89.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of unique ranch accommodation with horses and mountain scenery, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/unique-ranch-90.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury villa with infinity pool and Mediterranean views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/unique-villa-91.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of beach destination with pristine sand and turquoise waters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/destination-beach-92.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of cultural destination with ancient temples and heritage sites, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/destination-culture-93.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of family destination with theme parks and kid-friendly activities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/destination-family-94.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of ski destination with snow-covered slopes and alpine chalets, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/destination-ski-95.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of wellness destination with spa treatments and yoga retreats, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/destination-wellness-96.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Florida beach hero with white sand and palm trees, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/florida-beach-hero-97.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Greece hero destination with Santorini sunset and caldera views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/greece-hero-98.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Canaves Oia Suites luxury hotel in Santorini with infinity pool, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotel-canaves-oia-suites-99.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Domes Zeen luxury resort in Chania with modern architecture, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotel-domes-zeen-100.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Electra Metropolis hotel in Athens with rooftop Acropolis views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotel-electra-metropolis-101.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Mykonos Blu resort with Aegean Sea views and infinity pool, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotel-mykonos-blu-102.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of aparthotel with kitchen facilities and home-like comfort, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotel-aparthotel-103.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of castle hotel with historic architecture and royal gardens, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotel-castle-104.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of oceanview hotel room with panoramic sea balcony, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotel-oceanview-105.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of hotel with stunning pool deck and mountain backdrop, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotel-pool-106.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of waterpark hotel with exciting slides and family fun zones, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/hotel-waterpark-107.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of romantic couple dining experience with ocean sunset views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/romantic-108.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of solo traveler exploring mountain hiking trails with backpack, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/solo-travel-109.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of family enjoying theme park rides and attractions together, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/family-friendly-110.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of budget backpacker exploring local markets and street food, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/budget-travel-111.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of arts and culture museum with modern exhibitions, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/arts-culture-112.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of premium travel class lounge with comfortable seating and amenities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/premium-travel-113.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury resort with exclusive amenities and VIP service, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/premium-resort-114.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of premium airline first class cabin with spacious seats, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/premium-flight-115.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of exclusive private villa with infinity pool and butler service, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/premium-villa-116.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of premium spa treatment with luxury wellness facilities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/premium-spa-117.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of exclusive yacht charter with ocean and sunset views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/premium-yacht-118.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury private jet interior with comfortable seating, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/premium-jet-119.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of premium safari lodge with wildlife viewing deck, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/premium-safari-120.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of mountain adventure with hiking and scenic landscapes, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/adventure-mountain-121.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of water sports adventure with kayaking and ocean activities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/adventure-water-122.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of desert adventure with sand dunes and camel trekking, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/adventure-desert-123.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of jungle adventure with rainforest canopy and wildlife, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/adventure-jungle-124.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of ski adventure with powder snow and alpine scenery, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/adventure-ski-125.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of cultural festival with traditional dancers and colorful costumes, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/cultural-festival-126.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of music festival with outdoor stage and dancing crowds, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/music-festival-127.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of food festival with outdoor stalls and culinary delights, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/food-festival-128.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of art festival with outdoor installations and creative displays, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/art-festival-129.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of wine festival with vineyard setting and tasting events, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/wine-festival-130.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of wellness retreat with yoga pavilion and natural setting, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/wellness-retreat-131.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of meditation sanctuary with peaceful gardens and zen atmosphere, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/meditation-sanctuary-132.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of thermal spa with natural hot springs and healing waters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/thermal-spa-133.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of fitness retreat with outdoor gym and mountain views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/fitness-retreat-134.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of detox retreat with healthy cuisine and natural surroundings, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/detox-retreat-135.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury cruise ship deck with ocean views and amenities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/cruise-luxury-136.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of river cruise through European castles and vineyards, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/cruise-river-137.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of expedition cruise in Arctic with icebergs and wildlife, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/cruise-expedition-138.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Mediterranean cruise with Greek islands and blue waters, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/cruise-mediterranean-139.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of Caribbean cruise with tropical ports and beaches, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/cruise-caribbean-140.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of city break in London with Big Ben and Thames River, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/city-break-london-141.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of city break in Rome with Colosseum and ancient architecture, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/city-break-rome-142.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of city break in Barcelona with Sagrada Familia and Gothic Quarter, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/city-break-barcelona-143.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of city break in Amsterdam with canals and historic buildings, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/city-break-amsterdam-144.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of city break in Berlin with Brandenburg Gate and modern culture, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/city-break-berlin-145.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of honeymoon suite with romantic decor and ocean views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/honeymoon-suite-146.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of romantic dinner on beach with candlelight and sunset, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/romantic-dinner-147.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of couples spa treatment with luxury amenities and relaxation, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/couples-spa-148.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of romantic gondola ride through Venice canals, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/romantic-gondola-149.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of sunset horseback ride on tropical beach, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/romantic-horseback-150.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury eco-lodge with sustainable architecture and rainforest views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/eco-lodge-151.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of sustainable resort with solar panels and green technologies, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/sustainable-resort-152.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of wildlife conservation camp with research facilities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/conservation-camp-153.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of organic farm stay with local produce and rural charm, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/farm-stay-154.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of green hotel with living walls and eco-friendly design, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/green-hotel-155.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of culinary tour through local markets and cooking classes, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/culinary-tour-156.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of wine tasting experience in vineyard cellar, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/wine-tasting-157.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of street food adventure with local vendors and authentic flavors, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/street-food-158.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of cooking class with local chef and traditional techniques, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/cooking-class-159.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of farm-to-table restaurant with fresh ingredients and rural setting, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/farm-to-table-160.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of digital nomad workspace with laptop and tropical background, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/digital-nomad-161.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of co-working space with modern amenities and city views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/coworking-space-162.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of remote work setup on beach with laptop and ocean views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/remote-work-beach-163.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of mountain retreat workspace with inspiring landscape views, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/mountain-workspace-164.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of urban loft workspace with industrial design and city energy, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/urban-workspace-165.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of photography tour capturing stunning landscapes and wildlife, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/photography-tour-166.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of art workshop with local artists and creative inspiration, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/art-workshop-167.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of language immersion school with international students, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/language-school-168.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of cultural exchange program with local community interaction, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/cultural-exchange-169.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of volunteer travel project with community development work, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/volunteer-travel-170.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury train journey through scenic mountain landscapes, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/luxury-train-171.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of scenic railway through European countryside and villages, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/scenic-railway-172.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of vintage steam train through historic landscapes, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/vintage-train-173.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of high-speed rail connecting modern cities efficiently, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/high-speed-rail-174.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of sleeper train cabin with comfortable overnight amenities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/sleeper-train-175.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of business travel lounge with professional amenities and comfort, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/business-lounge-176.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of conference venue with modern meeting facilities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/conference-venue-177.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of business hotel with executive services and city access, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/business-hotel-178.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of corporate retreat venue with team building facilities, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/corporate-retreat-179.jpg"
+  },
+  {
+    "prompt": "Ultra realistic photo of luxury helicopter tour over scenic coastline and landmarks, photorealistic travel magazine style, no text, no logos, no signs",
+    "file_path": "src/assets/helicopter-tour-180.jpg"
+  }
+]

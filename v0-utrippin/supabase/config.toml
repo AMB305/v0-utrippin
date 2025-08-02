@@ -1,0 +1,67 @@
+project_id = "ytraidksgwxttjeevjuc"
+
+[functions.ai-comprehensive-itinerary]
+verify_jwt = false
+
+[functions.flight-search-integration]
+verify_jwt = false
+
+[functions.hotel-affiliate-integration]
+verify_jwt = false
+
+[functions.pixabay-images]
+verify_jwt = false
+
+[functions.pexels-images]
+verify_jwt = false
+
+[functions.searchapi-images]
+verify_jwt = false
+
+[functions.unsplash-images]
+verify_jwt = false
+
+[functions.serpapi-images]
+verify_jwt = false
+
+[functions.airport-search]
+verify_jwt = false
+
+[functions.mobile-ai-travel]
+verify_jwt = false
+
+[functions.unified-image-search]
+verify_jwt = false
+
+[functions.expedia-hotel-lookup]
+verify_jwt = false
+
+[functions.recognize-image]
+verify_jwt = false
+
+[functions.get-suggested-questions]
+verify_jwt = false
+
+[functions.ratehawk-hotel-search]
+verify_jwt = false
+
+[functions.ratehawk-hotel-info]
+verify_jwt = false
+
+[functions.ratehawk-hotel-prebook]
+verify_jwt = false
+
+[functions.ratehawk-hotel-book]
+verify_jwt = false
+
+[functions.ratehawk-hotel-cancel]
+verify_jwt = false
+
+[functions.ratehawk-search-region]
+verify_jwt = false
+
+[functions.ratehawk-search-geo]
+verify_jwt = false
+
+[functions.scrape-destinations]
+verify_jwt = false

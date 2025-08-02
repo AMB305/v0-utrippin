@@ -1,0 +1,163 @@
+{
+  "heroStory": {
+    "title": "Why Black Travelers are Rediscovering Africa",
+    "tag": "Black Travel ✈️",
+    "excerpt": "From Ghana's Year of Return to Afrochella, more Black travelers are reconnecting with the motherland than ever before. Discover the cultural renaissance happening across the continent.",
+    "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+    "link": "/stories/rediscovering-africa"
+  },
+  "featuredStories": [
+    {
+      "title": "Exploring the Diaspora in Paris",
+      "tag": "Culture & Heritage",
+      "excerpt": "Beyond the Eiffel Tower — Black history tours and Afro-French culture in the City of Light.",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/stories/diaspora-paris"
+    },
+    {
+      "title": "A Taste of Lagos: Spicy Street Food",
+      "tag": "Foodie Adventures",
+      "excerpt": "Why Nigerian street markets are a must-visit for spice lovers and food adventurers.",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/stories/lagos-food"
+    },
+    {
+      "title": "Carnival in Salvador: Afro-Brazilian Joy",
+      "tag": "Festivals",
+      "excerpt": "How Salvador's streets explode with culture, color, and pure joy during carnival season.",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/stories/salvador-carnival"
+    }
+  ],
+  "editorialHighlights": [
+    {
+      "title": "Ghana's Year of Return",
+      "tag": "Events & Festivals",
+      "excerpt": "Celebrating identity, music, and history during Ghana's landmark year of remembrance.",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/stories/ghana-year-of-return"
+    },
+    {
+      "title": "Black-Owned Hotels You Should Book",
+      "tag": "Travel Tips",
+      "excerpt": "Supporting Black hospitality businesses on your next adventure around the world.",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/stories/black-owned-hotels"
+    },
+    {
+      "title": "Safe Places for Black Americans to Travel",
+      "tag": "Travel Safety 🌍",
+      "excerpt": "Countries and cities where Black travelers feel welcomed, respected, and celebrated.",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/guides/safe-places"
+    },
+    {
+      "title": "Travel Essentials for Melanin Skin",
+      "tag": "Beauty & Wellness",
+      "excerpt": "Skincare and beauty products that travel well and keep you glowing on the road.",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/guides/melanin-skincare"
+    }
+  ],
+  "travelGuides": [
+    {
+      "title": "7 Must-Visit Destinations for Black Couples",
+      "tag": "Romantic Trips 💑",
+      "excerpt": "Romantic getaways where love and heritage meet in perfect harmony.",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/stories/black-couples-travel"
+    },
+    {
+      "title": "Best Beach Getaways for the Culture",
+      "tag": "Beach Destinations",
+      "excerpt": "Sun, sand, and soul at these culturally rich coastal destinations.",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/guides/cultural-beaches"
+    },
+    {
+      "title": "Finding Community on the Road",
+      "tag": "Solo Travel",
+      "excerpt": "How to connect with like-minded travelers and build lasting friendships.",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/stories/community-while-solo"
+    }
+  ],
+  "communityStories": [
+    {
+      "title": "My First Trip to the Motherland",
+      "tag": "Personal Stories",
+      "excerpt": "A life-changing journey of self-discovery and cultural connection in Ghana.",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/community/first-africa-trip"
+    },
+    {
+      "title": "Building Community While Solo Traveling",
+      "tag": "Solo Travel",
+      "excerpt": "How I found my tribe while exploring Southeast Asia alone.",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/community/solo-community"
+    },
+    {
+      "title": "Girls Trip to Jamaica: Sisterhood Goals",
+      "tag": "Girls Trips 👯‍♀️",
+      "excerpt": "Five friends, one island, countless memories and a bond that grew stronger.",
+      "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+      "link": "/community/jamaica-girls-trip"
+    },
+    {
+      "title": "Black-Owned Restaurants Worth the Trip",
+      "tag": "Food & Culture 🍽",
+      "excerpt": "From New Orleans to Lagos, these chefs are redefining cuisine worldwide.",
+      "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+      "link": "/community/black-owned-restaurants"
+    },
+    {
+      "title": "Boys Trip to Ghana: Brotherhood Redefined",
+      "tag": "Boys Trips 🕺🏾",
+      "excerpt": "How a group of friends discovered their roots and strengthened their bonds.",
+      "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+      "link": "/community/ghana-boys-trip"
+    },
+    {
+      "title": "Affordable Couple Getaways for 2025",
+      "tag": "Budget Travel",
+      "excerpt": "Romantic destinations that won't break the bank but will steal your heart.",
+      "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+      "link": "/community/affordable-couples"
+    }
+  ],
+  "rssFeeds": {
+    "blackOwnedRestaurants": [
+      {
+        "title": "Marcus Samuelsson's New NYC Spot",
+        "tag": "Food & Culture 🍽",
+        "excerpt": "The celebrity chef opens another must-visit restaurant in Harlem.",
+        "image": "/lovable-uploads/c261366c-c4ee-4e07-a82a-3235d0766c82.png",
+        "link": "/restaurants/marcus-samuelsson-nyc"
+      },
+      {
+        "title": "Atlanta's Rising Food Scene",
+        "tag": "Food & Culture 🍽",
+        "excerpt": "New Black-owned eateries are transforming the city's culinary landscape.",
+        "image": "/lovable-uploads/81b7dff6-141a-42f0-a275-1d7a430418a8.png",
+        "link": "/restaurants/atlanta-rising"
+      }
+    ],
+    "blackOwnedWineries": [
+      {
+        "title": "California's Hidden Black Vintners",
+        "tag": "Wine & Spirits 🍷",
+        "excerpt": "Discover the Black winemakers crafting exceptional vintages in Napa and beyond.",
+        "image": "/lovable-uploads/1d6f39c0-2e22-4030-bf90-43a71ce90021.png",
+        "link": "/wineries/california-black-vintners"
+      },
+      {
+        "title": "South African Wine Heritage",
+        "tag": "Wine & Spirits 🍷",
+        "excerpt": "The rich history and bright future of Black winemaking in South Africa.",
+        "image": "/lovable-uploads/6353c2ce-b592-4888-ae89-d00f92af47ba.png",
+        "link": "/wineries/south-africa-heritage"
+      }
+    ]
+  }
+}

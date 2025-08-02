@@ -1,0 +1,462 @@
+[
+  {
+    "name": "Santorini, Greece",
+    "summary": "Iconic white-washed buildings and stunning sunsets on this volcanic island paradise.",
+    "description": "Experience the breathtaking beauty of Santorini with its iconic white-washed buildings, stunning sunsets, and crystal-clear waters. This volcanic island offers a perfect blend of romance, luxury, and Greek culture.",
+    "image": "/src/assets/hero-santorini-1.jpg",
+    "tags": ["Romantic", "Luxury", "Sunsets", "Wine tasting", "Volcanic tours"],
+    "cuisine": ["Fava beans", "Tomatokeftedes", "Assyrtiko wine", "Fresh seafood", "Baklava"],
+    "highlights": ["Oia sunset viewing", "Red Beach", "Akrotiri archaeological site", "Fira town", "Volcano boat tours"],
+    "tips": ["Book sunset dinner early", "Wear comfortable shoes for cobblestones", "Visit in shoulder season for fewer crowds", "Try local wineries"]
+  },
+  {
+    "name": "Miami, Florida",
+    "summary": "Vibrant beach city with art deco architecture, world-class dining, and endless nightlife.",
+    "description": "Miami pulses with energy, from South Beach's art deco glamour to Little Havana's Cuban culture. Enjoy pristine beaches, world-class dining, and a nightlife scene that never sleeps.",
+    "image": "/src/assets/south-beach-4.jpg",
+    "tags": ["Beach", "Nightlife", "Art Deco", "Cuban culture", "Fashion"],
+    "cuisine": ["Cuban sandwich", "Stone crab", "Key lime pie", "Ceviche", "Cortadito coffee"],
+    "highlights": ["South Beach", "Art Deco Historic District", "Wynwood Walls", "Little Havana", "Venetian Pool"],
+    "tips": ["Book beach clubs early", "Explore neighborhoods by bike", "Try authentic Cuban food", "Visit during Art Basel"]
+  },
+  {
+    "name": "Tokyo, Japan",
+    "summary": "Ultra-modern metropolis blending ancient traditions with cutting-edge technology and incredible cuisine.",
+    "description": "Tokyo seamlessly merges ancient traditions with futuristic innovation. From serene temples to neon-lit streets, world-class sushi to robot restaurants, this megacity offers endless discoveries.",
+    "image": "/src/assets/tokyo.jpg",
+    "tags": ["Technology", "Cuisine", "Culture", "Shopping", "Temples"],
+    "cuisine": ["Sushi", "Ramen", "Tempura", "Wagyu beef", "Mochi"],
+    "highlights": ["Senso-ji Temple", "Shibuya Crossing", "Tsukiji Fish Market", "Tokyo Skytree", "Golden Gai"],
+    "tips": ["Get a JR Pass for transport", "Bow when greeting", "No tipping culture", "Download translation apps"]
+  },
+  {
+    "name": "Paris, France",
+    "summary": "The City of Light enchants with world-class museums, romantic ambiance, and exquisite cuisine.",
+    "description": "Paris captivates with its timeless elegance, from the Eiffel Tower to charming cafés. Art, fashion, and culinary excellence come together in this romantic capital.",
+    "image": "/src/assets/paris.jpg",
+    "tags": ["Romance", "Art", "Fashion", "Architecture", "Cuisine"],
+    "cuisine": ["Croissants", "Escargot", "Coq au vin", "Macarons", "Champagne"],
+    "highlights": ["Eiffel Tower", "Louvre Museum", "Notre-Dame", "Champs-Élysées", "Montmartre"],
+    "tips": ["Learn basic French phrases", "Dine after 8 PM", "Validate metro tickets", "Visit museums on first Sunday mornings"]
+  },
+  {
+    "name": "Bali, Indonesia",
+    "summary": "Tropical paradise with lush rice terraces, spiritual temples, and pristine beaches.",
+    "description": "Bali offers a perfect blend of natural beauty, spiritual culture, and tropical luxury. From ancient temples to world-class surf breaks, this island paradise rejuvenates the soul.",
+    "image": "/src/assets/bali.jpg",
+    "tags": ["Tropical", "Spiritual", "Surfing", "Rice terraces", "Wellness"],
+    "cuisine": ["Nasi goreng", "Satay", "Rendang", "Gado-gado", "Kopi luwak"],
+    "highlights": ["Tanah Lot Temple", "Ubud Rice Terraces", "Mount Batur", "Seminyak Beach", "Sacred Monkey Forest"],
+    "tips": ["Respect temple dress codes", "Bargain at local markets", "Try traditional spa treatments", "Rent a scooter for exploring"]
+  },
+  {
+    "name": "New York City",
+    "summary": "The city that never sleeps - Broadway shows, world-class museums, and iconic landmarks.",
+    "description": "NYC is an urban playground of endless possibilities. From Broadway theaters to world-class museums, iconic skylines to diverse neighborhoods, every corner tells a story.",
+    "image": "/src/assets/new-york-city-5.jpg",
+    "tags": ["Broadway", "Museums", "Skyline", "Food scene", "Shopping"],
+    "cuisine": ["New York pizza", "Bagels", "Pastrami sandwich", "Cheesecake", "Street hot dogs"],
+    "highlights": ["Statue of Liberty", "Central Park", "Times Square", "Brooklyn Bridge", "9/11 Memorial"],
+    "tips": ["Use subway for transportation", "Book Broadway shows early", "Walk the High Line", "Visit Central Park"]
+  },
+  {
+    "name": "Iceland Ring Road",
+    "summary": "Epic road trip through otherworldly landscapes, geysers, waterfalls, and Northern Lights.",
+    "description": "Iceland's Ring Road offers one of the world's most spectacular drives. Witness powerful waterfalls, active geysers, glacier lagoons, and the magical Aurora Borealis.",
+    "image": "/src/assets/iceland.jpg",
+    "tags": ["Road trip", "Northern Lights", "Waterfalls", "Glaciers", "Adventure"],
+    "cuisine": ["Fresh seafood", "Lamb", "Skyr", "Brennivín", "Hot spring bread"],
+    "highlights": ["Blue Lagoon", "Gullfoss waterfall", "Geysir", "Jökulsárlón glacier lagoon", "Diamond Beach"],
+    "tips": ["Rent a 4WD vehicle", "Pack warm clothes", "Book accommodations early", "Check Northern Lights forecast"]
+  },
+  {
+    "name": "Machu Picchu, Peru",
+    "summary": "Ancient Incan citadel perched high in the Andes Mountains, a UNESCO World Heritage wonder.",
+    "description": "Machu Picchu stands as one of the world's most iconic archaeological sites. This ancient Incan city offers breathtaking mountain views and mysterious history.",
+    "image": "/src/assets/machu-picchu.jpg",
+    "tags": ["History", "Hiking", "UNESCO", "Mountains", "Ancient"],
+    "cuisine": ["Ceviche", "Quinoa", "Alpaca", "Pisco sour", "Inca Kola"],
+    "highlights": ["Machu Picchu citadel", "Huayna Picchu hike", "Sacred Valley", "Cusco city", "Inca Trail"],
+    "tips": ["Book tickets months in advance", "Acclimatize in Cusco first", "Bring altitude sickness medication", "Hire a guide for history"]
+  },
+  {
+    "name": "Thai Islands",
+    "summary": "Tropical paradise islands with crystal-clear waters, pristine beaches, and vibrant marine life.",
+    "description": "Thailand's islands offer some of the world's most beautiful beaches and clearest waters. From bustling Phuket to serene Koh Phi Phi, each island has its own character.",
+    "image": "/src/assets/thai-islands.jpg",
+    "tags": ["Islands", "Beaches", "Snorkeling", "Tropical", "Relaxation"],
+    "cuisine": ["Pad Thai", "Tom Yum", "Green curry", "Mango sticky rice", "Thai iced tea"],
+    "highlights": ["Maya Bay", "James Bond Island", "Phi Phi Islands", "Krabi beaches", "Coral reefs"],
+    "tips": ["Visit during dry season", "Respect marine life", "Bargain for boat tours", "Try island hopping"]
+  },
+  {
+    "name": "Tuscany, Italy",
+    "summary": "Rolling hills, medieval towns, world-class wines, and Renaissance art in Italy's heartland.",
+    "description": "Tuscany enchants with its rolling vineyards, hilltop towns, and artistic heritage. From Florence's Renaissance masterpieces to Chianti's wine cellars, beauty abounds.",
+    "image": "/src/assets/tuscany.jpg",
+    "tags": ["Wine", "Renaissance", "Countryside", "Art", "Historic towns"],
+    "cuisine": ["Chianti wine", "Truffle pasta", "Bistecca Fiorentina", "Gelato", "Pecorino cheese"],
+    "highlights": ["Florence", "Siena", "San Gimignano", "Pisa", "Val d'Orcia"],
+    "tips": ["Rent a car for countryside", "Book wine tours early", "Visit during harvest season", "Stay in agriturismos"]
+  },
+  {
+    "name": "Safari Kenya",
+    "summary": "Witness the Great Migration and Big Five animals in world-renowned national parks.",
+    "description": "Kenya offers unparalleled wildlife experiences. From the Masai Mara's Great Migration to Amboseli's elephant herds, witness nature's most spectacular displays.",
+    "image": "/src/assets/kenya-safari.jpg",
+    "tags": ["Wildlife", "Safari", "Migration", "Big Five", "Adventure"],
+    "cuisine": ["Ugali", "Nyama choma", "Sukuma wiki", "Chai", "Mandazi"],
+    "highlights": ["Masai Mara", "Amboseli National Park", "Lake Nakuru", "Tsavo National Park", "Maasai villages"],
+    "tips": ["Visit during migration season", "Pack neutral colored clothes", "Bring binoculars", "Respect wildlife distances"]
+  },
+  {
+    "name": "Swiss Alps",
+    "summary": "Majestic mountain peaks, pristine lakes, charming villages, and world-class skiing.",
+    "description": "The Swiss Alps offer breathtaking mountain scenery, luxury resorts, and outdoor adventures. From Matterhorn's iconic peak to Jungfraujoch's glaciers, nature reigns supreme.",
+    "image": "/src/assets/swiss-alps.jpg",
+    "tags": ["Mountains", "Skiing", "Hiking", "Luxury", "Scenic trains"],
+    "cuisine": ["Fondue", "Raclette", "Rösti", "Swiss chocolate", "Glühwein"],
+    "highlights": ["Matterhorn", "Jungfraujoch", "Interlaken", "Zermatt", "Glacier Express"],
+    "tips": ["Buy Swiss Travel Pass", "Pack warm clothes", "Book mountain restaurants", "Try scenic train routes"]
+  },
+  {
+    "name": "Australian Outback",
+    "summary": "Vast red landscapes, unique wildlife, Aboriginal culture, and the iconic Uluru monolith.",
+    "description": "Australia's Outback offers raw natural beauty and ancient culture. From Uluru's spiritual significance to unique wildlife encounters, this vast wilderness captivates.",
+    "image": "/src/assets/australian-outback.jpg",
+    "tags": ["Outback", "Aboriginal culture", "Wildlife", "Desert", "Adventure"],
+    "cuisine": ["Bush tucker", "Barramundi", "Kangaroo", "Damper bread", "Billy tea"],
+    "highlights": ["Uluru", "Kata Tjuta", "Kings Canyon", "Alice Springs", "Coober Pedy"],
+    "tips": ["Respect Aboriginal sacred sites", "Carry plenty of water", "Check road conditions", "Learn about Indigenous culture"]
+  },
+  {
+    "name": "Northern Norway",
+    "summary": "Midnight sun, Northern Lights, dramatic fjords, and authentic Sami culture above the Arctic Circle.",
+    "description": "Northern Norway offers unique Arctic experiences. From the midnight sun in summer to Northern Lights in winter, this region showcases nature's most dramatic phenomena.",
+    "image": "/src/assets/northern-norway.jpg",
+    "tags": ["Arctic", "Northern Lights", "Midnight sun", "Fjords", "Sami culture"],
+    "cuisine": ["King crab", "Reindeer", "Arctic char", "Cloudberries", "Aquavit"],
+    "highlights": ["Tromsø", "Lofoten Islands", "North Cape", "Sami reindeer farms", "Ice hotels"],
+    "tips": ["Visit winter for Northern Lights", "Summer for midnight sun", "Pack very warm clothes", "Try dog sledding"]
+  },
+  {
+    "name": "Morocco Atlas Mountains",
+    "summary": "Berber villages, mountain treks, traditional markets, and stunning desert landscapes.",
+    "description": "Morocco's Atlas Mountains offer cultural immersion and natural beauty. Trek through Berber villages, explore bustling souks, and experience Sahara Desert magic.",
+    "image": "/src/assets/morocco-atlas.jpg",
+    "tags": ["Mountains", "Desert", "Culture", "Trekking", "Markets"],
+    "cuisine": ["Tagine", "Couscous", "Mint tea", "Pastilla", "Argan oil"],
+    "highlights": ["Marrakech", "Sahara Desert", "Berber villages", "Atlas Mountains", "Fes medina"],
+    "tips": ["Hire local guides", "Respect Islamic customs", "Bargain in markets", "Try traditional hammams"]
+  },
+  {
+    "name": "Patagonia",
+    "summary": "Dramatic landscapes spanning Argentina and Chile with glaciers, peaks, and pristine wilderness.",
+    "description": "Patagonia offers some of Earth's most dramatic scenery. From massive glaciers to towering peaks, this region at the world's end captivates adventurers.",
+    "image": "/src/assets/patagonia.jpg",
+    "tags": ["Wilderness", "Glaciers", "Hiking", "Mountains", "Adventure"],
+    "cuisine": ["Asado", "Empanadas", "Calafate berries", "Mate tea", "Lamb"],
+    "highlights": ["Torres del Paine", "Perito Moreno Glacier", "Mount Fitz Roy", "Ushuaia", "Tierra del Fuego"],
+    "tips": ["Visit during summer", "Pack layered clothing", "Book accommodations early", "Prepare for wind"]
+  },
+  {
+    "name": "Rajasthan, India",
+    "summary": "Royal palaces, vibrant colors, desert landscapes, and rich cultural heritage in India's crown jewel.",
+    "description": "Rajasthan showcases India's royal heritage with magnificent palaces, colorful markets, and desert adventures. This 'Land of Kings' offers an immersive cultural experience.",
+    "image": "/src/assets/rajasthan.jpg",
+    "tags": ["Palaces", "Culture", "Desert", "History", "Colors"],
+    "cuisine": ["Dal baati churma", "Laal maas", "Ghevar", "Lassi", "Kachori"],
+    "highlights": ["Jaipur", "Udaipur", "Jodhpur", "Jaisalmer", "Thar Desert"],
+    "tips": ["Respect local customs", "Bargain in markets", "Try camel safaris", "Visit during cooler months"]
+  },
+  {
+    "name": "Vancouver, Canada",
+    "summary": "Cosmopolitan city surrounded by mountains and ocean, perfect blend of urban and nature.",
+    "description": "Vancouver combines urban sophistication with natural beauty. From Stanley Park's seawall to Grouse Mountain's peaks, this city offers the best of both worlds.",
+    "image": "/src/assets/vancouver.jpg",
+    "tags": ["City", "Mountains", "Ocean", "Multicultural", "Nature"],
+    "cuisine": ["Fresh salmon", "Poutine", "Sushi", "Craft beer", "Maple syrup"],
+    "highlights": ["Stanley Park", "Granville Island", "Grouse Mountain", "Capilano Bridge", "Gastown"],
+    "tips": ["Use public transportation", "Explore different neighborhoods", "Try outdoor activities", "Visit year-round"]
+  },
+  {
+    "name": "Scottish Highlands",
+    "summary": "Dramatic landscapes, ancient castles, whisky distilleries, and legendary lochs including Loch Ness.",
+    "description": "Scotland's Highlands offer rugged beauty and rich history. From misty mountains to historic castles, this region embodies romance and adventure.",
+    "image": "/src/assets/scottish-highlands.jpg",
+    "tags": ["Castles", "Whisky", "Lochs", "History", "Landscapes"],
+    "cuisine": ["Haggis", "Fresh salmon", "Shortbread", "Single malt whisky", "Tablet"],
+    "highlights": ["Loch Ness", "Edinburgh Castle", "Isle of Skye", "Glencoe", "Stirling Castle"],
+    "tips": ["Pack rain gear", "Try whisky tastings", "Drive scenic routes", "Learn Highland history"]
+  },
+  {
+    "name": "Maldives",
+    "summary": "Overwater bungalows, crystal-clear lagoons, pristine coral reefs, and ultimate luxury relaxation.",
+    "description": "The Maldives represents tropical paradise perfection. With overwater villas, pristine reefs, and azure waters, this Indian Ocean nation offers ultimate relaxation.",
+    "image": "/src/assets/maldives.jpg",
+    "tags": ["Luxury", "Overwater", "Coral reefs", "Relaxation", "Tropical"],
+    "cuisine": ["Fresh fish", "Coconut", "Tropical fruits", "Mas huni", "Garudhiya"],
+    "highlights": ["Overwater bungalows", "Coral reefs", "Spa treatments", "Sunset cruises", "Water sports"],
+    "tips": ["Book all-inclusive resorts", "Bring reef-safe sunscreen", "Try snorkeling", "Respect marine life"]
+  },
+  {
+    "name": "Vietnam",
+    "summary": "Rich history, stunning landscapes, incredible street food, and warm hospitality from north to south.",
+    "description": "Vietnam offers incredible diversity from Ha Long Bay's limestone karsts to Mekong Delta's floating markets. Rich history, delicious cuisine, and friendly people await.",
+    "image": "/src/assets/vietnam.jpg",
+    "tags": ["History", "Street food", "Landscapes", "Culture", "Motorbikes"],
+    "cuisine": ["Pho", "Banh mi", "Fresh spring rolls", "Vietnamese coffee", "Bun cha"],
+    "highlights": ["Ha Long Bay", "Hoi An", "Ho Chi Minh City", "Sapa rice terraces", "Mekong Delta"],
+    "tips": ["Try street food", "Learn basic Vietnamese", "Use ride-sharing apps", "Respect local customs"]
+  },
+  {
+    "name": "Prague, Czech Republic",
+    "summary": "Fairy-tale medieval city with stunning architecture, craft beer culture, and rich musical heritage.",
+    "description": "Prague enchants with its medieval charm and architectural splendor. From the iconic castle to traditional beer halls, this Central European gem captivates visitors.",
+    "image": "/src/assets/prague.jpg",
+    "tags": ["Medieval", "Architecture", "Beer", "Music", "History"],
+    "cuisine": ["Goulash", "Svíčková", "Czech beer", "Trdelník", "Schnitzel"],
+    "highlights": ["Prague Castle", "Charles Bridge", "Old Town Square", "Czech beer halls", "Wenceslas Square"],
+    "tips": ["Try local beer", "Walk across Charles Bridge", "Attend classical concerts", "Explore Old Town"]
+  },
+  {
+    "name": "Jordan",
+    "summary": "Ancient Petra, desert landscapes, Dead Sea, and warm Bedouin hospitality in the heart of the Middle East.",
+    "description": "Jordan combines ancient wonders with natural beauty. From Petra's rose-red city to Wadi Rum's desert landscapes, this kingdom offers unforgettable experiences.",
+    "image": "/src/assets/jordan.jpg",
+    "tags": ["Ancient", "Desert", "Archaeology", "Dead Sea", "Hospitality"],
+    "cuisine": ["Mansaf", "Hummus", "Falafel", "Kanafeh", "Arabic coffee"],
+    "highlights": ["Petra", "Wadi Rum", "Dead Sea", "Amman", "Jerash"],
+    "tips": ["Respect local customs", "Stay hydrated", "Hire local guides", "Try Bedouin camps"]
+  },
+  {
+    "name": "Croatian Coast",
+    "summary": "Crystal-clear Adriatic waters, medieval towns, island hopping, and stunning national parks.",
+    "description": "Croatia's coast offers Mediterranean charm with crystal-clear waters and historic towns. From Dubrovnik's walls to Plitvice's waterfalls, beauty abounds.",
+    "image": "/src/assets/croatian-coast.jpg",
+    "tags": ["Islands", "Medieval towns", "Clear waters", "National parks", "Mediterranean"],
+    "cuisine": ["Fresh seafood", "Istrian truffles", "Peka", "Croatian wine", "Palacinke"],
+    "highlights": ["Dubrovnik", "Split", "Hvar Island", "Plitvice Lakes", "Korčula"],
+    "tips": ["Visit during shoulder season", "Try island hopping", "Book accommodations early", "Explore national parks"]
+  },
+  {
+    "name": "Chile Wine Country",
+    "summary": "World-class wineries, stunning Andes backdrop, gourmet cuisine, and charming colonial towns.",
+    "description": "Chile's wine regions offer world-class vintages against dramatic Andean backdrops. From Casablanca's cool climate wines to Colchagua's reds, oenophiles rejoice.",
+    "image": "/src/assets/chile-wine.jpg",
+    "tags": ["Wine", "Andes", "Gourmet", "Vineyards", "Mountains"],
+    "cuisine": ["Chilean wine", "Empanadas", "Fresh seafood", "Asado", "Pisco sour"],
+    "highlights": ["Casablanca Valley", "Maipo Valley", "Colchagua Valley", "Santiago", "Valparaíso"],
+    "tips": ["Book winery tours", "Try wine and food pairings", "Visit during harvest", "Explore colonial towns"]
+  },
+  {
+    "name": "Myanmar",
+    "summary": "Golden pagodas, ancient temples, floating markets, and authentic Buddhist culture largely untouched by tourism.",
+    "description": "Myanmar offers authentic Southeast Asian culture with magnificent temples and warm hospitality. From Bagan's temple plains to Inle Lake's floating gardens, discover hidden treasures.",
+    "image": "/src/assets/myanmar.jpg",
+    "tags": ["Temples", "Buddhism", "Authentic", "Culture", "Spiritual"],
+    "cuisine": ["Mohinga", "Tea leaf salad", "Shan noodles", "Curry", "Local tea"],
+    "highlights": ["Bagan temples", "Inle Lake", "Mandalay", "Yangon", "Golden Rock"],
+    "tips": ["Respect Buddhist customs", "Dress conservatively", "Try local transport", "Learn about local culture"]
+  },
+  {
+    "name": "Azores, Portugal",
+    "summary": "Volcanic islands with hot springs, crater lakes, pristine nature, and authentic Portuguese culture.",
+    "description": "The Azores offer unspoiled natural beauty in the Atlantic. From volcanic hot springs to emerald crater lakes, these islands provide tranquil escape and adventure.",
+    "image": "/src/assets/azores.jpg",
+    "tags": ["Volcanic", "Hot springs", "Nature", "Islands", "Authentic"],
+    "cuisine": ["Fresh seafood", "Cozido", "Portuguese wine", "Queijadas", "Local cheese"],
+    "highlights": ["Sete Cidades", "Furnas hot springs", "Pico Island", "Angra do Heroísmo", "Whale watching"],
+    "tips": ["Rent a car", "Try thermal baths", "Go whale watching", "Explore crater lakes"]
+  },
+  {
+    "name": "Uzbekistan",
+    "summary": "Silk Road cities, stunning Islamic architecture, desert fortresses, and rich Central Asian culture.",
+    "description": "Uzbekistan showcases Silk Road grandeur with magnificent Islamic architecture and rich cultural heritage. From Samarkand's blue domes to Bukhara's ancient streets, history comes alive.",
+    "image": "/src/assets/uzbekistan.jpg",
+    "tags": ["Silk Road", "Islamic architecture", "History", "Culture", "Desert"],
+    "cuisine": ["Plov", "Lagman", "Manti", "Green tea", "Samsa"],
+    "highlights": ["Samarkand", "Bukhara", "Khiva", "Tashkent", "Registan Square"],
+    "tips": ["Respect Islamic customs", "Try local bazaars", "Learn about Silk Road history", "Dress modestly"]
+  },
+  {
+    "name": "Faroe Islands",
+    "summary": "Remote Nordic islands with dramatic cliffs, grass-roof houses, pristine nature, and unique culture.",
+    "description": "The Faroe Islands offer untouched Nordic beauty with dramatic landscapes and unique culture. From grass-roof villages to towering cliffs, this remote archipelago captivates.",
+    "image": "/src/assets/faroe-islands.jpg",
+    "tags": ["Remote", "Nordic", "Cliffs", "Nature", "Unique culture"],
+    "cuisine": ["Fresh fish", "Lamb", "Faroese salmon", "Rhubarb", "Local herbs"],
+    "highlights": ["Mykines puffins", "Gásadalur village", "Kallur lighthouse", "Tórshavn", "Múlafossur waterfall"],
+    "tips": ["Pack warm, waterproof clothes", "Rent a car", "Respect bird nesting areas", "Try local cuisine"]
+  },
+  {
+    "name": "Madagascar",
+    "summary": "Unique wildlife, endemic species, diverse landscapes, and Malagasy culture on the world's fourth-largest island.",
+    "description": "Madagascar offers unparalleled biodiversity with 90% endemic species. From lemurs to baobab trees, this island continent provides unique wildlife encounters and cultural experiences.",
+    "image": "/src/assets/madagascar.jpg",
+    "tags": ["Wildlife", "Endemic species", "Biodiversity", "Adventure", "Unique"],
+    "cuisine": ["Romazava", "Ravitoto", "Zebu", "Tropical fruits", "Rice dishes"],
+    "highlights": ["Andasibe National Park", "Avenue of the Baobabs", "Tsingy de Bemaraha", "Anakao Beach", "Lemur parks"],
+    "tips": ["Get vaccinations", "Hire local guides", "Respect wildlife", "Try local markets"]
+  },
+  {
+    "name": "Slovenia",
+    "summary": "Fairy-tale Lake Bled, Ljubljana's charm, wine regions, and pristine Alpine scenery in compact Europe.",
+    "description": "Slovenia packs incredible diversity into a small country. From Lake Bled's island church to Ljubljana's dragon bridge, this hidden European gem offers Alpine beauty and charm.",
+    "image": "/src/assets/slovenia.jpg",
+    "tags": ["Alpine", "Lakes", "Charming", "Wine", "Compact"],
+    "cuisine": ["Bled cream cake", "Kranjska klobasa", "Slovenian wine", "Potica", "Štruklji"],
+    "highlights": ["Lake Bled", "Ljubljana", "Postojna Cave", "Vipava Valley", "Triglav National Park"],
+    "tips": ["Visit Lake Bled early morning", "Try local wines", "Explore caves", "Hike in Alps"]
+  },
+  {
+    "name": "Socotra Island, Yemen",
+    "summary": "Alien-like landscapes, endemic flora, pristine beaches, and unique ecosystems on UNESCO World Heritage island.",
+    "description": "Socotra Island feels like another planet with its unique dragon's blood trees and endemic species. This UNESCO site offers otherworldly beauty and pristine nature.",
+    "image": "/src/assets/socotra.jpg",
+    "tags": ["UNESCO", "Endemic", "Unique", "Pristine", "Otherworldly"],
+    "cuisine": ["Fresh fish", "Dates", "Goat", "Local honey", "Traditional bread"],
+    "highlights": ["Dragon's blood trees", "Qalansiyah Beach", "Hagghier Mountains", "Hoq Cave", "Dixam Plateau"],
+    "tips": ["Check travel advisories", "Bring camping gear", "Respect environment", "Hire local guides"]
+  },
+  {
+    "name": "Bhutan",
+    "summary": "Last Shangri-La with Buddhist monasteries, pristine Himalayas, unique culture, and Gross National Happiness philosophy.",
+    "description": "Bhutan offers authentic Himalayan culture with its philosophy of Gross National Happiness. From Tiger's Nest monastery to pristine valleys, this kingdom preserves ancient traditions.",
+    "image": "/src/assets/bhutan.jpg",
+    "tags": ["Buddhism", "Himalayas", "Authentic", "Spiritual", "Unique"],
+    "cuisine": ["Ema datshi", "Momos", "Yak cheese", "Butter tea", "Red rice"],
+    "highlights": ["Tiger's Nest monastery", "Thimphu", "Punakha Dzong", "Paro Valley", "Dochula Pass"],
+    "tips": ["Book through tour operators", "Respect local customs", "Pack warm clothes", "Learn about Buddhism"]
+  },
+  {
+    "name": "Easter Island, Chile",
+    "summary": "Mysterious moai statues, Polynesian culture, remote Pacific location, and archaeological wonders.",
+    "description": "Easter Island captivates with its mysterious moai statues and Polynesian culture. This remote Pacific island offers unique archaeological wonders and cultural experiences.",
+    "image": "/src/assets/easter-island.jpg",
+    "tags": ["Archaeological", "Mysterious", "Remote", "Polynesian", "Unique"],
+    "cuisine": ["Fresh fish", "Tropical fruits", "Empanadas", "Local vegetables", "Pisco"],
+    "highlights": ["Moai statues", "Rano Raraku", "Orongo village", "Ahu Tongariki", "Terevaka volcano"],
+    "tips": ["Fly from Santiago", "Respect archaeological sites", "Learn Rapa Nui history", "Book accommodations early"]
+  },
+  {
+    "name": "Palawan, Philippines",
+    "summary": "Last frontier with underground rivers, pristine lagoons, island hopping, and crystal-clear waters.",
+    "description": "Palawan represents the Philippines' last frontier with pristine nature and crystal-clear waters. From underground rivers to hidden lagoons, this province offers tropical paradise.",
+    "image": "/src/assets/palawan.jpg",
+    "tags": ["Tropical", "Islands", "Underground rivers", "Pristine", "Paradise"],
+    "cuisine": ["Fresh seafood", "Adobo", "Tropical fruits", "Coconut", "Filipino BBQ"],
+    "highlights": ["El Nido", "Coron Island", "Underground River", "Balabac Island", "Big Lagoon"],
+    "tips": ["Island hop", "Bring reef-safe sunscreen", "Try island hopping tours", "Respect marine life"]
+  },
+  {
+    "name": "Tasmania, Australia",
+    "summary": "Wilderness island with unique wildlife, pristine nature, MONA art museum, and cool climate wines.",
+    "description": "Tasmania offers wilderness adventures and cultural experiences. From Cradle Mountain's peaks to MONA's provocative art, this island state surprises and delights.",
+    "image": "/src/assets/tasmania.jpg",
+    "tags": ["Wilderness", "Wildlife", "Art", "Wine", "Nature"],
+    "cuisine": ["Fresh oysters", "Tasmanian salmon", "Cool climate wines", "Wallaby", "Local cheeses"],
+    "highlights": ["Cradle Mountain", "MONA", "Wineglass Bay", "Salamanca Market", "Bay of Fires"],
+    "tips": ["Rent a car", "Try local produce", "Visit MONA", "Pack warm clothes"]
+  },
+  {
+    "name": "Georgian Wine Country",
+    "summary": "Ancient winemaking traditions, stunning Caucasus Mountains, warm hospitality, and unique qvevri wines.",
+    "description": "Georgia offers the world's oldest winemaking tradition with unique qvevri wines and Caucasus Mountain beauty. Experience legendary hospitality and ancient culture.",
+    "image": "/src/assets/georgian-wine.jpg",
+    "tags": ["Ancient wine", "Mountains", "Hospitality", "Traditions", "Unique"],
+    "cuisine": ["Khachapuri", "Khinkali", "Georgian wine", "Churchkhela", "Mtsvadi"],
+    "highlights": ["Kakheti wine region", "Tbilisi", "Svaneti", "Uplistsikhe", "Vardzia"],
+    "tips": ["Try qvevri wines", "Experience supra feasts", "Visit wine cellars", "Learn Georgian toasts"]
+  },
+  {
+    "name": "Kamchatka, Russia",
+    "summary": "Remote volcanic peninsula with geysers, brown bears, pristine wilderness, and helicopter adventures.",
+    "description": "Kamchatka offers one of Earth's last wildernesses with active volcanoes, geysers, and abundant wildlife. This remote peninsula provides ultimate adventure experiences.",
+    "image": "/src/assets/kamchatka.jpg",
+    "tags": ["Volcanic", "Remote", "Bears", "Wilderness", "Adventure"],
+    "cuisine": ["Fresh salmon", "Crab", "Caviar", "Wild berries", "Russian bread"],
+    "highlights": ["Valley of Geysers", "Kronotsky Nature Reserve", "Bear watching", "Helicopter tours", "Hot springs"],
+    "tips": ["Book organized tours", "Bring warm clothes", "Respect wildlife", "Prepare for remote conditions"]
+  },
+  {
+    "name": "Rwanda",
+    "summary": "Mountain gorillas, rolling hills, conservation success, vibrant culture, and remarkable recovery story.",
+    "description": "Rwanda showcases Africa's conservation success with mountain gorillas and pristine national parks. Experience the 'Land of a Thousand Hills' and remarkable cultural resilience.",
+    "image": "/src/assets/rwanda.jpg",
+    "tags": ["Gorillas", "Conservation", "Hills", "Culture", "Recovery"],
+    "cuisine": ["Ugali", "Nyama choma", "Ibirayi", "Rwandan coffee", "Local beer"],
+    "highlights": ["Volcanoes National Park", "Kigali city", "Lake Kivu", "Nyungwe Forest", "Gorilla trekking"],
+    "tips": ["Book gorilla permits early", "Respect gorilla guidelines", "Learn about history", "Support local communities"]
+  },
+  {
+    "name": "Lapland, Finland",
+    "summary": "Arctic wilderness, reindeer herding, Northern Lights, midnight sun, and authentic Sami culture.",
+    "description": "Lapland offers authentic Arctic experiences with Northern Lights, reindeer, and Sami culture. From glass igloos to husky sledding, this region provides magical moments.",
+    "image": "/src/assets/lapland.jpg",
+    "tags": ["Arctic", "Reindeer", "Northern Lights", "Sami culture", "Wilderness"],
+    "cuisine": ["Reindeer", "Arctic char", "Cloudberries", "Lapland cheese", "Glögi"],
+    "highlights": ["Rovaniemi", "Northern Lights", "Reindeer farms", "Ice hotels", "Husky sledding"],
+    "tips": ["Visit winter for lights", "Summer for midnight sun", "Try reindeer sledding", "Pack very warm clothes"]
+  },
+  {
+    "name": "Oman",
+    "summary": "Arabian Peninsula gem with dramatic landscapes, frankincense heritage, pristine beaches, and warm hospitality.",
+    "description": "Oman offers authentic Arabian experiences with dramatic mountains, pristine beaches, and rich heritage. From frankincense trails to turtle watching, discover hidden Arabia.",
+    "image": "/src/assets/oman.jpg",
+    "tags": ["Arabian", "Desert", "Mountains", "Heritage", "Hospitality"],
+    "cuisine": ["Machboos", "Shuwa", "Halwa", "Dates", "Arabic coffee"],
+    "highlights": ["Muscat", "Wahiba Sands", "Nizwa Fort", "Wadi Shab", "Turtle beaches"],
+    "tips": ["Respect local customs", "Visit wadis", "Try desert camping", "Learn about frankincense"]
+  },
+  {
+    "name": "Albania",
+    "summary": "Hidden Balkan gem with pristine beaches, mountain villages, rich history, and affordable adventure.",
+    "description": "Albania offers undiscovered beauty with pristine Riviera beaches, mountain villages, and rich history. This affordable Balkan destination provides authentic experiences.",
+    "image": "/src/assets/albania.jpg",
+    "tags": ["Hidden gem", "Beaches", "Mountains", "History", "Affordable"],
+    "cuisine": ["Byrek", "Tavë kosi", "Fresh seafood", "Raki", "Qofte"],
+    "highlights": ["Albanian Riviera", "Berat", "Gjirokastër", "Theth National Park", "Blue Eye Spring"],
+    "tips": ["Rent a car", "Try local food", "Explore mountain villages", "Visit both coast and mountains"]
+  },
+  {
+    "name": "Sark, Channel Islands",
+    "summary": "Car-free island with dark skies, dramatic cliffs, peaceful atmosphere, and unique feudal system.",
+    "description": "Sark offers tranquil escape with car-free living and pristine dark skies. This unique Channel Island provides peaceful retreat and stunning coastal scenery.",
+    "image": "/src/assets/sark.jpg",
+    "tags": ["Car-free", "Dark skies", "Peaceful", "Cliffs", "Unique"],
+    "cuisine": ["Fresh seafood", "Local dairy", "Channel Islands cream", "Locally grown produce", "Traditional British"],
+    "highlights": ["La Coupée", "Little Sark", "Dark sky stargazing", "Coastal walks", "Prison ruins"],
+    "tips": ["No cars allowed", "Bring warm clothes", "Book accommodations early", "Try stargazing"]
+  },
+  {
+    "name": "Lord Howe Island, Australia",
+    "summary": "UNESCO World Heritage island with pristine nature, limited visitors, unique wildlife, and coral reefs.",
+    "description": "Lord Howe Island limits visitors to preserve its pristine environment. This UNESCO site offers unique wildlife encounters and untouched natural beauty.",
+    "image": "/src/assets/lord-howe.jpg",
+    "tags": ["UNESCO", "Pristine", "Limited visitors", "Wildlife", "Coral reefs"],
+    "cuisine": ["Fresh fish", "Local produce", "Tropical fruits", "Organic vegetables", "Simple preparations"],
+    "highlights": ["Ball's Pyramid", "Coral reefs", "Mount Gower", "Lagoon", "Unique birds"],
+    "tips": ["Book well in advance", "Limited accommodation", "Bring snorkeling gear", "Respect wildlife"]
+  },
+  {
+    "name": "Vanuatu",
+    "summary": "Melanesian culture, active volcanoes, pristine diving, tribal traditions, and happy island life.",
+    "description": "Vanuatu offers authentic Melanesian culture with active volcanoes and pristine reefs. Experience tribal traditions and discover why it's known as the happiest place on Earth.",
+    "image": "/src/assets/vanuatu.jpg",
+    "tags": ["Melanesian", "Volcanoes", "Diving", "Tribal", "Happy"],
+    "cuisine": ["Lap lap", "Fresh seafood", "Tropical fruits", "Kava", "Island vegetables"],
+    "highlights": ["Mount Yasur volcano", "Port Vila", "Champagne Beach", "Million Dollar Point", "Chief Roi Mata's Domain"],
+    "tips": ["Try kava ceremony", "Respect tribal customs", "Visit active volcanoes", "Go diving"]
+  },
+  {
+    "name": "Pitcairn Islands",
+    "summary": "World's most remote populated island, Bounty mutineer history, pristine nature, and tiny population.",
+    "description": "Pitcairn Island represents ultimate isolation with only 50 residents. Discover Bounty mutineer history and experience life on one of the world's most remote inhabited islands.",
+    "image": "/src/assets/pitcairn.jpg",
+    "tags": ["Remote", "History", "Tiny population", "Pristine", "Unique"],
+    "cuisine": ["Fish", "Local fruits", "Vegetables", "Simple cooking", "Limited supplies"],
+    "highlights": ["Bounty Bay", "Adamstown", "Christian's Cave", "Down Rope", "Bounty artifacts"],
+    "tips": ["Arrange transport early", "Very limited facilities", "Bring supplies", "Respect small community"]
+  }
+]
